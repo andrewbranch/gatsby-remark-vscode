@@ -1,0 +1,32 @@
+{
+  "name": "gatsby-remark-textmate-highlight",
+  "version": "1.0.0",
+  "description": "Gatsby plugin to provide editor-quality syntax highlighting for code snippets",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewbranch/gatsby-remark-textmate-highlight.git"
+  },
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "remark",
+    "syntax",
+    "highlighting",
+    "markdown"
+  ],
+  "author": "Andrew Branch <andrew@wheream.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewbranch/gatsby-remark-textmate-highlight/issues"
+  },
+  "homepage": "https://github.com/andrewbranch/gatsby-remark-textmate-highlight#readme",
+  "devDependencies": {
+    "jest": "^24.5.0",
+    "ts-jest": "^24.0.0",
+    "typescript": "^3.3.4000"
+  }
+}
