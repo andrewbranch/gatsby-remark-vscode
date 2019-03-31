@@ -1,21 +1,29 @@
 // @ts-check
+const fs = require('fs');
+const util = require('util');
 const path = require('path');
 const constants = require('./constants');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
-const { getGrammarFileContents } = require('./getGrammarFileContents');
 const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-
-/** @type {Registry} */
-let registry;
+const readFile = util.promisify(fs.readFile);
 
 /**
  * @param {string} scopeName 
  */
 function warnMissingLanguageFile(scopeName) {
   console.warn(`No language file was loaded for scope '${scopeName}'. `);
+}
+
+/**
+ * @param {string} lang 
+ */
+function warnUnknownLanguage(lang) {
+  console.warn(
+    `Encountered unknown language '${lang}'. If '${lang}' is an alias for a supported language, ` +
+    `use the 'languageAliases' plugin option to map it to the canonical language name.`);
 }
 
 const settingPropertyMap = { 'editor.background': 'background-color', 'editor.foreground': 'color' };
@@ -46,8 +54,6 @@ function getStylesFromSettings(settings) {
  * @property {string=} highlightClassName
  * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
- * @property {(filePath: string) => string | Promise<string>=} getGrammarFileContents
- * @property {(scopeName: string) => void=} onRequestUnknownLanguage
  * @property {ExtensionDemand[]=} extensions
  */
 
@@ -57,13 +63,12 @@ function getStylesFromSettings(settings) {
  * @param {PluginOptions=} options 
  */
 async function textmateHighlight(
-  { markdownAST, markdownNode },
+  { markdownAST, markdownNode, cache },
   {
     colorTheme = () => 'darkPlus',
     highlightClassName = 'vscode-highlight',
     scopesByLanguage = {},
     languageAliases = {},
-    onRequestUnknownLanguage = warnMissingLanguageFile,
     extensions = [],
   } = {},
 ) {
@@ -83,23 +88,30 @@ async function textmateHighlight(
 
     /** @type {string} */
     const scope = scopesByLanguage[lang] || scopesByLanguage[languageAliases[lang]];
-    if (!scope) continue;
+    if (!scope) {
+      warnUnknownLanguage(lang);
+      continue;
+    }
 
     /** @type {string} */
     const text = node.value || node.children && node.children[0] && node.children[0].value;
     if (!text) continue;
 
+    let registry = await cache.get('registry');
     if (!registry) {
       registry = new Registry({
         loadGrammar: async scopeName => {
-          const contents = await getGrammarFileContents(scopeName);
-          if (contents) {
-            return parseRawGrammar(contents, null);
+          const fileName = constants.grammarLocations[scopeName];
+          if (fileName) {
+            const contents = await readFile(fileName, 'utf8');
+            return parseRawGrammar(contents, fileName);
           } else {
-            onRequestUnknownLanguage(scopeName);
+            warnMissingLanguageFile(scopeName);
           }
         },
       });
+
+      await cache.set('registry', registry);
     }
 
     const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node) : colorTheme;
