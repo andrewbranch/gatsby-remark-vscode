@@ -17,10 +17,40 @@ function warnMissingLanguageFile(scopeName) {
   console.warn(`No language file was loaded for scope '${scopeName}'. `);
 }
 
-function textmateHighlight(
-  { markdownAST },
+const settingPropertyMap = { 'editor.background': 'background-color', 'editor.foreground': 'color' };
+/**
+ * @param {Record<string, string>} settings 
+ */
+function getStylesFromSettings(settings) {
+  return Object.keys(settings).reduce((styles, setting) => {
+    const property = settingPropertyMap[setting];
+    if (property) {
+      return [...styles, `${property}: ${settings[setting]};`];
+    }
+    return styles;
+  }, []).join('\n');
+}
+
+/**
+ * @typedef {object} PluginOptions
+ * @property {string | ((markdownNode: any, codeBlockNode: any) => string)=} colorTheme
+ * @property {string=} highlightClassName
+ * @property {Record<string, string>=} scopesByLanguage
+ * @property {Record<string, string>=} languageAliases
+ * @property {(filePath: string) => string=} getGrammarFileContents
+ * @property {(scopeName: string) => void=} onRequestUnknownLanguage
+ */
+
+/**
+ * 
+ * @param {*} param0
+ * @param {PluginOptions=} options 
+ */
+async function textmateHighlight(
+  { markdownAST, markdownNode },
   {
-    colorTheme = 'darkPlus',
+    colorTheme = () => 'darkPlus',
+    highlightClassName = 'vscode-highlight',
     scopesByLanguage = {},
     languageAliases = {},
     getGrammarFileContents = getIncludedGrammarFileContents,
@@ -29,9 +59,12 @@ function textmateHighlight(
 ) {
   scopesByLanguage = { ...constants.scopesByLanguage, ...scopesByLanguage };
   languageAliases = { ...constants.languageAliases, ...languageAliases };
+  /** @type {Record<string, string>} */
+  const stylesheets = {};
 
   for (const node of markdownAST.children) {
     if (node.type !== 'code' || !node.lang) continue;
+    /** @type {string} */
     const lang = node.lang.toLowerCase();
 
     /** @type {string} */
@@ -44,40 +77,72 @@ function textmateHighlight(
 
     if (!registry) {
       registry = new Registry({
-        loadGrammar: scopeName => new Promise(resolve => {
+        loadGrammar: async scopeName => {
           const contents = getGrammarFileContents(scopeName) || getIncludedGrammarFileContents(scopeName);
           if (contents) {
-            resolve(parseRawGrammar(contents, null));
+            return parseRawGrammar(contents, null);
           } else {
             onRequestUnknownLanguage(scopeName);
           }
-        }),
+        },
       });
     }
 
-    const colorThemePath = constants.themeLocations[colorTheme] || colorTheme;
-    const tokenColors = [];
-    const colorMap = {};
-    loadColorTheme(colorThemePath, tokenColors, colorMap);
+    const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node) : colorTheme;
+    const colorThemePath = constants.themeLocations[colorThemeValue]
+      || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
+    const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
     registry.setTheme({ settings: tokenColors });
-    const css = generateTokensCSSForColorMap(registry.getColorMap());
+    if (!stylesheets[themeName]) {
+      stylesheets[themeName] = [
+        `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
+        ...generateTokensCSSForColorMap(registry.getColorMap())
+          .split('\n')
+          .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
+      ].join('\n');
+    }
 
-    return registry.loadGrammar(scope).then(grammar => {
-      const lines = text.split(/\r?\n/);
-      let ruleStack = undefined;
-      
-      for (const line of lines) {
-        const result = grammar.tokenizeLine2(line, ruleStack);
-        ruleStack = result.ruleStack;
-        for (let i = 0; i < result.tokens.length; i += 2) {
-          const startIndex = result.tokens[i];
-          const metadata = result.tokens[i + 1];
-          console.log(startIndex, getClassNameFromMetadata(metadata));
-        }
-        console.log('\n');
+    const grammar = await registry.loadGrammar(scope)
+    const rawLines = text.split(/\r?\n/);
+    const htmlLines = [];
+    let ruleStack = undefined;
+    for (const line of rawLines) {
+      const result = grammar.tokenizeLine2(line, ruleStack);
+      ruleStack = result.ruleStack;
+      let htmlLine = '';
+      for (let i = 0; i < result.tokens.length; i += 2) {
+        const startIndex = result.tokens[i];
+        const metadata = result.tokens[i + 1];
+        const endIndex = result.tokens[i + 2] || line.length;
+        htmlLine += [
+          `<span class="${getClassNameFromMetadata(metadata)}">`,
+          line.slice(startIndex, endIndex),
+          '</span>',
+        ].join('');
       }
-    });
+      htmlLines.push(htmlLine);
+    }
 
+    node.type = 'html';
+    node.value = [
+      `<pre class="${[highlightClassName, themeName].join(' ').trim()}" data-language="${lang}">`,
+      `<code>`,
+      htmlLines.join('\n'),
+      `</code>`,
+      `</pre>`,
+    ].join('');
+  }
+
+  const themeNames = Object.keys(stylesheets);
+  if (themeNames.length) {
+    markdownAST.children.push({
+      type: 'html',
+      value: [
+        '<style class="vscode-highlight-styles">',
+        themeNames.map(theme => stylesheets[theme]).join('\n'),
+        '</style>',
+      ].join(''),
+    });
   }
 };
 
