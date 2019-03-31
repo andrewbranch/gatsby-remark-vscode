@@ -43,7 +43,7 @@ function getStylesFromSettings(settings) {
 
 /**
  * 
- * @param {*} param0
+ * @param {*} _
  * @param {PluginOptions=} options 
  */
 async function textmateHighlight(
