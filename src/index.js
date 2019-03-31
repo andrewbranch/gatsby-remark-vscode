@@ -1,8 +1,9 @@
 // @ts-check
 const path = require('path');
 const constants = require('./constants');
-const getIncludedGrammarFileContents = require('./getIncludedLanguageFileContents');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
+const { getGrammarFileContents } = require('./getGrammarFileContents');
+const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
@@ -32,13 +33,22 @@ function getStylesFromSettings(settings) {
 }
 
 /**
+ * @typedef {object} ExtensionDemand
+ * @property {string} identifier
+ * @property {string} version
+ * @property {string[]=} languages
+ * @property {string[]=} themes
+ */
+
+/**
  * @typedef {object} PluginOptions
  * @property {string | ((markdownNode: any, codeBlockNode: any) => string)=} colorTheme
  * @property {string=} highlightClassName
  * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
- * @property {(filePath: string) => string=} getGrammarFileContents
+ * @property {(filePath: string) => string | Promise<string>=} getGrammarFileContents
  * @property {(scopeName: string) => void=} onRequestUnknownLanguage
+ * @property {ExtensionDemand[]=} extensions
  */
 
 /**
@@ -53,8 +63,8 @@ async function textmateHighlight(
     highlightClassName = 'vscode-highlight',
     scopesByLanguage = {},
     languageAliases = {},
-    getGrammarFileContents = getIncludedGrammarFileContents,
     onRequestUnknownLanguage = warnMissingLanguageFile,
+    extensions = [],
   } = {},
 ) {
   scopesByLanguage = { ...constants.scopesByLanguage, ...scopesByLanguage };
@@ -66,6 +76,10 @@ async function textmateHighlight(
     if (node.type !== 'code' || !node.lang) continue;
     /** @type {string} */
     const lang = node.lang.toLowerCase();
+    const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(lang));
+    if (languageExtension) {
+      await downloadExtensionIfNeeded(languageExtension);
+    }
 
     /** @type {string} */
     const scope = scopesByLanguage[lang] || scopesByLanguage[languageAliases[lang]];
@@ -78,7 +92,7 @@ async function textmateHighlight(
     if (!registry) {
       registry = new Registry({
         loadGrammar: async scopeName => {
-          const contents = getGrammarFileContents(scopeName) || getIncludedGrammarFileContents(scopeName);
+          const contents = await getGrammarFileContents(scopeName);
           if (contents) {
             return parseRawGrammar(contents, null);
           } else {
@@ -89,6 +103,11 @@ async function textmateHighlight(
     }
 
     const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node) : colorTheme;
+    const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
+    if (themeExtension) {
+      await downloadExtensionIfNeeded(themeExtension);
+    }
+
     const colorThemePath = constants.themeLocations[colorThemeValue]
       || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
     const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
