@@ -5,14 +5,14 @@ const zlib = require('zlib');
 const util = require('util');
 const request = require('request');
 const decompress = require('decompress');
-const { scopesByLanguage, grammarLocations, themeLocations } = require('./constants');
 const { parseExtensionIdentifier, getExtensionPath, getExtensionBasePath, getExtensionPackageJson } = require('./utils');
 const gunzip = util.promisify(zlib.gunzip);
 
 /**
- * @param {import('.').ExtensionDemand} extensionDemand 
+ * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {*} cache
  */
-function syncExtensionData({ identifier, themes = [], languages = [] }) {
+async function syncExtensionData({ identifier, themes = [], languages = [] }, cache) {
   const extensionData = getExtensionPackageJson(identifier);
   const grammarContributions = extensionData.contributes && extensionData.contributes.grammars;
   const themeContributions = extensionData.contributes && extensionData.contributes.themes;
@@ -33,8 +33,16 @@ function syncExtensionData({ identifier, themes = [], languages = [] }) {
     }
 
     const grammarFilePath = path.resolve(getExtensionPath(identifier), grammarContribution.path);
-    grammarLocations[language] = grammarFilePath;
-    scopesByLanguage[language] = grammarContribution.scopeName;
+
+    await cache.set('grammarLocations', {
+      ...await cache.get('grammarLocations'),
+      [grammarContribution.scopeName]: grammarFilePath,
+    });
+
+    await cache.set('scopesByLanguage', {
+      ...await cache.get('scopesByLanguage'),
+      [language]: grammarContribution.scopeName,
+    });
   }
 
   // Sync themes
@@ -54,14 +62,19 @@ function syncExtensionData({ identifier, themes = [], languages = [] }) {
     }
 
     const themeFilePath = path.resolve(getExtensionPath(identifier), themeContribution.path);
-    themeLocations[theme] = themeFilePath;
+
+    await cache.set('themeLocations', {
+      ...await cache.get('themeLocations'),
+      [theme]: themeFilePath,
+    });
   }
 }
 
 /**
  * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {*} cache
  */
-async function downloadExtension(extensionDemand) {
+async function downloadExtension(extensionDemand, cache) {
   const { identifier, version } = extensionDemand;
   const { publisher, name } = parseExtensionIdentifier(identifier);
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${name}/${version}/vspackage`;
@@ -86,23 +99,26 @@ async function downloadExtension(extensionDemand) {
 
   const extensionPath = getExtensionBasePath(identifier);
   await decompress(archive, extensionPath);
-  syncExtensionData(extensionDemand);
+  syncExtensionData(extensionDemand, cache);
   return extensionPath;
 }
 
 /**
  * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {*} cache
  */
-async function downloadExtensionIfNeeded(extensionDemand) {
-  const { identifier, version } = extensionDemand
+async function downloadExtensionIfNeeded(extensionDemand, cache) {
+  const { identifier, version } = extensionDemand;
   const extensionPath = getExtensionBasePath(identifier);
   if (!fs.existsSync(extensionPath)) {
-    return downloadExtension(extensionDemand);
+    return downloadExtension(extensionDemand, cache);
   }
   const packageJson = getExtensionPackageJson(identifier);
   if (packageJson.version !== version) {
-    return downloadExtension(extensionDemand);
+    return downloadExtension(extensionDemand, cache);
   }
+
+  await syncExtensionData(extensionDemand, cache);
   return extensionPath;
 }
 

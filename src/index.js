@@ -72,8 +72,6 @@ async function textmateHighlight(
     extensions = [],
   } = {},
 ) {
-  scopesByLanguage = { ...constants.scopesByLanguage, ...scopesByLanguage };
-  languageAliases = { ...constants.languageAliases, ...languageAliases };
   /** @type {Record<string, string>} */
   const stylesheets = {};
 
@@ -83,9 +81,11 @@ async function textmateHighlight(
     const lang = node.lang.toLowerCase();
     const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(lang));
     if (languageExtension) {
-      await downloadExtensionIfNeeded(languageExtension);
+      await downloadExtensionIfNeeded(languageExtension, cache);
     }
 
+    scopesByLanguage = { ...constants.scopesByLanguage, ...await cache.get('scopesByLanguage'), ...scopesByLanguage };
+    languageAliases = { ...constants.languageAliases, ...await cache.get('languageAliases'), ...languageAliases };
     /** @type {string} */
     const scope = scopesByLanguage[lang] || scopesByLanguage[languageAliases[lang]];
     if (!scope) {
@@ -97,30 +97,27 @@ async function textmateHighlight(
     const text = node.value || node.children && node.children[0] && node.children[0].value;
     if (!text) continue;
 
-    let registry = await cache.get('registry');
-    if (!registry) {
-      registry = new Registry({
-        loadGrammar: async scopeName => {
-          const fileName = constants.grammarLocations[scopeName];
-          if (fileName) {
-            const contents = await readFile(fileName, 'utf8');
-            return parseRawGrammar(contents, fileName);
-          } else {
-            warnMissingLanguageFile(scopeName);
-          }
-        },
-      });
-
-      await cache.set('registry', registry);
-    }
+    const registry = new Registry({
+      loadGrammar: async scopeName => {
+        const grammarLocations = { ...constants.grammarLocations, ...await cache.get('grammarLocations') };
+        const fileName = grammarLocations[scopeName];
+        if (fileName) {
+          const contents = await readFile(fileName, 'utf8');
+          return parseRawGrammar(contents, fileName);
+        } else {
+          warnMissingLanguageFile(scopeName);
+        }
+      },
+    });
 
     const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node) : colorTheme;
     const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
     if (themeExtension) {
-      await downloadExtensionIfNeeded(themeExtension);
+      await downloadExtensionIfNeeded(themeExtension, cache);
     }
 
-    const colorThemePath = constants.themeLocations[colorThemeValue]
+    const themeLocations = { ...constants.themeLocations, ...await cache.get('themeLocations') };
+    const colorThemePath = themeLocations[colorThemeValue]
       || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
     const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
     registry.setTheme({ settings: tokenColors });

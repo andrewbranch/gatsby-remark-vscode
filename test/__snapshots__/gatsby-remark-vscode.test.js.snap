@@ -1,5 +1,97 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`extension downloading can download an extension to resolve a grammar 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "custom",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"custom\\"><code><span class=\\"mtk1\\">const x = 3;</span>
+<span class=\\"mtk1\\">// Comment</span></code></pre>",
+    },
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+background-color: #1E1E1E;
+color: #D4D4D4;
+}
+
+.Dark-default-dark .mtk1 { color: #000000; }
+.Dark-default-dark .mtk2 { color: #FFFFFF; }
+.Dark-default-dark .mtk3 { color: #6A9955; }
+.Dark-default-dark .mtk4 { color: #569CD6; }
+.Dark-default-dark .mtk5 { color: #D16969; }
+.Dark-default-dark .mtk6 { color: #D7BA7D; }
+.Dark-default-dark .mtk7 { color: #B5CEA8; }
+.Dark-default-dark .mtk8 { color: #CE9178; }
+.Dark-default-dark .mtk9 { color: #646695; }
+.Dark-default-dark .mtk10 { color: #4EC9B0; }
+.Dark-default-dark .mtk11 { color: #DCDCAA; }
+.Dark-default-dark .mtk12 { color: #9CDCFE; }
+.Dark-default-dark .mtk13 { color: #000080; }
+.Dark-default-dark .mtk14 { color: #F44747; }
+.Dark-default-dark .mtk15 { color: #C586C0; }
+.Dark-default-dark .mtk16 { color: #D4D4D4; }
+.Dark-default-dark .mtk17 { color: #6796E6; }
+.Dark-default-dark .mtk18 { color: #808080; }
+.Dark-default-dark .mtki { font-style: italic; }
+.Dark-default-dark .mtkb { font-weight: bold; }
+.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+    },
+  ],
+}
+`;
+
+exports[`extension downloading can download an extension to resolve a theme 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "js",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight custom\\" data-language=\\"js\\"><code><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span>
+<span class=\\"mtk3\\">// Comment</span></code></pre>",
+    },
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.custom {
+
+}
+
+.custom .mtk1 { color: #000000; }
+.custom .mtk2 { color: #FFFFFF; }
+.custom .mtk3 { color: #6A9955; }
+.custom .mtk4 { color: #569CD6; }
+.custom .mtk5 { color: #B5CEA8; }
+.custom .mtk6 { color: #646695; }
+.custom .mtk7 { color: #D7BA7D; }
+.custom .mtk8 { color: #9CDCFE; }
+.custom .mtk9 { color: #000080; }
+.custom .mtk10 { color: #F44747; }
+.custom .mtk11 { color: #D4D4D4; }
+.custom .mtk12 { color: #CE9178; }
+.custom .mtk13 { color: #6796E6; }
+.custom .mtk14 { color: #808080; }
+.custom .mtk15 { color: #D16969; }
+.custom .mtki { font-style: italic; }
+.custom .mtkb { font-weight: bold; }
+.custom .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+    },
+  ],
+}
+`;
+
 exports[`included languages and themes works with default options 1`] = `
 Object {
   "children": Array [
