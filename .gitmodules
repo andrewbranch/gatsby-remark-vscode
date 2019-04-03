@@ -1,0 +1,3 @@
+[submodule "vscode"]
+	path = vscode
+	url = git@github.com:Microsoft/vscode.git
