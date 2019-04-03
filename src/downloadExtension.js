@@ -56,10 +56,11 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
     const themeContribution = themeContributions.find(contribution => contribution.id === theme)
       || themeContributions.find(contribution => contribution.label === theme);
     if (!themeContribution) {
+      const themeList = themeContributions.map(c => ` - ${c.label || c.id || path.extname(c.path).split('.')[0]}`).join('\n');
       throw new Error(
         `Extension '${identifier}' does not contribute the theme '${theme}'. ` +
-        `The list of themes it contains is:\n${themeContributions.map(c => ` - ${c.id}`).join('\n')}`);
-    }
+        `The list of themes it contains is:\n${themeList}`);
+      }
 
     const themeFilePath = path.resolve(getExtensionPath(identifier), themeContribution.path);
 
@@ -67,6 +68,13 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
       ...await cache.get('themeLocations'),
       [theme]: themeFilePath,
     });
+
+    if (themeContribution.label) {
+      await cache.set('themeAliases', {
+        ...await cache.get('themeAliases'),
+        [themeContribution.label.toLowerCase()]: theme,
+      });
+    }
   }
 }
 

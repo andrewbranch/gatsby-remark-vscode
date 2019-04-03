@@ -1,5 +1,9 @@
 // @ts-check
 const path = require('path');
+// @ts-ignore
+const grammarManifest = require('../lib/grammars/manifest.json');
+// @ts-ignore
+const themeManifest = require('../lib/themes/manifest.json');
 
 const scopesByLanguage = {
   js: 'source.js',
@@ -17,15 +21,19 @@ const languageAliases = {
   yml: 'yaml',
 };
 
-const themeLocations = {
-  darkPlus: path.resolve(__dirname, '../lib/themes/dark_plus.json'),
-};
+const grammarLocations = Object.keys(grammarManifest).reduce((hash, scopeName) => ({
+  ...hash,
+  [scopeName]: path.resolve(__dirname, '../lib/grammars', grammarManifest[scopeName]),
+}), {});
 
-const grammarLocations = {
-  [scopesByLanguage.js]: path.resolve(__dirname, '../lib/grammars/JavaScript.tmLanguage.json'),
-  [scopesByLanguage.jsx]: path.resolve(__dirname, '../lib/grammars/JavaScriptReact.tmLanguage.json'),
-  [scopesByLanguage.ts]: path.resolve(__dirname, '../lib/grammars/TypeScript.tmLanguage'),
-  [scopesByLanguage.tsx]: path.resolve(__dirname, '../lib/grammars/TypeScriptReact.tmLanguage'),
-};
+const themeLocations = Object.keys(themeManifest).reduce((hash, themeId) => ({
+  ...hash,
+  [themeId]: path.resolve(__dirname, '../lib/themes', themeManifest[themeId].path),
+}), {});
 
-module.exports = { scopesByLanguage, languageAliases, themeLocations, grammarLocations };
+const themeAliases = Object.keys(themeManifest).reduce((hash, themeId) => themeManifest[themeId].label ? ({
+  ...hash,
+  [themeManifest[themeId].label.toLowerCase()]: themeId,
+}) : hash, {});
+
+module.exports = { scopesByLanguage, languageAliases, grammarLocations, themeLocations, themeAliases };

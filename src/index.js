@@ -65,7 +65,7 @@ function getStylesFromSettings(settings) {
 async function textmateHighlight(
   { markdownAST, markdownNode, cache },
   {
-    colorTheme = () => 'darkPlus',
+    colorTheme = () => 'Default Dark+',
     highlightClassName = 'vscode-highlight',
     scopesByLanguage = {},
     languageAliases = {},
@@ -117,8 +117,11 @@ async function textmateHighlight(
     }
 
     const themeLocations = { ...constants.themeLocations, ...await cache.get('themeLocations') };
+    const themeAliases = { ...constants.themeAliases, ...await cache.get('themeAliases') };
     const colorThemePath = themeLocations[colorThemeValue]
+      || themeLocations[themeAliases[colorThemeValue]]
       || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
+
     const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
     registry.setTheme({ settings: tokenColors });
     if (!stylesheets[themeName]) {
