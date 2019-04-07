@@ -1,5 +1,6 @@
 // @ts-check
 const path = require('path');
+const uniq = require('lodash.uniq');
 
 /**
  * Splits a Visual Studio Marketplace extension identifier into publisher and extension name.
@@ -39,4 +40,22 @@ function getExtensionPackageJson(identifier) {
   return require(path.join(getExtensionPath(identifier), 'package.json'));
 }
 
-module.exports = { parseExtensionIdentifier, getExtensionPath, getExtensionBasePath, getExtensionPackageJson };
+/**
+ * Gets the array of language codes that can be used to set the language of a Markdown code fence.
+ * @param {*} languageRegistration A 'contributes.languages' entry from an extension’s package.json.
+ */
+function getLanguageNames(languageRegistration) {
+  return uniq([
+    languageRegistration.id,
+    ...(languageRegistration.aliases || []),
+    ...(languageRegistration.extensions || []),
+  ].map(name => name.toLowerCase().replace(/[^a-z0-9_-]/g, '')));
+}
+
+module.exports = {
+  parseExtensionIdentifier,
+  getExtensionPath,
+  getExtensionBasePath,
+  getExtensionPackageJson,
+  getLanguageNames,
+};

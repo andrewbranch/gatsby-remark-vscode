@@ -15,6 +15,8 @@ utils.parseExtensionIdentifier.mockImplementation(realUtils.parseExtensionIdenti
 utils.getExtensionBasePath.mockImplementation(realUtils.getExtensionBasePath);
 // @ts-ignore
 utils.getExtensionPath.mockImplementation(realUtils.getExtensionPath);
+// @ts-ignore
+utils.getLanguageNames.mockImplementation(realUtils.getLanguageNames);
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 
@@ -141,10 +143,13 @@ describe('extension downloading', () => {
     // @ts-ignore
     utils.getExtensionPackageJson.mockImplementationOnce(() => ({
       contributes: {
+        languages: [{
+          id: 'custom',
+        }],
         grammars: [{
           language: 'custom',
           scopeName: 'source.custom',
-          path: '../../../../test/custom.tmLanguage.json'
+          path: '../../../../test/custom.tmLanguage.json',
         }],
       }
     }));

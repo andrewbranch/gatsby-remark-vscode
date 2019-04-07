@@ -5,7 +5,13 @@ const zlib = require('zlib');
 const util = require('util');
 const request = require('request');
 const decompress = require('decompress');
-const { parseExtensionIdentifier, getExtensionPath, getExtensionBasePath, getExtensionPackageJson } = require('./utils');
+const {
+  parseExtensionIdentifier,
+  getExtensionPath,
+  getExtensionBasePath,
+  getExtensionPackageJson,
+  getLanguageNames,
+} = require('./utils');
 const gunzip = util.promisify(zlib.gunzip);
 
 /**
@@ -33,6 +39,8 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
     }
 
     const grammarFilePath = path.resolve(getExtensionPath(identifier), grammarContribution.path);
+    const languageRegistration = extensionData.contributes.languages
+      && extensionData.contributes.languages.find(l => l.id === grammarContribution.language);
 
     await cache.set('grammarLocations', {
       ...await cache.get('grammarLocations'),
@@ -41,7 +49,10 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
 
     await cache.set('scopesByLanguage', {
       ...await cache.get('scopesByLanguage'),
-      [language]: grammarContribution.scopeName,
+      ...languageRegistration && getLanguageNames(languageRegistration).reduce((hash, name) => ({
+        ...hash,
+        [name]: grammarContribution.scopeName,
+      }), {}),
     });
   }
 

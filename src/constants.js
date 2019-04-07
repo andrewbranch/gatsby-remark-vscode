@@ -5,25 +5,18 @@ const grammarManifest = require('../lib/grammars/manifest.json');
 // @ts-ignore
 const themeManifest = require('../lib/themes/manifest.json');
 
-const scopesByLanguage = {
-  js: 'source.js',
-  jsx: 'source.jsx',
-  md: 'text.html.markdown',
-  ts: 'source.ts',
-  tsx: 'source.tsx',
-  yaml: 'source.yaml',
-};
-
-const languageAliases = {
-  javascript: 'js',
-  markdown: 'md',
-  typescript: 'ts',
-  yml: 'yaml',
-};
+const scopesByLanguage = Object.keys(grammarManifest).reduce((hash, scopeName) => ({
+  ...hash,
+  ...grammarManifest[scopeName].languageNames
+    && grammarManifest[scopeName].languageNames.reduceRight((hash, name) => ({
+      ...hash,
+      [name]: scopeName,
+    }), {}),
+}), {});
 
 const grammarLocations = Object.keys(grammarManifest).reduce((hash, scopeName) => ({
   ...hash,
-  [scopeName]: path.resolve(__dirname, '../lib/grammars', grammarManifest[scopeName]),
+  [scopeName]: path.resolve(__dirname, '../lib/grammars', grammarManifest[scopeName].path),
 }), {});
 
 const themeLocations = Object.keys(themeManifest).reduce((hash, themeId) => ({
@@ -36,4 +29,4 @@ const themeAliases = Object.keys(themeManifest).reduce((hash, themeId) => themeM
   [themeManifest[themeId].label.toLowerCase()]: themeId,
 }) : hash, {});
 
-module.exports = { scopesByLanguage, languageAliases, grammarLocations, themeLocations, themeAliases };
+module.exports = { scopesByLanguage, grammarLocations, themeLocations, themeAliases };

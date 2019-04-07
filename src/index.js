@@ -85,7 +85,6 @@ async function textmateHighlight(
     }
 
     scopesByLanguage = { ...constants.scopesByLanguage, ...await cache.get('scopesByLanguage'), ...scopesByLanguage };
-    languageAliases = { ...constants.languageAliases, ...await cache.get('languageAliases'), ...languageAliases };
     /** @type {string} */
     const scope = scopesByLanguage[lang] || scopesByLanguage[languageAliases[lang]];
     if (!scope) {
