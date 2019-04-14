@@ -3,6 +3,7 @@ const fs = require('fs');
 const util = require('util');
 const path = require('path');
 const constants = require('./constants');
+const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
 const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
@@ -50,7 +51,7 @@ function getStylesFromSettings(settings) {
 
 /**
  * @typedef {object} PluginOptions
- * @property {string | ((markdownNode: any, codeBlockNode: any) => string)=} colorTheme
+ * @property {string | ((markdownNode: any, codeBlockNode: any, parsedOptions: any) => string)=} colorTheme
  * @property {string=} highlightClassName
  * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
@@ -77,18 +78,17 @@ async function textmateHighlight(
 
   for (const node of markdownAST.children) {
     if (node.type !== 'code' || !node.lang) continue;
-    /** @type {string} */
-    const lang = node.lang.toLowerCase();
-    const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(lang));
+    const { languageName, options } = parseCodeFenceHeader(node.lang.toLowerCase());
+    const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(languageName));
     if (languageExtension) {
       await downloadExtensionIfNeeded(languageExtension, cache);
     }
 
     scopesByLanguage = { ...constants.scopesByLanguage, ...await cache.get('scopesByLanguage'), ...scopesByLanguage };
     /** @type {string} */
-    const scope = scopesByLanguage[lang] || scopesByLanguage[languageAliases[lang]];
+    const scope = scopesByLanguage[languageName] || scopesByLanguage[languageAliases[languageName]];
     if (!scope) {
-      warnUnknownLanguage(lang);
+      warnUnknownLanguage(languageName);
       continue;
     }
 
@@ -109,7 +109,7 @@ async function textmateHighlight(
       },
     });
 
-    const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node) : colorTheme;
+    const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node, options) : colorTheme;
     const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
     if (themeExtension) {
       await downloadExtensionIfNeeded(themeExtension, cache);
@@ -155,7 +155,7 @@ async function textmateHighlight(
 
     node.type = 'html';
     node.value = [
-      `<pre class="${[highlightClassName, themeName].join(' ').trim()}" data-language="${lang}">`,
+      `<pre class="${[highlightClassName, themeName].join(' ').trim()}" data-language="${languageName}">`,
       `<code>`,
       htmlLines.join('\n'),
       `</code>`,

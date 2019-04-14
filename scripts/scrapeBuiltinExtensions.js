@@ -28,12 +28,18 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
       if (packageJson.contributes && packageJson.contributes.grammars) {
         return Promise.all(packageJson.contributes.grammars.map(async grammar => {
           const sourcePath = path.resolve(path.dirname(packageJsonPath), grammar.path);
-          const { scopeName } = path.extname(sourcePath) === '.json'
+          const content = path.extname(sourcePath) === '.json'
             ? requireJson(sourcePath)
             : plist.parse(await readFile(sourcePath, 'utf8'));
+            const { scopeName } = content;
           const destPath = grammarPath(path.basename(sourcePath));
           const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
-          await copyFile(sourcePath, destPath);
+          const newContent = processTmJson(content);
+          if (newContent === content) {
+            await copyFile(sourcePath, destPath);
+          } else {
+            await writeFile(destPath, JSON.stringify(newContent, null, 2));
+          }
 
           return {
             scopeName,
@@ -113,3 +119,24 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
     process.exit(1);
   }
 });
+
+/**
+ * @param {*} content JSON content of a tmLanguage file
+ */
+function processTmJson(content) {
+  // This one file tries to include like every language including ones that aren’t built into
+  // VS Code, and I doubt anybody wants to syntax highlight whatever “heredoc” is on their blog,
+  // so let’s just remove it.
+  if (content.scopeName === 'source.shell' && content.repository && content.repository.heredoc) {
+    return {
+      ...content,
+      repository: {
+        ...content.repository,
+        heredoc: {
+          patterns: [],
+        },
+      },
+    };
+  }
+  return content;
+}
