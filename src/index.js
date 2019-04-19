@@ -2,6 +2,7 @@
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
+const escapeHTML = require('lodash.escape');
 const constants = require('./constants');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
@@ -122,7 +123,14 @@ async function textmateHighlight(
       || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
 
     const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
-    registry.setTheme({ settings: tokenColors });
+    const defaultTokenColors = {
+      settings: {
+        foreground: settings['editor.foreground'],
+        background: settings['editor.background'],
+      },
+    };
+
+    registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
     if (!stylesheets[themeName]) {
       stylesheets[themeName] = [
         `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
@@ -146,7 +154,7 @@ async function textmateHighlight(
         const endIndex = result.tokens[i + 2] || line.length;
         htmlLine += [
           `<span class="${getClassNameFromMetadata(metadata)}">`,
-          line.slice(startIndex, endIndex),
+          escapeHTML(line.slice(startIndex, endIndex)),
           '</span>',
         ].join('');
       }
