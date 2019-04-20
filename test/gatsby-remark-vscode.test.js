@@ -19,6 +19,8 @@ utils.getExtensionPath.mockImplementation(realUtils.getExtensionPath);
 utils.getLanguageNames.mockImplementation(realUtils.getLanguageNames);
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
+/** @type {import('../src').PluginOptions} */
+const options = { injectStyles: false };
 
 function createCache() {
   return new Map();
@@ -38,14 +40,14 @@ describe('included languages and themes', () => {
   it('works with default options', async () => {
     const markdownAST = createMarkdownAST();
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, {});
+    await plugin({ markdownAST, markdownNode, cache }, options);
     expect(markdownAST).toMatchSnapshot();
   });
 
   it('does nothing if language is not recognized', async () => {
     const markdownAST = createMarkdownAST('none');
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache });
+    await plugin({ markdownAST, markdownNode, cache }, options);
     expect(markdownAST).toEqual(createMarkdownAST('none'));
   });
 
@@ -55,6 +57,7 @@ describe('included languages and themes', () => {
     const cache = createCache();
     try {
       await plugin({ markdownAST, markdownNode, cache }, {
+        ...options,
         scopesByLanguage: { none: 'source.none' },
       });
     } catch (err) {
@@ -65,28 +68,28 @@ describe('included languages and themes', () => {
   it('only adds theme CSS once', async () => {
     const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache });
+    await plugin({ markdownAST, markdownNode, cache }, options);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
   });
 
   it('can use a standard language alias', async () => {
     const markdownAST = createMarkdownAST('JavaScript');
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache });
+    await plugin({ markdownAST, markdownNode, cache }, options);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
   });
 
   it('can use a custom language alias', async () => {
     const markdownAST = createMarkdownAST('java-scripty');
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, { languageAliases: { 'java-scripty': 'js' } });
+    await plugin({ markdownAST, markdownNode, cache }, { ...options, languageAliases: { 'java-scripty': 'js' } });
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
   });
 
   it('can use a custom scope mapping', async () => {
     const markdownAST = createMarkdownAST('swift');
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, { scopesByLanguage: { swift: 'source.js' } });
+    await plugin({ markdownAST, markdownNode, cache }, { ...options, scopesByLanguage: { swift: 'source.js' } });
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
   });
 });
@@ -120,6 +123,7 @@ describe('extension downloading', () => {
     const markdownAST = createMarkdownAST();
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, {
+      ...options,
       colorTheme: 'custom',
       extensions: [{
         identifier: 'publisher.custom-theme',
@@ -157,6 +161,7 @@ describe('extension downloading', () => {
     const markdownAST = createMarkdownAST('custom');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, {
+      ...options,
       extensions: [{
         identifier: 'publisher.custom-language',
         version: '1.0.0',
@@ -173,6 +178,6 @@ describe('extension downloading', () => {
 it('sets highlighted line class names', async () => {
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
   const cache = createCache();
-  await plugin({ markdownAST, markdownNode, cache }, {});
+  await plugin({ markdownAST, markdownNode, cache }, options);
   expect(markdownAST).toMatchSnapshot();
 });

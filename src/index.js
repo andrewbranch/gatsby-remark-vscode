@@ -12,6 +12,7 @@ const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const readFile = util.promisify(fs.readFile);
+const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
  * @param {string} scopeName 
@@ -67,6 +68,7 @@ function getStylesFromSettings(settings) {
  * @property {Record<string, string>=} languageAliases
  * @property {ExtensionDemand[]=} extensions
  * @property {(line: LineData) => string=} getLineClassName
+ * @property {boolean=} injectStyles
  */
 
 /**
@@ -83,6 +85,7 @@ async function textmateHighlight(
     languageAliases = {},
     extensions = [],
     getLineClassName = () => '',
+    injectStyles = true,
   } = {},
 ) {
   /** @type {Record<string, string>} */
@@ -188,11 +191,11 @@ async function textmateHighlight(
       ].join(''));
     }
 
-    const className = [highlightClassName, 'vscode-highlight'].join(' ').trim();
+    const className = [highlightClassName, themeName, 'vscode-highlight'].join(' ').trim();
     node.type = 'html';
     node.value = [
-      `<pre class="${className}" data-language="${languageName}" data-theme="${themeName}">`,
-      `<code>`,
+      `<pre class="${className}" data-language="${languageName}">`,
+      `<code class="vscode-highlight-code">`,
       htmlLines.join('\n'),
       `</code>`,
       `</pre>`,
@@ -205,6 +208,7 @@ async function textmateHighlight(
       type: 'html',
       value: [
         '<style class="vscode-highlight-styles">',
+        injectStyles ? styles : '',
         themeNames.map(theme => stylesheets[theme]).join('\n'),
         '</style>',
       ].join(''),

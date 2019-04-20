@@ -1,0 +1,32 @@
+:root {
+  --vscode-highlight-padding-v: 1rem;
+  --vscode-highlight-padding-h: 1.5rem;
+  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
+  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
+  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
+  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
+  --vscode-highlight-border-radius: 8px;
+}
+
+.vscode-highlight {
+  overflow: auto;
+  padding-top: 1rem;
+  padding-top: var(--vscode-highlight-padding-top);
+  padding-bottom: 1rem;
+  padding-bottom: var(--vscode-highlight-padding-bottom);
+  border-radius: 8px;
+  border-radius: var(--vscode-highlight-border-radius);
+}
+
+.vscode-highlight-code {
+  display: inline-block;
+}
+
+.vscode-highlight-line {
+  display: inline-block;
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-left: var(--vscode-highlight-padding-left);
+  padding-right: 1.5rem;
+  padding-right: var(--vscode-highlight-padding-right);
+}
