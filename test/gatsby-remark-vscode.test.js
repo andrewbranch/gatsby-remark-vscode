@@ -169,3 +169,10 @@ describe('extension downloading', () => {
     expect(markdownAST).toMatchSnapshot();
   });
 });
+
+it('sets highlighted line class names', async () => {
+  const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
+  const cache = createCache();
+  await plugin({ markdownAST, markdownNode, cache }, {});
+  expect(markdownAST).toMatchSnapshot();
+});

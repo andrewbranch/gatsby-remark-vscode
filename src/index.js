@@ -4,6 +4,7 @@ const util = require('util');
 const path = require('path');
 const escapeHTML = require('lodash.escape');
 const constants = require('./constants');
+const lineHighlighting = require('./lineHighlighting');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
 const { downloadExtensionIfNeeded } = require('./downloadExtension');
@@ -51,12 +52,21 @@ function getStylesFromSettings(settings) {
  */
 
 /**
+ * @typedef {object} LineData
+ * @property {string} content The line’s string content 
+ * @property {number} index The zero-based line index
+ * @property {string} language The code block’s language
+ * @property {object} codeBlockOptions The code block’s options parsed from the language suffix
+ */
+
+/**
  * @typedef {object} PluginOptions
- * @property {string | ((markdownNode: any, codeBlockNode: any, parsedOptions: any) => string)=} colorTheme
+ * @property {string | ((markdownNode: any, codeBlockNode: any, parsedOptions: object) => string)=} colorTheme
  * @property {string=} highlightClassName
  * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
  * @property {ExtensionDemand[]=} extensions
+ * @property {(line: LineData) => string=} getLineClassName
  */
 
 /**
@@ -72,6 +82,7 @@ async function textmateHighlight(
     scopesByLanguage = {},
     languageAliases = {},
     extensions = [],
+    getLineClassName = () => '',
   } = {},
 ) {
   /** @type {Record<string, string>} */
@@ -140,11 +151,13 @@ async function textmateHighlight(
       ].join('\n');
     }
 
+    const highlightedLines = lineHighlighting.parseOptionKeys(options);
     const grammar = await registry.loadGrammar(scope)
     const rawLines = text.split(/\r?\n/);
     const htmlLines = [];
     let ruleStack = undefined;
-    for (const line of rawLines) {
+    for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
+      const line = rawLines[lineIndex];
       const result = grammar.tokenizeLine2(line, ruleStack);
       ruleStack = result.ruleStack;
       let htmlLine = '';
@@ -152,13 +165,27 @@ async function textmateHighlight(
         const startIndex = result.tokens[i];
         const metadata = result.tokens[i + 1];
         const endIndex = result.tokens[i + 2] || line.length;
+        /** @type {LineData} */
         htmlLine += [
           `<span class="${getClassNameFromMetadata(metadata)}">`,
           escapeHTML(line.slice(startIndex, endIndex)),
           '</span>',
         ].join('');
       }
-      htmlLines.push(htmlLine);
+      
+      const isHighlighted = highlightedLines.includes(lineIndex + 1);
+      const lineData = { codeBlockOptions: options, index: lineIndex, content: line, language: languageName };
+      const className = [
+        getLineClassName(lineData),
+        `${highlightClassName}-line`,
+        isHighlighted ? `${highlightClassName}-line-highlighted` : ''
+      ].join(' ').trim();
+
+      htmlLines.push([
+        `<div class="${className}">`,
+        htmlLine,
+        `</div>`
+      ].join('\n'));
     }
 
     node.type = 'html';
@@ -168,7 +195,7 @@ async function textmateHighlight(
       htmlLines.join('\n'),
       `</code>`,
       `</pre>`,
-    ].join('');
+    ].join('\n');
   }
 
   const themeNames = Object.keys(stylesheets);
