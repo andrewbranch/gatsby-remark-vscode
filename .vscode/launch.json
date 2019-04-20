@@ -7,6 +7,12 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "Scrape Extensions",
+      "program": "${workspaceFolder}/scripts/scrapeBuiltinExtensions.js"
+    },
+    {
+      "type": "node",
+      "request": "launch",
       "name": "Test",
       "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["--runInBand"],

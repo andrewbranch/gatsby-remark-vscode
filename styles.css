@@ -24,6 +24,7 @@
 
 .vscode-highlight-code {
   display: inline-block;
+  min-width: 100%;
 }
 
 .vscode-highlight-line {

@@ -9,9 +9,11 @@ const { getLanguageNames } = require('../src/utils');
 
 const copyFile = util.promisify(fs.copyFile);
 const writeFile = util.promisify(fs.writeFile);
+const exists = util.promisify(fs.exists);
 const readFile = util.promisify(fs.readFile);
 const tryMkdir = /** @param {string} pathName */ pathName => { try { return fs.mkdirSync(pathName) } catch (_) { return null; } };
 const requireJson = pathName => json.parse(fs.readFileSync(pathName, 'utf8'));
+const requireGrammar = async pathName => path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
 
 const grammarDestDir = path.resolve(__dirname, '../lib/grammars');
 const themeDestDir = path.resolve(__dirname, '../lib/themes');
@@ -29,11 +31,19 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
       if (packageJson.contributes && packageJson.contributes.grammars) {
         return Promise.all(packageJson.contributes.grammars.map(async grammar => {
           const sourcePath = path.resolve(path.dirname(packageJsonPath), grammar.path);
-          const content = path.extname(sourcePath) === '.json'
-            ? requireJson(sourcePath)
-            : plist.parse(await readFile(sourcePath, 'utf8'));
-            const { scopeName } = content;
-          const destPath = grammarPath(path.basename(sourcePath));
+          const content = await requireGrammar(sourcePath);
+          const { scopeName } = content;
+          let destPath = grammarPath(path.basename(sourcePath));
+          // Different languages are sometimes named the same thing
+          languageId++;
+          if (await exists(destPath)) {
+            const existingGrammar = await requireGrammar(destPath);
+            if (existingGrammar.scopeName !== scopeName) {
+              const [baseName, ...ext] = path.basename(sourcePath).split('.');
+              const renamed = [baseName, languageId, ...ext].join('.');
+              destPath = grammarPath(renamed);
+            }
+          }
           const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
           const newContent = processTmJson(content);
           if (newContent === content) {
@@ -48,6 +58,7 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
             tokenTypes: grammar.tokenTypes,
             embeddedLanguages: grammar.embeddedLanguages,
             languageNames: languageRegistration ? getLanguageNames(languageRegistration) : [],
+            languageId,
           };
         }));
       }
@@ -64,7 +75,7 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
             tokenTypes: grammar.tokenTypes,
             embeddedLanguages: grammar.embeddedLanguages,
             languageNames: grammar.languageNames,
-            languageId: languageId++,
+            languageId: grammar.languageId,
           },
         }) : hash, {}),
       }) : hash, {}), null, 2));

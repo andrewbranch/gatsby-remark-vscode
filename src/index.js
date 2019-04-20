@@ -15,10 +15,11 @@ const readFile = util.promisify(fs.readFile);
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
- * @param {string} scopeName 
+ * @param {string} missingScopeName 
+ * @param {string} rootScopeName
  */
-function warnMissingLanguageFile(scopeName) {
-  console.warn(`No language file was loaded for scope '${scopeName}'. `);
+function warnMissingLanguageFile(missingScopeName, rootScopeName) {
+  console.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
 }
 
 /**
@@ -123,7 +124,7 @@ async function textmateHighlight(
           const contents = await readFile(fileName, 'utf8');
           return parseRawGrammar(contents, fileName);
         } else {
-          warnMissingLanguageFile(scopeName);
+          warnMissingLanguageFile(scopeName, scope);
         }
       },
     });
@@ -143,8 +144,8 @@ async function textmateHighlight(
     const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
     const defaultTokenColors = {
       settings: {
-        foreground: settings['editor.foreground'],
-        background: settings['editor.background'],
+        foreground: settings['editor.foreground'] || settings.foreground,
+        background: settings['editor.background'] || settings.background,
       },
     };
 
