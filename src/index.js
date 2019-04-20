@@ -177,8 +177,8 @@ async function textmateHighlight(
       const lineData = { codeBlockOptions: options, index: lineIndex, content: line, language: languageName };
       const className = [
         getLineClassName(lineData),
-        `${highlightClassName}-line`,
-        isHighlighted ? `${highlightClassName}-line-highlighted` : ''
+        'vscode-highlight-line',
+        isHighlighted ? 'vscode-highlight-line-highlighted' : ''
       ].join(' ').trim();
 
       htmlLines.push([
@@ -188,9 +188,10 @@ async function textmateHighlight(
       ].join(''));
     }
 
+    const className = [highlightClassName, 'vscode-highlight'].join(' ').trim();
     node.type = 'html';
     node.value = [
-      `<pre class="${[highlightClassName, themeName].join(' ').trim()}" data-language="${languageName}">`,
+      `<pre class="${className}" data-language="${languageName}" data-theme="${themeName}">`,
       `<code>`,
       htmlLines.join('\n'),
       `</code>`,
