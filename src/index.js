@@ -95,8 +95,8 @@ async function textmateHighlight(
   const stylesheets = {};
 
   for (const node of markdownAST.children) {
-    if (node.type !== 'code' || !node.lang) continue;
-    const { languageName, options } = parseCodeFenceHeader(node.lang.toLowerCase());
+    if (node.type !== 'code') continue;
+    const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
     const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(languageName));
     if (languageExtension) {
       await downloadExtensionIfNeeded(languageExtension, cache);
@@ -105,30 +105,11 @@ async function textmateHighlight(
     scopesByLanguage = { ...constants.scopesByLanguage, ...await cache.get('scopesByLanguage'), ...scopesByLanguage };
     /** @type {string} */
     const scope = scopesByLanguage[languageName] || scopesByLanguage[languageAliases[languageName]];
-    if (!scope) {
+    if (!scope && languageName) {
       warnUnknownLanguage(languageName);
-      continue;
     }
-    /** @type {number} */
-    const languageId = { ...constants.languageIds, ...await cache.get('languageIds' ) }[scope];
 
-    /** @type {string} */
-    const text = node.value || node.children && node.children[0] && node.children[0].value;
-    if (!text) continue;
-
-    const registry = new Registry({
-      loadGrammar: async scopeName => {
-        const grammarLocations = { ...constants.grammarLocations, ...await cache.get('grammarLocations') };
-        const fileName = grammarLocations[scopeName];
-        if (fileName) {
-          const contents = await readFile(fileName, 'utf8');
-          return parseRawGrammar(contents, fileName);
-        } else {
-          warnMissingLanguageFile(scopeName, scope);
-        }
-      },
-    });
-
+    // Set up theme
     const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node, options) : colorTheme;
     const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
     if (themeExtension) {
@@ -149,37 +130,66 @@ async function textmateHighlight(
       },
     };
 
-    registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
-    if (!stylesheets[themeName]) {
-      stylesheets[themeName] = [
-        `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
-        ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
-          .split('\n')
-          .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
-      ].join('\n');
+    /** @type {string} */
+    const text = node.value || node.children && node.children[0] && node.children[0].value;
+    if (!text) continue;
+
+    const rawLines = text.split(/\r?\n/);
+    const htmlLines = [];
+    /** @type {number} */
+    let languageId;
+    /** @type {Registry} */
+    let registry;
+
+    if (scope) {
+      languageId = { ...constants.languageIds, ...await cache.get('languageIds' ) }[scope];
+      registry = new Registry({
+        loadGrammar: async scopeName => {
+          const grammarLocations = { ...constants.grammarLocations, ...await cache.get('grammarLocations') };
+          const fileName = grammarLocations[scopeName];
+          if (fileName) {
+            const contents = await readFile(fileName, 'utf8');
+            return parseRawGrammar(contents, fileName);
+          } else {
+            warnMissingLanguageFile(scopeName, scope);
+          }
+        },
+      });
+
+      registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
+      if (!stylesheets[themeName]) {
+        stylesheets[themeName] = [
+          `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
+          ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
+            .split('\n')
+            .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
+        ].join('\n');
+      }
     }
 
     const highlightedLines = lineHighlighting.parseOptionKeys(options);
-    const tokenTypes = { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope] || {};
-    const grammar = await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
-    const rawLines = text.split(/\r?\n/);
-    const htmlLines = [];
+    const tokenTypes = scope && { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope] || {};
+    const grammar = registry && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
     let ruleStack = undefined;
     for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
       const line = rawLines[lineIndex];
-      const result = grammar.tokenizeLine2(line, ruleStack);
-      ruleStack = result.ruleStack;
       let htmlLine = '';
-      for (let i = 0; i < result.tokens.length; i += 2) {
-        const startIndex = result.tokens[i];
-        const metadata = result.tokens[i + 1];
-        const endIndex = result.tokens[i + 2] || line.length;
-        /** @type {LineData} */
-        htmlLine += [
-          `<span class="${getClassNameFromMetadata(metadata)}">`,
-          escapeHTML(line.slice(startIndex, endIndex)),
-          '</span>',
-        ].join('');
+      if (grammar) {
+        const result = grammar.tokenizeLine2(line, ruleStack);
+        ruleStack = result.ruleStack;
+        for (let i = 0; i < result.tokens.length; i += 2) {
+          const startIndex = result.tokens[i];
+          const metadata = result.tokens[i + 1];
+          const endIndex = result.tokens[i + 2] || line.length;
+          /** @type {LineData} */
+          htmlLine += [
+            `<span class="${getClassNameFromMetadata(metadata)}">`,
+            escapeHTML(line.slice(startIndex, endIndex)),
+            '</span>',
+          ].join('');
+        }
+      } else {
+        htmlLine += escapeHTML(line);
       }
       
       const isHighlighted = highlightedLines.includes(lineIndex + 1);

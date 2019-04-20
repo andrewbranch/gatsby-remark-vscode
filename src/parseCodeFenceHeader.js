@@ -19,7 +19,11 @@ function test(input, pattern) {
 function parseCodeFenceHeader(input) {
   let pos = 0;
   let options = {};
-  const languageName = parseIdentifier();
+  let languageName = '';
+  skipTrivia();
+  if (!isEnd() && current() !== '{') {
+    languageName = parseIdentifier();
+  }
   skipTrivia();
   if (!isEnd() && current() === '{') {
     options = parseObject();

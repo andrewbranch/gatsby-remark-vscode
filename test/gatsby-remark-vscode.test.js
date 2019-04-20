@@ -51,18 +51,23 @@ describe('included languages and themes', () => {
     expect(markdownAST).toEqual(createMarkdownAST('none'));
   });
 
-  it('fails if no grammar file is found', async () => {
+  it('works without highlighting if no grammar file is found', async () => {
     expect.assertions(1);
     const markdownAST = createMarkdownAST('none');
     const cache = createCache();
-    try {
-      await plugin({ markdownAST, markdownNode, cache }, {
-        ...options,
-        scopesByLanguage: { none: 'source.none' },
-      });
-    } catch (err) {
-      expect(err).toBeInstanceOf(Error);
-    }
+    await plugin({ markdownAST, markdownNode, cache }, {
+      ...options,
+      scopesByLanguage: { none: 'source.none' },
+    });
+    expect(markdownAST).toMatchSnapshot();
+  });
+
+  it('works without highlighting if a code fence has no language', async () => {
+    expect.assertions(1);
+    const markdownAST = createMarkdownAST('');
+    const cache = createCache();
+    await plugin({ markdownAST, markdownNode, cache }, options);
+    expect(markdownAST).toMatchSnapshot();
   });
 
   it('only adds theme CSS once', async () => {

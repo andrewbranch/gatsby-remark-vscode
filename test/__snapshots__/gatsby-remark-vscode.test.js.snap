@@ -185,6 +185,25 @@ color: #D4D4D4;
 }
 `;
 
+exports[`included languages and themes works without highlighting if a code fence has no language 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "",
+      "type": "code",
+      "value": "const x = 3;
+// Comment",
+    },
+    Object {
+      "type": "paragraph",
+    },
+  ],
+}
+`;
+
 exports[`sets highlighted line class names 1`] = `
 Object {
   "children": Array [
