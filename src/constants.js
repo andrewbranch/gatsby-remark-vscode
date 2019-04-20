@@ -29,4 +29,18 @@ const themeAliases = Object.keys(themeManifest).reduce((hash, themeId) => themeM
   [themeManifest[themeId].label.toLowerCase()]: themeId,
 }) : hash, {});
 
-module.exports = { scopesByLanguage, grammarLocations, themeLocations, themeAliases };
+const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce((highest, scopeName) => (
+  Math.max(highest, grammarManifest[scopeName].languageId)
+), 1);
+
+const languageIds = Object.keys(grammarManifest).reduce((hash, scopeName) => ({
+  ...hash,
+  [scopeName]: grammarManifest[scopeName].languageId,
+}), {});
+
+const tokenTypes = Object.keys(grammarManifest).reduce((hash, scopeName) => ({
+  ...hash,
+  [scopeName]: grammarManifest[scopeName].tokenTypes,
+}), {});
+
+module.exports = { scopesByLanguage, grammarLocations, themeLocations, themeAliases, languageIds, tokenTypes, highestBuiltinLanguageId };

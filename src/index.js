@@ -106,6 +106,8 @@ async function textmateHighlight(
       warnUnknownLanguage(languageName);
       continue;
     }
+    /** @type {number} */
+    const languageId = { ...constants.languageIds, ...await cache.get('languageIds' ) }[scope];
 
     /** @type {string} */
     const text = node.value || node.children && node.children[0] && node.children[0].value;
@@ -155,7 +157,8 @@ async function textmateHighlight(
     }
 
     const highlightedLines = lineHighlighting.parseOptionKeys(options);
-    const grammar = await registry.loadGrammar(scope)
+    const tokenTypes = { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope];
+    const grammar = await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
     const rawLines = text.split(/\r?\n/);
     const htmlLines = [];
     let ruleStack = undefined;

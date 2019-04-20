@@ -5,6 +5,7 @@ const zlib = require('zlib');
 const util = require('util');
 const request = require('request');
 const decompress = require('decompress');
+const { highestBuiltinLanguageId } = require('./constants');
 const {
   parseExtensionIdentifier,
   getExtensionPath,
@@ -13,6 +14,16 @@ const {
   getLanguageNames,
 } = require('./utils');
 const gunzip = util.promisify(zlib.gunzip);
+let languageId = highestBuiltinLanguageId + 1;
+
+/**
+ * @param {*} cache
+ * @param {string} key 
+ * @param {object} value 
+ */
+async function mergeCache(cache, key, value) {
+  return cache.set(key, { ...await cache.get(key), ...value });
+}
 
 /**
  * @param {import('.').ExtensionDemand} extensionDemand
@@ -42,13 +53,19 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
     const languageRegistration = extensionData.contributes.languages
       && extensionData.contributes.languages.find(l => l.id === grammarContribution.language);
 
-    await cache.set('grammarLocations', {
-      ...await cache.get('grammarLocations'),
+    await mergeCache(cache, 'grammarLocations', {
       [grammarContribution.scopeName]: grammarFilePath,
     });
 
-    await cache.set('scopesByLanguage', {
-      ...await cache.get('scopesByLanguage'),
+    await mergeCache(cache, 'languageIds', {
+      [grammarContribution.scopeName]: languageId++,
+    });
+
+    await mergeCache(cache, 'tokenTypes', {
+      [grammarContribution.scopeName]: grammarContribution.tokenTypes,
+    });
+
+    await mergeCache(cache, 'scopesByLanguage', {
       ...languageRegistration && getLanguageNames(languageRegistration).reduce((hash, name) => ({
         ...hash,
         [name]: grammarContribution.scopeName,
@@ -75,14 +92,12 @@ async function syncExtensionData({ identifier, themes = [], languages = [] }, ca
 
     const themeFilePath = path.resolve(getExtensionPath(identifier), themeContribution.path);
 
-    await cache.set('themeLocations', {
-      ...await cache.get('themeLocations'),
+    await mergeCache(cache, 'themeLocations', {
       [theme]: themeFilePath,
     });
 
     if (themeContribution.label) {
-      await cache.set('themeAliases', {
-        ...await cache.get('themeAliases'),
+      await mergeCache(cache, 'themeAliases', {
         [themeContribution.label.toLowerCase()]: theme,
       });
     }

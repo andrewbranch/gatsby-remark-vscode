@@ -17,6 +17,7 @@ const grammarDestDir = path.resolve(__dirname, '../lib/grammars');
 const themeDestDir = path.resolve(__dirname, '../lib/themes');
 const grammarPath = /** @param {string} basename */ basename => path.join(grammarDestDir, basename);
 const themePath = /** @param {string} basename */ basename => path.join(themeDestDir, basename);
+let languageId = 1;
 
 glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err, packages) => {
   try {
@@ -63,6 +64,7 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
             tokenTypes: grammar.tokenTypes,
             embeddedLanguages: grammar.embeddedLanguages,
             languageNames: grammar.languageNames,
+            languageId: languageId++,
           },
         }) : hash, {}),
       }) : hash, {}), null, 2));
