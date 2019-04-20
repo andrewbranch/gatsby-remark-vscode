@@ -22,7 +22,7 @@ let languageId = highestBuiltinLanguageId + 1;
  * @param {object} value 
  */
 async function mergeCache(cache, key, value) {
-  return cache.set(key, { ...await cache.get(key), ...value });
+  await cache.set(key, { ...await cache.get(key), ...value });
 }
 
 /**
@@ -133,7 +133,7 @@ async function downloadExtension(extensionDemand, cache) {
 
   const extensionPath = getExtensionBasePath(identifier);
   await decompress(archive, extensionPath);
-  syncExtensionData(extensionDemand, cache);
+  await syncExtensionData(extensionDemand, cache);
   return extensionPath;
 }
 

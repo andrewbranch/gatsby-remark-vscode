@@ -181,3 +181,13 @@ it('sets highlighted line class names', async () => {
   await plugin({ markdownAST, markdownNode, cache }, options);
   expect(markdownAST).toMatchSnapshot();
 });
+
+it('can replace a color value', async () => {
+  const markdownAST = createMarkdownAST();
+  const cache = createCache();
+  await plugin({ markdownAST, markdownNode, cache }, {
+    ...options,
+    replaceColor: oldColor => `var(--color-${oldColor.replace('#', '')})`,
+  });
+  expect(markdownAST).toMatchSnapshot();
+});

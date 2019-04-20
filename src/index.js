@@ -69,6 +69,7 @@ function getStylesFromSettings(settings) {
  * @property {ExtensionDemand[]=} extensions
  * @property {(line: LineData) => string=} getLineClassName
  * @property {boolean=} injectStyles
+ * @property {(colorValue: string) => string=} replaceColor
  */
 
 /**
@@ -86,6 +87,7 @@ async function textmateHighlight(
     extensions = [],
     getLineClassName = () => '',
     injectStyles = true,
+    replaceColor = x => x,
   } = {},
 ) {
   /** @type {Record<string, string>} */
@@ -150,14 +152,14 @@ async function textmateHighlight(
     if (!stylesheets[themeName]) {
       stylesheets[themeName] = [
         `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
-        ...generateTokensCSSForColorMap(registry.getColorMap())
+        ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
           .split('\n')
           .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
       ].join('\n');
     }
 
     const highlightedLines = lineHighlighting.parseOptionKeys(options);
-    const tokenTypes = { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope];
+    const tokenTypes = { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope] || {};
     const grammar = await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
     const rawLines = text.split(/\r?\n/);
     const htmlLines = [];

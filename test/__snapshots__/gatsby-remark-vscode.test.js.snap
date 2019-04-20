@@ -1,5 +1,52 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`can replace a color value 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "js",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+    },
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+background-color: #1E1E1E;
+color: #D4D4D4;
+}
+
+.Dark-default-dark .mtk1 { color: var(--color-D4D4D4); }
+.Dark-default-dark .mtk2 { color: var(--color-1E1E1E); }
+.Dark-default-dark .mtk3 { color: var(--color-6A9955); }
+.Dark-default-dark .mtk4 { color: var(--color-569CD6); }
+.Dark-default-dark .mtk5 { color: var(--color-D16969); }
+.Dark-default-dark .mtk6 { color: var(--color-D7BA7D); }
+.Dark-default-dark .mtk7 { color: var(--color-B5CEA8); }
+.Dark-default-dark .mtk8 { color: var(--color-CE9178); }
+.Dark-default-dark .mtk9 { color: var(--color-646695); }
+.Dark-default-dark .mtk10 { color: var(--color-4EC9B0); }
+.Dark-default-dark .mtk11 { color: var(--color-DCDCAA); }
+.Dark-default-dark .mtk12 { color: var(--color-9CDCFE); }
+.Dark-default-dark .mtk13 { color: var(--color-000080); }
+.Dark-default-dark .mtk14 { color: var(--color-F44747); }
+.Dark-default-dark .mtk15 { color: var(--color-C586C0); }
+.Dark-default-dark .mtk16 { color: var(--color-6796E6); }
+.Dark-default-dark .mtk17 { color: var(--color-808080); }
+.Dark-default-dark .mtki { font-style: italic; }
+.Dark-default-dark .mtkb { font-weight: bold; }
+.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+    },
+  ],
+}
+`;
+
 exports[`extension downloading can download an extension to resolve a grammar 1`] = `
 Object {
   "children": Array [
