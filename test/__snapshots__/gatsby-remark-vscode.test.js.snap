@@ -9,16 +9,8 @@ Object {
     Object {
       "lang": "custom",
       "type": "html",
-      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"custom\\">
-<code>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk1\\">const x = 3;</span>
-</div>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk1\\">// Comment</span>
-</div>
-</code>
-</pre>",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"custom\\"><code><span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">const x = 3;</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">// Comment</span></span></code></pre>",
     },
     Object {
       "type": "paragraph",
@@ -64,16 +56,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"vscode-highlight custom\\" data-language=\\"js\\">
-<code>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span>
-</div>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk3\\">// Comment</span>
-</div>
-</code>
-</pre>",
+      "value": "<pre class=\\"vscode-highlight custom\\" data-language=\\"js\\"><code><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
       "type": "paragraph",
@@ -116,16 +100,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"js\\">
-<code>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span>
-</div>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk3\\">// Comment</span>
-</div>
-</code>
-</pre>",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"js\\"><code><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
       "type": "paragraph",
@@ -171,25 +147,11 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"js\\">
-<code>
-<div class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\">
-<span class=\\"mtk3\\">// 1</span>
-</div>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk3\\">// 2</span>
-</div>
-<div class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\">
-<span class=\\"mtk3\\">// 3</span>
-</div>
-<div class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\">
-<span class=\\"mtk3\\">// 4</span>
-</div>
-<div class=\\"vscode-highlight-line\\">
-<span class=\\"mtk3\\">// 5</span>
-</div>
-</code>
-</pre>",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark\\" data-language=\\"js\\"><code><span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// 2</span></span>
+<span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
+<span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
+<span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// 5</span></span></code></pre>",
     },
     Object {
       "type": "paragraph",

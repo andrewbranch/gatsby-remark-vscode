@@ -182,10 +182,10 @@ async function textmateHighlight(
       ].join(' ').trim();
 
       htmlLines.push([
-        `<div class="${className}">`,
+        `<span class="${className}">`,
         htmlLine,
-        `</div>`
-      ].join('\n'));
+        `</span>`
+      ].join(''));
     }
 
     node.type = 'html';
@@ -195,7 +195,7 @@ async function textmateHighlight(
       htmlLines.join('\n'),
       `</code>`,
       `</pre>`,
-    ].join('\n');
+    ].join('');
   }
 
   const themeNames = Object.keys(stylesheets);
