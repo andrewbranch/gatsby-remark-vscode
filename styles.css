@@ -6,6 +6,10 @@
   --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
   --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
   --vscode-highlight-border-radius: 8px;
+
+  --vscode-highlight-line-highlighted-background-color: transparent;
+  --vscode-highlight-line-highlighted-border-width: 4px;
+  --vscode-highlight-line-highlighted-border-color: transparent;
 }
 
 .vscode-highlight {
@@ -29,4 +33,9 @@
   padding-left: var(--vscode-highlight-padding-left);
   padding-right: 1.5rem;
   padding-right: var(--vscode-highlight-padding-right);
+}
+
+.vscode-highlight-line-highlighted {
+  background-color: var(--vscode-highlight-line-highlighted-background-color);
+  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
 }
