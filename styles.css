@@ -14,12 +14,14 @@
 
 .vscode-highlight {
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
   padding-top: 1rem;
   padding-top: var(--vscode-highlight-padding-top);
   padding-bottom: 1rem;
   padding-bottom: var(--vscode-highlight-padding-bottom);
   border-radius: 8px;
   border-radius: var(--vscode-highlight-border-radius);
+  font-feature-settings: normal;
 }
 
 .vscode-highlight-code {
