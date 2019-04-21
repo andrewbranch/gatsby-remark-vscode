@@ -193,12 +193,78 @@ Object {
     },
     Object {
       "lang": "",
-      "type": "code",
-      "value": "const x = 3;
-// Comment",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark vscode-highlight\\" data-language=\\"\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
       "type": "paragraph",
+    },
+  ],
+}
+`;
+
+exports[`included languages and themes works without highlighting if language is not recognized 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "none",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
+    },
+    Object {
+      "type": "paragraph",
+    },
+  ],
+}
+`;
+
+exports[`included languages and themes works without highlighting if no grammar file is found 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "lang": "none",
+      "type": "html",
+      "value": "<pre class=\\"vscode-highlight Dark-default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
+    },
+    Object {
+      "type": "paragraph",
+    },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+background-color: #1E1E1E;
+color: #D4D4D4;
+}
+
+.Dark-default-dark .mtk1 { color: #D4D4D4; }
+.Dark-default-dark .mtk2 { color: #1E1E1E; }
+.Dark-default-dark .mtk3 { color: #6A9955; }
+.Dark-default-dark .mtk4 { color: #569CD6; }
+.Dark-default-dark .mtk5 { color: #D16969; }
+.Dark-default-dark .mtk6 { color: #D7BA7D; }
+.Dark-default-dark .mtk7 { color: #B5CEA8; }
+.Dark-default-dark .mtk8 { color: #CE9178; }
+.Dark-default-dark .mtk9 { color: #646695; }
+.Dark-default-dark .mtk10 { color: #4EC9B0; }
+.Dark-default-dark .mtk11 { color: #DCDCAA; }
+.Dark-default-dark .mtk12 { color: #9CDCFE; }
+.Dark-default-dark .mtk13 { color: #000080; }
+.Dark-default-dark .mtk14 { color: #F44747; }
+.Dark-default-dark .mtk15 { color: #C586C0; }
+.Dark-default-dark .mtk16 { color: #6796E6; }
+.Dark-default-dark .mtk17 { color: #808080; }
+.Dark-default-dark .mtki { font-style: italic; }
+.Dark-default-dark .mtkb { font-weight: bold; }
+.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }

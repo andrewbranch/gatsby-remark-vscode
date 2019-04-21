@@ -5,7 +5,7 @@ jest.mock('../src/utils');
 const request = require('request');
 const decompress = require('decompress');
 const path = require('path');
-const plugin = require('../src');
+const createPlugin = require('../src');
 const utils = require('../src/utils');
 const realUtils = jest.requireActual('../src/utils');
 
@@ -38,21 +38,23 @@ function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
 
 describe('included languages and themes', () => {
   it('works with default options', async () => {
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST();
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
     expect(markdownAST).toMatchSnapshot();
   });
 
-  it('does nothing if language is not recognized', async () => {
+  it('works without highlighting if language is not recognized', async () => {
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('none');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toEqual(createMarkdownAST('none'));
+    expect(markdownAST).toMatchSnapshot();
   });
 
   it('works without highlighting if no grammar file is found', async () => {
-    expect.assertions(1);
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('none');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, {
@@ -63,7 +65,7 @@ describe('included languages and themes', () => {
   });
 
   it('works without highlighting if a code fence has no language', async () => {
-    expect.assertions(1);
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
@@ -71,6 +73,7 @@ describe('included languages and themes', () => {
   });
 
   it('only adds theme CSS once', async () => {
+    const plugin = createPlugin();
     const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
@@ -78,6 +81,7 @@ describe('included languages and themes', () => {
   });
 
   it('can use a standard language alias', async () => {
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('JavaScript');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
@@ -85,6 +89,7 @@ describe('included languages and themes', () => {
   });
 
   it('can use a custom language alias', async () => {
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('java-scripty');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, { ...options, languageAliases: { 'java-scripty': 'js' } });
@@ -92,6 +97,7 @@ describe('included languages and themes', () => {
   });
 
   it('can use a custom scope mapping', async () => {
+    const plugin = createPlugin();
     const markdownAST = createMarkdownAST('swift');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, { ...options, scopesByLanguage: { swift: 'source.js' } });
@@ -108,6 +114,7 @@ describe('extension downloading', () => {
   });
 
   it('can download an extension to resolve a theme', async () => {
+    const plugin = createPlugin();
     // @ts-ignore
     const requestMock = request.get.mockImplementationOnce((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
@@ -143,6 +150,7 @@ describe('extension downloading', () => {
   });
 
   it('can download an extension to resolve a grammar', async () => {
+    const plugin = createPlugin();
     // @ts-ignore
     const requestMock = request.get.mockImplementationOnce((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
@@ -181,6 +189,7 @@ describe('extension downloading', () => {
 });
 
 it('sets highlighted line class names', async () => {
+  const plugin = createPlugin();
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
   const cache = createCache();
   await plugin({ markdownAST, markdownNode, cache }, options);
@@ -188,6 +197,7 @@ it('sets highlighted line class names', async () => {
 });
 
 it('can replace a color value', async () => {
+  const plugin = createPlugin();
   const markdownAST = createMarkdownAST();
   const cache = createCache();
   await plugin({ markdownAST, markdownNode, cache }, {
