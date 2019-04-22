@@ -4,6 +4,7 @@ const util = require('util');
 const path = require('path');
 const escapeHTML = require('lodash.escape');
 const constants = require('./constants');
+const createGetRegistry = require('./createGetRegistry');
 const lineHighlighting = require('./lineHighlighting');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
@@ -11,7 +12,6 @@ const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-const readFile = util.promisify(fs.readFile);
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
@@ -74,32 +74,7 @@ function getStylesFromSettings(settings) {
  */
 
 function createPlugin() {
-  const getRegistry = (() => {
-    /** @type {Registry} */
-    let registry;
-    /**
-     * @param {*} cache 
-     * @param {(missingScopeName: string) => void} onMissingLanguageFile 
-     */
-    function getRegistry(cache, onMissingLanguageFile) {
-      if (!registry) {
-        registry = new Registry({
-          loadGrammar: async scopeName => {
-            const grammarLocations = { ...constants.grammarLocations, ...await cache.get('grammarLocations') };
-            const fileName = grammarLocations[scopeName];
-            if (fileName) {
-              const contents = await readFile(fileName, 'utf8');
-              return parseRawGrammar(contents, fileName);
-            } else {
-              onMissingLanguageFile(scopeName);
-            }
-          },
-        });
-      }
-      return registry;
-    }
-    return getRegistry;
-  })();
+  const getRegistry = createGetRegistry();
 
   /**
    * 
@@ -168,10 +143,14 @@ function createPlugin() {
       let languageId;
       /** @type {Registry} */
       let registry;
+      /** @type {() => void} */
+      let unlockRegistry = () => {};
 
       if (scope) {
         languageId = { ...constants.languageIds, ...await cache.get('languageIds' ) }[scope];
-        registry = getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
+        const [reg, unlock] = await getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
+        registry = reg;
+        unlockRegistry = unlock;
         registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
         if (!stylesheets[themeName]) {
           stylesheets[themeName] = [
@@ -222,6 +201,7 @@ function createPlugin() {
           `</span>`
         ].join(''));
       }
+      unlockRegistry();
 
       const className = [highlightClassName, themeName, 'vscode-highlight'].join(' ').trim();
       node.type = 'html';
