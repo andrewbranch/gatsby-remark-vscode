@@ -1,13 +1,12 @@
 // @ts-check
 const fs = require('fs');
-const util = require('util');
 const path = require('path');
 const escapeHTML = require('lodash.escape');
 const constants = require('./constants');
 const createGetRegistry = require('./createGetRegistry');
 const lineHighlighting = require('./lineHighlighting');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const { Registry, parseRawGrammar } = require('vscode-textmate');
+const { Registry } = require('vscode-textmate');
 const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
@@ -54,6 +53,14 @@ function getStylesFromSettings(settings) {
  */
 
 /**
+ * @typedef {object} CodeFenceData
+ * @property {string} language
+ * @property {*} markdownNode
+ * @property {*} codeBlockNode
+ * @property {*} parsedOptions
+ */
+
+/**
  * @typedef {object} LineData
  * @property {string} content The line’s string content 
  * @property {number} index The zero-based line index
@@ -63,8 +70,8 @@ function getStylesFromSettings(settings) {
 
 /**
  * @typedef {object} PluginOptions
- * @property {string | ((markdownNode: any, codeBlockNode: any, parsedOptions: object) => string)=} colorTheme
- * @property {string=} highlightClassName
+ * @property {string | ((data: CodeFenceData) => string)=} colorTheme
+ * @property {string=} wrapperClassName
  * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
  * @property {ExtensionDemand[]=} extensions
@@ -85,7 +92,7 @@ function createPlugin() {
     { markdownAST, markdownNode, cache },
     {
       colorTheme = () => 'Default Dark+',
-      highlightClassName = 'vscode-highlight',
+      wrapperClassName = '',
       scopesByLanguage = {},
       languageAliases = {},
       extensions = [],
@@ -113,7 +120,9 @@ function createPlugin() {
       }
 
       // Set up theme
-      const colorThemeValue = typeof colorTheme === 'function' ? colorTheme(markdownNode, node, options) : colorTheme;
+      const colorThemeValue = typeof colorTheme === 'function'
+        ? colorTheme({ markdownNode, codeBlockNode: node, parsedOptions: options, language: languageName })
+        : colorTheme;
       const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
       if (themeExtension) {
         await downloadExtensionIfNeeded(themeExtension, cache);
@@ -203,7 +212,7 @@ function createPlugin() {
       }
       unlockRegistry();
 
-      const className = [highlightClassName, themeName, 'vscode-highlight'].join(' ').trim();
+      const className = [wrapperClassName, themeName, 'vscode-highlight'].join(' ').trim();
       node.type = 'html';
       node.value = [
         `<pre class="${className}" data-language="${languageName}">`,
