@@ -1,6 +1,6 @@
 // @ts-check
 const fs = require('fs');
-const { getGrammarLocation, getGrammar } = require('./constants');
+const { getGrammarLocation, getGrammar } = require('./storeUtils');
 const { promisify } = require('util');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
 const readFile = promisify(fs.readFile);

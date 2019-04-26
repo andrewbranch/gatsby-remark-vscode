@@ -6,7 +6,7 @@ const util = require('util');
 const request = require('request');
 const decompress = require('decompress');
 const processExtension = require('./processExtension');
-const { highestBuiltinLanguageId } = require('./constants');
+const { highestBuiltinLanguageId } = require('./storeUtils');
 const {
   parseExtensionIdentifier,
   getExtensionPath,

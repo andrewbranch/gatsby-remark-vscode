@@ -10,7 +10,7 @@ const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-const { getGrammar, getGrammarLocation, getScope, getThemeLocation } = require('./constants');
+const { getGrammar, getGrammarLocation, getScope, getThemeLocation } = require('./storeUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
