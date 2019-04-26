@@ -153,63 +153,66 @@ function createPlugin() {
       /** @type {() => void} */
       let unlockRegistry = () => {};
 
-      if (scope) {
-        const grammarData = getGrammar(scope, grammarCache);
-        languageId = grammarData.languageId;
-        tokenTypes = grammarData.tokenTypes;
-        const [reg, unlock] = await getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
-        registry = reg;
-        unlockRegistry = unlock;
-        registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
-        if (!stylesheets[themeName]) {
-          stylesheets[themeName] = [
-            `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
-            ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
-              .split('\n')
-              .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
-          ].join('\n');
-        }
-      }
-
-      const highlightedLines = lineHighlighting.parseOptionKeys(options);
-      const grammar = registry && languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
-      let ruleStack = undefined;
-      for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
-        const line = rawLines[lineIndex];
-        let htmlLine = '';
-        if (grammar) {
-          const result = grammar.tokenizeLine2(line, ruleStack);
-          ruleStack = result.ruleStack;
-          for (let i = 0; i < result.tokens.length; i += 2) {
-            const startIndex = result.tokens[i];
-            const metadata = result.tokens[i + 1];
-            const endIndex = result.tokens[i + 2] || line.length;
-            /** @type {LineData} */
-            htmlLine += [
-              `<span class="${getClassNameFromMetadata(metadata)}">`,
-              escapeHTML(line.slice(startIndex, endIndex)),
-              '</span>',
-            ].join('');
+      try {
+        if (scope) {
+          const grammarData = getGrammar(scope, grammarCache);
+          languageId = grammarData.languageId;
+          tokenTypes = grammarData.tokenTypes;
+          const [reg, unlock] = await getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
+          registry = reg;
+          unlockRegistry = unlock;
+          registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
+          if (!stylesheets[themeName]) {
+            stylesheets[themeName] = [
+              `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
+              ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
+                .split('\n')
+                .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
+            ].join('\n');
           }
-        } else {
-          htmlLine += escapeHTML(line);
         }
-        
-        const isHighlighted = highlightedLines.includes(lineIndex + 1);
-        const lineData = { codeBlockOptions: options, index: lineIndex, content: line, language: languageName };
-        const className = [
-          getLineClassName(lineData),
-          'vscode-highlight-line',
-          isHighlighted ? 'vscode-highlight-line-highlighted' : ''
-        ].join(' ').trim();
 
-        htmlLines.push([
-          `<span class="${className}">`,
-          htmlLine,
-          `</span>`
-        ].join(''));
+        const highlightedLines = lineHighlighting.parseOptionKeys(options);
+        const grammar = registry && languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
+        let ruleStack = undefined;
+        for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
+          const line = rawLines[lineIndex];
+          let htmlLine = '';
+          if (grammar) {
+            const result = grammar.tokenizeLine2(line, ruleStack);
+            ruleStack = result.ruleStack;
+            for (let i = 0; i < result.tokens.length; i += 2) {
+              const startIndex = result.tokens[i];
+              const metadata = result.tokens[i + 1];
+              const endIndex = result.tokens[i + 2] || line.length;
+              /** @type {LineData} */
+              htmlLine += [
+                `<span class="${getClassNameFromMetadata(metadata)}">`,
+                escapeHTML(line.slice(startIndex, endIndex)),
+                '</span>',
+              ].join('');
+            }
+          } else {
+            htmlLine += escapeHTML(line);
+          }
+          
+          const isHighlighted = highlightedLines.includes(lineIndex + 1);
+          const lineData = { codeBlockOptions: options, index: lineIndex, content: line, language: languageName };
+          const className = [
+            getLineClassName(lineData),
+            'vscode-highlight-line',
+            isHighlighted ? 'vscode-highlight-line-highlighted' : ''
+          ].join(' ').trim();
+
+          htmlLines.push([
+            `<span class="${className}">`,
+            htmlLine,
+            `</span>`
+          ].join(''));
+        }
+      } finally {
+        unlockRegistry();
       }
-      unlockRegistry();
 
       const className = [wrapperClassName, themeName, 'vscode-highlight'].join(' ').trim();
       node.type = 'html';
