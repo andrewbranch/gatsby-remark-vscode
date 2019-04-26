@@ -71,6 +71,8 @@ function getStylesFromSettings(settings) {
 /**
  * @typedef {object} PluginOptions
  * @property {string | ((data: CodeFenceData) => string)=} colorTheme
+ * @property {string=} prefersLightTheme
+ * @property {string=} prefersDarkTheme
  * @property {string=} wrapperClassName
  * @property {Record<string, string>=} languageAliases
  * @property {ExtensionDemand[]=} extensions
@@ -90,7 +92,9 @@ function createPlugin() {
   async function textmateHighlight(
     { markdownAST, markdownNode, cache },
     {
-      colorTheme = () => 'Default Dark+',
+      colorTheme = 'Default Dark+',
+      prefersLightTheme,
+      prefersDarkTheme,
       wrapperClassName = '',
       languageAliases = {},
       extensions = [],
@@ -104,6 +108,9 @@ function createPlugin() {
 
     for (const node of markdownAST.children) {
       if (node.type !== 'code') continue;
+      /** @type {string} */
+      const text = node.value || node.children && node.children[0] && node.children[0].value;
+      if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
       const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(languageName));
       if (languageExtension) {
@@ -138,9 +145,19 @@ function createPlugin() {
         },
       };
 
-      /** @type {string} */
-      const text = node.value || node.children && node.children[0] && node.children[0].value;
-      if (!text) continue;
+      const [registry, unlockRegistry] = await getRegistry(cache, missingScopeName => {
+        warnMissingLanguageFile(missingScopeName, scope)
+      });
+
+      registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
+      if (!stylesheets[themeName]) {
+        stylesheets[themeName] = [
+          `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
+          ...(scope ? generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor)) : '')
+            .split('\n')
+            .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
+        ].join('\n');
+      }
 
       const rawLines = text.split(/\r?\n/);
       const htmlLines = [];
@@ -148,30 +165,12 @@ function createPlugin() {
       let tokenTypes = {};
       /** @type {number} */
       let languageId;
-      /** @type {Registry} */
-      let registry;
-      /** @type {() => void} */
-      let unlockRegistry = () => {};
 
       try {
         if (scope) {
           const grammarData = getGrammar(scope, grammarCache);
           languageId = grammarData.languageId;
           tokenTypes = grammarData.tokenTypes;
-          const [reg, unlock] = await getRegistry(cache, missingScopeName => {
-            warnMissingLanguageFile(missingScopeName, scope)
-          });
-          registry = reg;
-          unlockRegistry = unlock;
-          registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
-          if (!stylesheets[themeName]) {
-            stylesheets[themeName] = [
-              `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
-              ...generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor))
-                .split('\n')
-                .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
-            ].join('\n');
-          }
         }
 
         const highlightedLines = lineHighlighting.parseOptionKeys(options);

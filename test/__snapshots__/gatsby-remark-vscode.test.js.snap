@@ -294,6 +294,14 @@ Object {
     Object {
       "type": "paragraph",
     },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+background-color: #1E1E1E;
+color: #D4D4D4;
+}
+</style>",
+    },
   ],
 }
 `;
@@ -312,6 +320,14 @@ Object {
     },
     Object {
       "type": "paragraph",
+    },
+    Object {
+      "type": "html",
+      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+background-color: #1E1E1E;
+color: #D4D4D4;
+}
+</style>",
     },
   ],
 }
