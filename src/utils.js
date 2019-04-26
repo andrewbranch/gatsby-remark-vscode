@@ -56,6 +56,14 @@ function getLanguageNames(languageRegistration) {
   ].map(name => name.toLowerCase().replace(/[^a-z0-9_-]/g, '')));
 }
 
+/**
+ * Strips special characters, replaces space with dashes, and lowercases a string.
+ * @param {string} str 
+ */
+function sanitizeForClassName(str) {
+  return str.replace(/\s+/g, '-').replace(/[^-_a-z0-9]/ig, '').toLowerCase();
+}
+
 const readFile = util.promisify(fs.readFile);
 const requireJson = /** @param {string} pathName */ pathName => json.parse(fs.readFileSync(pathName, 'utf8'));
 const requireGrammar = /** @param {string} pathName */ async pathName => path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -67,6 +75,7 @@ module.exports = {
   getExtensionBasePath,
   getExtensionPackageJson,
   getLanguageNames,
+  sanitizeForClassName,
   requireJson,
   requireGrammar,
 };

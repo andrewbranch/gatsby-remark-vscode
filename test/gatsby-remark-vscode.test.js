@@ -21,6 +21,8 @@ utils.getLanguageNames.mockImplementation(realUtils.getLanguageNames);
 utils.requireJson.mockImplementation(realUtils.requireJson);
 // @ts-ignore
 utils.requireGrammar.mockImplementation(realUtils.requireGrammar);
+// @ts-ignore
+utils.sanitizeForClassName.mockImplementation(realUtils.sanitizeForClassName);
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {import('../src').PluginOptions} */
@@ -194,4 +196,8 @@ it('can replace a color value', async () => {
     replaceColor: oldColor => `var(--color-${oldColor.replace('#', '')})`,
   });
   expect(markdownAST).toMatchSnapshot();
+});
+
+describe('prefersColorTheme', () => {
+
 });

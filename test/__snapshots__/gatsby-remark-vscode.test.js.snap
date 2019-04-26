@@ -9,7 +9,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -17,31 +17,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: var(--color-D4D4D4); }
-.Dark-default-dark .mtk2 { color: var(--color-1E1E1E); }
-.Dark-default-dark .mtk3 { color: var(--color-6A9955); }
-.Dark-default-dark .mtk4 { color: var(--color-569CD6); }
-.Dark-default-dark .mtk5 { color: var(--color-D16969); }
-.Dark-default-dark .mtk6 { color: var(--color-D7BA7D); }
-.Dark-default-dark .mtk7 { color: var(--color-B5CEA8); }
-.Dark-default-dark .mtk8 { color: var(--color-CE9178); }
-.Dark-default-dark .mtk9 { color: var(--color-646695); }
-.Dark-default-dark .mtk10 { color: var(--color-4EC9B0); }
-.Dark-default-dark .mtk11 { color: var(--color-DCDCAA); }
-.Dark-default-dark .mtk12 { color: var(--color-9CDCFE); }
-.Dark-default-dark .mtk13 { color: var(--color-000080); }
-.Dark-default-dark .mtk14 { color: var(--color-F44747); }
-.Dark-default-dark .mtk15 { color: var(--color-C586C0); }
-.Dark-default-dark .mtk16 { color: var(--color-6796E6); }
-.Dark-default-dark .mtk17 { color: var(--color-808080); }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: var(--color-D4D4D4); }
+.default-dark.mtk2 { color: var(--color-1E1E1E); }
+.default-dark.mtk3 { color: var(--color-6A9955); }
+.default-dark.mtk4 { color: var(--color-569CD6); }
+.default-dark.mtk5 { color: var(--color-D16969); }
+.default-dark.mtk6 { color: var(--color-D7BA7D); }
+.default-dark.mtk7 { color: var(--color-B5CEA8); }
+.default-dark.mtk8 { color: var(--color-CE9178); }
+.default-dark.mtk9 { color: var(--color-646695); }
+.default-dark.mtk10 { color: var(--color-4EC9B0); }
+.default-dark.mtk11 { color: var(--color-DCDCAA); }
+.default-dark.mtk12 { color: var(--color-9CDCFE); }
+.default-dark.mtk13 { color: var(--color-000080); }
+.default-dark.mtk14 { color: var(--color-F44747); }
+.default-dark.mtk15 { color: var(--color-C586C0); }
+.default-dark.mtk16 { color: var(--color-6796E6); }
+.default-dark.mtk17 { color: var(--color-808080); }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -56,7 +56,7 @@ Object {
     Object {
       "lang": "custom",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"custom\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">const x = 3;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"custom\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">const x = 3;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -64,31 +64,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: #D4D4D4; }
-.Dark-default-dark .mtk2 { color: #1E1E1E; }
-.Dark-default-dark .mtk3 { color: #6A9955; }
-.Dark-default-dark .mtk4 { color: #569CD6; }
-.Dark-default-dark .mtk5 { color: #D16969; }
-.Dark-default-dark .mtk6 { color: #D7BA7D; }
-.Dark-default-dark .mtk7 { color: #B5CEA8; }
-.Dark-default-dark .mtk8 { color: #CE9178; }
-.Dark-default-dark .mtk9 { color: #646695; }
-.Dark-default-dark .mtk10 { color: #4EC9B0; }
-.Dark-default-dark .mtk11 { color: #DCDCAA; }
-.Dark-default-dark .mtk12 { color: #9CDCFE; }
-.Dark-default-dark .mtk13 { color: #000080; }
-.Dark-default-dark .mtk14 { color: #F44747; }
-.Dark-default-dark .mtk15 { color: #C586C0; }
-.Dark-default-dark .mtk16 { color: #6796E6; }
-.Dark-default-dark .mtk17 { color: #808080; }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: #D4D4D4; }
+.default-dark.mtk2 { color: #1E1E1E; }
+.default-dark.mtk3 { color: #6A9955; }
+.default-dark.mtk4 { color: #569CD6; }
+.default-dark.mtk5 { color: #D16969; }
+.default-dark.mtk6 { color: #D7BA7D; }
+.default-dark.mtk7 { color: #B5CEA8; }
+.default-dark.mtk8 { color: #CE9178; }
+.default-dark.mtk9 { color: #646695; }
+.default-dark.mtk10 { color: #4EC9B0; }
+.default-dark.mtk11 { color: #DCDCAA; }
+.default-dark.mtk12 { color: #9CDCFE; }
+.default-dark.mtk13 { color: #000080; }
+.default-dark.mtk14 { color: #F44747; }
+.default-dark.mtk15 { color: #C586C0; }
+.default-dark.mtk16 { color: #6796E6; }
+.default-dark.mtk17 { color: #808080; }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -103,7 +103,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"custom vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"custom-theme vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -111,28 +111,28 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.custom {
+      "value": "<style class=\\"vscode-highlight-styles\\">.custom-theme {
 
 }
 
-.custom .mtk1 { color: #000000; }
-.custom .mtk2 { color: #FFFFFF; }
-.custom .mtk3 { color: #6A9955; }
-.custom .mtk4 { color: #569CD6; }
-.custom .mtk5 { color: #B5CEA8; }
-.custom .mtk6 { color: #646695; }
-.custom .mtk7 { color: #D7BA7D; }
-.custom .mtk8 { color: #9CDCFE; }
-.custom .mtk9 { color: #000080; }
-.custom .mtk10 { color: #F44747; }
-.custom .mtk11 { color: #D4D4D4; }
-.custom .mtk12 { color: #CE9178; }
-.custom .mtk13 { color: #6796E6; }
-.custom .mtk14 { color: #808080; }
-.custom .mtk15 { color: #D16969; }
-.custom .mtki { font-style: italic; }
-.custom .mtkb { font-weight: bold; }
-.custom .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.custom-theme.mtk1 { color: #000000; }
+.custom-theme.mtk2 { color: #FFFFFF; }
+.custom-theme.mtk3 { color: #6A9955; }
+.custom-theme.mtk4 { color: #569CD6; }
+.custom-theme.mtk5 { color: #B5CEA8; }
+.custom-theme.mtk6 { color: #646695; }
+.custom-theme.mtk7 { color: #D7BA7D; }
+.custom-theme.mtk8 { color: #9CDCFE; }
+.custom-theme.mtk9 { color: #000080; }
+.custom-theme.mtk10 { color: #F44747; }
+.custom-theme.mtk11 { color: #D4D4D4; }
+.custom-theme.mtk12 { color: #CE9178; }
+.custom-theme.mtk13 { color: #6796E6; }
+.custom-theme.mtk14 { color: #808080; }
+.custom-theme.mtk15 { color: #D16969; }
+.custom-theme.mtki { font-style: italic; }
+.custom-theme.mtkb { font-weight: bold; }
+.custom-theme.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -147,7 +147,7 @@ Object {
     Object {
       "lang": "java-scripty",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"java-scripty\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"java-scripty\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -155,31 +155,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: #D4D4D4; }
-.Dark-default-dark .mtk2 { color: #1E1E1E; }
-.Dark-default-dark .mtk3 { color: #6A9955; }
-.Dark-default-dark .mtk4 { color: #569CD6; }
-.Dark-default-dark .mtk5 { color: #D16969; }
-.Dark-default-dark .mtk6 { color: #D7BA7D; }
-.Dark-default-dark .mtk7 { color: #B5CEA8; }
-.Dark-default-dark .mtk8 { color: #CE9178; }
-.Dark-default-dark .mtk9 { color: #646695; }
-.Dark-default-dark .mtk10 { color: #4EC9B0; }
-.Dark-default-dark .mtk11 { color: #DCDCAA; }
-.Dark-default-dark .mtk12 { color: #9CDCFE; }
-.Dark-default-dark .mtk13 { color: #000080; }
-.Dark-default-dark .mtk14 { color: #F44747; }
-.Dark-default-dark .mtk15 { color: #C586C0; }
-.Dark-default-dark .mtk16 { color: #6796E6; }
-.Dark-default-dark .mtk17 { color: #808080; }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: #D4D4D4; }
+.default-dark.mtk2 { color: #1E1E1E; }
+.default-dark.mtk3 { color: #6A9955; }
+.default-dark.mtk4 { color: #569CD6; }
+.default-dark.mtk5 { color: #D16969; }
+.default-dark.mtk6 { color: #D7BA7D; }
+.default-dark.mtk7 { color: #B5CEA8; }
+.default-dark.mtk8 { color: #CE9178; }
+.default-dark.mtk9 { color: #646695; }
+.default-dark.mtk10 { color: #4EC9B0; }
+.default-dark.mtk11 { color: #DCDCAA; }
+.default-dark.mtk12 { color: #9CDCFE; }
+.default-dark.mtk13 { color: #000080; }
+.default-dark.mtk14 { color: #F44747; }
+.default-dark.mtk15 { color: #C586C0; }
+.default-dark.mtk16 { color: #6796E6; }
+.default-dark.mtk17 { color: #808080; }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -194,7 +194,7 @@ Object {
     Object {
       "lang": "JavaScript",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"javascript\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"javascript\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -202,31 +202,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: #D4D4D4; }
-.Dark-default-dark .mtk2 { color: #1E1E1E; }
-.Dark-default-dark .mtk3 { color: #6A9955; }
-.Dark-default-dark .mtk4 { color: #569CD6; }
-.Dark-default-dark .mtk5 { color: #D16969; }
-.Dark-default-dark .mtk6 { color: #D7BA7D; }
-.Dark-default-dark .mtk7 { color: #B5CEA8; }
-.Dark-default-dark .mtk8 { color: #CE9178; }
-.Dark-default-dark .mtk9 { color: #646695; }
-.Dark-default-dark .mtk10 { color: #4EC9B0; }
-.Dark-default-dark .mtk11 { color: #DCDCAA; }
-.Dark-default-dark .mtk12 { color: #9CDCFE; }
-.Dark-default-dark .mtk13 { color: #000080; }
-.Dark-default-dark .mtk14 { color: #F44747; }
-.Dark-default-dark .mtk15 { color: #C586C0; }
-.Dark-default-dark .mtk16 { color: #6796E6; }
-.Dark-default-dark .mtk17 { color: #808080; }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: #D4D4D4; }
+.default-dark.mtk2 { color: #1E1E1E; }
+.default-dark.mtk3 { color: #6A9955; }
+.default-dark.mtk4 { color: #569CD6; }
+.default-dark.mtk5 { color: #D16969; }
+.default-dark.mtk6 { color: #D7BA7D; }
+.default-dark.mtk7 { color: #B5CEA8; }
+.default-dark.mtk8 { color: #CE9178; }
+.default-dark.mtk9 { color: #646695; }
+.default-dark.mtk10 { color: #4EC9B0; }
+.default-dark.mtk11 { color: #DCDCAA; }
+.default-dark.mtk12 { color: #9CDCFE; }
+.default-dark.mtk13 { color: #000080; }
+.default-dark.mtk14 { color: #F44747; }
+.default-dark.mtk15 { color: #C586C0; }
+.default-dark.mtk16 { color: #6796E6; }
+.default-dark.mtk17 { color: #808080; }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -241,7 +241,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -249,31 +249,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: #D4D4D4; }
-.Dark-default-dark .mtk2 { color: #1E1E1E; }
-.Dark-default-dark .mtk3 { color: #6A9955; }
-.Dark-default-dark .mtk4 { color: #569CD6; }
-.Dark-default-dark .mtk5 { color: #D16969; }
-.Dark-default-dark .mtk6 { color: #D7BA7D; }
-.Dark-default-dark .mtk7 { color: #B5CEA8; }
-.Dark-default-dark .mtk8 { color: #CE9178; }
-.Dark-default-dark .mtk9 { color: #646695; }
-.Dark-default-dark .mtk10 { color: #4EC9B0; }
-.Dark-default-dark .mtk11 { color: #DCDCAA; }
-.Dark-default-dark .mtk12 { color: #9CDCFE; }
-.Dark-default-dark .mtk13 { color: #000080; }
-.Dark-default-dark .mtk14 { color: #F44747; }
-.Dark-default-dark .mtk15 { color: #C586C0; }
-.Dark-default-dark .mtk16 { color: #6796E6; }
-.Dark-default-dark .mtk17 { color: #808080; }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: #D4D4D4; }
+.default-dark.mtk2 { color: #1E1E1E; }
+.default-dark.mtk3 { color: #6A9955; }
+.default-dark.mtk4 { color: #569CD6; }
+.default-dark.mtk5 { color: #D16969; }
+.default-dark.mtk6 { color: #D7BA7D; }
+.default-dark.mtk7 { color: #B5CEA8; }
+.default-dark.mtk8 { color: #CE9178; }
+.default-dark.mtk9 { color: #646695; }
+.default-dark.mtk10 { color: #4EC9B0; }
+.default-dark.mtk11 { color: #DCDCAA; }
+.default-dark.mtk12 { color: #9CDCFE; }
+.default-dark.mtk13 { color: #000080; }
+.default-dark.mtk14 { color: #F44747; }
+.default-dark.mtk15 { color: #C586C0; }
+.default-dark.mtk16 { color: #6796E6; }
+.default-dark.mtk17 { color: #808080; }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
@@ -288,7 +288,7 @@ Object {
     Object {
       "lang": "",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
@@ -296,11 +296,10 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
-}
-</style>",
+}</style>",
     },
   ],
 }
@@ -315,7 +314,7 @@ Object {
     Object {
       "lang": "none",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
@@ -323,11 +322,10 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
-}
-</style>",
+}</style>",
     },
   ],
 }
@@ -342,7 +340,7 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"Dark-default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// 2</span></span>
 <span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
 <span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
@@ -353,31 +351,31 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.Dark-default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
 
-.Dark-default-dark .mtk1 { color: #D4D4D4; }
-.Dark-default-dark .mtk2 { color: #1E1E1E; }
-.Dark-default-dark .mtk3 { color: #6A9955; }
-.Dark-default-dark .mtk4 { color: #569CD6; }
-.Dark-default-dark .mtk5 { color: #D16969; }
-.Dark-default-dark .mtk6 { color: #D7BA7D; }
-.Dark-default-dark .mtk7 { color: #B5CEA8; }
-.Dark-default-dark .mtk8 { color: #CE9178; }
-.Dark-default-dark .mtk9 { color: #646695; }
-.Dark-default-dark .mtk10 { color: #4EC9B0; }
-.Dark-default-dark .mtk11 { color: #DCDCAA; }
-.Dark-default-dark .mtk12 { color: #9CDCFE; }
-.Dark-default-dark .mtk13 { color: #000080; }
-.Dark-default-dark .mtk14 { color: #F44747; }
-.Dark-default-dark .mtk15 { color: #C586C0; }
-.Dark-default-dark .mtk16 { color: #6796E6; }
-.Dark-default-dark .mtk17 { color: #808080; }
-.Dark-default-dark .mtki { font-style: italic; }
-.Dark-default-dark .mtkb { font-weight: bold; }
-.Dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark.mtk1 { color: #D4D4D4; }
+.default-dark.mtk2 { color: #1E1E1E; }
+.default-dark.mtk3 { color: #6A9955; }
+.default-dark.mtk4 { color: #569CD6; }
+.default-dark.mtk5 { color: #D16969; }
+.default-dark.mtk6 { color: #D7BA7D; }
+.default-dark.mtk7 { color: #B5CEA8; }
+.default-dark.mtk8 { color: #CE9178; }
+.default-dark.mtk9 { color: #646695; }
+.default-dark.mtk10 { color: #4EC9B0; }
+.default-dark.mtk11 { color: #DCDCAA; }
+.default-dark.mtk12 { color: #9CDCFE; }
+.default-dark.mtk13 { color: #000080; }
+.default-dark.mtk14 { color: #F44747; }
+.default-dark.mtk15 { color: #C586C0; }
+.default-dark.mtk16 { color: #6796E6; }
+.default-dark.mtk17 { color: #808080; }
+.default-dark.mtki { font-style: italic; }
+.default-dark.mtkb { font-weight: bold; }
+.default-dark.mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
 }
