@@ -101,18 +101,18 @@ describe('extension downloading', () => {
   it('can download an extension to resolve a theme', async () => {
     const plugin = createPlugin();
     // @ts-ignore
-    const requestMock = request.get.mockImplementationOnce((_, __, cb) => {
+    const requestMock = request.get.mockImplementation((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
     });
     // @ts-ignore
-    const decompressMock = decompress.mockImplementationOnce(jest.fn());
+    const decompressMock = decompress.mockImplementation(jest.fn());
     // @ts-ignore
-    utils.requireJson.mockImplementationOnce(() => ({
+    utils.requireJson.mockImplementation((jsonPath) => ({
       contributes: {
         themes: [{
-          id: 'custom',
-          label: 'Custom Theme',
-          path: '../../../../test/custom.tmTheme.json'
+          id: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
+          label: jsonPath.includes('wrong-one') ? 'wrong-one' : 'Custom Theme',
+          path: `../../../../test/${jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom'}.tmTheme.json`
         }],
       }
     }));
@@ -121,37 +121,39 @@ describe('extension downloading', () => {
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, {
       ...options,
-      colorTheme: 'custom',
+      colorTheme: 'Custom Theme',
       extensions: [{
+        identifier: 'publisher.wrong-one',
+        version: '1.0.0',
+      }, {
         identifier: 'publisher.custom-theme',
         version: '1.0.0',
-        themes: ['custom'],
       }],
     });
 
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(requestMock).toHaveBeenCalledTimes(2);
+    expect(decompressMock).toHaveBeenCalledTimes(2);
     expect(markdownAST).toMatchSnapshot();
   });
 
   it('can download an extension to resolve a grammar', async () => {
     const plugin = createPlugin();
     // @ts-ignore
-    const requestMock = request.get.mockImplementationOnce((_, __, cb) => {
+    const requestMock = request.get.mockImplementation((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
     });
     // @ts-ignore
-    const decompressMock = decompress.mockImplementationOnce(jest.fn());
+    const decompressMock = decompress.mockImplementation(jest.fn());
     // @ts-ignore
-    utils.requireJson.mockImplementationOnce(() => ({
+    utils.requireJson.mockImplementation((jsonPath) => ({
       contributes: {
         languages: [{
-          id: 'custom',
+          id: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
         }],
         grammars: [{
-          language: 'custom',
-          scopeName: 'source.custom',
-          path: '../../../../test/custom.tmLanguage.json',
+          language: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
+          scopeName: jsonPath.includes('wrong-one') ? 'source.wrong' : 'source.custom',
+          path: `../../../../test/${jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom'}.tmLanguage.json`
         }],
       }
     }));
@@ -161,14 +163,16 @@ describe('extension downloading', () => {
     await plugin({ markdownAST, markdownNode, cache }, {
       ...options,
       extensions: [{
+        identifier: 'publisher.wrong-one',
+        version: '1.0.0',
+      }, {
         identifier: 'publisher.custom-language',
         version: '1.0.0',
-        languages: ['custom'],
       }],
     });
 
-    expect(requestMock).toHaveBeenCalledTimes(1);
-    expect(decompressMock).toHaveBeenCalledTimes(1);
+    expect(requestMock).toHaveBeenCalledTimes(2);
+    expect(decompressMock).toHaveBeenCalledTimes(2);
     expect(markdownAST).toMatchSnapshot();
   });
 });

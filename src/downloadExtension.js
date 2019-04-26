@@ -6,8 +6,14 @@ const util = require('util');
 const request = require('request');
 const decompress = require('decompress');
 const processExtension = require('./processExtension');
-const { highestBuiltinLanguageId } = require('./storeUtils');
 const {
+  getScope,
+  getGrammar,
+  getGrammarLocation,
+  getThemeLocation,
+  highestBuiltinLanguageId
+} = require('./storeUtils');
+  const {
   parseExtensionIdentifier,
   getExtensionPath,
   getExtensionBasePath,
@@ -71,22 +77,37 @@ async function downloadExtension(extensionDemand, cache) {
 }
 
 /**
- * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {'grammar' | 'theme'} type
+ * @param {string} name
+ * @param {import('.').ExtensionDemand[]} extensions
  * @param {*} cache
  */
-async function downloadExtensionIfNeeded(extensionDemand, cache) {
-  const { identifier, version } = extensionDemand;
-  const extensionPath = getExtensionBasePath(identifier);
-  if (!fs.existsSync(extensionPath)) {
-    return downloadExtension(extensionDemand, cache);
-  }
-  const packageJson = getExtensionPackageJson(identifier);
-  if (packageJson.version !== version) {
-    return downloadExtension(extensionDemand, cache);
-  }
+async function downloadExtensionIfNeeded(type, name, extensions, cache) {
+  extensions = extensions.slice();
+  const locator = type === 'grammar'
+    ? async languageName => {
+      const grammarCache = await cache.get('grammars');
+      const grammar = getGrammar(getScope(languageName, grammarCache), grammarCache);
+      return grammar && getGrammarLocation(grammar);
+    }
+    : async themeName => getThemeLocation(themeName, await cache.get('themes'));
 
-  await syncExtensionData(extensionDemand, cache);
-  return extensionPath;
+  while (extensions.length && !(await locator(name))) {
+    const extensionDemand = extensions.shift();
+    const { identifier, version } = extensionDemand;
+    const extensionPath = getExtensionBasePath(identifier);
+    if (!fs.existsSync(extensionPath)) {
+      await downloadExtension(extensionDemand, cache);
+      continue;
+    }
+    const packageJson = getExtensionPackageJson(identifier);
+    if (packageJson.version !== version) {
+      await downloadExtension(extensionDemand, cache);
+      continue;
+    }
+  
+    await syncExtensionData(extensionDemand, cache);
+  }
 }
 
 module.exports = { downloadExtension, downloadExtensionIfNeeded, syncExtensionData };

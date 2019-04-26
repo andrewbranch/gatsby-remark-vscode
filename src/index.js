@@ -5,7 +5,6 @@ const escapeHTML = require('lodash.escape');
 const createGetRegistry = require('./createGetRegistry');
 const lineHighlighting = require('./lineHighlighting');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const { Registry } = require('vscode-textmate');
 const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
@@ -48,8 +47,6 @@ function getStylesFromSettings(settings) {
  * @typedef {object} ExtensionDemand
  * @property {string} identifier
  * @property {string} version
- * @property {string[]=} languages
- * @property {string[]=} themes
  */
 
 /**
@@ -69,6 +66,13 @@ function getStylesFromSettings(settings) {
  */
 
 /**
+ * @typedef {object} ColorThemeSettings
+ * @property {string} defaultTheme
+ * @property {string=} prefersLightTheme
+ * @property {string=} prefersDarkTheme
+ */
+
+/**
  * @typedef {object} PluginOptions
  * @property {string | ((data: CodeFenceData) => string)=} colorTheme
  * @property {string=} prefersLightTheme
@@ -78,7 +82,7 @@ function getStylesFromSettings(settings) {
  * @property {ExtensionDemand[]=} extensions
  * @property {(line: LineData) => string=} getLineClassName
  * @property {boolean=} injectStyles
- * @property {(colorValue: string) => string=} replaceColor
+ * @property {(colorValue: string, theme: string) => string=} replaceColor
  */
 
 function createPlugin() {
@@ -112,10 +116,7 @@ function createPlugin() {
       const text = node.value || node.children && node.children[0] && node.children[0].value;
       if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
-      const languageExtension = extensions.find(ext => ext.languages && ext.languages.includes(languageName));
-      if (languageExtension) {
-        await downloadExtensionIfNeeded(languageExtension, cache);
-      }
+      await downloadExtensionIfNeeded('grammar', languageName, extensions, cache);
 
       const grammarCache = await cache.get('grammars');
       /** @type {string} */
@@ -128,10 +129,7 @@ function createPlugin() {
       const colorThemeValue = typeof colorTheme === 'function'
         ? colorTheme({ markdownNode, codeBlockNode: node, parsedOptions: options, language: languageName })
         : colorTheme;
-      const themeExtension = extensions.find(ext => ext.themes && ext.themes.includes(colorThemeValue));
-      if (themeExtension) {
-        await downloadExtensionIfNeeded(themeExtension, cache);
-      }
+      await downloadExtensionIfNeeded('theme', colorThemeValue, extensions, cache);
 
       const themeCache = await cache.get('themes');
       const colorThemePath = getThemeLocation(colorThemeValue, themeCache)
@@ -153,9 +151,9 @@ function createPlugin() {
       if (!stylesheets[themeName]) {
         stylesheets[themeName] = [
           `.${themeName} {\n${getStylesFromSettings(settings)}\n}`,
-          ...(scope ? generateTokensCSSForColorMap(registry.getColorMap().map(replaceColor)) : '')
-            .split('\n')
-            .map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
+          ...(scope
+            ? generateTokensCSSForColorMap(registry.getColorMap().map(color => replaceColor(color, colorThemeValue)))
+            : '').split('\n').map(rule => rule.trim() ? `.${themeName} ${rule}` : ''),
         ].join('\n');
       }
 
@@ -174,7 +172,7 @@ function createPlugin() {
         }
 
         const highlightedLines = lineHighlighting.parseOptionKeys(options);
-        const grammar = registry && languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
+        const grammar = languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
         let ruleStack = undefined;
         for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
           const line = rawLines[lineIndex];
