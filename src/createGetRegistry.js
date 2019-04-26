@@ -1,6 +1,6 @@
 // @ts-check
 const fs = require('fs');
-const constants = require('./constants');
+const { getGrammarLocation, getGrammar } = require('./constants');
 const { promisify } = require('util');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
 const readFile = promisify(fs.readFile);
@@ -51,8 +51,7 @@ function createGetRegistry() {
     if (!registry) {
       registry = new Registry({
         loadGrammar: async scopeName => {
-          const grammarLocations = { ...constants.grammarLocations, ...await cache.get('grammarLocations') };
-          const fileName = grammarLocations[scopeName];
+          const fileName = getGrammarLocation(getGrammar(scopeName, await cache.get('grammars')));
           if (fileName) {
             const contents = await readFile(fileName, 'utf8');
             return parseRawGrammar(contents, fileName);

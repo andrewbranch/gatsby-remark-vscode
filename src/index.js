@@ -2,7 +2,6 @@
 const fs = require('fs');
 const path = require('path');
 const escapeHTML = require('lodash.escape');
-const constants = require('./constants');
 const createGetRegistry = require('./createGetRegistry');
 const lineHighlighting = require('./lineHighlighting');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
@@ -11,6 +10,7 @@ const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
+const { getGrammar, getGrammarLocation, getScope, getThemeLocation } = require('./constants');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
@@ -72,7 +72,6 @@ function getStylesFromSettings(settings) {
  * @typedef {object} PluginOptions
  * @property {string | ((data: CodeFenceData) => string)=} colorTheme
  * @property {string=} wrapperClassName
- * @property {Record<string, string>=} scopesByLanguage
  * @property {Record<string, string>=} languageAliases
  * @property {ExtensionDemand[]=} extensions
  * @property {(line: LineData) => string=} getLineClassName
@@ -93,7 +92,6 @@ function createPlugin() {
     {
       colorTheme = () => 'Default Dark+',
       wrapperClassName = '',
-      scopesByLanguage = {},
       languageAliases = {},
       extensions = [],
       getLineClassName = () => '',
@@ -112,9 +110,9 @@ function createPlugin() {
         await downloadExtensionIfNeeded(languageExtension, cache);
       }
 
-      scopesByLanguage = { ...constants.scopesByLanguage, ...await cache.get('scopesByLanguage'), ...scopesByLanguage };
+      const grammarCache = await cache.get('grammars');
       /** @type {string} */
-      const scope = scopesByLanguage[languageName] || scopesByLanguage[languageAliases[languageName]];
+      const scope = getScope(languageName, grammarCache) || getScope(languageAliases[languageName], grammarCache);
       if (!scope && languageName) {
         warnUnknownLanguage(languageName);
       }
@@ -128,10 +126,8 @@ function createPlugin() {
         await downloadExtensionIfNeeded(themeExtension, cache);
       }
 
-      const themeLocations = { ...constants.themeLocations, ...await cache.get('themeLocations') };
-      const themeAliases = { ...constants.themeAliases, ...await cache.get('themeAliases') };
-      const colorThemePath = themeLocations[colorThemeValue]
-        || themeLocations[themeAliases[colorThemeValue]]
+      const themeCache = await cache.get('themes');
+      const colorThemePath = getThemeLocation(colorThemeValue, themeCache)
         || path.resolve(markdownNode.fileAbsolutePath, colorThemeValue);
 
       const { name: themeName, resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
@@ -148,6 +144,8 @@ function createPlugin() {
 
       const rawLines = text.split(/\r?\n/);
       const htmlLines = [];
+      /** @type {import('vscode-textmate').ITokenTypeMap} */
+      let tokenTypes = {};
       /** @type {number} */
       let languageId;
       /** @type {Registry} */
@@ -156,7 +154,9 @@ function createPlugin() {
       let unlockRegistry = () => {};
 
       if (scope) {
-        languageId = { ...constants.languageIds, ...await cache.get('languageIds' ) }[scope];
+        const grammarData = getGrammar(scope, grammarCache);
+        languageId = grammarData.languageId;
+        tokenTypes = grammarData.tokenTypes;
         const [reg, unlock] = await getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
         registry = reg;
         unlockRegistry = unlock;
@@ -172,7 +172,6 @@ function createPlugin() {
       }
 
       const highlightedLines = lineHighlighting.parseOptionKeys(options);
-      const tokenTypes = scope && languageId && { ...constants.tokenTypes, ...await cache.get('tokenTypes') }[scope] || {};
       const grammar = registry && languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
       let ruleStack = undefined;
       for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {

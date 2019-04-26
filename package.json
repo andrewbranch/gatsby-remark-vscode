@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node scripts/scrapeBuiltinExtensions.js",
-    "test": "jest --coverage",
+    "test": "jest",
     "pretest": "npm run build",
     "prepare": "npm test"
   },

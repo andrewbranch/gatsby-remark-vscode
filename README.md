@@ -27,7 +27,6 @@ Add to your `gatsby-config.js`. All options are optional and are explained in mo
           injectStyles: true,    // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],        // Extensions to download from the marketplace to provide more languages and themes
           languageAliases: {},   // Map of custom/unknown language codes to standard/known language codes
-          scopesByLanguage: {},  // Map of language names to TextMate scope names. You probably don’t need this.
           replaceColor: x => x,  // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
           getLineClassName: ({   // Function allowing dynamic setting of additional class names on individual lines
             content,             //   - the string content of the line

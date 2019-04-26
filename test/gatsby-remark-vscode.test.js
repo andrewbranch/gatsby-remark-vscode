@@ -17,6 +17,10 @@ utils.getExtensionBasePath.mockImplementation(realUtils.getExtensionBasePath);
 utils.getExtensionPath.mockImplementation(realUtils.getExtensionPath);
 // @ts-ignore
 utils.getLanguageNames.mockImplementation(realUtils.getLanguageNames);
+// @ts-ignore
+utils.requireJson.mockImplementation(realUtils.requireJson);
+// @ts-ignore
+utils.requireGrammar.mockImplementation(realUtils.requireGrammar);
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {import('../src').PluginOptions} */
@@ -50,17 +54,6 @@ describe('included languages and themes', () => {
     const markdownAST = createMarkdownAST('none');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toMatchSnapshot();
-  });
-
-  it('works without highlighting if no grammar file is found', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('none');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, {
-      ...options,
-      scopesByLanguage: { none: 'source.none' },
-    });
     expect(markdownAST).toMatchSnapshot();
   });
 
@@ -122,7 +115,7 @@ describe('extension downloading', () => {
     // @ts-ignore
     const decompressMock = decompress.mockImplementationOnce(jest.fn());
     // @ts-ignore
-    utils.getExtensionPackageJson.mockImplementationOnce(() => ({
+    utils.requireJson.mockImplementationOnce(() => ({
       contributes: {
         themes: [{
           id: 'custom',
@@ -158,7 +151,7 @@ describe('extension downloading', () => {
     // @ts-ignore
     const decompressMock = decompress.mockImplementationOnce(jest.fn());
     // @ts-ignore
-    utils.getExtensionPackageJson.mockImplementationOnce(() => ({
+    utils.requireJson.mockImplementationOnce(() => ({
       contributes: {
         languages: [{
           id: 'custom',
