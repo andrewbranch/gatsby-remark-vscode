@@ -10,7 +10,7 @@ const { downloadExtensionIfNeeded } = require('./downloadExtension');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-const { getGrammar, getGrammarLocation, getScope, getThemeLocation } = require('./storeUtils');
+const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
@@ -158,7 +158,9 @@ function createPlugin() {
           const grammarData = getGrammar(scope, grammarCache);
           languageId = grammarData.languageId;
           tokenTypes = grammarData.tokenTypes;
-          const [reg, unlock] = await getRegistry(cache, missingScopeName => warnMissingLanguageFile(missingScopeName, scope));
+          const [reg, unlock] = await getRegistry(cache, missingScopeName => {
+            warnMissingLanguageFile(missingScopeName, scope)
+          });
           registry = reg;
           unlockRegistry = unlock;
           registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });

@@ -78,7 +78,7 @@ describe('included languages and themes', () => {
     const markdownAST = createMarkdownAST('JavaScript');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
+    expect(markdownAST).toMatchSnapshot();
   });
 
   it('can use a custom language alias', async () => {
@@ -86,15 +86,7 @@ describe('included languages and themes', () => {
     const markdownAST = createMarkdownAST('java-scripty');
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, { ...options, languageAliases: { 'java-scripty': 'js' } });
-    expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
-  });
-
-  it('can use a custom scope mapping', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('swift');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, { ...options, scopesByLanguage: { swift: 'source.js' } });
-    expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(2);
+    expect(markdownAST).toMatchSnapshot();
   });
 });
 
