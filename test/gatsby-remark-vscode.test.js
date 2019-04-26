@@ -26,7 +26,7 @@ utils.sanitizeForClassName.mockImplementation(realUtils.sanitizeForClassName);
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {import('../src').PluginOptions} */
-const options = { injectStyles: false };
+const defaultOptions = { injectStyles: false };
 
 function createCache() {
   return new Map();
@@ -42,53 +42,44 @@ function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
   };
 }
 
+/**
+ * @param {import('../src').PluginOptions=} options
+ * @param {*} markdownAST
+ */
+async function testSnapshot(options, markdownAST = createMarkdownAST()) {
+  const plugin = createPlugin();
+  const cache = createCache();
+  await plugin({ markdownAST, markdownNode, cache }, { ...defaultOptions, ...options });
+  expect(markdownAST).toMatchSnapshot();
+}
+
 describe('included languages and themes', () => {
   it('works with default options', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST();
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toMatchSnapshot();
+    return testSnapshot();
   });
 
   it('works without highlighting if language is not recognized', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('none');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toMatchSnapshot();
+    return testSnapshot({}, createMarkdownAST('none'));
   });
 
   it('works without highlighting if a code fence has no language', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toMatchSnapshot();
+    return testSnapshot({}, createMarkdownAST(''));
   });
 
   it('only adds theme CSS once', async () => {
     const plugin = createPlugin();
     const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, options);
+    await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
   });
 
   it('can use a standard language alias', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('JavaScript');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, options);
-    expect(markdownAST).toMatchSnapshot();
+    return testSnapshot({}, createMarkdownAST('JavaScript'));
   });
 
   it('can use a custom language alias', async () => {
-    const plugin = createPlugin();
-    const markdownAST = createMarkdownAST('java-scripty');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, { ...options, languageAliases: { 'java-scripty': 'js' } });
-    expect(markdownAST).toMatchSnapshot();
+    return testSnapshot({ languageAliases: { 'java-scripty': 'js' } }, createMarkdownAST('java-scripty'));
   });
 });
 
@@ -119,10 +110,7 @@ describe('extension downloading', () => {
       }
     }));
 
-    const markdownAST = createMarkdownAST();
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, {
-      ...options,
+    await testSnapshot({
       colorTheme: 'Custom Theme',
       extensions: [{
         identifier: 'publisher.wrong-one',
@@ -135,7 +123,6 @@ describe('extension downloading', () => {
 
     expect(requestMock).toHaveBeenCalledTimes(2);
     expect(decompressMock).toHaveBeenCalledTimes(2);
-    expect(markdownAST).toMatchSnapshot();
   });
 
   it('can download an extension to resolve a grammar', async () => {
@@ -160,10 +147,7 @@ describe('extension downloading', () => {
       }
     }));
 
-    const markdownAST = createMarkdownAST('custom');
-    const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, {
-      ...options,
+    await testSnapshot({
       extensions: [{
         identifier: 'publisher.wrong-one',
         version: '1.0.0',
@@ -171,11 +155,10 @@ describe('extension downloading', () => {
         identifier: 'publisher.custom-language',
         version: '1.0.0',
       }],
-    });
+    }, createMarkdownAST('custom'));
 
     expect(requestMock).toHaveBeenCalledTimes(2);
     expect(decompressMock).toHaveBeenCalledTimes(2);
-    expect(markdownAST).toMatchSnapshot();
   });
 });
 
@@ -183,21 +166,37 @@ it('sets highlighted line class names', async () => {
   const plugin = createPlugin();
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
   const cache = createCache();
-  await plugin({ markdownAST, markdownNode, cache }, options);
+  await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
   expect(markdownAST).toMatchSnapshot();
 });
 
 it('can replace a color value', async () => {
-  const plugin = createPlugin();
-  const markdownAST = createMarkdownAST();
-  const cache = createCache();
-  await plugin({ markdownAST, markdownNode, cache }, {
-    ...options,
+  return testSnapshot({
     replaceColor: oldColor => `var(--color-${oldColor.replace('#', '')})`,
   });
-  expect(markdownAST).toMatchSnapshot();
 });
 
-describe('prefersColorTheme', () => {
+describe('prefers-color-scheme', () => {
+  it('supports prefers-color-scheme via an object for `colorTheme`', async () => {
+    return testSnapshot({
+      colorTheme: {
+        defaultTheme: 'Solarized Light',
+        prefersDarkTheme: 'Monokai Dimmed',
+        prefersLightTheme: 'Quiet Light',
+      },
+    });
+  });
 
+  it('supports prefers-color-scheme with dynamically selected themes', async () => {
+    const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
+    let i = 0;
+    const darkThemes = ['Dark+ (default dark)', 'Monokai'];
+    return testSnapshot({
+      colorTheme: () => ({
+        defaultTheme: 'Solarized Light',
+        prefersDarkTheme: darkThemes[i++],
+        prefersLightTheme: 'Quiet Light',
+      }),
+    }, markdownAST);
+  });
 });

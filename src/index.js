@@ -198,9 +198,9 @@ function createPlugin() {
               : [])
           ];
 
-          if (setting === 'prefersDark') {
+          if (setting === 'prefersDarkTheme') {
             stylesheets[themeClassName] = prefersDark(rules);
-          } else if (setting === 'prefersLight') {
+          } else if (setting === 'prefersLightTheme') {
             stylesheets[themeClassName] = prefersLight(rules);
           } else {
             stylesheets[themeClassName] = rules.join('\n');
