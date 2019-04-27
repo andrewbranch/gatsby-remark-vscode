@@ -41,7 +41,7 @@ Install the package:
 npm install --save gatsby-remark-vscode
 ```
 
-Add to your `gatsby-config.js`. All options are optional and are explained in more detail [later](#options).
+Add to your `gatsby-config.js` (all options are optional; defaults shown here):
 
 ```js
 {
