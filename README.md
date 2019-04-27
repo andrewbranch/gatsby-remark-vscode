@@ -215,7 +215,7 @@ The generated HTML has ample stable class names, and you can add your own with t
 
 The styles also include a few CSS variables you can override. The defaults are:
 
-```scss
+```css
 .vscode-highlight {
   --vscode-highlight-padding-v: 1rem;
   --vscode-highlight-padding-h: 1.5rem;
@@ -225,7 +225,7 @@ The styles also include a few CSS variables you can override. The defaults are:
   --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
   --vscode-highlight-border-radius: 8px;
 
-  // Line highlighting: see next section
+  /* Line highlighting: see next section */
   --vscode-highlight-line-highlighted-background-color: transparent;
   --vscode-highlight-line-highlighted-border-width: 4px;
   --vscode-highlight-line-highlighted-border-color: transparent;
@@ -266,11 +266,11 @@ However, comment directives like `// highlight-line` are not currently supported
 
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 
-```scss
+```css
 .vscode-highlight {
-  --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); // default: transparent
-  --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); // default: transparent
-  --vscode-highlight-line-highlighted-border-width: 2px; // default: 2px
+  --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+  --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+  --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
 }
 ```
 
