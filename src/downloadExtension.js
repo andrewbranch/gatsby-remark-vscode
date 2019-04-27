@@ -19,6 +19,7 @@ const {
   getExtensionBasePath,
   getExtensionPackageJson,
 } = require('./utils');
+const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
 let languageId = highestBuiltinLanguageId + 1;
 
@@ -88,9 +89,12 @@ async function downloadExtensionIfNeeded(type, name, extensions, cache) {
     ? async languageName => {
       const grammarCache = await cache.get('grammars');
       const grammar = getGrammar(getScope(languageName, grammarCache), grammarCache);
-      return grammar && getGrammarLocation(grammar);
+      return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
     }
-    : async themeName => getThemeLocation(themeName, await cache.get('themes'));
+    : async themeName => {
+      const location = getThemeLocation(themeName, await cache.get('themes'));
+      return location && exists(location);
+    };
 
   while (extensions.length && !(await locator(name))) {
     const extensionDemand = extensions.shift();

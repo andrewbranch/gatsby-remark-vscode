@@ -1,6 +1,37 @@
 # gatsby-remark-vscode
 
-A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your blog.
+A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
+
+Includes OS dark mode support 🌙
+
+## Table of contents
+
+- [Getting started](#getting-started)
+- [Why gatsby-remark-vscode?](#why-gatsby-remark-vscode)
+- [Dark mode support via `prefers-color-scheme`](#dark-mode-support-via-prefers-color-scheme)
+- [Built-in languages and themes](#built-in-languages-and-themes)
+  - [Languages](#languages)
+  - [Themes](#themes)
+- [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension)
+- [Styles](#styles)
+  - [Class names](#class-names)
+  - [Variables](#variables)
+  - [Tweaking or replacing theme colors](#tweaking-or-replacing-theme-colors)
+- [Extra stuff](#extra-stuff)
+  - [Line highlighting](#line-highlighting)
+  - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
+  - [Arbitrary code fence options](#arbitrary-code-fence-options)
+
+## Why gatsby-remark-vscode?
+
+JavaScript syntax highlighting libraries that were designed to run in the browser, like [Prism](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/), have to make compromises given the constraints of their intended environment. Since they get downloaded and executed whenever a user visits a page, they have to be ultra-fast and ultra-lightweight. Your Gatsby app, on the other hand, renders to HTML at build-time in Node, so these constraints don’t apply. So why make tradeoffs that don’t buy you anything? There’s no reason why the syntax highlighting on your blog should be any less sophisticated than the syntax highlighting in your code editor. And since VS Code is built with JavaScript and CSS, is open source, and has a rich extension ecosystem, it turns out that it’s pretty easy to hook use its highlighting engine and extensions and get great results. A few examples of where gatsby-remark-vscode excels:
+
+| Scenario                | Others                 | gatsby-remark-vscode |
+|-------------------------|------------------------|----------------------|
+| Embedded languages      | ![][embedded-others]   | ![][embedded-own]
+| Complex TypeScript      | ![][typescript-others] | ![][typescript-own]
+| Tricky template strings | ![][templates-others]  | ![][templates-own]
+| Uncommon languages      | ![][solidity-others]   | ![][solidity-own]
 
 ## Getting started
 
@@ -22,7 +53,7 @@ Add to your `gatsby-config.js`. All options are optional and are explained in mo
         resolve: `gatsby-remark-vscode`,
         // All options are optional. Defaults shown here.
         options: {
-          colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts a function.
+          colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
           wrapperClassName: '',  // Additional class put on 'pre' tag
           injectStyles: true,    // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],        // Extensions to download from the marketplace to provide more languages and themes
@@ -30,9 +61,9 @@ Add to your `gatsby-config.js`. All options are optional and are explained in mo
           replaceColor: x => x,  // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
           getLineClassName: ({   // Function allowing dynamic setting of additional class names on individual lines
             content,             //   - the string content of the line
-            index,               //   - the zero-based index of the line within the code block
-            language,            //   - the language specified for the code block
-            codeBlockOptions     //   - any options set on the code block alongside the language (more on this later)
+            index,               //   - the zero-based index of the line within the code fence
+            language,            //   - the language specified for the code fence
+            codeFenceOptions     //   - any options set on the code fence alongside the language (more on this later)
           }) => ''
         }
       }]
@@ -43,6 +74,22 @@ Write code examples in your markdown file as usual:
     ```js
     this.willBe(highlighted);
     ```
+
+## Dark mode support via `prefers-color-scheme`
+
+Instead of passing a string for `colorTheme`, you can pass an object specifying which theme to use for different values of a user’s operating system color scheme preference.
+
+```js
+{
+  colorTheme: {
+    defaultTheme: 'Solarized Light',    // Required
+    prefersDarkTheme: 'Monokai Dimmed', // Optional: used with `prefers-color-scheme: dark`
+    prefersLightTheme: 'Quiet Light'    // Optional: used with `prefers-color-scheme: light`
+  }
+}
+```
+
+This places CSS for each theme inside a corresponding `prefers-color-scheme` media query. [See browser support.](#todo-when-not-on-plane)
 
 ## Built-in languages and themes
 
@@ -236,6 +283,10 @@ or by setting custom styles on the lines:
 }
 ```
 
+### Using different themes for different code fences
+
+The `colorTheme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
+
 ### Arbitrary code fence options
 
 Line numbers and ranges aren’t the only things you can pass as options on your code fence. A JSON-like syntax is supported:
@@ -248,17 +299,26 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 
 ```js
 {
-  colorTheme: ({ options, language, markdownNode, codeBlockNode }) => {
+  colorTheme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
     // 'language' is 'jsx', in this case
     // 'markdownNode' is the gatsby-transformer-remark GraphQL node
-    // 'codeBlockNode' is the Markdown AST node of the current code block
-    // 'options' is your parsed object that looks like this:
+    // 'codeFenceNode' is the Markdown AST node of the current code fence
+    // 'parsedOptions' is your parsed object that looks like this:
     // {
     //   theme: 'Monokai',
     //   someNumbers: { '1': true, '2': true, '3': true },
     //   nested: { objects: 'yep' }
     // }
-    return options.theme || 'Dark+ (default dark)';
+    return parsedOptions.theme || 'Dark+ (default dark)';
   }
 }
 ```
+
+[embedded-others]: https://user-images.githubusercontent.com/3277153/56853797-5debe780-68c8-11e9-91b2-aa651e87a675.png
+[embedded-own]: https://user-images.githubusercontent.com/3277153/56853798-5e847e00-68c8-11e9-9eb6-061aa16756ec.png
+[typescript-others]: https://user-images.githubusercontent.com/3277153/56853804-5f1d1480-68c8-11e9-965a-bc0adc0e5643.png
+[typescript-own]: https://user-images.githubusercontent.com/3277153/56853803-5e847e00-68c8-11e9-9fa6-13a8de51c83d.png
+[templates-others]: https://user-images.githubusercontent.com/3277153/56853801-5e847e00-68c8-11e9-9ed6-4a03e187aecd.png
+[templates-own]: https://user-images.githubusercontent.com/3277153/56853802-5e847e00-68c8-11e9-8468-dedcd8bcab78.png
+[solidity-others]: https://user-images.githubusercontent.com/3277153/56853799-5e847e00-68c8-11e9-8895-535d9e0d555c.png
+[solidity-own]: https://user-images.githubusercontent.com/3277153/56853800-5e847e00-68c8-11e9-9c83-5e76146d5e46.png

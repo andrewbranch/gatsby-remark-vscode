@@ -83,7 +83,7 @@ function getStylesFromSettings(settings) {
  * @typedef {object} CodeFenceData
  * @property {string} language
  * @property {*} markdownNode
- * @property {*} codeBlockNode
+ * @property {*} codeFenceNode
  * @property {*} parsedOptions
  */
 
@@ -91,8 +91,8 @@ function getStylesFromSettings(settings) {
  * @typedef {object} LineData
  * @property {string} content The line’s string content 
  * @property {number} index The zero-based line index
- * @property {string} language The code block’s language
- * @property {object} codeBlockOptions The code block’s options parsed from the language suffix
+ * @property {string} language The code fence’s language
+ * @property {object} codeFenceOptions The code fence’s options parsed from the language suffix
  */
 
 /**
@@ -162,7 +162,7 @@ function createPlugin() {
       
       const colorThemeValue = typeof colorTheme === 'function' ? colorTheme({
         markdownNode,
-        codeBlockNode: node,
+        codeFenceNode: node,
         parsedOptions: options,
         language: languageName
       }) : colorTheme;
@@ -194,7 +194,7 @@ function createPlugin() {
               ? prefixRules(
                 generateTokensCSSForColorMap(
                   registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))).split('\n'),
-                `.${themeClassName}`)
+                `.${themeClassName} `)
               : [])
           ];
 
@@ -247,7 +247,8 @@ function createPlugin() {
           }
           
           const isHighlighted = highlightedLines.includes(lineIndex + 1);
-          const lineData = { codeBlockOptions: options, index: lineIndex, content: line, language: languageName };
+          /** @type {LineData} */
+          const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
           const className = joinClassNames(
             getLineClassName(lineData),
             'vscode-highlight-line',

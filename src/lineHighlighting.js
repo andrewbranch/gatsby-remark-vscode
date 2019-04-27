@@ -4,13 +4,13 @@ const rangeRegExp = /^\d+[-–—]\d+$/;
 const numberRegExp = /^\d+$/;
 
 /**
- * @param {object} codeBlockOptions
+ * @param {object} codeFenceOptions
  * @returns {number[]}
  */
-function parseOptionKeys(codeBlockOptions) {
+function parseOptionKeys(codeFenceOptions) {
   const lines = [];
-  for (const key in codeBlockOptions) {
-    if (codeBlockOptions[key] === true) {
+  for (const key in codeFenceOptions) {
+    if (codeFenceOptions[key] === true) {
       if (numberRegExp.test(key)) lines.push(parseInt(key, 10));
       else if (rangeRegExp.test(key)) {
         const [lower, upper] = key.split(dashRegExp).map(s => parseInt(s, 10));
