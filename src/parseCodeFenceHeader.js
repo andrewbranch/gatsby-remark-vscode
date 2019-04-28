@@ -31,8 +31,6 @@ function parseCodeFenceHeader(input) {
 
   return { languageName, options };
 
-
-  
   function current() {
     if (isEnd()) {
       return fail('Unexpected end of input');
@@ -53,7 +51,7 @@ function parseCodeFenceHeader(input) {
   }
 
   /**
-   * @param {string} expected 
+   * @param {string} expected
    */
   function scanExpected(expected) {
     if (isEnd() || current() !== expected) {
@@ -113,10 +111,14 @@ function parseCodeFenceHeader(input) {
   function parseBoolean() {
     const identifier = parseIdentifier('Expected expression, but got nothing');
     switch (identifier) {
-      case 'true': return true;
-      case 'false': return false;
-      case '': return fail('Expected expression, but got nothing');
-      default: return fail(`Unrecognized input '${identifier}'`);
+      case 'true':
+        return true;
+      case 'false':
+        return false;
+      case '':
+        return fail('Expected expression, but got nothing');
+      default:
+        return fail(`Unrecognized input '${identifier}'`);
     }
   }
 

@@ -6,7 +6,7 @@ const grammarManifest = require('../lib/grammars/manifest.json');
 const themeManifest = require('../lib/themes/manifest.json');
 
 /**
- * @param {string} language 
+ * @param {string} language
  * @param {*} grammarCache
  */
 function getScope(language, grammarCache) {
@@ -23,34 +23,31 @@ function getScope(language, grammarCache) {
  * @param {*} grammar
  */
 function getGrammarLocation(grammar) {
-    return path.isAbsolute(grammar.path)
-      ? grammar.path
-      : path.resolve(__dirname, '../lib/grammars', grammar.path);
+  return path.isAbsolute(grammar.path) ? grammar.path : path.resolve(__dirname, '../lib/grammars', grammar.path);
 }
 
 /**
- * 
- * @param {string} themeNameOrId 
- * @param {*} themeCache 
+ *
+ * @param {string} themeNameOrId
+ * @param {*} themeCache
  */
 function getThemeLocation(themeNameOrId, themeCache) {
   const themes = { ...themeManifest, ...themeCache };
   for (const themeId in themes) {
     const theme = themes[themeId];
     if (themeNameOrId === themeId || themeNameOrId.toLowerCase() === theme.label.toLowerCase()) {
-      return path.isAbsolute(theme.path)
-        ? theme.path
-        : path.resolve(__dirname, '../lib/themes', theme.path);
+      return path.isAbsolute(theme.path) ? theme.path : path.resolve(__dirname, '../lib/themes', theme.path);
     }
   }
 }
 
-const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce((highest, scopeName) => (
-  Math.max(highest, grammarManifest[scopeName].languageId)
-), 1);
+const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce(
+  (highest, scopeName) => Math.max(highest, grammarManifest[scopeName].languageId),
+  1
+);
 
 /**
- * @param {string} scopeName 
+ * @param {string} scopeName
  * @param {*} grammarCache
  */
 function getGrammar(scopeName, grammarCache) {

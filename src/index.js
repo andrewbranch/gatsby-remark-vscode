@@ -15,7 +15,7 @@ const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = r
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 /**
- * @param {string} missingScopeName 
+ * @param {string} missingScopeName
  * @param {string} rootScopeName
  */
 function warnMissingLanguageFile(missingScopeName, rootScopeName) {
@@ -23,12 +23,13 @@ function warnMissingLanguageFile(missingScopeName, rootScopeName) {
 }
 
 /**
- * @param {string} lang 
+ * @param {string} lang
  */
 function warnUnknownLanguage(lang) {
   console.warn(
     `Encountered unknown language '${lang}'. If '${lang}' is an alias for a supported language, ` +
-    `use the 'languageAliases' plugin option to map it to the canonical language name.`);
+      `use the 'languageAliases' plugin option to map it to the canonical language name.`
+  );
 }
 
 /**
@@ -39,12 +40,12 @@ function createThemeClassNames(settings) {
   return {
     defaultTheme: sanitizeForClassName(settings.defaultTheme),
     prefersDarkTheme: settings.prefersDarkTheme && `pd--${sanitizeForClassName(settings.prefersDarkTheme)}`,
-    prefersLightTheme: settings.prefersLightTheme && `pl--${sanitizeForClassName(settings.prefersLightTheme)}`,
+    prefersLightTheme: settings.prefersLightTheme && `pl--${sanitizeForClassName(settings.prefersLightTheme)}`
   };
 }
 
 /**
- * @param {{ [K in keyof ColorThemeSettings]: string }} classNames 
+ * @param {{ [K in keyof ColorThemeSettings]: string }} classNames
  */
 function joinThemeClassNames(classNames) {
   return joinClassNames(...Object.keys(classNames).map(setting => classNames[setting]));
@@ -61,16 +62,18 @@ function createColorThemeSettings(colorThemeValue) {
 const settingPropertyMap = { 'editor.background': 'background-color', 'editor.foreground': 'color' };
 
 /**
- * @param {Record<string, string>} settings 
+ * @param {Record<string, string>} settings
  */
 function getStylesFromSettings(settings) {
-  return Object.keys(settings).reduce((styles, setting) => {
-    const property = settingPropertyMap[setting];
-    if (property) {
-      return [...styles, `${property}: ${settings[setting]};`];
-    }
-    return styles;
-  }, []).join('\n');
+  return Object.keys(settings)
+    .reduce((styles, setting) => {
+      const property = settingPropertyMap[setting];
+      if (property) {
+        return [...styles, `${property}: ${settings[setting]};`];
+      }
+      return styles;
+    }, [])
+    .join('\n');
 }
 
 /**
@@ -89,7 +92,7 @@ function getStylesFromSettings(settings) {
 
 /**
  * @typedef {object} LineData
- * @property {string} content The line’s string content 
+ * @property {string} content The line’s string content
  * @property {number} index The zero-based line index
  * @property {string} language The code fence’s language
  * @property {object} codeFenceOptions The code fence’s options parsed from the language suffix
@@ -121,9 +124,9 @@ function createPlugin() {
   const getRegistry = createGetRegistry();
 
   /**
-   * 
+   *
    * @param {*} _
-   * @param {PluginOptions=} options 
+   * @param {PluginOptions=} options
    */
   async function textmateHighlight(
     { markdownAST, markdownNode, cache },
@@ -134,8 +137,8 @@ function createPlugin() {
       extensions = [],
       getLineClassName = () => '',
       injectStyles = true,
-      replaceColor = x => x,
-    } = {},
+      replaceColor = x => x
+    } = {}
   ) {
     /** @type {Record<string, string>} */
     const stylesheets = {};
@@ -143,7 +146,7 @@ function createPlugin() {
     for (const node of markdownAST.children) {
       if (node.type !== 'code') continue;
       /** @type {string} */
-      const text = node.value || node.children && node.children[0] && node.children[0].value;
+      const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
       await downloadExtensionIfNeeded('grammar', languageName, extensions, cache);
@@ -157,15 +160,18 @@ function createPlugin() {
 
       // Set up theme
       const [registry, unlockRegistry] = await getRegistry(cache, missingScopeName => {
-        warnMissingLanguageFile(missingScopeName, scope)
+        warnMissingLanguageFile(missingScopeName, scope);
       });
-      
-      const colorThemeValue = typeof colorTheme === 'function' ? colorTheme({
-        markdownNode,
-        codeFenceNode: node,
-        parsedOptions: options,
-        language: languageName
-      }) : colorTheme;
+
+      const colorThemeValue =
+        typeof colorTheme === 'function'
+          ? colorTheme({
+              markdownNode,
+              codeFenceNode: node,
+              parsedOptions: options,
+              language: languageName
+            })
+          : colorTheme;
       const colorThemeSettings = createColorThemeSettings(colorThemeValue);
       const themeClassNames = createThemeClassNames(colorThemeSettings);
       for (const setting in colorThemeSettings) {
@@ -175,15 +181,16 @@ function createPlugin() {
 
         const themeClassName = themeClassNames[setting];
         const themeCache = await cache.get('themes');
-        const colorThemePath = getThemeLocation(colorThemeIdentifier, themeCache)
-          || path.resolve(markdownNode.fileAbsolutePath, colorThemeIdentifier);
+        const colorThemePath =
+          getThemeLocation(colorThemeIdentifier, themeCache) ||
+          path.resolve(markdownNode.fileAbsolutePath, colorThemeIdentifier);
 
         const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
         const defaultTokenColors = {
           settings: {
             foreground: settings['editor.foreground'] || settings.foreground,
-            background: settings['editor.background'] || settings.background,
-          },
+            background: settings['editor.background'] || settings.background
+          }
         };
 
         registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
@@ -192,9 +199,11 @@ function createPlugin() {
             renderRule(themeClassName, getStylesFromSettings(settings)),
             ...(scope
               ? prefixRules(
-                generateTokensCSSForColorMap(
-                  registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))).split('\n'),
-                `.${themeClassName} `)
+                  generateTokensCSSForColorMap(
+                    registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))
+                  ).split('\n'),
+                  `.${themeClassName} `
+                )
               : [])
           ];
 
@@ -223,7 +232,7 @@ function createPlugin() {
         }
 
         const highlightedLines = lineHighlighting.parseOptionKeys(options);
-        const grammar = languageId && await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
+        const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
         for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
           const line = rawLines[lineIndex];
@@ -239,44 +248,36 @@ function createPlugin() {
               htmlLine += [
                 `<span class="${getClassNameFromMetadata(metadata)}">`,
                 escapeHTML(line.slice(startIndex, endIndex)),
-                '</span>',
+                '</span>'
               ].join('');
             }
           } else {
             htmlLine += escapeHTML(line);
           }
-          
+
           const isHighlighted = highlightedLines.includes(lineIndex + 1);
           /** @type {LineData} */
           const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
           const className = joinClassNames(
             getLineClassName(lineData),
             'vscode-highlight-line',
-            isHighlighted && 'vscode-highlight-line-highlighted',
+            isHighlighted && 'vscode-highlight-line-highlighted'
           );
 
-          htmlLines.push([
-            `<span class="${className}">`,
-            htmlLine,
-            `</span>`
-          ].join(''));
+          htmlLines.push([`<span class="${className}">`, htmlLine, `</span>`].join(''));
         }
       } finally {
         unlockRegistry();
       }
 
-      const className = joinClassNames(
-        wrapperClassName,
-        joinThemeClassNames(themeClassNames),
-        'vscode-highlight',
-      );
+      const className = joinClassNames(wrapperClassName, joinThemeClassNames(themeClassNames), 'vscode-highlight');
       node.type = 'html';
       node.value = [
         `<pre class="${className}" data-language="${languageName}">`,
         `<code class="vscode-highlight-code">`,
         htmlLines.join('\n'),
         `</code>`,
-        `</pre>`,
+        `</pre>`
       ].join('');
     }
 
@@ -288,11 +289,11 @@ function createPlugin() {
           '<style class="vscode-highlight-styles">',
           injectStyles ? styles : '',
           themeNames.map(theme => stylesheets[theme]).join('\n'),
-          '</style>',
-        ].join(''),
+          '</style>'
+        ].join('')
       });
     }
-  };
+  }
   return textmateHighlight;
 }
 

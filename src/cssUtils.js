@@ -1,6 +1,6 @@
 /**
  * @param {string} className
- * @param {string | string[]} propertyList 
+ * @param {string | string[]} propertyList
  */
 function renderRule(className, propertyList) {
   return `.${className} {\n${typeof propertyList === 'string' ? propertyList : propertyList.join('\n')}\n}`;
@@ -33,7 +33,7 @@ function prefersDark(rules) {
  * @param {string} prefix
  */
 function prefixRules(rules, prefix) {
-  return rules.map(rule => rule.trim() ? prefix + rule : '');
+  return rules.map(rule => (rule.trim() ? prefix + rule : ''));
 }
 
 /**

@@ -33,7 +33,7 @@ const getLock = (() => {
     });
     return function unlock() {
       emit();
-    }
+    };
   }
   return getLock;
 })();
@@ -41,10 +41,10 @@ const getLock = (() => {
 function createGetRegistry() {
   /** @type {Registry} */
   let registry;
-  
+
   /**
-   * @param {*} cache 
-   * @param {(missingScopeName: string) => void} onMissingLanguageFile 
+   * @param {*} cache
+   * @param {(missingScopeName: string) => void} onMissingLanguageFile
    * @returns {Promise<[Registry, () => void]>}
    */
   async function getRegistry(cache, onMissingLanguageFile) {
@@ -58,7 +58,7 @@ function createGetRegistry() {
           } else {
             onMissingLanguageFile(scopeName);
           }
-        },
+        }
       });
     }
     const unlock = await getLock();

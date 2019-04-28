@@ -21,7 +21,7 @@ function parseExtensionIdentifier(identifier) {
 
 /**
  * Gets the absolute path to the download path of a downloaded extension.
- * @param {string} identifier 
+ * @param {string} identifier
  */
 function getExtensionBasePath(identifier) {
   return path.resolve(__dirname, '../lib/extensions', identifier);
@@ -29,7 +29,7 @@ function getExtensionBasePath(identifier) {
 
 /**
  * Gets the absolute path to the data directory of a downloaded extension.
- * @param {string} identifier 
+ * @param {string} identifier
  */
 function getExtensionPath(identifier) {
   return path.resolve(getExtensionBasePath(identifier), 'extension');
@@ -37,7 +37,7 @@ function getExtensionPath(identifier) {
 
 /**
  * Gets the package.json of an extension as a JavaScript object.
- * @param {string} identifier 
+ * @param {string} identifier
  * @returns {object}
  */
 function getExtensionPackageJson(identifier) {
@@ -49,25 +49,28 @@ function getExtensionPackageJson(identifier) {
  * @param {*} languageRegistration A 'contributes.languages' entry from an extension’s package.json.
  */
 function getLanguageNames(languageRegistration) {
-  return uniq([
-    languageRegistration.id,
-    ...(languageRegistration.aliases || []),
-    ...(languageRegistration.extensions || []),
-  ].map(name => name.toLowerCase().replace(/[^a-z0-9_-]/g, '')));
+  return uniq(
+    [languageRegistration.id, ...(languageRegistration.aliases || []), ...(languageRegistration.extensions || [])].map(
+      name => name.toLowerCase().replace(/[^a-z0-9_-]/g, '')
+    )
+  );
 }
 
 /**
  * Strips special characters, replaces space with dashes, and lowercases a string.
- * @param {string} str 
+ * @param {string} str
  */
 function sanitizeForClassName(str) {
-  return str.replace(/\s+/g, '-').replace(/[^-_a-z0-9]/ig, '').toLowerCase();
+  return str
+    .replace(/\s+/g, '-')
+    .replace(/[^-_a-z0-9]/gi, '')
+    .toLowerCase();
 }
 
 const readFile = util.promisify(fs.readFile);
 const requireJson = /** @param {string} pathName */ pathName => json.parse(fs.readFileSync(pathName, 'utf8'));
-const requireGrammar = /** @param {string} pathName */ async pathName => path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
-
+const requireGrammar = /** @param {string} pathName */ async pathName =>
+  path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
 
 module.exports = {
   parseExtensionIdentifier,
@@ -77,5 +80,5 @@ module.exports = {
   getLanguageNames,
   sanitizeForClassName,
   requireJson,
-  requireGrammar,
+  requireGrammar
 };

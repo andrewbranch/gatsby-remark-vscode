@@ -13,11 +13,11 @@ const {
   getThemeLocation,
   highestBuiltinLanguageId
 } = require('./storeUtils');
-  const {
+const {
   parseExtensionIdentifier,
   getExtensionPath,
   getExtensionBasePath,
-  getExtensionPackageJson,
+  getExtensionPackageJson
 } = require('./utils');
 const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
@@ -25,11 +25,11 @@ let languageId = highestBuiltinLanguageId + 1;
 
 /**
  * @param {*} cache
- * @param {string} key 
- * @param {object} value 
+ * @param {string} key
+ * @param {object} value
  */
 async function mergeCache(cache, key, value) {
-  await cache.set(key, { ...await cache.get(key), ...value });
+  await cache.set(key, { ...(await cache.get(key)), ...value });
 }
 
 /**
@@ -39,7 +39,7 @@ async function mergeCache(cache, key, value) {
 async function syncExtensionData({ identifier }, cache) {
   const packageJsonPath = path.join(getExtensionPath(identifier), 'package.json');
   const { grammars, themes } = await processExtension(packageJsonPath);
-  Object.keys(grammars).forEach(scopeName => grammars[scopeName].languageId = languageId++);
+  Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
   await mergeCache(cache, 'grammars', grammars);
   await mergeCache(cache, 'themes', themes);
 }
@@ -58,7 +58,9 @@ async function downloadExtension(extensionDemand, cache) {
         return reject(error);
       }
       if (res.statusCode === 404) {
-        return reject(new Error(`Could not find extension with publisher '${publisher}', name '${name}', and verion '${version}'.`));
+        return reject(
+          new Error(`Could not find extension with publisher '${publisher}', name '${name}', and verion '${version}'.`)
+        );
       }
       if (res.statusCode !== 200) {
         return reject(new Error(`Failed to download extension ${identifier} with status code ${res.statusCode}`));
@@ -85,16 +87,17 @@ async function downloadExtension(extensionDemand, cache) {
  */
 async function downloadExtensionIfNeeded(type, name, extensions, cache) {
   extensions = extensions.slice();
-  const locator = type === 'grammar'
-    ? async languageName => {
-      const grammarCache = await cache.get('grammars');
-      const grammar = getGrammar(getScope(languageName, grammarCache), grammarCache);
-      return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
-    }
-    : async themeName => {
-      const location = getThemeLocation(themeName, await cache.get('themes'));
-      return location && exists(location);
-    };
+  const locator =
+    type === 'grammar'
+      ? async languageName => {
+          const grammarCache = await cache.get('grammars');
+          const grammar = getGrammar(getScope(languageName, grammarCache), grammarCache);
+          return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
+        }
+      : async themeName => {
+          const location = getThemeLocation(themeName, await cache.get('themes'));
+          return location && exists(location);
+        };
 
   while (extensions.length && !(await locator(name))) {
     const extensionDemand = extensions.shift();
@@ -109,7 +112,7 @@ async function downloadExtensionIfNeeded(type, name, extensions, cache) {
       await downloadExtension(extensionDemand, cache);
       continue;
     }
-  
+
     await syncExtensionData(extensionDemand, cache);
   }
 }
