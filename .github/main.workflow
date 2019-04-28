@@ -4,7 +4,8 @@ workflow "build, test and publish on release" {
 }
 
 action "install" {
-  uses = "actions/npm@1.0.0"
+  uses = "node:10"
+  runs = "npm"
   args = "install"
 }
 
