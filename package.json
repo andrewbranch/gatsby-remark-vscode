@@ -24,9 +24,9 @@
   "author": "Andrew Branch <andrew@wheream.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/andrewbranch/gatsby-remark-textmate-highlight/issues"
+    "url": "https://github.com/andrewbranch/gatsby-remark-vscode/issues"
   },
-  "homepage": "https://github.com/andrewbranch/gatsby-remark-textmate-highlight#readme",
+  "homepage": "https://github.com/andrewbranch/gatsby-remark-vscode#readme",
   "devDependencies": {
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.11",
