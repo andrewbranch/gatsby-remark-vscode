@@ -22,7 +22,7 @@ action "test" {
 
 # filter for a new tag
 action "check for new tag" {
-  needs = "test"
+  needs = ["test", "build"]
   uses = "actions/bin/filter@master"
   args = "tag"
 }
