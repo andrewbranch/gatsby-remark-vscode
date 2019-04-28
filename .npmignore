@@ -2,3 +2,4 @@ vscode
 coverage
 test
 .vscode
+lib/extensions
