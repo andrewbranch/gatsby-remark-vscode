@@ -38,5 +38,5 @@ action "publish" {
   needs = ["build", "test"]
   uses = "actions/npm@1.0.0"
   args = "publish"
-  secrets = ["NPM_AUTH_TOKEN"]
+  secrets = ["NPM_TOKEN"]
 }
