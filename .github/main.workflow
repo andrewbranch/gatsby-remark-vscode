@@ -3,7 +3,13 @@ workflow "build, test and publish on release" {
   resolves = "publish"
 }
 
+action "check for new tag" {
+  uses = "actions/bin/filter@master"
+  args = "tag"
+}
+
 action "pull submodules" {
+  needs = "check for new tag"
   uses = "docker://node:10"
   runs = "git"
   args = "submodule update --init"
@@ -28,15 +34,8 @@ action "test" {
   args = "test"
 }
 
-# filter for a new tag
-action "check for new tag" {
-  needs = ["test", "build"]
-  uses = "actions/bin/filter@master"
-  args = "tag"
-}
-
 action "publish" {
-  needs = "check for new tag"
+  needs = ["build", "test"]
   uses = "actions/npm@1.0.0"
   args = "publish"
   secrets = ["NPM_AUTH_TOKEN"]
