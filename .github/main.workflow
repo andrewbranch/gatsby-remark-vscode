@@ -3,8 +3,15 @@ workflow "build, test and publish on release" {
   resolves = "publish"
 }
 
+action "pull submodules" {
+  uses = "docker://node:10"
+  runs = "git"
+  args = "submodule update --init"
+}
+
 action "install" {
   uses = "docker://node:10"
+  needs = "pull submodules"
   runs = "npm"
   args = "install"
 }
