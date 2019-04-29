@@ -24,19 +24,19 @@ action "install" {
 
 action "build" {
   needs = "install"
-  uses = "actions/npm@1.0.0"
+  uses = "actions/npm@2.0.0"
   args = "run build"
 }
 
 action "test" {
   needs = "install"
-  uses = "actions/npm@1.0.0"
+  uses = "actions/npm@2.0.0"
   args = "test"
 }
 
 action "publish" {
   needs = ["build", "test"]
-  uses = "actions/npm@1.0.0"
-  args = "publish"
+  uses = "actions/npm@2.0.0"
+  args = "publish --access public"
   secrets = ["NPM_AUTH_TOKEN"]
 }
