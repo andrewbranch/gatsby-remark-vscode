@@ -1,7 +1,7 @@
 {
   "name": "gatsby-remark-vscode",
   "version": "1.0.0",
-  "description": "Gatsby plugin to provide VS Code language support and themes to code snippets",
+  "description": "Gatsby plugin to provide VS Code’s syntax highlighting to Markdown code fences",
   "main": "index.js",
   "scripts": {
     "build": "node scripts/scrapeBuiltinExtensions.js",
