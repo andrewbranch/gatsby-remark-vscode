@@ -1,4 +1,5 @@
 vscode
+!lib/vscode
 coverage
 test
 .vscode
