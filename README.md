@@ -156,6 +156,8 @@ The following can be used without specifying an extension to download from the m
   - YAML
 </details>
 
+Language names are resolve case-insensitively by any aliases and file extensions listed in the grammar’s metadata. For example, a code fence with C++ code in it can use [any of these language codes](https://github.com/Microsoft/vscode/blob/da3c97f3668393ebfcb9f8208d7616018d6d1859/extensions/cpp/package.json#L20-L21). You could also check the [built-in grammar manifest](https://unpkg.com/gatsby-remark-vscode@1.0.3/lib/grammars/manifest.json) for an exact list of mappings.
+
 #### Themes
 Pro tip: a good way to preview themes is by flipping through them in VS Code. Here’s the list of included ones:
 
