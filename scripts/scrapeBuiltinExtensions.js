@@ -30,7 +30,7 @@ glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err
         ...await newManifestPromise,
         ...await Object.keys(extension.grammars).reduce(async (newManifestPromise, scopeName) => {
           const grammar = extension.grammars[scopeName];
-          const content = requireGrammar(grammar.path);
+          const content = await requireGrammar(grammar.path);
           let destPath = grammarPath(path.basename(grammar.path));
           const newContent = processTmJson(content);
           // Different languages are sometimes named the same thing
