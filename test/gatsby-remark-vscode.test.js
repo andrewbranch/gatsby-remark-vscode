@@ -46,9 +46,8 @@ function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
  * @param {import('../src').PluginOptions=} options
  * @param {*} markdownAST
  */
-async function testSnapshot(options, markdownAST = createMarkdownAST()) {
+async function testSnapshot(options, markdownAST = createMarkdownAST(), cache = createCache()) {
   const plugin = createPlugin();
-  const cache = createCache();
   await plugin({ markdownAST, markdownNode, cache }, { ...defaultOptions, ...options });
   expect(markdownAST).toMatchSnapshot();
 }
@@ -64,6 +63,18 @@ describe('included languages and themes', () => {
 
   it('works without highlighting if a code fence has no language', async () => {
     return testSnapshot({}, createMarkdownAST(''));
+  });
+
+  it('partially works if an embedded grammar is missing', async () => {
+    const cache = createCache();
+    cache.set('grammars', {
+      'source.embedded': {
+        path: path.resolve(__dirname, 'embedded.tmLanguage.json'),
+        languageNames: ['embedded'],
+        languageId: 100,
+      },
+    });
+    return testSnapshot({}, createMarkdownAST('embedded'), cache);
   });
 
   it('only adds theme CSS once', async () => {

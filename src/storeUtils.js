@@ -7,13 +7,23 @@ const themeManifest = require('../lib/themes/manifest.json');
 
 /**
  * @param {string} language
- * @param {*} grammarCache
+ * @param {Record<string, string>} languageAliases
  */
-function getScope(language, grammarCache) {
+function resolveAlias(language, languageAliases) {
+  return languageAliases[language] || language;
+}
+
+/**
+ * @param {string} language
+ * @param {*} grammarCache
+ * @param {Record<string, string>} languageAliases
+ */
+function getScope(language, grammarCache, languageAliases) {
+  const resolvedLanguage = resolveAlias(language, languageAliases);
   const grammars = { ...grammarManifest, ...grammarCache };
   for (const scopeName in grammars) {
     const grammar = grammars[scopeName];
-    if (grammar.languageNames.includes(language)) {
+    if (grammar.languageNames.includes(resolvedLanguage)) {
       return scopeName;
     }
   }

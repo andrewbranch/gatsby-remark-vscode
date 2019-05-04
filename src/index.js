@@ -149,11 +149,10 @@ function createPlugin() {
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
-      await downloadExtensionIfNeeded('grammar', languageName, extensions, cache);
+      await downloadExtensionIfNeeded('grammar', languageName, extensions, cache, languageAliases);
 
       const grammarCache = await cache.get('grammars');
-      /** @type {string} */
-      const scope = getScope(languageName, grammarCache) || getScope(languageAliases[languageName], grammarCache);
+      const scope = getScope(languageName, grammarCache, languageAliases);
       if (!scope && languageName) {
         warnUnknownLanguage(languageName);
       }
@@ -177,7 +176,7 @@ function createPlugin() {
       for (const setting in colorThemeSettings) {
         const colorThemeIdentifier = colorThemeSettings[setting];
         if (!colorThemeIdentifier) continue;
-        await downloadExtensionIfNeeded('theme', colorThemeIdentifier, extensions, cache);
+        await downloadExtensionIfNeeded('theme', colorThemeIdentifier, extensions, cache, languageAliases);
 
         const themeClassName = themeClassNames[setting];
         const themeCache = await cache.get('themes');

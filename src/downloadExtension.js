@@ -84,14 +84,15 @@ async function downloadExtension(extensionDemand, cache) {
  * @param {string} name
  * @param {import('.').ExtensionDemand[]} extensions
  * @param {*} cache
+ * @param {Record<string, string>} languageAliases
  */
-async function downloadExtensionIfNeeded(type, name, extensions, cache) {
+async function downloadExtensionIfNeeded(type, name, extensions, cache, languageAliases) {
   extensions = extensions.slice();
   const locator =
     type === 'grammar'
       ? async languageName => {
           const grammarCache = await cache.get('grammars');
-          const grammar = getGrammar(getScope(languageName, grammarCache), grammarCache);
+          const grammar = getGrammar(getScope(languageName, grammarCache, languageAliases), grammarCache);
           return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
         }
       : async themeName => {

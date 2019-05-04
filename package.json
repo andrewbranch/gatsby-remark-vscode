@@ -7,7 +7,7 @@
     "build": "node scripts/scrapeBuiltinExtensions.js",
     "test": "jest",
     "pretest": "npm run build && prettier --check src/**/*.js",
-    "prepare": "npm test",
+    "prepublishOnly": "npm test",
     "format": "prettier --write src/**/*.js"
   },
   "repository": {
