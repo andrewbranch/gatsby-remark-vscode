@@ -2,5 +2,7 @@ vscode
 !lib/vscode
 coverage
 test
+scripts
+.github
 .vscode
 lib/extensions

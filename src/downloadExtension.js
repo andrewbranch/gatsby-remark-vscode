@@ -88,19 +88,8 @@ async function downloadExtension(extensionDemand, cache) {
  */
 async function downloadExtensionIfNeeded(type, name, extensions, cache, languageAliases) {
   extensions = extensions.slice();
-  const locator =
-    type === 'grammar'
-      ? async languageName => {
-          const grammarCache = await cache.get('grammars');
-          const grammar = getGrammar(getScope(languageName, grammarCache, languageAliases), grammarCache);
-          return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
-        }
-      : async themeName => {
-          const location = getThemeLocation(themeName, await cache.get('themes'));
-          return location && exists(location);
-        };
-
-  while (extensions.length && !(await locator(name))) {
+  const extensionExists = type === 'grammar' ? grammarExists : themeExists;
+  while (extensions.length && !(await extensionExists(name))) {
     const extensionDemand = extensions.shift();
     const { identifier, version } = extensionDemand;
     const extensionPath = getExtensionBasePath(identifier);
@@ -115,6 +104,19 @@ async function downloadExtensionIfNeeded(type, name, extensions, cache, language
     }
 
     await syncExtensionData(extensionDemand, cache);
+  }
+
+  /** @param {string} languageName */
+  async function grammarExists(languageName) {
+    const grammarCache = await cache.get('grammars');
+    const grammar = getGrammar(getScope(languageName, grammarCache, languageAliases), grammarCache);
+    return grammar && getGrammarLocation(grammar) && exists(getGrammarLocation(grammar));
+  }
+
+  /** @param {string} themeName */
+  async function themeExists(themeName) {
+    const location = getThemeLocation(themeName, await cache.get('themes'));
+    return location && exists(location);
   }
 }
 
