@@ -1,5 +1,7 @@
 # gatsby-remark-vscode
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/andrewbranch/gatsby-remark-vscode.svg)](https://greenkeeper.io/)
+
 A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
 
 Includes OS dark mode support 🌙
