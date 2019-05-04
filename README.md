@@ -89,7 +89,7 @@ Instead of passing a string for `colorTheme`, you can pass an object specifying 
 }
 ```
 
-This places CSS for each theme inside a corresponding `prefers-color-scheme` media query. [See browser support.](#todo-when-not-on-plane)
+This places CSS for each theme inside a corresponding [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) media query. [See browser support.](https://caniuse.com/#feat=prefers-color-scheme)
 
 ## Built-in languages and themes
 
