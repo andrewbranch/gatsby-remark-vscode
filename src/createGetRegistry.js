@@ -51,13 +51,13 @@ function createGetRegistry() {
     if (!registry) {
       registry = new Registry({
         loadGrammar: async scopeName => {
-          const fileName = getGrammarLocation(getGrammar(scopeName, await cache.get('grammars')));
+          const grammarInfo = getGrammar(scopeName, await cache.get('grammars'));
+          const fileName = grammarInfo && getGrammarLocation(grammarInfo);
           if (fileName) {
             const contents = await readFile(fileName, 'utf8');
             return parseRawGrammar(contents, fileName);
-          } else {
-            onMissingLanguageFile(scopeName);
           }
+          onMissingLanguageFile(scopeName);
         }
       });
     }
