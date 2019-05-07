@@ -4,6 +4,7 @@ exports[`can replace a color value 1`] = `
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -13,6 +14,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -44,6 +46,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -51,6 +54,7 @@ exports[`extension downloading can download an extension to resolve a grammar 1`
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -60,6 +64,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -91,6 +96,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -98,6 +104,7 @@ exports[`extension downloading can download an extension to resolve a theme 1`] 
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -107,6 +114,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -135,6 +143,7 @@ Object {
 .custom-theme .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -142,6 +151,7 @@ exports[`included languages and themes can use a custom language alias 1`] = `
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -151,6 +161,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -182,6 +193,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -189,6 +201,7 @@ exports[`included languages and themes can use a standard language alias 1`] = `
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -198,6 +211,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -229,6 +243,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -236,6 +251,7 @@ exports[`included languages and themes partially works if an embedded grammar is
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -245,6 +261,7 @@ Object {
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -276,6 +293,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -283,6 +301,7 @@ exports[`included languages and themes works with default options 1`] = `
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -292,6 +311,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -323,6 +343,7 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -330,6 +351,7 @@ exports[`included languages and themes works without highlighting if a code fenc
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -339,6 +361,7 @@ Object {
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -349,6 +372,7 @@ color: #D4D4D4;
 }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -356,6 +380,7 @@ exports[`included languages and themes works without highlighting if language is
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -365,6 +390,7 @@ Object {
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -375,6 +401,7 @@ color: #D4D4D4;
 }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -382,6 +409,7 @@ exports[`prefers-color-scheme supports prefers-color-scheme via an object for \`
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -391,6 +419,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -490,6 +519,7 @@ background-color: #F5F5F5;
 }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -497,6 +527,7 @@ exports[`prefers-color-scheme supports prefers-color-scheme with dynamically sel
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -506,9 +537,11 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -518,6 +551,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -629,6 +663,7 @@ color: #f8f8f2;
 }</style>",
     },
   ],
+  "type": "root",
 }
 `;
 
@@ -636,6 +671,7 @@ exports[`sets highlighted line class names 1`] = `
 Object {
   "children": Array [
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -648,6 +684,7 @@ Object {
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// 5</span></span></code></pre>",
     },
     Object {
+      "children": Array [],
       "type": "paragraph",
     },
     Object {
@@ -679,5 +716,6 @@ color: #D4D4D4;
 .default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
     },
   ],
+  "type": "root",
 }
 `;

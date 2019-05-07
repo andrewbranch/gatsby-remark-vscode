@@ -51,6 +51,7 @@
     "lodash.uniq": "^4.5.0",
     "oniguruma": "^7.0.2",
     "plist": "^3.0.1",
+    "unist-util-visit": "^1.4.0",
     "vscode-textmate": "^4.1.0"
   },
   "jest": {

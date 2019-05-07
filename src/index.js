@@ -1,6 +1,7 @@
 // @ts-check
 const fs = require('fs');
 const path = require('path');
+const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
 const lineHighlighting = require('./lineHighlighting');
 const createGetRegistry = require('./createGetRegistry');
@@ -142,9 +143,12 @@ function createPlugin() {
   ) {
     /** @type {Record<string, string>} */
     const stylesheets = {};
+    const nodes = [];
+    visit(markdownAST, 'code', node => {
+      nodes.push(node);
+    });
 
-    for (const node of markdownAST.children) {
-      if (node.type !== 'code') continue;
+    for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;

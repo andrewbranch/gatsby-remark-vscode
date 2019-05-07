@@ -34,10 +34,11 @@ function createCache() {
 
 function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
   return {
+    type: 'root',
     children: [
-      { type: 'paragraph' },
+      { type: 'paragraph', children: [] },
       { type: 'code', lang, value },
-      { type: 'paragraph' },
+      { type: 'paragraph', children: [] },
     ],
   };
 }
@@ -79,7 +80,7 @@ describe('included languages and themes', () => {
 
   it('only adds theme CSS once', async () => {
     const plugin = createPlugin();
-    const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
+    const markdownAST = { type: 'root', children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
     await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
@@ -199,7 +200,7 @@ describe('prefers-color-scheme', () => {
   });
 
   it('supports prefers-color-scheme with dynamically selected themes', async () => {
-    const markdownAST = { children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
+    const markdownAST = { type: 'root', children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     let i = 0;
     const darkThemes = ['Dark+ (default dark)', 'Monokai'];
     return testSnapshot({
