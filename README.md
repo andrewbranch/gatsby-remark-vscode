@@ -1,6 +1,6 @@
 # gatsby-remark-vscode
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/andrewbranch/gatsby-remark-vscode.svg)](https://greenkeeper.io/)
+[![Greenkeeper badge](https://badges.greenkeeper.io/andrewbranch/gatsby-remark-vscode.svg)](https://greenkeeper.io/) [![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
 
 A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
 
@@ -8,8 +8,8 @@ Includes OS dark mode support 🌙
 
 ## Table of contents
 
-- [Getting started](#getting-started)
 - [Why gatsby-remark-vscode?](#why-gatsby-remark-vscode)
+- [Getting started](#getting-started)
 - [Dark mode support via `prefers-color-scheme`](#dark-mode-support-via-prefers-color-scheme)
 - [Built-in languages and themes](#built-in-languages-and-themes)
   - [Languages](#languages)
@@ -26,7 +26,7 @@ Includes OS dark mode support 🌙
 
 ## Why gatsby-remark-vscode?
 
-JavaScript syntax highlighting libraries that were designed to run in the browser, like [Prism](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/), have to make compromises given the constraints of their intended environment. Since they get downloaded and executed whenever a user visits a page, they have to be ultra-fast and ultra-lightweight. Your Gatsby app, on the other hand, renders to HTML at build-time in Node, so these constraints don’t apply. So why make tradeoffs that don’t buy you anything? There’s no reason why the syntax highlighting on your blog should be any less sophisticated than the syntax highlighting in your code editor. And since VS Code is built with JavaScript and CSS, is open source, and has a rich extension ecosystem, it turns out that it’s pretty easy to hook use its highlighting engine and extensions and get great results. A few examples of where gatsby-remark-vscode excels:
+JavaScript syntax highlighting libraries that were designed to run in the browser, like [Prism](https://www.gatsbyjs.org/packages/gatsby-remark-prismjs/), have to make compromises given the constraints of their intended environment. Since they get downloaded and executed whenever a user visits a page, they have to be ultra-fast and ultra-lightweight. Your Gatsby app, on the other hand, renders to HTML at build-time in Node, so these constraints don’t apply. So why make tradeoffs that don’t buy you anything? There’s no reason why the syntax highlighting on your blog should be any less sophisticated than the syntax highlighting in your code editor. And since VS Code is built with JavaScript and CSS, is open source, and has a rich extension ecosystem, it turns out that it’s pretty easy to use its highlighting engine and extensions and get great results. A few examples of where gatsby-remark-vscode excels:
 
 | Scenario                | Others                 | gatsby-remark-vscode |
 |-------------------------|------------------------|----------------------|
@@ -82,6 +82,8 @@ Write code examples in your markdown file as usual:
 Instead of passing a string for `colorTheme`, you can pass an object specifying which theme to use for different values of a user’s operating system color scheme preference.
 
 ```js
+// Note: you probably don’t actually want to provide all three options,
+// this example just aims to show all possible options.
 {
   colorTheme: {
     defaultTheme: 'Solarized Light',    // Required
@@ -92,6 +94,8 @@ Instead of passing a string for `colorTheme`, you can pass an object specifying 
 ```
 
 This places CSS for each theme inside a corresponding [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) media query. [See browser support.](https://caniuse.com/#feat=prefers-color-scheme)
+
+Generally, you probably don’t need or want to set all three `colorTheme` options—typical usage would be to set `defaultTheme` to a light theme and `prefersDarkTheme` to a dark theme.
 
 ## Built-in languages and themes
 
