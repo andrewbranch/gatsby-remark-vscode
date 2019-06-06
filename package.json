@@ -42,7 +42,7 @@
     "decompress": "^4.2.0",
     "lodash.escape": "^4.0.1",
     "lodash.uniq": "^4.5.0",
-    "oniguruma": "^7.0.2",
+    "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
     "vscode-textmate": "^4.1.0"
   },
