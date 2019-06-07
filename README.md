@@ -69,6 +69,8 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
           }) => ''
         }
       }]
+    }
+  }
 ```
 
 Write code examples in your markdown file as usual:
@@ -203,6 +205,10 @@ Add those strings to the `extensions` option in your plugin configuration in `ga
             identifier: 'daltonjorge.scala',
             version: '0.0.5'
           }]
+        }
+      ]}
+    }
+  }]
 ```
 
 Next time you `gatsby develop` or `gatsby build`, the extension will be downloaded and Scala code fences will be highlighted. Extensions are downloaded to `node_modules/gatsby-remark-vscode/lib/extensions`, so they remain cached on disk as long as `gastsby-remark-vscode` does.
