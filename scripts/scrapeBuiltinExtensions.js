@@ -17,7 +17,7 @@ const grammarPath = /** @param {string} basename */ basename => path.join(gramma
 const themePath = /** @param {string} basename */ basename => path.join(themeDestDir, basename);
 let languageId = 0;
 
-glob(path.resolve(__dirname, '../vscode/extensions/**/package.json'), async (err, packages) => {
+glob(path.resolve(__dirname, '../vscode/extensions/*/package.json'), async (err, packages) => {
   try {
     if (err) throw err;
     await tryMkdir(grammarDestDir);

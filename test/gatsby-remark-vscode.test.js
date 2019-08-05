@@ -104,7 +104,6 @@ describe('extension downloading', () => {
   });
 
   it('can download an extension to resolve a theme', async () => {
-    const plugin = createPlugin();
     // @ts-ignore
     const requestMock = request.get.mockImplementation((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
@@ -138,7 +137,6 @@ describe('extension downloading', () => {
   });
 
   it('can download an extension to resolve a grammar', async () => {
-    const plugin = createPlugin();
     // @ts-ignore
     const requestMock = request.get.mockImplementation((_, __, cb) => {
       cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
