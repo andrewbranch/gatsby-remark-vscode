@@ -35,9 +35,10 @@ async function mergeCache(cache, key, value) {
 /**
  * @param {import('.').ExtensionDemand} extensionDemand
  * @param {*} cache
+ * @param {string} extensionDir
  */
-async function syncExtensionData({ identifier }, cache) {
-  const packageJsonPath = path.join(getExtensionPath(identifier), 'package.json');
+async function syncExtensionData({ identifier }, cache, extensionDir) {
+  const packageJsonPath = path.join(getExtensionPath(identifier, extensionDir), 'package.json');
   const { grammars, themes } = await processExtension(packageJsonPath);
   Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
   await mergeCache(cache, 'grammars', grammars);
@@ -47,8 +48,9 @@ async function syncExtensionData({ identifier }, cache) {
 /**
  * @param {import('.').ExtensionDemand} extensionDemand
  * @param {*} cache
+ * @param {string} extensionDir
  */
-async function downloadExtension(extensionDemand, cache) {
+async function downloadExtension(extensionDemand, cache, extensionDir) {
   const { identifier, version } = extensionDemand;
   const { publisher, name } = parseExtensionIdentifier(identifier);
   const url = `https://marketplace.visualstudio.com/_apis/public/gallery/publishers/${publisher}/vsextensions/${name}/${version}/vspackage`;
@@ -73,37 +75,43 @@ async function downloadExtension(extensionDemand, cache) {
     });
   });
 
-  const extensionPath = getExtensionBasePath(identifier);
+  const extensionPath = getExtensionBasePath(identifier, extensionDir);
   await decompress(archive, extensionPath);
-  await syncExtensionData(extensionDemand, cache);
+  await syncExtensionData(extensionDemand, cache, extensionDir);
   return extensionPath;
 }
 
 /**
- * @param {'grammar' | 'theme'} type
- * @param {string} name
- * @param {import('.').ExtensionDemand[]} extensions
- * @param {*} cache
- * @param {Record<string, string>} languageAliases
+ * @typedef {object} DownloadExtensionOptions
+ * @property {'grammar' | 'theme'} type
+ * @property {string} name
+ * @property {import('.').ExtensionDemand[]} extensions
+ * @property {*} cache
+ * @property {Record<string, string>} languageAliases
+ * @property {string} extensionDir
  */
-async function downloadExtensionIfNeeded(type, name, extensions, cache, languageAliases) {
+
+/**
+ * @param {DownloadExtensionOptions} options
+ */
+async function downloadExtensionIfNeeded({ type, name, extensions, cache, languageAliases, extensionDir }) {
   extensions = extensions.slice();
   const extensionExists = type === 'grammar' ? grammarExists : themeExists;
   while (extensions.length && !(await extensionExists(name))) {
     const extensionDemand = extensions.shift();
     const { identifier, version } = extensionDemand;
-    const extensionPath = getExtensionBasePath(identifier);
+    const extensionPath = getExtensionBasePath(identifier, extensionDir);
     if (!fs.existsSync(extensionPath)) {
-      await downloadExtension(extensionDemand, cache);
+      await downloadExtension(extensionDemand, cache, extensionDir);
       continue;
     }
-    const packageJson = getExtensionPackageJson(identifier);
+    const packageJson = getExtensionPackageJson(identifier, extensionDir);
     if (packageJson.version !== version) {
-      await downloadExtension(extensionDemand, cache);
+      await downloadExtension(extensionDemand, cache, extensionDir);
       continue;
     }
 
-    await syncExtensionData(extensionDemand, cache);
+    await syncExtensionData(extensionDemand, cache, extensionDir);
   }
 
   /** @param {string} languageName */

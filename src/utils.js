@@ -22,26 +22,29 @@ function parseExtensionIdentifier(identifier) {
 /**
  * Gets the absolute path to the download path of a downloaded extension.
  * @param {string} identifier
+ * @param {string} extensionDir
  */
-function getExtensionBasePath(identifier) {
-  return path.resolve(__dirname, '../lib/extensions', identifier);
+function getExtensionBasePath(identifier, extensionDir) {
+  return path.join(extensionDir, identifier);
 }
 
 /**
  * Gets the absolute path to the data directory of a downloaded extension.
  * @param {string} identifier
+ * @param {string} extensionDir
  */
-function getExtensionPath(identifier) {
-  return path.resolve(getExtensionBasePath(identifier), 'extension');
+function getExtensionPath(identifier, extensionDir) {
+  return path.join(getExtensionBasePath(identifier, extensionDir), 'extension');
 }
 
 /**
  * Gets the package.json of an extension as a JavaScript object.
  * @param {string} identifier
+ * @param {string} extensionDir
  * @returns {object}
  */
-function getExtensionPackageJson(identifier) {
-  return require(path.join(getExtensionPath(identifier), 'package.json'));
+function getExtensionPackageJson(identifier, extensionDir) {
+  return require(path.join(getExtensionPath(identifier, extensionDir), 'package.json'));
 }
 
 /**

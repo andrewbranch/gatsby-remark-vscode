@@ -119,6 +119,7 @@ function getStylesFromSettings(settings) {
  * @property {(line: LineData) => string=} getLineClassName
  * @property {boolean=} injectStyles
  * @property {(colorValue: string, theme: string) => string=} replaceColor
+ * @property {string=} extensionDataDirectory
  */
 
 function createPlugin() {
@@ -138,7 +139,8 @@ function createPlugin() {
       extensions = [],
       getLineClassName = () => '',
       injectStyles = true,
-      replaceColor = x => x
+      replaceColor = x => x,
+      extensionDataDirectory = path.resolve(__dirname, '../lib/extensions')
     } = {}
   ) {
     /** @type {Record<string, string>} */
@@ -153,7 +155,14 @@ function createPlugin() {
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
-      await downloadExtensionIfNeeded('grammar', languageName, extensions, cache, languageAliases);
+      await downloadExtensionIfNeeded({
+        type: 'grammar',
+        name: languageName,
+        extensions,
+        cache,
+        languageAliases,
+        extensionDir: extensionDataDirectory
+      });
 
       const grammarCache = await cache.get('grammars');
       const scope = getScope(languageName, grammarCache, languageAliases);
@@ -180,7 +189,14 @@ function createPlugin() {
       for (const setting in colorThemeSettings) {
         const colorThemeIdentifier = colorThemeSettings[setting];
         if (!colorThemeIdentifier) continue;
-        await downloadExtensionIfNeeded('theme', colorThemeIdentifier, extensions, cache, languageAliases);
+        await downloadExtensionIfNeeded({
+          type: 'theme',
+          name: colorThemeIdentifier,
+          extensions,
+          cache,
+          languageAliases,
+          extensionDir: extensionDataDirectory
+        });
 
         const themeClassName = themeClassNames[setting];
         const themeCache = await cache.get('themes');
