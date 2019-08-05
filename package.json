@@ -59,7 +59,8 @@
       "lib"
     ],
     "testPathIgnorePatterns": [
-      "<rootDir>/vscode"
+      "<rootDir>/vscode",
+      "<rootDir>/examples"
     ]
   }
 }

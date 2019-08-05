@@ -19,6 +19,7 @@ async function processExtension(packageJsonPath) {
           path: sourcePath,
           tokenTypes: grammar.tokenTypes,
           embeddedLanguages: grammar.embeddedLanguages,
+          injectTo: grammar.injectTo,
           languageNames: languageRegistration ? getLanguageNames(languageRegistration) : []
         };
       })
@@ -31,6 +32,7 @@ async function processExtension(packageJsonPath) {
           path: grammar.path,
           tokenTypes: grammar.tokenTypes,
           embeddedLanguages: grammar.embeddedLanguages,
+          injectTo: grammar.injectTo,
           languageNames: grammar.languageNames
         }
       }),
