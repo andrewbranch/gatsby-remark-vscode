@@ -170,6 +170,41 @@ describe('extension downloading', () => {
     expect(requestMock).toHaveBeenCalledTimes(2);
     expect(decompressMock).toHaveBeenCalledTimes(2);
   });
+
+  it('can download an extension to a custom location', async () => {
+    const plugin = createPlugin();
+    // @ts-ignore
+    const requestMock = request.get.mockImplementation((_, __, cb) => {
+      cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
+    });
+    // @ts-ignore
+    const decompressMock = decompress.mockImplementation(jest.fn());
+    // @ts-ignore
+    utils.requireJson.mockImplementation(() => ({
+      contributes: {
+        languages: [{
+          id: 'custom',
+        }],
+        grammars: [{
+          language: 'custom',
+          scopeName: 'source.custom',
+          path: `../../../../../../custom.tmLanguage.json`
+        }],
+      }
+    }));
+
+    return plugin({
+      markdownAST: createMarkdownAST('custom'),
+      markdownNode,
+      cache: createCache(),
+    }, {
+      extensionDataDirectory: path.resolve(__dirname, 'extensions/one/two/three'),
+      extensions: [{
+        identifier: 'publisher.custom-language',
+        version: '1.0.0',
+      }],
+    });
+  });
 });
 
 it('sets highlighted line class names', async () => {
