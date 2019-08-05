@@ -32,13 +32,8 @@ module.exports = {
           {
             resolve: path.resolve(__dirname, '../..'),
             options: {
-              colorTheme: {
-                defaultTheme: 'Ayu Mirage',
-                prefersDarkTheme: 'Ayu Dark',
-              },
               injectStyles: true,
               extensions: [
-                { identifier: 'teabyii.ayu', version: '0.18.0' },
                 {
                   identifier: 'jpoissonnier.vscode-styled-components',
                   version: '0.0.26',
