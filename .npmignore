@@ -1,4 +1,5 @@
 vscode
+examples
 !lib/vscode
 coverage
 test
