@@ -65,10 +65,17 @@ function getGrammar(scopeName, grammarCache) {
 }
 
 /**
- * @param {*} grammarCache 
+ * @param {*} grammarCache
  */
 function getAllGrammars(grammarCache) {
   return { ...grammarManifest, ...grammarCache };
 }
 
-module.exports = { getScope, getGrammar, getGrammarLocation, getThemeLocation, highestBuiltinLanguageId, getAllGrammars };
+module.exports = {
+  getScope,
+  getGrammar,
+  getGrammarLocation,
+  getThemeLocation,
+  highestBuiltinLanguageId,
+  getAllGrammars
+};
