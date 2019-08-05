@@ -17,6 +17,15 @@
       "program": "${workspaceFolder}/node_modules/jest/bin/jest.js",
       "args": ["--runInBand"],
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Example Site",
+      "cwd": "${workspaceFolder}/examples/example-site",
+      "program": "${workspaceFolder}/examples/example-site/node_modules/.bin/gatsby",
+      "args": ["develop"],
+      "console": "integratedTerminal"
     }
   ]
 }

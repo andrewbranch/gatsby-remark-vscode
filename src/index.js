@@ -9,7 +9,7 @@ const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { sanitizeForClassName } = require('./utils');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
-const { downloadExtensionIfNeeded } = require('./downloadExtension');
+const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = require('./cssUtils');
@@ -155,12 +155,9 @@ function createPlugin() {
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
       const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
-      await downloadExtensionIfNeeded({
-        type: 'grammar',
-        name: languageName,
+      await downloadExtensionsIfNeeded({
         extensions,
         cache,
-        languageAliases,
         extensionDir: extensionDataDirectory
       });
 
@@ -190,14 +187,6 @@ function createPlugin() {
         for (const setting in colorThemeSettings) {
           const colorThemeIdentifier = colorThemeSettings[setting];
           if (!colorThemeIdentifier) continue;
-          await downloadExtensionIfNeeded({
-            type: 'theme',
-            name: colorThemeIdentifier,
-            extensions,
-            cache,
-            languageAliases,
-            extensionDir: extensionDataDirectory
-          });
 
           const themeClassName = themeClassNames[setting];
           const themeCache = await cache.get('themes');

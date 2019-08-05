@@ -61,7 +61,14 @@ const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce(
  * @param {*} grammarCache
  */
 function getGrammar(scopeName, grammarCache) {
-  return { ...grammarManifest, ...grammarCache }[scopeName];
+  return getAllGrammars(grammarCache)[scopeName];
 }
 
-module.exports = { getScope, getGrammar, getGrammarLocation, getThemeLocation, highestBuiltinLanguageId };
+/**
+ * @param {*} grammarCache 
+ */
+function getAllGrammars(grammarCache) {
+  return { ...grammarManifest, ...grammarCache };
+}
+
+module.exports = { getScope, getGrammar, getGrammarLocation, getThemeLocation, highestBuiltinLanguageId, getAllGrammars };
