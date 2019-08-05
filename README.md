@@ -15,6 +15,7 @@ Includes OS dark mode support 🌙
   - [Languages](#languages)
   - [Themes](#themes)
 - [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension)
+  - [Dealing with rate limiting in CI](#dealing-with-rate-limiting-in-ci)
 - [Styles](#styles)
   - [Class names](#class-names)
   - [Variables](#variables)
@@ -56,17 +57,19 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
         // All options are optional. Defaults shown here.
         options: {
           colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
-          wrapperClassName: '',  // Additional class put on 'pre' tag
-          injectStyles: true,    // Injects (minimal) additional CSS for layout and scrolling
-          extensions: [],        // Extensions to download from the marketplace to provide more languages and themes
-          languageAliases: {},   // Map of custom/unknown language codes to standard/known language codes
-          replaceColor: x => x,  // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
-          getLineClassName: ({   // Function allowing dynamic setting of additional class names on individual lines
-            content,             //   - the string content of the line
-            index,               //   - the zero-based index of the line within the code fence
-            language,            //   - the language specified for the code fence
-            codeFenceOptions     //   - any options set on the code fence alongside the language (more on this later)
-          }) => ''
+          wrapperClassName: '',   // Additional class put on 'pre' tag
+          injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
+          extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
+          languageAliases: {},    // Map of custom/unknown language codes to standard/known language codes
+          replaceColor: x => x,   // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
+          getLineClassName: ({    // Function allowing dynamic setting of additional class names on individual lines
+            content,              //   - the string content of the line
+            index,                //   - the zero-based index of the line within the code fence
+            language,             //   - the language specified for the code fence
+            codeFenceOptions      //   - any options set on the code fence alongside the language (more on this later)
+          }) => '',
+          extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
+            path.resolve('extensions'),
         }
       }]
     }
@@ -211,7 +214,13 @@ Add those strings to the `extensions` option in your plugin configuration in `ga
   }]
 ```
 
-Next time you `gatsby develop` or `gatsby build`, the extension will be downloaded and Scala code fences will be highlighted. Extensions are downloaded to `node_modules/gatsby-remark-vscode/lib/extensions`, so they remain cached on disk as long as `gastsby-remark-vscode` does.
+Next time you `gatsby develop` or `gatsby build`, the extension will be downloaded and Scala code fences will be highlighted. Extensions are downloaded to `node_modules/gatsby-remark-vscode/lib/extensions` by default (but can go elsewhere by setting the `extensionDataDirectory` option), so they remain cached on disk as long as `gastsby-remark-vscode` does.
+
+### Dealing with rate limiting in CI
+
+Anonymous requests to the Visual Studio Marketplace are rate limited, so if you’re downloading a lot of extensions or running builds in quick succession in an environment where the extensions aren’t already cached on disk (like on a build server), you might see failed requests.
+
+As a workaround, you can set the `extensionDataDirectory` plugin option to an absolute path pointing to a folder that you check into source control. After running a build locally, any extensions you’ve requested will appear in that directory. Then, in CI, gatsby-remark-vscode will check that directory and determine if anything needs to be downloaded. By checking including the extensions alongside your own source code, you can avoid making requests to the Visual Studio Marketplace in CI entirely.
 
 ## Styles
 
