@@ -295,22 +295,22 @@ function createPlugin() {
           `</code>`,
           `</pre>`
         ].join('');
-
-        const themeNames = Object.keys(stylesheets);
-        if (themeNames.length) {
-          markdownAST.children.push({
-            type: 'html',
-            value: [
-              '<style class="vscode-highlight-styles">',
-              injectStyles ? styles : '',
-              themeNames.map(theme => stylesheets[theme]).join('\n'),
-              '</style>'
-            ].join('')
-          });
-        }
       } finally {
         unlockRegistry();
       }
+    }
+
+    const themeNames = Object.keys(stylesheets);
+    if (themeNames.length) {
+      markdownAST.children.push({
+        type: 'html',
+        value: [
+          '<style class="vscode-highlight-styles">',
+          injectStyles ? styles : '',
+          themeNames.map(theme => stylesheets[theme]).join('\n'),
+          '</style>'
+        ].join('')
+      });
     }
   }
   return textmateHighlight;
