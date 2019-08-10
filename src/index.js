@@ -1,6 +1,7 @@
 // @ts-check
 const fs = require('fs');
 const path = require('path');
+const logger = require('loglevel');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
 const lineHighlighting = require('./lineHighlighting');
@@ -20,14 +21,14 @@ const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8')
  * @param {string} rootScopeName
  */
 function warnMissingLanguageFile(missingScopeName, rootScopeName) {
-  console.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
+  logger.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
 }
 
 /**
  * @param {string} lang
  */
 function warnUnknownLanguage(lang) {
-  console.warn(
+  logger.warn(
     `Encountered unknown language '${lang}'. If '${lang}' is an alias for a supported language, ` +
       `use the 'languageAliases' plugin option to map it to the canonical language name.`
   );
@@ -120,6 +121,7 @@ function getStylesFromSettings(settings) {
  * @property {boolean=} injectStyles
  * @property {(colorValue: string, theme: string) => string=} replaceColor
  * @property {string=} extensionDataDirectory
+ * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  */
 
 function createPlugin() {
@@ -140,9 +142,11 @@ function createPlugin() {
       getLineClassName = () => '',
       injectStyles = true,
       replaceColor = x => x,
-      extensionDataDirectory = path.resolve(__dirname, '../lib/extensions')
+      extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
+      logLevel = 'error'
     } = {}
   ) {
+    logger.setLevel(logLevel);
     /** @type {Record<string, string>} */
     const stylesheets = {};
     const nodes = [];

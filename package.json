@@ -49,6 +49,7 @@
     "json5": "^2.1.0",
     "lodash.escape": "^4.0.1",
     "lodash.uniq": "^4.5.0",
+    "loglevel": "^1.6.3",
     "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
     "unist-util-visit": "^1.4.0",
