@@ -245,3 +245,11 @@ describe('prefers-color-scheme', () => {
     }, markdownAST);
   });
 });
+
+describe('utils', () => {
+  describe('requireJson', () => {
+    it('works with json5', () => {
+      expect(() => realUtils.requireJson(path.resolve(__dirname, 'json5.tmTheme.json'))).not.toThrow();
+    });
+  });
+});
