@@ -1,0 +1,15 @@
+{
+	"$schema": "vscode://schemas/color-theme",
+	"name": "json5",
+	"tokenColors": [
+		{
+			scope: [
+				"meta.embedded",
+				"source.groovy.embedded",
+			],
+			"settings": {
+				"foreground": "#D4D4D4" // a nice gray
+      }
+    },
+  ],
+}

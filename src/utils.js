@@ -2,7 +2,7 @@
 const fs = require('fs');
 const util = require('util');
 const path = require('path');
-const json = require('comment-json');
+const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
 
@@ -71,7 +71,7 @@ function sanitizeForClassName(str) {
 }
 
 const readFile = util.promisify(fs.readFile);
-const requireJson = /** @param {string} pathName */ pathName => json.parse(fs.readFileSync(pathName, 'utf8'));
+const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requireGrammar = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
 

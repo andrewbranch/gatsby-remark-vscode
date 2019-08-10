@@ -70,6 +70,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
           }) => '',
           extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
             path.resolve('extensions'),
+          logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
         }
       }]
     }
