@@ -9,12 +9,9 @@ const glob = require('glob');
 const path = require('path');
 const request = require('request');
 const unified = require('unified');
-const raw = require('rehype-raw');
 const reparseHast = require('hast-util-raw');
 const mdastToHast = require('mdast-util-to-hast');
 const remark = require('remark-parse');
-const rehype = require('remark-rehype');
-const format = require('rehype-format');
 const stringify = require('rehype-stringify');
 const decompress = require('decompress');
 const createPlugin = require('../src');
@@ -297,10 +294,7 @@ describe('integration tests', () => {
   const defaultOptions = require('./integration/options');
   const processor = unified()
     .use(remark, { commonmark: true })
-      // @ts-ignore
-    .use(rehype, { allowDangerousHTML: true })
-    .use(raw)
-    .use(format)
+    // @ts-ignore
     .use(stringify, { sanitize: false });
 
   const cases = glob.sync('integration/cases/**/*.md', { cwd: __dirname }).map(name => {
