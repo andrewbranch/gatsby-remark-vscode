@@ -2,12 +2,43 @@
 jest.mock('request');
 jest.mock('decompress');
 jest.mock('../src/utils');
-const request = require('request');
-const decompress = require('decompress');
+const { execSync } = require('child_process');
+const { promisify } = require('util');
+const fs = require('fs');
+const glob = require('glob');
 const path = require('path');
+const request = require('request');
+const unified = require('unified');
+const raw = require('rehype-raw');
+const reparseHast = require('hast-util-raw');
+const mdastToHast = require('mdast-util-to-hast');
+const remark = require('remark-parse');
+const rehype = require('remark-rehype');
+const format = require('rehype-format');
+const stringify = require('rehype-stringify');
+const decompress = require('decompress');
 const createPlugin = require('../src');
 const utils = require('../src/utils');
 const realUtils = jest.requireActual('../src/utils');
+const { renderDocument, renderNewCase, renderTestDiff } = require('./integration/render');
+
+const readFile = promisify(fs.readFile);
+const exists = promisify(fs.exists);
+const writeFile = promisify(fs.writeFile);
+/** @param {string} fileName */
+async function tryReadFile(fileName) {
+  if (await exists(fileName)) {
+    return readFile(fileName, 'utf8');
+  }
+}
+
+function tryRequire(specifier) {
+  try {
+    return require(specifier);
+  } catch {
+    return undefined;
+  }
+}
 
 // @ts-ignore
 utils.parseExtensionIdentifier.mockImplementation(realUtils.parseExtensionIdentifier);
@@ -76,6 +107,14 @@ describe('included languages and themes', () => {
       },
     });
     return testSnapshot({}, createMarkdownAST('embedded'), cache);
+  });
+
+  it('only adds theme CSS once', async () => {
+    const plugin = createPlugin();
+    const markdownAST = { type: 'root', children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
+    const cache = createCache();
+    await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
+    expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
   });
 
   it('only adds theme CSS once', async () => {
@@ -253,3 +292,50 @@ describe('utils', () => {
     });
   });
 });
+
+describe('integration tests', () => {
+  const defaultOptions = require('./integration/options');
+  const processor = unified()
+    .use(remark, { commonmark: true })
+      // @ts-ignore
+    .use(rehype, { allowDangerousHTML: true })
+    .use(raw)
+    .use(format)
+    .use(stringify, { sanitize: false });
+
+  const cases = glob.sync('integration/cases/**/*.md', { cwd: __dirname }).map(name => {
+    return path.basename(name, '.md');
+  });
+
+  /** @type {string[]} */
+  const failedCaseHTML = [];
+  /** @type {string[]} */
+  const newCaseHTML = [];
+  it.each(cases)('%s', async name => {
+    const plugin = createPlugin();
+    const extensionless = path.resolve(__dirname, 'integration/cases', name);
+    const md = await readFile(extensionless + '.md');
+    const options = tryRequire(extensionless);
+    const expected = await tryReadFile(extensionless + '.expected.html');
+    const markdownAST =  processor.parse(md);
+    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
+    const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
+    if (!expected) {
+      await writeFile(extensionless + '.expected.html', html, 'utf8');
+      newCaseHTML.push(renderNewCase(name, html));
+    } else {
+      if (html !== expected) {
+        failedCaseHTML.push(renderTestDiff(name, html, expected));
+        expect(html).toBe(expected);
+      }
+    }
+  });
+
+  afterAll(async () => {
+    if (failedCaseHTML.length || newCaseHTML.length) {
+      const fileName = path.resolve(__dirname, 'integration/report.html');
+      await writeFile(fileName, renderDocument([...newCaseHTML, ...failedCaseHTML].join('\n')));
+      execSync(`open ${fileName}`);
+    }
+  });
+})

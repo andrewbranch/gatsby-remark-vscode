@@ -207,7 +207,7 @@ function createPlugin() {
           };
 
           registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
-          if (!stylesheets[themeClassName]) {
+          if (!stylesheets[themeClassName] || scope) {
             const rules = [
               renderRule(themeClassName, getStylesFromSettings(settings)),
               ...(scope
