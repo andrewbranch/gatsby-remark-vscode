@@ -25,8 +25,15 @@ function parseCodeFenceHeader(input) {
     languageName = parseIdentifier();
   }
   skipTrivia();
-  if (!isEnd() && current() === '{') {
-    options = parseObject();
+  if (!isEnd()) {
+    if (current() === '{') {
+      options = parseObject();
+    } else if (current() === ' ') {
+      pos++;
+      if (current() === '{') {
+        options = parseObject();
+      }
+    }
   }
 
   return { languageName, options };
