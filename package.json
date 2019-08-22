@@ -58,6 +58,7 @@
     "loglevel": "^1.6.3",
     "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
+    "rimraf": "^3.0.0",
     "unist-util-visit": "^1.4.0",
     "vscode-textmate": "^4.1.0"
   },

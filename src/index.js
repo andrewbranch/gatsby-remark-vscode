@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('loglevel');
+const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
 const lineHighlighting = require('./lineHighlighting');
@@ -122,6 +123,7 @@ function getStylesFromSettings(settings) {
  * @property {(colorValue: string, theme: string) => string=} replaceColor
  * @property {string=} extensionDataDirectory
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
+ * @property {import('./host').Host=} host
  */
 
 function createPlugin() {
@@ -143,7 +145,8 @@ function createPlugin() {
       injectStyles = true,
       replaceColor = x => x,
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
-      logLevel = 'error'
+      logLevel = 'error',
+      host = defaultHost
     } = {}
   ) {
     logger.setLevel(logLevel);
@@ -162,7 +165,8 @@ function createPlugin() {
       await downloadExtensionsIfNeeded({
         extensions,
         cache,
-        extensionDir: extensionDataDirectory
+        extensionDir: extensionDataDirectory,
+        host
       });
 
       const grammarCache = await cache.get('grammars');

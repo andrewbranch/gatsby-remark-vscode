@@ -1,22 +1,18 @@
 // @ts-check
-jest.mock('request');
-jest.mock('decompress');
-jest.mock('../src/utils');
 const { execSync } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
-const request = require('request');
+const rimraf = require('rimraf');
 const unified = require('unified');
 const reparseHast = require('hast-util-raw');
 const mdastToHast = require('mdast-util-to-hast');
 const remark = require('remark-parse');
 const stringify = require('rehype-stringify');
-const decompress = require('decompress');
 const createPlugin = require('../src');
+const host = require('../src/host');
 const utils = require('../src/utils');
-const realUtils = jest.requireActual('../src/utils');
 const { renderDocument, renderNewCase, renderTestDiff } = require('./integration/render');
 
 const readFile = promisify(fs.readFile);
@@ -37,24 +33,16 @@ function tryRequire(specifier) {
   }
 }
 
-// @ts-ignore
-utils.parseExtensionIdentifier.mockImplementation(realUtils.parseExtensionIdentifier);
-// @ts-ignore
-utils.getExtensionBasePath.mockImplementation(realUtils.getExtensionBasePath);
-// @ts-ignore
-utils.getExtensionPath.mockImplementation(realUtils.getExtensionPath);
-// @ts-ignore
-utils.getLanguageNames.mockImplementation(realUtils.getLanguageNames);
-// @ts-ignore
-utils.requireJson.mockImplementation(realUtils.requireJson);
-// @ts-ignore
-utils.requireGrammar.mockImplementation(realUtils.requireGrammar);
-// @ts-ignore
-utils.sanitizeForClassName.mockImplementation(realUtils.sanitizeForClassName);
-
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {import('../src').PluginOptions} */
-const defaultOptions = { injectStyles: false };
+const defaultOptions = {
+  injectStyles: false,
+  extensionDataDirectory: path.join(__dirname, 'extensions'),
+  host: {
+    fetch: () => fail('host.fetch should not be called without providing a test host'),
+    decompress: () => fail('host.decompress should not be called without providing a test host')
+  }
+};
 
 function createCache() {
   return new Map();
@@ -98,7 +86,7 @@ describe('included languages and themes', () => {
     const cache = createCache();
     cache.set('grammars', {
       'source.embedded': {
-        path: path.resolve(__dirname, 'embedded.tmLanguage.json'),
+        path: path.resolve(__dirname, 'fixtures', 'embedded.tmLanguage.json'),
         languageNames: ['embedded'],
         languageId: 100,
       },
@@ -132,31 +120,27 @@ describe('included languages and themes', () => {
 });
 
 describe('extension downloading', () => {
-  afterEach(() => {
-    // @ts-ignore
-    request.get.mockReset();
-    // @ts-ignore
-    decompress.mockReset();
+  const testHost = {
+    ...host,
+    fetch: jest.fn(async url => ({
+      statusCode: 200,
+      body: await readFile(path.join(__dirname, 'fixtures', url.includes('wrong-one')
+        ? 'wrong-extension.zip'
+        : 'extension.zip')),
+    })),
+  };
+
+  beforeEach(() => {
+    rimraf.sync(defaultOptions.extensionDataDirectory);
+    testHost.fetch.mockClear();
   });
 
-  it('can download an extension to resolve a theme', async () => {
-    // @ts-ignore
-    const requestMock = request.get.mockImplementation((_, __, cb) => {
-      cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
-    });
-    // @ts-ignore
-    const decompressMock = decompress.mockImplementation(jest.fn());
-    // @ts-ignore
-    utils.requireJson.mockImplementation((jsonPath) => ({
-      contributes: {
-        themes: [{
-          id: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
-          label: jsonPath.includes('wrong-one') ? 'wrong-one' : 'Custom Theme',
-          path: `../../../../test/${jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom'}.tmTheme.json`
-        }],
-      }
-    }));
+  afterAll(() => {
+    rimraf.sync(defaultOptions.extensionDataDirectory);
+  });
 
+
+  it('can download an extension to resolve a theme', async () => {
     await testSnapshot({
       colorTheme: 'Custom Theme',
       extensions: [{
@@ -166,33 +150,13 @@ describe('extension downloading', () => {
         identifier: 'publisher.custom-theme',
         version: '1.0.0',
       }],
+      host: testHost,
     });
 
-    expect(requestMock).toHaveBeenCalledTimes(2);
-    expect(decompressMock).toHaveBeenCalledTimes(2);
+    expect(testHost.fetch).toHaveBeenCalledTimes(2);
   });
 
   it('can download an extension to resolve a grammar', async () => {
-    // @ts-ignore
-    const requestMock = request.get.mockImplementation((_, __, cb) => {
-      cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
-    });
-    // @ts-ignore
-    const decompressMock = decompress.mockImplementation(jest.fn());
-    // @ts-ignore
-    utils.requireJson.mockImplementation((jsonPath) => ({
-      contributes: {
-        languages: [{
-          id: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
-        }],
-        grammars: [{
-          language: jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom',
-          scopeName: jsonPath.includes('wrong-one') ? 'source.wrong' : 'source.custom',
-          path: `../../../../test/${jsonPath.includes('wrong-one') ? 'wrong-one' : 'custom'}.tmLanguage.json`
-        }],
-      }
-    }));
-
     await testSnapshot({
       extensions: [{
         identifier: 'publisher.wrong-one',
@@ -201,45 +165,29 @@ describe('extension downloading', () => {
         identifier: 'publisher.custom-language',
         version: '1.0.0',
       }],
+      host: testHost,
     }, createMarkdownAST('custom'));
 
-    expect(requestMock).toHaveBeenCalledTimes(2);
-    expect(decompressMock).toHaveBeenCalledTimes(2);
+    expect(testHost.fetch).toHaveBeenCalledTimes(2);
   });
 
   it('can download an extension to a custom location', async () => {
     const plugin = createPlugin();
-    // @ts-ignore
-    const requestMock = request.get.mockImplementation((_, __, cb) => {
-      cb(null, { statusCode: 200, headers: {} }, Buffer.from(''));
-    });
-    // @ts-ignore
-    const decompressMock = decompress.mockImplementation(jest.fn());
-    // @ts-ignore
-    utils.requireJson.mockImplementation(() => ({
-      contributes: {
-        languages: [{
-          id: 'custom',
-        }],
-        grammars: [{
-          language: 'custom',
-          scopeName: 'source.custom',
-          path: `../../../../../../custom.tmLanguage.json`
-        }],
-      }
-    }));
-
-    return plugin({
+    const extensionDataDirectory = path.join(__dirname, 'extensions/one/two/three');
+    await plugin({
       markdownAST: createMarkdownAST('custom'),
       markdownNode,
       cache: createCache(),
     }, {
-      extensionDataDirectory: path.resolve(__dirname, 'extensions/one/two/three'),
+      extensionDataDirectory,
       extensions: [{
         identifier: 'publisher.custom-language',
         version: '1.0.0',
       }],
+      host: testHost,
     });
+
+    expect(await exists(extensionDataDirectory)).toBeTruthy();
   });
 });
 
@@ -285,7 +233,7 @@ describe('prefers-color-scheme', () => {
 describe('utils', () => {
   describe('requireJson', () => {
     it('works with json5', () => {
-      expect(() => realUtils.requireJson(path.resolve(__dirname, 'json5.tmTheme.json'))).not.toThrow();
+      expect(() => utils.requireJson(path.resolve(__dirname, 'fixtures/json5.tmTheme.json'))).not.toThrow();
     });
   });
 });
@@ -305,6 +253,12 @@ describe('integration tests', () => {
   const failedCaseHTML = [];
   /** @type {string[]} */
   const newCaseHTML = [];
+
+  beforeAll(() => {
+    jest.resetAllMocks();
+    jest.resetModuleRegistry();
+  });
+
   it.each(cases)('%s', async name => {
     const plugin = createPlugin();
     const extensionless = path.resolve(__dirname, 'integration/cases', name);
@@ -312,7 +266,7 @@ describe('integration tests', () => {
     const options = tryRequire(extensionless);
     const expected = await tryReadFile(extensionless + '.expected.html');
     const markdownAST =  processor.parse(md);
-    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
+    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, host, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
     if (!expected) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');
@@ -332,4 +286,4 @@ describe('integration tests', () => {
       execSync(`open ${fileName}`);
     }
   });
-})
+});
