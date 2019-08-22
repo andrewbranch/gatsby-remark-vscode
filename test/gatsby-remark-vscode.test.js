@@ -266,7 +266,7 @@ describe('integration tests', () => {
     const options = tryRequire(extensionless);
     const expected = await tryReadFile(extensionless + '.expected.html');
     const markdownAST =  processor.parse(md);
-    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, host, ...options });
+    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
     if (!expected) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');
