@@ -1,0 +1,28 @@
+{
+  "name": "theme-oceanicnext",
+  "displayName": "Theme - Oceanic Next",
+  "description": "Oceanic Next theme for VSCode + dimmed bg version for better looking UI",
+  "version": "0.0.4",
+  "publisher": "naumovs",
+  "engines": {
+    "vscode": "^0.10.1"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "icon": "preview.png",
+  "contributes": {
+    "themes": [
+      {
+        "label": "Oceanic Next",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Oceanic_Next_std.tmTheme"
+      },
+      {
+        "label": "Oceanic Next (dimmed bg)",
+        "uiTheme": "vs-dark",
+        "path": "./themes/Oceanic_Next_dimmed.tmTheme"
+      }
+    ]
+  }
+}

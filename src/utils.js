@@ -72,7 +72,7 @@ function sanitizeForClassName(str) {
 
 const readFile = util.promisify(fs.readFile);
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
-const requireGrammar = /** @param {string} pathName */ async pathName =>
+const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
 
 module.exports = {
@@ -83,5 +83,5 @@ module.exports = {
   getLanguageNames,
   sanitizeForClassName,
   requireJson,
-  requireGrammar
+  requirePlistOrJson
 };
