@@ -4,7 +4,7 @@ const util = require('util');
 const glob = require('glob');
 const path = require('path');
 const processExtension = require('../src/processExtension');
-const { requireGrammar } = require('../src/utils');
+const { requirePlistOrJson } = require('../src/utils');
 
 const copyFile = util.promisify(fs.copyFile);
 const writeFile = util.promisify(fs.writeFile);
@@ -30,13 +30,13 @@ glob(path.resolve(__dirname, '../vscode/extensions/*/package.json'), async (err,
         ...await newManifestPromise,
         ...await Object.keys(extension.grammars).reduce(async (newManifestPromise, scopeName) => {
           const grammar = extension.grammars[scopeName];
-          const content = await requireGrammar(grammar.path);
+          const content = await requirePlistOrJson(grammar.path);
           let destPath = grammarPath(path.basename(grammar.path));
           const newContent = processTmJson(content);
           // Different languages are sometimes named the same thing
           languageId++;
           if (await exists(destPath)) {
-            const existingGrammar = await requireGrammar(destPath);
+            const existingGrammar = await requirePlistOrJson(destPath);
             if (existingGrammar.scopeName !== scopeName) {
               const [baseName, ...ext] = path.basename(grammar.path).split('.');
               const renamed = [baseName, languageId, ...ext].join('.');

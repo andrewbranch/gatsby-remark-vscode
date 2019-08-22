@@ -1,6 +1,6 @@
 // @ts-check
 const path = require('path');
-const { getLanguageNames, requireJson, requireGrammar } = require('./utils');
+const { getLanguageNames, requireJson, requirePlistOrJson } = require('./utils');
 
 async function processExtension(packageJsonPath) {
   const packageJson = requireJson(packageJsonPath);
@@ -10,7 +10,7 @@ async function processExtension(packageJsonPath) {
     const manifest = await Promise.all(
       packageJson.contributes.grammars.map(async grammar => {
         const sourcePath = path.resolve(path.dirname(packageJsonPath), grammar.path);
-        const content = await requireGrammar(sourcePath);
+        const content = await requirePlistOrJson(sourcePath);
         const { scopeName } = content;
         const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
 
@@ -44,7 +44,7 @@ async function processExtension(packageJsonPath) {
     const manifest = await Promise.all(
       packageJson.contributes.themes.map(async theme => {
         const sourcePath = path.resolve(path.dirname(packageJsonPath), theme.path);
-        const themeContents = requireJson(sourcePath);
+        const themeContents = await requirePlistOrJson(sourcePath);
         return {
           id: theme.id || path.basename(theme.path).split('.')[0],
           path: sourcePath,
