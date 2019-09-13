@@ -1,5 +1,5 @@
 // @ts-check
-const identifierPattern = /[a-z0-9-–—_]/i;
+const identifierPattern = /[a-z0-9-–—_+#]/i;
 const triviaPattern = /\s/;
 const startOfNumberPattern = /[0-9-.]/;
 const numberPattern = /[0-9-.e]/;
@@ -24,9 +24,17 @@ function parseCodeFenceHeader(input) {
   if (!isEnd() && current() !== '{') {
     languageName = parseIdentifier();
   }
+  const languageNameEnd = pos;
   skipTrivia();
   if (!isEnd() && current() === '{') {
     options = parseObject();
+  }
+
+  if (!isEnd()) {
+    if (languageNameEnd === pos) {
+      return fail(`Invalid character in language name: '${current()}'`);
+    }
+    return fail(`Unrecognized input: '${current()}'`);
   }
 
   return { languageName, options };
