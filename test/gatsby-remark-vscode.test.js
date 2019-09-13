@@ -117,6 +117,10 @@ describe('included languages and themes', () => {
   it('can use a custom language alias', async () => {
     return testSnapshot({ languageAliases: { 'java-scripty': 'js' } }, createMarkdownAST('java-scripty'));
   });
+
+  it('includes special characters in language name', async () => {
+    return testSnapshot({}, createMarkdownAST('c++'));
+  });
 });
 
 describe('extension downloading', () => {

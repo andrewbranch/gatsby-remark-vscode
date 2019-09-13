@@ -4,6 +4,7 @@ const parse = require('../src/parseCodeFenceHeader');
 describe('parseCodeFenceHeader', () => {
   it('parses language name without options', () => {
     expect(parse('jsx')).toEqual({ languageName: 'jsx', options: {} });
+    expect(parse('c++')).toEqual({ languageName: 'c++', options: {} });
   });
 
   it('parses empty options', () => {
@@ -52,5 +53,7 @@ describe('parseCodeFenceHeader', () => {
     expect(() => parse('jsx{ a: boo }')).toThrowError(/unrecognized input 'boo'/i);
     expect(() => parse('jsx{ : }')).toThrowError(/expected identifier/i);
     expect(() => parse('jsx{ a: "')).toThrowError(/unexpected end of input/i);
+    expect(() => parse('c%')).toThrowError(/invalid character in language name.+?%/i);
+    expect(() => parse('c %')).toThrowError(/unrecognized input.+?%/i);
   });
 });
