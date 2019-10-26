@@ -125,7 +125,7 @@ function getStylesFromSettings(settings) {
  * @property {string=} extensionDataDirectory
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
- * @property {LineTransformer[]} lineTransformers
+ * @property {LineTransformer[]=} lineTransformers
  */
 
 function createPlugin() {
@@ -149,7 +149,7 @@ function createPlugin() {
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
       host = defaultHost,
-      lineTransformers = createHighlightDirectiveLineTransformer()
+      lineTransformers = [createHighlightDirectiveLineTransformer()]
     } = {}
   ) {
     logger.setLevel(logLevel);
@@ -267,8 +267,8 @@ function createPlugin() {
               codeFenceOptions: options,
               language: languageName
             });
-            attrs = txResult.attrs;
-            line = txResult.line;
+            attrs = txResult.line.attrs;
+            line = txResult.line.text;
             prevTransformerStates[i] = txResult.state;
           }
           if (grammar) {
