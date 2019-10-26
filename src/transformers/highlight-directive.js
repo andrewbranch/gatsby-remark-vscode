@@ -2,12 +2,22 @@
 const { highlightClassName } = require('../lineHighlighting');
 
 /**
+ * @param {object} attrs
+ * @param {string} className
+ */
+const addClassName = (attrs, className) => {
+  // should we add a check here if attrs.className exists?
+  attrs.className += ` ${className}`;
+  return attrs;
+};
+
+/**
  * @returns {LineTransformer<HighlightCommentTransfomerState>}
  */
 function createHighlightDirectiveLineTransformer() {
   return ({ line: { text, attrs } = {}, language, state }) => {
     //     directiveText = getCommentForLanguage(language, directiveText)
-    const commentFn = getCommentForLanguage(language)
+    const commentFn = getCommentForLanguage(language);
     if (text.endsWith(commentFn('highlight-start'))) {
       return { state: { inHighlightRange: true } }; // no `line` - drop this line from output
     }
@@ -17,14 +27,14 @@ function createHighlightDirectiveLineTransformer() {
     if (text.endsWith(commentFn('highlight-next-line'))) {
       return { state: { highlightNextLine: true } }; // again no `line`
     }
-    if (text.endsWith(commentFn('highlight-line')) || state && state.inHighlightRange) {
+    if (text.endsWith(commentFn('highlight-line')) || (state && state.inHighlightRange)) {
       // return attrs with added class name, text with comment removed, current state
       return {
         line: {
           text: text.replace(commentFn('highlight-line'), ''),
-          attrs: addClassName(attrs, highlightClassName),
+          attrs: addClassName(attrs, highlightClassName)
         },
-        state,
+        state
       };
     }
     if (state && state.highlightNextLine) {
@@ -33,8 +43,8 @@ function createHighlightDirectiveLineTransformer() {
       // doesn't disrupt a highlight range
       return {
         line: { text, attrs: addClassName(attrs, highlightClassName) },
-        state: { ...state, highlightNextLine: false },
-      }
+        state: { ...state, highlightNextLine: false }
+      };
     }
     return { line: { text, attrs }, state }; // default: don’t change anything, propagate state to next call
   };
