@@ -212,7 +212,6 @@ function createPlugin() {
             rawContent: text,
             htmlContent: html,
             lines: linesData,
-            children: [],
           };
 
           const childNode = {
