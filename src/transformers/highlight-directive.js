@@ -1,4 +1,5 @@
 // @ts-check
+const { highlightClassName } = require('../lineHighlighting');
 
 /**
  * @returns {LineTransformer<HighlightCommentTransfomerState>}

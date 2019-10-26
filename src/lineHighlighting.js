@@ -2,6 +2,7 @@
 const dashRegExp = /[-–—]/;
 const rangeRegExp = /^\d+[-–—]\d+$/;
 const numberRegExp = /^\d+$/;
+const highlightClassName = 'vscode-highlight-line-highlighted';
 
 /**
  * @param {object} codeFenceOptions
@@ -21,4 +22,4 @@ function parseOptionKeys(codeFenceOptions) {
   return lines;
 }
 
-module.exports = { parseOptionKeys };
+module.exports = { parseOptionKeys, highlightClassName };

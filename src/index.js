@@ -295,7 +295,7 @@ function createPlugin() {
           const className = joinClassNames(
             getLineClassName(lineData),
             'vscode-highlight-line',
-            isHighlighted && 'vscode-highlight-line-highlighted'
+            isHighlighted && lineHighlighting.highlightClassName
           );
 
           htmlLines.push([`<span class="${className}">`, htmlLine, `</span>`].join(''));
