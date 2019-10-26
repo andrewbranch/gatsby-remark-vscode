@@ -16,6 +16,7 @@ const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = require('./cssUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
+const createHighlightDirectiveLineTransformer = require('./transformers/highlight-directive');
 
 /**
  * @param {string} missingScopeName
@@ -124,6 +125,7 @@ function getStylesFromSettings(settings) {
  * @property {string=} extensionDataDirectory
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
+ * @property {LineTransformer[]} lineTransformers
  */
 
 function createPlugin() {
@@ -146,7 +148,8 @@ function createPlugin() {
       replaceColor = x => x,
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
-      host = defaultHost
+      host = defaultHost,
+      lineTransformers = createHighlightDirectiveLineTransformer()
     } = {}
   ) {
     logger.setLevel(logLevel);
@@ -250,9 +253,24 @@ function createPlugin() {
         const highlightedLines = lineHighlighting.parseOptionKeys(options);
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
+        const prevTransformerStates = [];
         for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
-          const line = rawLines[lineIndex];
+          let line = rawLines[lineIndex];
           let htmlLine = '';
+          let attrs = {};
+          for (let i = 0; i < lineTransformers.length; i++) {
+            const transformer = lineTransformers[i];
+            const state = prevTransformerStates[i];
+            const txResult = transformer({
+              state,
+              line: { text: line, attrs },
+              codeFenceOptions: options,
+              language: languageName
+            });
+            attrs = txResult.attrs;
+            line = txResult.line;
+            prevTransformerStates[i] = txResult.state;
+          }
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
             ruleStack = result.ruleStack;
