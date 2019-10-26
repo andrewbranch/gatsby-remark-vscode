@@ -51,6 +51,7 @@ interface PluginOptions {
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
+  createNodes?: boolean;
 }
 
 // Line transformers

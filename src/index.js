@@ -8,6 +8,7 @@ const escapeHTML = require('lodash.escape');
 const createThemeStyles = require('./createThemeStyles');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
+const { createHash } = require('crypto');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope } = require('./storeUtils');
@@ -32,7 +33,7 @@ function createPlugin() {
    * @param {PluginOptions=} options
    */
   async function textmateHighlight(
-    { markdownAST, markdownNode, cache },
+    { markdownAST, markdownNode, cache, actions, createNodeId },
     {
       colorTheme = 'Default Dark+',
       wrapperClassName = '',
@@ -45,6 +46,7 @@ function createPlugin() {
       logLevel = 'error',
       host = defaultHost,
       getLineTransformers = getDefaultLineTransformers,
+      createNodes,
       ...rest
     } = {}
   ) {
@@ -69,6 +71,7 @@ function createPlugin() {
       nodes.push(node);
     });
 
+    let nodeIndex = 0;
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
@@ -125,6 +128,7 @@ function createPlugin() {
         }
 
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
+        const linesData = [];
         let ruleStack = undefined;
         const prevTransformerStates = [];
         linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
@@ -152,6 +156,14 @@ function createPlugin() {
           }
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
+            if (createNodes) {
+              linesData.push({
+                tokens: grammar.tokenizeLine(line, ruleStack).tokens,
+                binaryTokens: Array.from(result.tokens),
+                text: line,
+              });
+            }
+
             ruleStack = result.ruleStack;
             for (let i = 0; i < result.tokens.length; i += 2) {
               const startIndex = result.tokens[i];
@@ -178,8 +190,7 @@ function createPlugin() {
         }
 
         const className = joinClassNames(wrapperClassName, themeClassNames, 'vscode-highlight');
-        node.type = 'html';
-        node.value = renderHTML(
+        const html = renderHTML(
           pre(
             { class: className, 'data-language': languageName },
             [
@@ -190,7 +201,36 @@ function createPlugin() {
             { whitespace: TriviaRenderFlags.NoWhitespace }
           )
         );
+
+        node.type = 'html';
+        node.value = html;
+        if (createNodes) {
+          const nodeData = {
+            id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
+            parent: markdownNode.id,
+            index: nodeIndex,
+            rawContent: text,
+            htmlContent: html,
+            lines: linesData,
+            children: [],
+          };
+
+          const childNode = {
+            ...nodeData,
+            internal: {
+              type: 'VSCodeHighlightCodeBlock',
+              contentDigest: createHash('md5').update(JSON.stringify(nodeData)).digest('hex'),
+            },
+          };
+          
+          await actions.createNode(childNode);
+          await actions.createParentChildLink({
+            parent: markdownNode,
+            child: childNode,
+          });
+        }
       } finally {
+        nodeIndex++;
         unlockRegistry();
       }
     }

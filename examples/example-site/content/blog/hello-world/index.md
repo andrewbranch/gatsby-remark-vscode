@@ -4,8 +4,6 @@ date: "2015-05-01T22:12:03.284Z"
 description: "Hello World"
 ---
 
-
-
 ```jsx
 const Wrapper = styled.section`
   border-radius: 4px;
@@ -25,11 +23,6 @@ export default function MyComponent({ children }) {
 // highlight-end
 ```
 
-```js
-/**
- * @param {string} x
- */
-function foo(x) {
 
-}
-```
+
+

@@ -33,6 +33,7 @@ module.exports = {
             resolve: path.resolve(__dirname, '../..'),
             options: {
               injectStyles: true,
+              createNodes: true,
               extensions: [
                 {
                   identifier: 'jpoissonnier.vscode-styled-components',
