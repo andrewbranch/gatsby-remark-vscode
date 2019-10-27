@@ -16,7 +16,7 @@ const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = require('./cssUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
-const createHighlightDirectiveLineTransformer = require('./transformers/highlight-directive');
+const { createHighlightDirectiveLineTransformer } = require('./transformers/highlight-directive');
 
 /**
  * @param {string} missingScopeName
