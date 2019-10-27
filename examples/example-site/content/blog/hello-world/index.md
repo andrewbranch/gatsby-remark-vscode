@@ -23,6 +23,21 @@ export default function MyComponent({ children }) {
 // highlight-end
 ```
 
+Hello hello
 
+```jsx
+const Wrapper = styled.section`
+  border-radius: 4px;
+  background: #bada55;
 
+  @media only screen and (max-width: 667px) {
+    & > div {
+      border-bottom: ${borderPixels}px solid #f00;
+    }
+  }
+`
 
+export default function MyComponent({ children }) {
+  return <Wrapper>{children}</Wrapper>;
+}
+```

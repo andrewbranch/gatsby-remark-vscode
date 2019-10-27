@@ -75,6 +75,21 @@ function sanitizeForClassName(str) {
     .toLowerCase();
 }
 
+/**
+ * @param {import('vscode-textmate').IToken} token 
+ * @param {import('vscode-textmate').ITokenizeLineResult2} binaryTokens 
+ */
+function getMetadataForToken(token, binaryTokens) {
+  const index = binaryTokens.tokens.findIndex((_, i) => {
+    return !(i % 2) && binaryTokens.tokens[i + 2] > token.startIndex;
+  });
+
+  if (index > -1) {
+    return binaryTokens.tokens[index + 1];
+  }
+  return binaryTokens.tokens[binaryTokens.tokens.length - 1]
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -90,5 +105,6 @@ module.exports = {
   getLanguageNames,
   sanitizeForClassName,
   requireJson,
-  requirePlistOrJson
+  requirePlistOrJson,
+  getMetadataForToken,
 };

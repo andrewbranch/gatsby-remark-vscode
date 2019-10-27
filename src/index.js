@@ -12,6 +12,9 @@ const { createHash } = require('crypto');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope } = require('./storeUtils');
+const { getMetadataForToken } = require('./utils');
+const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
+const { getDefaultLineTransformers } = require('./transformers');
 const {
   joinClassNames,
   renderHTML,
@@ -22,8 +25,6 @@ const {
   mergeAttributes,
   TriviaRenderFlags
 } = require('./renderUtils');
-const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
-const { getDefaultLineTransformers } = require('./transformers');
 
 function createPlugin() {
   const getRegistry = createGetRegistry();
@@ -72,6 +73,8 @@ function createPlugin() {
     });
 
     let nodeIndex = 0;
+    /** @type {object[]} */
+    let graphQLNodes;
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
@@ -135,6 +138,8 @@ function createPlugin() {
           let line = rawLines[lineIndex];
           /** @type {(ElementTemplate | string)[]} */
           const htmlLine = [];
+          /** @type {LineData} */
+          const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
           let attrs = {};
           for (let i = 0; i < lineTransformers.length; i++) {
             const transformer = lineTransformers[i];
@@ -154,13 +159,24 @@ function createPlugin() {
             Object.assign(attrs, txResult.line.attrs);
             line = txResult.line.text;
           }
+
+          const lineClassName = joinClassNames(
+            getLineClassName(lineData),
+            'vscode-highlight-line'
+          );
+
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
             if (createNodes) {
               linesData.push({
-                tokens: grammar.tokenizeLine(line, ruleStack).tokens,
+                tokens: grammar.tokenizeLine(line, ruleStack).tokens.map(token => ({
+                  ...token,
+                  text: line.slice(token.startIndex, token.endIndex),
+                  className: getClassNameFromMetadata(getMetadataForToken(token, result)),
+                })),
                 binaryTokens: Array.from(result.tokens),
                 text: line,
+                className: joinClassNames(lineClassName, attrs.class)
               });
             }
 
@@ -180,21 +196,18 @@ function createPlugin() {
             htmlLine.push(escapeHTML(line));
           }
 
-          /** @type {LineData} */
-          const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
-          const className = joinClassNames(getLineClassName(lineData), 'vscode-highlight-line');
-
           htmlLines.push(
-            span(mergeAttributes({ class: className }, attrs), htmlLine, { whitespace: TriviaRenderFlags.NoWhitespace })
+            span(mergeAttributes({ class: lineClassName }, attrs), htmlLine, { whitespace: TriviaRenderFlags.NoWhitespace })
           );
         }
 
-        const className = joinClassNames(wrapperClassName, themeClassNames, 'vscode-highlight');
+        const preClassName = joinClassNames(wrapperClassName, themeClassNames, 'vscode-highlight');
+        const codeClassName = 'vscode-highlight-code';
         const html = renderHTML(
           pre(
-            { class: className, 'data-language': languageName },
+            { class: preClassName, 'data-language': languageName, 'data-index': nodeIndex },
             [
-              code({ class: 'vscode-highlight-code' }, htmlLines, {
+              code({ class: codeClassName }, htmlLines, {
                 whitespace: TriviaRenderFlags.NewlineBetweenChildren
               })
             ],
@@ -212,6 +225,9 @@ function createPlugin() {
             rawContent: text,
             htmlContent: html,
             lines: linesData,
+            preClassName,
+            codeClassName,
+            language: languageName,
           };
 
           const childNode = {
@@ -222,15 +238,21 @@ function createPlugin() {
             },
           };
           
-          await actions.createNode(childNode);
-          await actions.createParentChildLink({
-            parent: markdownNode,
-            child: childNode,
-          });
+          (graphQLNodes || (graphQLNodes = [])).push(childNode);
         }
       } finally {
         nodeIndex++;
         unlockRegistry();
+      }
+    }
+
+    if (createNodes && graphQLNodes) {
+      for (const childNode of graphQLNodes) {
+        await actions.createNode(childNode);
+        await actions.createParentChildLink({
+          parent: markdownNode,
+          child: childNode,
+        });
       }
     }
 
