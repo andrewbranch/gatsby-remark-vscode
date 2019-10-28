@@ -12,38 +12,21 @@ const addClassName = (attrs, className) => ({
 
 /**
  * @param {string} language
+ * @param {object} languageCommentMap
  * @return {function} curried function taking a string argument and
  *   prefixing/wrapping that with a language's comment syntax
  */
-const getCommentForLanguage = language => str => {
-  switch (language) {
-    case 'js':
-    case 'ts':
-    case 'php':
-    case 'swift':
-    case 'c#':
-      return `// ${str}`;
-    case 'python':
-    case 'ruby':
-    case 'bash':
-    case 'perl':
-      return `# ${str}`;
-    case 'css':
-    case 'c':
-    case 'objc':
-      return `/* ${str} */`;
-    case 'html':
-    case 'xml':
-      return `<!-- ${str} -->`;
-    case 'clojure':
-      return `; ${str}`;
-    case 'sql':
-      return `-- ${str}`;
-    case 'fortran':
-      return `! ${str}`;
-    default:
-      return `// ${str}`;
-  }
+const getCommentForLanguage = (language, languageCommentMap) => str => {
+  // example: languageCommentMap = {js: str => `// ${str}`}
+  if (languageCommentMap[language]) return languageCommentMap[language](str);
+  if (['js', 'ts', 'php', 'swift', 'c#', 'go', 'java', 'jsonc'].includes(language)) return `// ${str}`;
+  if (['python', 'ruby', 'shell', 'perl', 'coffee', 'yaml'].includes(language)) return `# ${str}`;
+  if (['css', 'c', 'cpp', 'objc', 'less'].includes(language)) return `/* ${str} */`;
+  if (['html', 'xml', 'markdown'].includes(language)) return `<!-- ${str} -->`;
+  if (['clojure'].includes(language)) return `; ${str}`;
+  if (['sql'].includes(language)) return `-- ${str}`;
+  if (['fortran'].includes(language)) return `! ${str}`;
+  return `// ${str}`;
 };
 
 /**
@@ -56,11 +39,12 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
   ['// ' + directive, commentWrapper(directive)].includes(text.trim());
 
 /**
+ * @param {object} languageCommentMap user-defined object mapping language keys to commenting functions
  * @returns {LineTransformer<HighlightCommentTransfomerState>}
  */
-function createHighlightDirectiveLineTransformer() {
+function createHighlightDirectiveLineTransformer(languageCommentMap) {
   return ({ line: { text, attrs } = {}, language, state }) => {
-    const commentWrapper = getCommentForLanguage(language);
+    const commentWrapper = getCommentForLanguage(language, languageCommentMap);
     const isDirective = textIsHighlightDirective(text, commentWrapper);
     if (isDirective('highlight-start')) {
       return { state: { inHighlightRange: true } }; // no `line` - drop this line from output

@@ -126,6 +126,7 @@ function getStylesFromSettings(settings) {
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
  * @property {LineTransformer[]=} lineTransformers
+ * @property {object=} languageCommentMap
  */
 
 function createPlugin() {
@@ -149,9 +150,14 @@ function createPlugin() {
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
       host = defaultHost,
-      lineTransformers = [createHighlightDirectiveLineTransformer()]
+      lineTransformers = [],
+      languageCommentMap = {}
     } = {}
   ) {
+    // This makes comment directives non-optional but that should fine considering
+    // they are unlikely to interfere with regular comments.
+    lineTransformers.push(createHighlightDirectiveLineTransformer(languageCommentMap));
+
     logger.setLevel(logLevel);
     /** @type {Record<string, string>} */
     const stylesheets = {};
