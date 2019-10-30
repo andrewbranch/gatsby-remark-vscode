@@ -7,32 +7,32 @@ const { highlightClassName } = require('../lineHighlighting');
  */
 const addClassName = (attrs, className) => ({
   ...attrs,
-  className: attrs.className ? attrs.className + ` ` + className : className
+  class: attrs.class ? attrs.class + ` ` + className : className
 });
 
 /**
  * @param {string} language
  * @param {object} languageCommentMap
- * @return {function} curried function taking a string argument and
+ * @return {(commentMessage: string) => string} curried function taking a string argument and
  *   prefixing/wrapping that with a language's comment syntax
  */
-const getCommentForLanguage = (language, languageCommentMap) => str => {
+const getCommentForLanguage = (language, languageCommentMap) => message => {
   // example: languageCommentMap = {js: str => `// ${str}`}
-  if (languageCommentMap[language]) return languageCommentMap[language](str);
-  if (['js', 'ts', 'php', 'swift', 'c#', 'go', 'java', 'jsonc'].includes(language)) return `// ${str}`;
-  if (['python', 'ruby', 'shell', 'perl', 'coffee', 'yaml'].includes(language)) return `# ${str}`;
-  if (['css', 'c', 'cpp', 'objc', 'less'].includes(language)) return `/* ${str} */`;
-  if (['html', 'xml', 'markdown'].includes(language)) return `<!-- ${str} -->`;
-  if (['clojure'].includes(language)) return `; ${str}`;
-  if (['sql'].includes(language)) return `-- ${str}`;
-  if (['fortran'].includes(language)) return `! ${str}`;
-  return `// ${str}`;
+  if (languageCommentMap[language]) return languageCommentMap[language](message);
+  if (['js', 'ts', 'php', 'swift', 'c#', 'go', 'java', 'jsonc'].includes(language)) return `// ${message}`;
+  if (['python', 'ruby', 'shell', 'perl', 'coffee', 'yaml'].includes(language)) return `# ${message}`;
+  if (['css', 'c', 'cpp', 'objc', 'less'].includes(language)) return `/* ${message} */`;
+  if (['html', 'xml', 'markdown'].includes(language)) return `<!-- ${message} -->`;
+  if (['clojure'].includes(language)) return `; ${message}`;
+  if (['sql'].includes(language)) return `-- ${message}`;
+  if (['fortran'].includes(language)) return `! ${message}`;
+  return `// ${message}`;
 };
 
 /**
  * @param {string} text
- * @param {function} commentWrapper
- * @return {function} curried function taking a directive string and checking
+ * @param {(directive: string) => string} commentWrapper
+ * @return {(directive: string) => boolean} curried function taking a directive string and checking
  *   whether it equals the line text
  */
 const textIsHighlightDirective = (text, commentWrapper) => directive =>
@@ -43,7 +43,7 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
  * @returns {LineTransformer<HighlightCommentTransfomerState>}
  */
 function createHighlightDirectiveLineTransformer(languageCommentMap) {
-  return ({ line: { text, attrs } = {}, language, state }) => {
+  return ({ line: { text, attrs }, language, state }) => {
     const commentWrapper = getCommentForLanguage(language, languageCommentMap);
     const isDirective = textIsHighlightDirective(text, commentWrapper);
     if (isDirective('highlight-start')) {
@@ -56,7 +56,8 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
       return { state: { highlightNextLine: true } }; // again no `line`
     }
     if (
-      text.endsWith(commentWrapper('highlight-line') || text.endsWith('// highlight-line')) ||
+      text.endsWith(commentWrapper('highlight-line')) ||
+      text.endsWith('// highlight-line') ||
       (state && state.inHighlightRange)
     ) {
       // return attrs with added class name, text with comment removed, current state

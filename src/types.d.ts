@@ -17,3 +17,14 @@ type HighlightCommentTransfomerState = {
   inHighlightRange?: boolean;
   highlightNextLine?: boolean;
 };
+
+type ElementTemplate = {
+  tagName: string;
+  attributes: Record<string, string>;
+  children: (ElementTemplate | string)[];
+  renderOptions?: RenderOptions;
+};
+
+interface RenderOptions {
+  whitespace?: number;
+}

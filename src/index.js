@@ -14,7 +14,20 @@ const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = require('./cssUtils');
+const {
+  renderRule,
+  prefersDark,
+  prefersLight,
+  prefixRules,
+  joinClassNames,
+  renderHTML,
+  span,
+  code,
+  pre,
+  style,
+  mergeAttributes,
+  TriviaRenderFlags
+} = require('./renderUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 const { createHighlightDirectiveLineTransformer } = require('./transformers/highlight-directive');
 
@@ -150,14 +163,10 @@ function createPlugin() {
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
       host = defaultHost,
-      lineTransformers = [],
-      languageCommentMap = {}
+      languageCommentMap = {},
+      lineTransformers = [createHighlightDirectiveLineTransformer(languageCommentMap)],
     } = {}
   ) {
-    // This makes comment directives non-optional but that should fine considering
-    // they are unlikely to interfere with regular comments.
-    lineTransformers.push(createHighlightDirectiveLineTransformer(languageCommentMap));
-
     logger.setLevel(logLevel);
     /** @type {Record<string, string>} */
     const stylesheets = {};
@@ -244,6 +253,7 @@ function createPlugin() {
         }
 
         const rawLines = text.split(/\r?\n/);
+        /** @type {ElementTemplate[]} */
         const htmlLines = [];
         /** @type {import('vscode-textmate').ITokenTypeMap} */
         let tokenTypes = {};
@@ -260,9 +270,10 @@ function createPlugin() {
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
         const prevTransformerStates = [];
-        for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
+        linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
           let line = rawLines[lineIndex];
-          let htmlLine = '';
+          /** @type {(ElementTemplate | string)[]} */
+          const htmlLine = [];
           let attrs = {};
           for (let i = 0; i < lineTransformers.length; i++) {
             const transformer = lineTransformers[i];
@@ -273,7 +284,11 @@ function createPlugin() {
               codeFenceOptions: options,
               language: languageName
             });
-            attrs = txResult.line.attrs;
+            if (!txResult.line) {
+              continue linesLoop;
+            }
+
+            Object.assign(attrs, txResult.line.attrs);
             line = txResult.line.text;
             prevTransformerStates[i] = txResult.state;
           }
@@ -285,14 +300,14 @@ function createPlugin() {
               const metadata = result.tokens[i + 1];
               const endIndex = result.tokens[i + 2] || line.length;
               /** @type {LineData} */
-              htmlLine += [
-                `<span class="${getClassNameFromMetadata(metadata)}">`,
-                escapeHTML(line.slice(startIndex, endIndex)),
-                '</span>'
-              ].join('');
+              htmlLine.push(
+                span({ class: getClassNameFromMetadata(metadata) }, [
+                  escapeHTML(line.slice(startIndex, endIndex))
+                ], { whitespace: TriviaRenderFlags.NoWhitespace }),
+              );
             }
           } else {
-            htmlLine += escapeHTML(line);
+            htmlLine.push(escapeHTML(line));
           }
 
           const isHighlighted = highlightedLines.includes(lineIndex + 1);
@@ -304,18 +319,20 @@ function createPlugin() {
             isHighlighted && lineHighlighting.highlightClassName
           );
 
-          htmlLines.push([`<span class="${className}">`, htmlLine, `</span>`].join(''));
+          htmlLines.push(span(
+            mergeAttributes({ class: className }, attrs),
+            htmlLine,
+            { whitespace: TriviaRenderFlags.NoWhitespace }
+          ));
         }
 
         const className = joinClassNames(wrapperClassName, joinThemeClassNames(themeClassNames), 'vscode-highlight');
         node.type = 'html';
-        node.value = [
-          `<pre class="${className}" data-language="${languageName}">`,
-          `<code class="vscode-highlight-code">`,
-          htmlLines.join('\n'),
-          `</code>`,
-          `</pre>`
-        ].join('');
+        node.value = renderHTML(
+          pre({ class: className, 'data-language': languageName }, [
+            code({ class: 'vscode-highlight-code' }, htmlLines, { whitespace: TriviaRenderFlags.NewlineBetweenChildren })
+          ], { whitespace: TriviaRenderFlags.NoWhitespace })
+        );
       } finally {
         unlockRegistry();
       }
@@ -325,12 +342,12 @@ function createPlugin() {
     if (themeNames.length) {
       markdownAST.children.push({
         type: 'html',
-        value: [
-          '<style class="vscode-highlight-styles">',
-          injectStyles ? styles : '',
-          themeNames.map(theme => stylesheets[theme]).join('\n'),
-          '</style>'
-        ].join('')
+        value: renderHTML(
+          style({ class: 'vscode-highlight-styles' }, [
+            injectStyles ? styles : '',
+            ...themeNames.map(theme => stylesheets[theme]),
+          ])
+        ),
       });
     }
   }
