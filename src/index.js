@@ -269,7 +269,7 @@ function createPlugin() {
         const highlightedLines = lineHighlighting.parseOptionKeys(options);
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
-        const prevTransformerStates = [];
+        const prevTransformerStates = Array(lineTransformers.length).fill(0).map(() => []);
         linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
           let line = rawLines[lineIndex];
           /** @type {(ElementTemplate | string)[]} */
@@ -277,7 +277,7 @@ function createPlugin() {
           let attrs = {};
           for (let i = 0; i < lineTransformers.length; i++) {
             const transformer = lineTransformers[i];
-            const state = prevTransformerStates[i];
+            const state = prevTransformerStates[i][lineIndex - 1];
             const txResult = transformer({
               state,
               line: { text: line, attrs },
@@ -290,7 +290,7 @@ function createPlugin() {
 
             Object.assign(attrs, txResult.line.attrs);
             line = txResult.line.text;
-            prevTransformerStates[i] = txResult.state;
+            prevTransformerStates[i][lineIndex] = txResult.state;
           }
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
