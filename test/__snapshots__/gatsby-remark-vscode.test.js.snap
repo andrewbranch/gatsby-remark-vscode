@@ -19,7 +19,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -43,7 +45,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: var(--color-808080); }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -69,7 +72,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -93,7 +98,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -119,7 +125,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.custom-theme {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .custom-theme {
 
 }
 
@@ -140,7 +148,8 @@ Object {
 .custom-theme .mtk15 { color: #D16969; }
 .custom-theme .mtki { font-style: italic; }
 .custom-theme .mtkb { font-weight: bold; }
-.custom-theme .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.custom-theme .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -166,7 +175,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -190,7 +201,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -216,7 +228,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -240,7 +254,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -266,7 +281,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -290,7 +307,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -316,7 +334,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -340,7 +360,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -366,7 +387,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -390,7 +413,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
@@ -416,10 +440,13 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
-}</style>",
+}
+</style>",
     },
   ],
   "type": "root",
@@ -445,10 +472,13 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
-}</style>",
+}
+</style>",
     },
   ],
   "type": "root",
@@ -474,7 +504,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.solarized-light {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .solarized-light {
 background-color: #FDF6E3;
 }
 
@@ -494,7 +526,7 @@ background-color: #FDF6E3;
 .solarized-light .mtki { font-style: italic; }
 .solarized-light .mtkb { font-weight: bold; }
 .solarized-light .mtku { text-decoration: underline; text-underline-position: under; }
-@media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: dark) {
 .pd--monokai-dimmed {
 background-color: #1e1e1e;
 color: #c5c8c6;
@@ -535,7 +567,7 @@ color: #c5c8c6;
 .pd--monokai-dimmed .mtkb { font-weight: bold; }
 .pd--monokai-dimmed .mtku { text-decoration: underline; text-underline-position: under; }
 }
-@media (prefers-color-scheme: light) {
+  @media (prefers-color-scheme: light) {
 .pl--quiet-light {
 background-color: #F5F5F5;
 }
@@ -564,7 +596,8 @@ background-color: #F5F5F5;
 .pl--quiet-light .mtki { font-style: italic; }
 .pl--quiet-light .mtkb { font-weight: bold; }
 .pl--quiet-light .mtku { text-decoration: underline; text-underline-position: under; }
-}</style>",
+}
+</style>",
     },
   ],
   "type": "root",
@@ -604,7 +637,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.solarized-light {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .solarized-light {
 background-color: #FDF6E3;
 }
 
@@ -624,7 +659,7 @@ background-color: #FDF6E3;
 .solarized-light .mtki { font-style: italic; }
 .solarized-light .mtkb { font-weight: bold; }
 .solarized-light .mtku { text-decoration: underline; text-underline-position: under; }
-@media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: dark) {
 .pd--dark-default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
@@ -651,7 +686,7 @@ color: #D4D4D4;
 .pd--dark-default-dark .mtkb { font-weight: bold; }
 .pd--dark-default-dark .mtku { text-decoration: underline; text-underline-position: under; }
 }
-@media (prefers-color-scheme: light) {
+  @media (prefers-color-scheme: light) {
 .pl--quiet-light {
 background-color: #F5F5F5;
 }
@@ -681,7 +716,7 @@ background-color: #F5F5F5;
 .pl--quiet-light .mtkb { font-weight: bold; }
 .pl--quiet-light .mtku { text-decoration: underline; text-underline-position: under; }
 }
-@media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: dark) {
 .pd--monokai {
 background-color: #272822;
 color: #f8f8f2;
@@ -706,7 +741,8 @@ color: #f8f8f2;
 .pd--monokai .mtki { font-style: italic; }
 .pd--monokai .mtkb { font-weight: bold; }
 .pd--monokai .mtku { text-decoration: underline; text-underline-position: under; }
-}</style>",
+}
+</style>",
     },
   ],
   "type": "root",
@@ -735,7 +771,9 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">.default-dark {
+      "value": "<style class=\\"vscode-highlight-styles\\">
+  
+  .default-dark {
 background-color: #1E1E1E;
 color: #D4D4D4;
 }
@@ -759,7 +797,8 @@ color: #D4D4D4;
 .default-dark .mtk17 { color: #808080; }
 .default-dark .mtki { font-style: italic; }
 .default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }</style>",
+.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+</style>",
     },
   ],
   "type": "root",
