@@ -33,35 +33,35 @@
   "devDependencies": {
     "@types/decompress": "^4.2.3",
     "@types/glob": "^7.1.1",
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.21",
     "@types/json5": "0.0.30",
     "@types/lodash.escape": "^4.0.6",
     "@types/lodash.uniq": "^4.5.6",
-    "@types/node": "^12.7.2",
+    "@types/node": "^12.12.5",
     "@types/plist": "^3.0.2",
-    "@types/request": "^2.48.2",
-    "glob": "^7.1.4",
+    "@types/request": "^2.48.3",
+    "glob": "^7.1.5",
     "hast-util-raw": "^5.0.1",
     "jest": "^24.9.0",
-    "mdast-util-to-hast": "^6.0.1",
+    "mdast-util-to-hast": "^6.0.2",
     "prettier": "^1.18.2",
     "rehype-stringify": "^6.0.0",
     "remark-parse": "^7.0.1",
     "remark-rehype": "^5.0.0",
-    "typescript": "^3.5.3",
-    "unified": "^8.3.2"
+    "typescript": "^3.6.4",
+    "unified": "^8.4.1"
   },
   "dependencies": {
     "decompress": "^4.2.0",
-    "json5": "^2.1.0",
+    "json5": "^2.1.1",
     "lodash.escape": "^4.0.1",
     "lodash.uniq": "^4.5.0",
-    "loglevel": "^1.6.3",
+    "loglevel": "^1.6.4",
     "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
     "rimraf": "^3.0.0",
     "unist-util-visit": "^1.4.1",
-    "vscode-textmate": "^4.2.2"
+    "vscode-textmate": "4.2.2"
   },
   "jest": {
     "coveragePathIgnorePatterns": [
