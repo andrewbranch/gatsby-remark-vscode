@@ -3,14 +3,20 @@ const { highlightCodeFenceOptionsTransformer } = require('./highlightCodeFenceOp
 const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiveLineTransformer');
 
 /**
- * @param {import('../index').PluginOptions} pluginOptions
  * @returns {LineTransformer[]}
  */
-function getDefaultLineTransformers(pluginOptions) {
+function getDefaultLineTransformers() {
   return [
-    createHighlightDirectiveLineTransformer(pluginOptions.languageCommentMap),
+    createHighlightDirectiveLineTransformer({}),
     highlightCodeFenceOptionsTransformer
   ];
 }
 
-module.exports = getDefaultLineTransformers;
+/**
+ * @param {...LineTransformer} transformers
+ */
+function addLineTransformers(...transformers) {
+  return () => [...transformers, ...getDefaultLineTransformers()];
+}
+
+module.exports = { getDefaultLineTransformers, addLineTransformers };

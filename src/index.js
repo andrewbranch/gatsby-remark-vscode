@@ -28,7 +28,7 @@ const {
   TriviaRenderFlags
 } = require('./renderUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
-const getDefaultLineTransformers = require('./transformers');
+const { getDefaultLineTransformers } = require('./transformers');
 
 /**
  * @param {string} missingScopeName
@@ -138,7 +138,6 @@ function getStylesFromSettings(settings) {
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
  * @property {(pluginOptions: PluginOptions) => LineTransformer[]=} getLineTransformers
- * @property {object=} languageCommentMap
  */
 
 function createPlugin() {
@@ -162,8 +161,8 @@ function createPlugin() {
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
       host = defaultHost,
-      languageCommentMap = {},
       getLineTransformers = getDefaultLineTransformers,
+      ...rest
     } = {}
   ) {
     logger.setLevel(logLevel);
@@ -177,7 +176,7 @@ function createPlugin() {
       replaceColor,
       extensionDataDirectory,
       logLevel,
-      languageCommentMap,
+      ...rest,
     });
 
     /** @type {Record<string, string>} */
