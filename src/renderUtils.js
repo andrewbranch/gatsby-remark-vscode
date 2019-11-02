@@ -53,8 +53,8 @@ function joinClassNames(...classNames) {
 }
 
 /**
- * @param {string} tagName 
- * @param {object} attributes 
+ * @param {string} tagName
+ * @param {object} attributes
  * @param {(ElementTemplate | string)[]} children
  * @param {RenderOptions=} renderOptions
  * @returns {ElementTemplate}
@@ -88,11 +88,11 @@ const span = factory('span');
 const style = factory('style');
 
 const TriviaRenderFlags = {
-  NoWhitespace:            0,
-  NewlineAfterOpeningTag:  1 << 0,
+  NoWhitespace: 0,
+  NewlineAfterOpeningTag: 1 << 0,
   NewlineBeforeClosingTag: 1 << 1,
-  NewlineBetweenChildren:  1 << 2,
-  IndentChildren:          1 << 3,
+  NewlineBetweenChildren: 1 << 2,
+  IndentChildren: 1 << 3
 };
 
 /**
@@ -108,9 +108,10 @@ function renderHTML(element, indent = 0) {
   }
 
   const { tagName, attributes, children } = element;
-  const attrs = Object.keys(attributes).map(attr => ` ${attr}="${escape(attributes[attr])}"`).join('');
+  const attrs = Object.keys(attributes)
+    .map(attr => ` ${attr}="${escape(attributes[attr])}"`)
+    .join('');
   let html = '';
-
 
   write(`<${tagName}${attrs}>`);
   if (whitespace & TriviaRenderFlags.NewlineAfterOpeningTag) {
@@ -158,5 +159,5 @@ module.exports = {
   code,
   span,
   style,
-  TriviaRenderFlags,
+  TriviaRenderFlags
 };

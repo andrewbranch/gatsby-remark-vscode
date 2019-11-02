@@ -49,15 +49,17 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
     const theme = themes[themeId];
     if (themeNameOrId === themeId || themeNameOrId.toLowerCase() === theme.label.toLowerCase()) {
       const themePath = path.isAbsolute(theme.path) ? theme.path : path.resolve(__dirname, '../lib/themes', theme.path);
-      if (!await exists(themePath)) {
+      if (!(await exists(themePath))) {
         throw new Error(`Theme manifest lists '${themeNameOrId}' at '${themePath}, but no such file exists.'`);
       }
     }
   }
 
   const locallyResolved = path.resolve(path.dirname(markdownFilePath), themeNameOrId);
-  if (!await exists(locallyResolved)) {
-    throw new Error(`Theme manifest does not contain theme '${themeNameOrId}', and no theme file exists at '${locallyResolved}'.`);
+  if (!(await exists(locallyResolved))) {
+    throw new Error(
+      `Theme manifest does not contain theme '${themeNameOrId}', and no theme file exists at '${locallyResolved}'.`
+    );
   }
 }
 

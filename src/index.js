@@ -176,7 +176,7 @@ function createPlugin() {
       replaceColor,
       extensionDataDirectory,
       logLevel,
-      ...rest,
+      ...rest
     });
 
     /** @type {Record<string, string>} */
@@ -227,7 +227,11 @@ function createPlugin() {
 
           const themeClassName = themeClassNames[setting];
           const themeCache = await cache.get('themes');
-          const colorThemePath = ensureThemeLocation(colorThemeIdentifier, themeCache, markdownNode.fileAbsolutePath);
+          const colorThemePath = await ensureThemeLocation(
+            colorThemeIdentifier,
+            themeCache,
+            markdownNode.fileAbsolutePath
+          );
 
           const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
           const defaultTokenColors = {
@@ -310,9 +314,9 @@ function createPlugin() {
               const endIndex = result.tokens[i + 2] || line.length;
               /** @type {LineData} */
               htmlLine.push(
-                span({ class: getClassNameFromMetadata(metadata) }, [
-                  escapeHTML(line.slice(startIndex, endIndex))
-                ], { whitespace: TriviaRenderFlags.NoWhitespace }),
+                span({ class: getClassNameFromMetadata(metadata) }, [escapeHTML(line.slice(startIndex, endIndex))], {
+                  whitespace: TriviaRenderFlags.NoWhitespace
+                })
               );
             }
           } else {
@@ -321,24 +325,25 @@ function createPlugin() {
 
           /** @type {LineData} */
           const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
-          const className = joinClassNames(
-            getLineClassName(lineData),
-            'vscode-highlight-line'
-          );
+          const className = joinClassNames(getLineClassName(lineData), 'vscode-highlight-line');
 
-          htmlLines.push(span(
-            mergeAttributes({ class: className }, attrs),
-            htmlLine,
-            { whitespace: TriviaRenderFlags.NoWhitespace }
-          ));
+          htmlLines.push(
+            span(mergeAttributes({ class: className }, attrs), htmlLine, { whitespace: TriviaRenderFlags.NoWhitespace })
+          );
         }
 
         const className = joinClassNames(wrapperClassName, joinThemeClassNames(themeClassNames), 'vscode-highlight');
         node.type = 'html';
         node.value = renderHTML(
-          pre({ class: className, 'data-language': languageName }, [
-            code({ class: 'vscode-highlight-code' }, htmlLines, { whitespace: TriviaRenderFlags.NewlineBetweenChildren })
-          ], { whitespace: TriviaRenderFlags.NoWhitespace })
+          pre(
+            { class: className, 'data-language': languageName },
+            [
+              code({ class: 'vscode-highlight-code' }, htmlLines, {
+                whitespace: TriviaRenderFlags.NewlineBetweenChildren
+              })
+            ],
+            { whitespace: TriviaRenderFlags.NoWhitespace }
+          )
         );
       } finally {
         unlockRegistry();
@@ -352,9 +357,9 @@ function createPlugin() {
         value: renderHTML(
           style({ class: 'vscode-highlight-styles' }, [
             injectStyles ? styles : '',
-            ...themeNames.map(theme => stylesheets[theme]),
+            ...themeNames.map(theme => stylesheets[theme])
           ])
-        ),
+        )
       });
     }
   }
