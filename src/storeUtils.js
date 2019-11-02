@@ -42,6 +42,7 @@ function getGrammarLocation(grammar) {
  * @param {string} themeNameOrId
  * @param {object} themeCache
  * @param {string} markdownFilePath
+ * @returns {Promise<string>}
  */
 async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) {
   const themes = { ...themeManifest, ...themeCache };
@@ -52,6 +53,7 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
       if (!(await exists(themePath))) {
         throw new Error(`Theme manifest lists '${themeNameOrId}' at '${themePath}, but no such file exists.'`);
       }
+      return themePath;
     }
   }
 
@@ -61,6 +63,7 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
       `Theme manifest does not contain theme '${themeNameOrId}', and no theme file exists at '${locallyResolved}'.`
     );
   }
+  return locallyResolved;
 }
 
 const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce(
