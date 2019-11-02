@@ -5,7 +5,6 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
-const lineHighlighting = require('./lineHighlighting');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { sanitizeForClassName } = require('./utils');
@@ -29,7 +28,7 @@ const {
   TriviaRenderFlags
 } = require('./renderUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
-const { createHighlightDirectiveLineTransformer } = require('./transformers/highlight-directive');
+const getDefaultLineTransformers = require('./transformers');
 
 /**
  * @param {string} missingScopeName
@@ -138,7 +137,7 @@ function getStylesFromSettings(settings) {
  * @property {string=} extensionDataDirectory
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
- * @property {LineTransformer[]=} lineTransformers
+ * @property {(pluginOptions: PluginOptions) => LineTransformer[]=} getLineTransformers
  * @property {object=} languageCommentMap
  */
 
@@ -164,10 +163,23 @@ function createPlugin() {
       logLevel = 'error',
       host = defaultHost,
       languageCommentMap = {},
-      lineTransformers = [createHighlightDirectiveLineTransformer(languageCommentMap)],
+      getLineTransformers = getDefaultLineTransformers,
     } = {}
   ) {
     logger.setLevel(logLevel);
+    const lineTransformers = getLineTransformers({
+      colorTheme,
+      wrapperClassName,
+      languageAliases,
+      extensions,
+      getLineClassName,
+      injectStyles,
+      replaceColor,
+      extensionDataDirectory,
+      logLevel,
+      languageCommentMap,
+    });
+
     /** @type {Record<string, string>} */
     const stylesheets = {};
     const nodes = [];
@@ -266,7 +278,6 @@ function createPlugin() {
           tokenTypes = grammarData.tokenTypes;
         }
 
-        const highlightedLines = lineHighlighting.parseOptionKeys(options);
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
         const prevTransformerStates = [];
@@ -311,13 +322,11 @@ function createPlugin() {
             htmlLine.push(escapeHTML(line));
           }
 
-          const isHighlighted = highlightedLines.includes(lineIndex + 1);
           /** @type {LineData} */
           const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
           const className = joinClassNames(
             getLineClassName(lineData),
-            'vscode-highlight-line',
-            isHighlighted && lineHighlighting.highlightClassName
+            'vscode-highlight-line'
           );
 
           htmlLines.push(span(

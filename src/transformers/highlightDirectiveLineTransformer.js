@@ -1,14 +1,5 @@
 // @ts-check
-const { highlightClassName } = require('../lineHighlighting');
-
-/**
- * @param {object} attrs
- * @param {string} className
- */
-const addClassName = (attrs, className) => ({
-  ...attrs,
-  class: attrs.class ? attrs.class + ` ` + className : className
-});
+const { highlightLine } = require('./transformerUtils');
 
 /**
  * @param {string} language
@@ -43,9 +34,9 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
  * @returns {LineTransformer<HighlightCommentTransfomerState>}
  */
 function createHighlightDirectiveLineTransformer(languageCommentMap) {
-  return ({ line: { text, attrs }, language, state }) => {
+  return ({ line, language, state }) => {
     const commentWrapper = getCommentForLanguage(language, languageCommentMap);
-    const isDirective = textIsHighlightDirective(text, commentWrapper);
+    const isDirective = textIsHighlightDirective(line.text, commentWrapper);
     if (isDirective('highlight-start')) {
       return { state: { inHighlightRange: true } }; // no `line` - drop this line from output
     }
@@ -56,16 +47,16 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
       return { state: { highlightNextLine: true } }; // again no `line`
     }
     if (
-      text.endsWith(commentWrapper('highlight-line')) ||
-      text.endsWith('// highlight-line') ||
+      line.text.endsWith(commentWrapper('highlight-line')) ||
+      line.text.endsWith('// highlight-line') ||
       (state && state.inHighlightRange)
     ) {
       // return attrs with added class name, text with comment removed, current state
       return {
-        line: {
-          text: text.replace(commentWrapper('highlight-line'), '').replace('// highlight-line', ''),
-          attrs: addClassName(attrs, highlightClassName)
-        },
+        line: highlightLine(
+          line,
+          line.text.replace(commentWrapper('highlight-line'), '').replace('// highlight-line', '')
+        ),
         state
       };
     }
@@ -74,11 +65,11 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
       // to false but preserve inHighlightRange so that a misplaced 'highlight-next-line'
       // doesn't disrupt a highlight range
       return {
-        line: { text, attrs: addClassName(attrs, highlightClassName) },
+        line: highlightLine(line),
         state: { ...state, highlightNextLine: false }
       };
     }
-    return { line: { text, attrs }, state }; // default: don’t change anything, propagate state to next call
+    return { line, state }; // default: don’t change anything, propagate state to next call
   };
 }
 
