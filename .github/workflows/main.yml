@@ -1,0 +1,51 @@
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+    - master
+    paths:
+    - '**.js'
+    - '**.ts'
+    - '**.yml'
+  pull_request:
+    paths:
+    - '**.js'
+    - '**.ts'
+    - '**.yml'
+name: build, test and publish production
+jobs:
+  build_test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '10', '12' ]
+    name: build and test (node ${{ matrix.node }})
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node }}
+    - name: install
+      run: npm ci
+    - name: build
+      run: npm run build
+    - name: test
+      run: npm test
+  publish:
+    if: github.event_name == 'release'
+    needs: build_test
+    name: publish to npm
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+    - name: install
+      run: npm ci
+    - name: build
+      run: npm run build
+    - name: publish production
+      run: npm publish
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
