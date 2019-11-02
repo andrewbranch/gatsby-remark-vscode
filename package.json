@@ -63,9 +63,6 @@
     "unist-util-visit": "^1.4.1",
     "vscode-textmate": "4.2.2"
   },
-  "publishConfig": {
-    "registry": "//registry.npmjs.org/:_authToken=${NPM_TOKEN}"
-  },
   "jest": {
     "coveragePathIgnorePatterns": [
       "lib"

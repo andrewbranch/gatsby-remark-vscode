@@ -42,6 +42,7 @@ jobs:
     - uses: actions/setup-node@v1
       with:
         node-version: '12'
+        registry-url: 'https://registry.npmjs.org'
     - name: install
       run: npm ci
     - name: build
@@ -49,4 +50,4 @@ jobs:
     - name: publish production
       run: npm publish
       env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
