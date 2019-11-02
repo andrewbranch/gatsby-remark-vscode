@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "node scripts/scrapeBuiltinExtensions.js",
+    "prebuild": "git submodule update --init",
     "check": "tsc -p .",
     "test": "jest",
     "pretest": "npm run check && npm run build && prettier --check src/**/*.js",
