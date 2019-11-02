@@ -13,7 +13,7 @@ on:
     - '**.js'
     - '**.ts'
     - '**.yml'
-name: build, test and publish production
+name: build, test and publish
 jobs:
   build_test:
     runs-on: ubuntu-latest

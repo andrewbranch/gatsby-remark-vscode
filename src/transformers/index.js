@@ -6,10 +6,7 @@ const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiv
  * @returns {LineTransformer[]}
  */
 function getDefaultLineTransformers() {
-  return [
-    createHighlightDirectiveLineTransformer({}),
-    highlightCodeFenceOptionsTransformer
-  ];
+  return [createHighlightDirectiveLineTransformer({}), highlightCodeFenceOptionsTransformer];
 }
 
 /**
