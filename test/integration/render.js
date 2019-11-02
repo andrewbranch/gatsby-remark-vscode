@@ -42,9 +42,21 @@ function renderNewCase(title, content) {
 
 /** @param {string} html */
 function renderInIframe(html) {
-  return `<iframe srcdoc="${escape(`
-    <html><body style="padding: 0; margin: 0">${html}</body></html>
-  `)}"></iframe>`
+  return `
+  <iframe srcdoc="${escape(`
+    <html>
+      <head>
+        <style>
+          .vscode-highlight {
+            --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+            --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+            --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+          }
+        </style>
+      </head>
+      <body style="padding: 0; margin: 0">${html}</body>
+    </html>
+  `)}"></iframe>`;
 }
 
 /** @param {string} casesHTML */

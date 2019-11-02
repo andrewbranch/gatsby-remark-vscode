@@ -60,6 +60,8 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
           wrapperClassName: '',   // Additional class put on 'pre' tag
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
+          extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
+            path.resolve('extensions'),
           languageAliases: {},    // Map of custom/unknown language codes to standard/known language codes
           replaceColor: x => x,   // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
           getLineClassName: ({    // Function allowing dynamic setting of additional class names on individual lines
@@ -68,8 +70,6 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             language,             //   - the language specified for the code fence
             codeFenceOptions      //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
-          extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
-            path.resolve('extensions'),
           logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
         }
       }]
@@ -286,7 +286,23 @@ Since the CSS for token colors is auto-generated, it’s fragile and inconvenien
     this.isLine(5); // highlighted
     ```
 
-However, comment directives like `// highlight-line` are not currently supported.
+Comment directives are also supported:
+
+    ```js
+    function constant(value) {
+      return () => value; // highlight-line
+    }
+
+    // highlight-next-line
+    const alwaysFour = constant(4);
+
+    // highlight-start
+    const zero = [0, 1, 2, 3, 4, 5]
+      .map(alwaysFour)
+      .filter(x => x !== 4)
+      .length;
+    // highlight-end
+    ```
 
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 

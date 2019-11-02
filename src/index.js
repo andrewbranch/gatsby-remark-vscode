@@ -5,7 +5,6 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
-const lineHighlighting = require('./lineHighlighting');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { sanitizeForClassName } = require('./utils');
@@ -14,8 +13,22 @@ const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
-const { renderRule, prefersDark, prefersLight, prefixRules, joinClassNames } = require('./cssUtils');
+const {
+  renderRule,
+  prefersDark,
+  prefersLight,
+  prefixRules,
+  joinClassNames,
+  renderHTML,
+  span,
+  code,
+  pre,
+  style,
+  mergeAttributes,
+  TriviaRenderFlags
+} = require('./renderUtils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
+const { getDefaultLineTransformers } = require('./transformers');
 
 /**
  * @param {string} missingScopeName
@@ -124,6 +137,7 @@ function getStylesFromSettings(settings) {
  * @property {string=} extensionDataDirectory
  * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
  * @property {import('./host').Host=} host
+ * @property {(pluginOptions: PluginOptions) => LineTransformer[]=} getLineTransformers
  */
 
 function createPlugin() {
@@ -146,10 +160,25 @@ function createPlugin() {
       replaceColor = x => x,
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
-      host = defaultHost
+      host = defaultHost,
+      getLineTransformers = getDefaultLineTransformers,
+      ...rest
     } = {}
   ) {
     logger.setLevel(logLevel);
+    const lineTransformers = getLineTransformers({
+      colorTheme,
+      wrapperClassName,
+      languageAliases,
+      extensions,
+      getLineClassName,
+      injectStyles,
+      replaceColor,
+      extensionDataDirectory,
+      logLevel,
+      ...rest,
+    });
+
     /** @type {Record<string, string>} */
     const stylesheets = {};
     const nodes = [];
@@ -235,6 +264,7 @@ function createPlugin() {
         }
 
         const rawLines = text.split(/\r?\n/);
+        /** @type {ElementTemplate[]} */
         const htmlLines = [];
         /** @type {import('vscode-textmate').ITokenTypeMap} */
         let tokenTypes = {};
@@ -247,12 +277,32 @@ function createPlugin() {
           tokenTypes = grammarData.tokenTypes;
         }
 
-        const highlightedLines = lineHighlighting.parseOptionKeys(options);
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
         let ruleStack = undefined;
-        for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
-          const line = rawLines[lineIndex];
-          let htmlLine = '';
+        const prevTransformerStates = [];
+        linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
+          let line = rawLines[lineIndex];
+          /** @type {(ElementTemplate | string)[]} */
+          const htmlLine = [];
+          let attrs = {};
+          for (let i = 0; i < lineTransformers.length; i++) {
+            const transformer = lineTransformers[i];
+            const state = prevTransformerStates[i];
+            const txResult = transformer({
+              state,
+              line: { text: line, attrs },
+              codeFenceOptions: options,
+              language: languageName
+            });
+
+            prevTransformerStates[i] = txResult.state;
+            if (!txResult.line) {
+              continue linesLoop;
+            }
+
+            Object.assign(attrs, txResult.line.attrs);
+            line = txResult.line.text;
+          }
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
             ruleStack = result.ruleStack;
@@ -261,37 +311,37 @@ function createPlugin() {
               const metadata = result.tokens[i + 1];
               const endIndex = result.tokens[i + 2] || line.length;
               /** @type {LineData} */
-              htmlLine += [
-                `<span class="${getClassNameFromMetadata(metadata)}">`,
-                escapeHTML(line.slice(startIndex, endIndex)),
-                '</span>'
-              ].join('');
+              htmlLine.push(
+                span({ class: getClassNameFromMetadata(metadata) }, [
+                  escapeHTML(line.slice(startIndex, endIndex))
+                ], { whitespace: TriviaRenderFlags.NoWhitespace }),
+              );
             }
           } else {
-            htmlLine += escapeHTML(line);
+            htmlLine.push(escapeHTML(line));
           }
 
-          const isHighlighted = highlightedLines.includes(lineIndex + 1);
           /** @type {LineData} */
           const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
           const className = joinClassNames(
             getLineClassName(lineData),
-            'vscode-highlight-line',
-            isHighlighted && 'vscode-highlight-line-highlighted'
+            'vscode-highlight-line'
           );
 
-          htmlLines.push([`<span class="${className}">`, htmlLine, `</span>`].join(''));
+          htmlLines.push(span(
+            mergeAttributes({ class: className }, attrs),
+            htmlLine,
+            { whitespace: TriviaRenderFlags.NoWhitespace }
+          ));
         }
 
         const className = joinClassNames(wrapperClassName, joinThemeClassNames(themeClassNames), 'vscode-highlight');
         node.type = 'html';
-        node.value = [
-          `<pre class="${className}" data-language="${languageName}">`,
-          `<code class="vscode-highlight-code">`,
-          htmlLines.join('\n'),
-          `</code>`,
-          `</pre>`
-        ].join('');
+        node.value = renderHTML(
+          pre({ class: className, 'data-language': languageName }, [
+            code({ class: 'vscode-highlight-code' }, htmlLines, { whitespace: TriviaRenderFlags.NewlineBetweenChildren })
+          ], { whitespace: TriviaRenderFlags.NoWhitespace })
+        );
       } finally {
         unlockRegistry();
       }
@@ -301,12 +351,12 @@ function createPlugin() {
     if (themeNames.length) {
       markdownAST.children.push({
         type: 'html',
-        value: [
-          '<style class="vscode-highlight-styles">',
-          injectStyles ? styles : '',
-          themeNames.map(theme => stylesheets[theme]).join('\n'),
-          '</style>'
-        ].join('')
+        value: renderHTML(
+          style({ class: 'vscode-highlight-styles' }, [
+            injectStyles ? styles : '',
+            ...themeNames.map(theme => stylesheets[theme]),
+          ])
+        ),
       });
     }
   }
