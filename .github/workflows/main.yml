@@ -8,11 +8,13 @@ on:
     - '**.js'
     - '**.ts'
     - '**.yml'
+    - 'package.json'
   pull_request:
     paths:
     - '**.js'
     - '**.ts'
     - '**.yml'
+    - 'package.json'
 name: build, test and publish
 jobs:
   build_test:
