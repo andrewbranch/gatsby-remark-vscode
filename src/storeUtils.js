@@ -1,5 +1,6 @@
 // @ts-check
 const path = require('path');
+const { exists } = require('./utils');
 // @ts-ignore
 const grammarManifest = require('../lib/grammars/manifest.json');
 // @ts-ignore
@@ -39,15 +40,24 @@ function getGrammarLocation(grammar) {
 /**
  *
  * @param {string} themeNameOrId
- * @param {*} themeCache
+ * @param {object} themeCache
+ * @param {string} markdownFilePath
  */
-function getThemeLocation(themeNameOrId, themeCache) {
+async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) {
   const themes = { ...themeManifest, ...themeCache };
   for (const themeId in themes) {
     const theme = themes[themeId];
     if (themeNameOrId === themeId || themeNameOrId.toLowerCase() === theme.label.toLowerCase()) {
-      return path.isAbsolute(theme.path) ? theme.path : path.resolve(__dirname, '../lib/themes', theme.path);
+      const themePath = path.isAbsolute(theme.path) ? theme.path : path.resolve(__dirname, '../lib/themes', theme.path);
+      if (!await exists(themePath)) {
+        throw new Error(`Theme manifest lists '${themeNameOrId}' at '${themePath}, but no such file exists.'`);
+      }
     }
+  }
+
+  const locallyResolved = path.resolve(path.dirname(markdownFilePath), themeNameOrId);
+  if (!await exists(locallyResolved)) {
+    throw new Error(`Theme manifest does not contain theme '${themeNameOrId}', and no theme file exists at '${locallyResolved}'.`);
   }
 }
 
@@ -75,7 +85,7 @@ module.exports = {
   getScope,
   getGrammar,
   getGrammarLocation,
-  getThemeLocation,
+  ensureThemeLocation,
   highestBuiltinLanguageId,
   getAllGrammars
 };

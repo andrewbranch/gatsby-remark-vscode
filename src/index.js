@@ -11,7 +11,7 @@ const { sanitizeForClassName } = require('./utils');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
-const { getGrammar, getScope, getThemeLocation } = require('./storeUtils');
+const { getGrammar, getScope, ensureThemeLocation } = require('./storeUtils');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const {
   renderRule,
@@ -227,9 +227,7 @@ function createPlugin() {
 
           const themeClassName = themeClassNames[setting];
           const themeCache = await cache.get('themes');
-          const colorThemePath =
-            getThemeLocation(colorThemeIdentifier, themeCache) ||
-            path.resolve(markdownNode.fileAbsolutePath, colorThemeIdentifier);
+          const colorThemePath = ensureThemeLocation(colorThemeIdentifier, themeCache, markdownNode.fileAbsolutePath);
 
           const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
           const defaultTokenColors = {

@@ -1,10 +1,15 @@
 // @ts-check
 const fs = require('fs');
 const util = require('util');
+const zlib = require('zlib');
 const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
+
+const readFile = util.promisify(fs.readFile);
+const exists = util.promisify(fs.exists);
+const gunzip = util.promisify(zlib.gunzip);
 
 /**
  * Splits a Visual Studio Marketplace extension identifier into publisher and extension name.
@@ -70,12 +75,14 @@ function sanitizeForClassName(str) {
     .toLowerCase();
 }
 
-const readFile = util.promisify(fs.readFile);
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
 
 module.exports = {
+  readFile,
+  exists,
+  gunzip,
   parseExtensionIdentifier,
   getExtensionPath,
   getExtensionBasePath,

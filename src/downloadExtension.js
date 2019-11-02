@@ -1,8 +1,6 @@
 // @ts-check
 const fs = require('fs');
 const path = require('path');
-const zlib = require('zlib');
-const util = require('util');
 const processExtension = require('./processExtension');
 const { highestBuiltinLanguageId } = require('./storeUtils');
 const {
@@ -11,7 +9,6 @@ const {
   getExtensionBasePath,
   getExtensionPackageJson
 } = require('./utils');
-const gunzip = util.promisify(zlib.gunzip);
 let languageId = highestBuiltinLanguageId + 1;
 
 /**

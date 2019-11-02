@@ -1,9 +1,7 @@
 // @ts-check
-const fs = require('fs');
 const { getGrammarLocation, getGrammar, getAllGrammars } = require('./storeUtils');
-const { promisify } = require('util');
+const { readFile } = require('./utils');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
-const readFile = promisify(fs.readFile);
 
 function createEmitter() {
   /** @type {() => void} */

@@ -1,8 +1,6 @@
 const request = require('request');
 const decompress = require('decompress');
-const zlib = require('zlib');
-const util = require('util');
-const gunzip = util.promisify(zlib.gunzip);
+const { gunzip } = require('./utils');
 
 /**
  * @typedef {object} Response
