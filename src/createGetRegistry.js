@@ -1,4 +1,5 @@
 // @ts-check
+const logger = require('loglevel');
 const { getGrammarLocation, getGrammar, getAllGrammars } = require('./storeUtils');
 const { readFile } = require('./utils');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
@@ -36,16 +37,24 @@ const getLock = (() => {
   return getLock;
 })();
 
+/**
+ * @param {string} missingScopeName
+ * @param {string} rootScopeName
+ */
+function warnMissingLanguageFile(missingScopeName, rootScopeName) {
+  logger.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
+}
+
 function createGetRegistry() {
   /** @type {Registry} */
   let registry;
 
   /**
    * @param {*} cache
-   * @param {(missingScopeName: string) => void} onMissingLanguageFile
+   * @param {string} rootScopeName
    * @returns {Promise<[Registry, () => void]>}
    */
-  async function getRegistry(cache, onMissingLanguageFile) {
+  async function getRegistry(cache, rootScopeName) {
     if (!registry) {
       const grammars = getAllGrammars(await cache.get('grammars'));
       registry = new Registry({
@@ -56,7 +65,7 @@ function createGetRegistry() {
             const contents = await readFile(fileName, 'utf8');
             return parseRawGrammar(contents, fileName);
           }
-          onMissingLanguageFile(scopeName);
+          warnMissingLanguageFile(scopeName, rootScopeName);
         },
         getInjections: scopeName => {
           return Object.keys(grammars).reduce((acc, s) => {

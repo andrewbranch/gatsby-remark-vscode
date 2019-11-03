@@ -21,7 +21,7 @@ async function mergeCache(cache, key, value) {
 }
 
 /**
- * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {ExtensionDemand} extensionDemand
  * @param {*} cache
  * @param {string} extensionDir
  */
@@ -34,10 +34,10 @@ async function syncExtensionData({ identifier }, cache, extensionDir) {
 }
 
 /**
- * @param {import('.').ExtensionDemand} extensionDemand
+ * @param {ExtensionDemand} extensionDemand
  * @param {*} cache
  * @param {string} extensionDir
- * @param {import('./host').Host} host
+ * @param {Host} host
  */
 async function downloadExtension(extensionDemand, cache, extensionDir, host) {
   const { identifier, version } = extensionDemand;
@@ -60,10 +60,10 @@ async function downloadExtension(extensionDemand, cache, extensionDir, host) {
 
 /**
  * @typedef {object} DownloadExtensionOptions
- * @property {import('.').ExtensionDemand[]} extensions
+ * @property {ExtensionDemand[]} extensions
  * @property {*} cache
  * @property {string} extensionDir
- * @property {import('./host').Host} host
+ * @property {Host} host
  */
 
 /**

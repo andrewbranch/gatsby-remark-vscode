@@ -1,18 +1,7 @@
+// @ts-check
 const request = require('request');
 const decompress = require('decompress');
 const { gunzip } = require('./utils');
-
-/**
- * @typedef {object} Response
- * @property {Buffer | undefined} body
- * @property {number} statusCode
- */
-
-/**
- * @typedef {object} Host
- * @property {(url: string, options: request.CoreOptions) => Promise<Response>} fetch
- * @property {(input: string | Buffer, output: string) => Promise<unknown>} decompress
- */
 
 /** @type {Host} */
 const host = {

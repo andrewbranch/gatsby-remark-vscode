@@ -5,19 +5,13 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
+const createThemeStyles = require('./createThemeStyles');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const { sanitizeForClassName } = require('./utils');
-const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
-const { getGrammar, getScope, ensureThemeLocation } = require('./storeUtils');
-const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
+const { getGrammar, getScope } = require('./storeUtils');
 const {
-  renderRule,
-  prefersDark,
-  prefersLight,
-  prefixRules,
   joinClassNames,
   renderHTML,
   span,
@@ -30,121 +24,10 @@ const {
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 const { getDefaultLineTransformers } = require('./transformers');
 
-/**
- * @param {string} missingScopeName
- * @param {string} rootScopeName
- */
-function warnMissingLanguageFile(missingScopeName, rootScopeName) {
-  logger.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
-}
-
-/**
- * @param {string} lang
- */
-function warnUnknownLanguage(lang) {
-  logger.warn(
-    `Encountered unknown language '${lang}'. If '${lang}' is an alias for a supported language, ` +
-      `use the 'languageAliases' plugin option to map it to the canonical language name.`
-  );
-}
-
-/**
- * @param {ColorThemeSettings} settings
- * @returns {{ [K in keyof ColorThemeSettings]: string }}
- */
-function createThemeClassNames(settings) {
-  return {
-    defaultTheme: sanitizeForClassName(settings.defaultTheme),
-    prefersDarkTheme: settings.prefersDarkTheme && `pd--${sanitizeForClassName(settings.prefersDarkTheme)}`,
-    prefersLightTheme: settings.prefersLightTheme && `pl--${sanitizeForClassName(settings.prefersLightTheme)}`
-  };
-}
-
-/**
- * @param {{ [K in keyof ColorThemeSettings]: string }} classNames
- */
-function joinThemeClassNames(classNames) {
-  return joinClassNames(...Object.keys(classNames).map(setting => classNames[setting]));
-}
-
-/**
- * @param {string | ColorThemeSettings} colorThemeValue
- * @returns {ColorThemeSettings}
- */
-function createColorThemeSettings(colorThemeValue) {
-  return typeof colorThemeValue === 'string' ? { defaultTheme: colorThemeValue } : colorThemeValue;
-}
-
-const settingPropertyMap = { 'editor.background': 'background-color', 'editor.foreground': 'color' };
-
-/**
- * @param {Record<string, string>} settings
- */
-function getStylesFromSettings(settings) {
-  return Object.keys(settings)
-    .reduce((styles, setting) => {
-      const property = settingPropertyMap[setting];
-      if (property) {
-        return [...styles, `${property}: ${settings[setting]};`];
-      }
-      return styles;
-    }, [])
-    .join('\n');
-}
-
-/**
- * @typedef {object} ExtensionDemand
- * @property {string} identifier
- * @property {string} version
- */
-
-/**
- * @typedef {object} CodeFenceData
- * @property {string} language
- * @property {*} markdownNode
- * @property {*} codeFenceNode
- * @property {*} parsedOptions
- */
-
-/**
- * @typedef {object} LineData
- * @property {string} content The line’s string content
- * @property {number} index The zero-based line index
- * @property {string} language The code fence’s language
- * @property {object} codeFenceOptions The code fence’s options parsed from the language suffix
- */
-
-/**
- * @typedef {object} ColorThemeSettings
- * @property {string} defaultTheme
- * @property {string=} prefersLightTheme
- * @property {string=} prefersDarkTheme
- */
-
-/**
- * @typedef {string | ColorThemeSettings | ((data: CodeFenceData) => string | ColorThemeSettings)=} ColorThemeOption
- */
-
-/**
- * @typedef {object} PluginOptions
- * @property {ColorThemeOption=} colorTheme
- * @property {string=} wrapperClassName
- * @property {Record<string, string>=} languageAliases
- * @property {ExtensionDemand[]=} extensions
- * @property {(line: LineData) => string=} getLineClassName
- * @property {boolean=} injectStyles
- * @property {(colorValue: string, theme: string) => string=} replaceColor
- * @property {string=} extensionDataDirectory
- * @property {'trace' | 'debug' | 'info' | 'warn' | 'error'=} logLevel
- * @property {import('./host').Host=} host
- * @property {(pluginOptions: PluginOptions) => LineTransformer[]=} getLineTransformers
- */
-
 function createPlugin() {
   const getRegistry = createGetRegistry();
 
   /**
-   *
    * @param {*} _
    * @param {PluginOptions=} options
    */
@@ -201,69 +84,31 @@ function createPlugin() {
       const grammarCache = await cache.get('grammars');
       const scope = getScope(languageName, grammarCache, languageAliases);
       if (!scope && languageName) {
-        warnUnknownLanguage(languageName);
+        logger.warn(
+          `Encountered unknown language '${languageName}'. ` +
+            `If '${languageName}' is an alias for a supported language, ` +
+            `use the 'languageAliases' plugin option to map it to the canonical language name.`
+        );
       }
 
-      // Set up theme
-      const [registry, unlockRegistry] = await getRegistry(cache, missingScopeName => {
-        warnMissingLanguageFile(missingScopeName, scope);
-      });
+      const [registry, unlockRegistry] = await getRegistry(cache, scope);
 
       try {
-        const colorThemeValue =
-          typeof colorTheme === 'function'
-            ? colorTheme({
-                markdownNode,
-                codeFenceNode: node,
-                parsedOptions: options,
-                language: languageName
-              })
-            : colorTheme;
-        const colorThemeSettings = createColorThemeSettings(colorThemeValue);
-        const themeClassNames = createThemeClassNames(colorThemeSettings);
-        for (const setting in colorThemeSettings) {
-          const colorThemeIdentifier = colorThemeSettings[setting];
-          if (!colorThemeIdentifier) continue;
-
-          const themeClassName = themeClassNames[setting];
-          const themeCache = await cache.get('themes');
-          const colorThemePath = await ensureThemeLocation(
-            colorThemeIdentifier,
-            themeCache,
-            markdownNode.fileAbsolutePath
-          );
-
-          const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(colorThemePath);
-          const defaultTokenColors = {
-            settings: {
-              foreground: settings['editor.foreground'] || settings.foreground,
-              background: settings['editor.background'] || settings.background
-            }
-          };
-
-          registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
-          if (!stylesheets[themeClassName] || scope) {
-            const rules = [
-              renderRule(themeClassName, getStylesFromSettings(settings)),
-              ...(scope
-                ? prefixRules(
-                    generateTokensCSSForColorMap(
-                      registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))
-                    ).split('\n'),
-                    `.${themeClassName} `
-                  )
-                : [])
-            ];
-
-            if (setting === 'prefersDarkTheme') {
-              stylesheets[themeClassName] = prefersDark(rules);
-            } else if (setting === 'prefersLightTheme') {
-              stylesheets[themeClassName] = prefersLight(rules);
-            } else {
-              stylesheets[themeClassName] = rules.join('\n');
-            }
-          }
-        }
+        // Generate stylesheets and class names for theme selections.
+        // Adds stylesheet content to `stylesheets` if necessary and returns
+        // corresponding class name to add to code fence.
+        const themeClassNames = await createThemeStyles({
+          cache,
+          markdownNode,
+          codeFenceOptions: options,
+          codeFenceNode: node,
+          colorTheme,
+          languageName,
+          scopeName: scope,
+          registry,
+          replaceColor,
+          stylesheets
+        });
 
         const rawLines = text.split(/\r?\n/);
         /** @type {ElementTemplate[]} */
@@ -332,7 +177,7 @@ function createPlugin() {
           );
         }
 
-        const className = joinClassNames(wrapperClassName, joinThemeClassNames(themeClassNames), 'vscode-highlight');
+        const className = joinClassNames(wrapperClassName, themeClassNames, 'vscode-highlight');
         node.type = 'html';
         node.value = renderHTML(
           pre(
