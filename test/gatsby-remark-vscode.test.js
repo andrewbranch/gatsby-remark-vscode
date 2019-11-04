@@ -4,6 +4,7 @@ const { promisify } = require('util');
 const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
+const open = require('open');
 const rimraf = require('rimraf');
 const unified = require('unified');
 const reparseHast = require('hast-util-raw');
@@ -34,7 +35,7 @@ function tryRequire(specifier) {
 }
 
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
-/** @type {import('../src').PluginOptions} */
+/** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,
   extensionDataDirectory: path.join(__dirname, 'extensions'),
@@ -60,7 +61,7 @@ function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
 }
 
 /**
- * @param {import('../src').PluginOptions=} options
+ * @param {PluginOptions=} options
  * @param {*} markdownAST
  */
 async function testSnapshot(options, markdownAST = createMarkdownAST(), cache = createCache()) {
@@ -243,6 +244,7 @@ describe('utils', () => {
 });
 
 describe('integration tests', () => {
+  const update = /^|\b(-u|--update|--updateSnapshot|--update-snapshot)\b|$/.test(process.argv.join(' '));
   const defaultOptions = require('./integration/options');
   const processor = unified()
     .use(remark, { commonmark: true })
@@ -272,7 +274,7 @@ describe('integration tests', () => {
     const markdownAST =  processor.parse(md);
     await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
-    if (!expected) {
+    if (!expected || update) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');
       newCaseHTML.push(renderNewCase(name, html));
     } else {
@@ -287,7 +289,7 @@ describe('integration tests', () => {
     if (failedCaseHTML.length || newCaseHTML.length) {
       const fileName = path.resolve(__dirname, 'integration/report.html');
       await writeFile(fileName, renderDocument([...newCaseHTML, ...failedCaseHTML].join('\n')));
-      execSync(`open ${fileName}`);
+      return open(fileName);
     }
   });
 });

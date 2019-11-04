@@ -10,7 +10,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -63,7 +63,7 @@ Object {
     Object {
       "lang": "custom",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"custom\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">const x = 3;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"custom\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">const x = 3;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk1\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -116,7 +116,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"custom-theme vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"custom-theme vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x </span><span class=\\"mtk11\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -166,7 +166,7 @@ Object {
     Object {
       "lang": "java-scripty",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"java-scripty\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"java-scripty\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -219,7 +219,7 @@ Object {
     Object {
       "lang": "JavaScript",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"javascript\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"javascript\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -272,7 +272,7 @@ Object {
     Object {
       "lang": "c++",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"c++\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"c++\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -325,7 +325,7 @@ Object {
     Object {
       "lang": "embedded",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"embedded\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"embedded\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
@@ -378,7 +378,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -431,7 +431,7 @@ Object {
     Object {
       "lang": "",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
@@ -463,7 +463,7 @@ Object {
     Object {
       "lang": "none",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"none\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
 <span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
     },
     Object {
@@ -495,7 +495,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"solarized-light pd--monokai-dimmed pl--quiet-light vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
+      "value": "<pre class=\\"solarized-light pd--monokai-dimmed pl--quiet-light vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -614,7 +614,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"solarized-light pd--dark-default-dark pl--quiet-light vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
+      "value": "<pre class=\\"solarized-light pd--dark-default-dark pl--quiet-light vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -628,7 +628,7 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"solarized-light pd--monokai pl--quiet-light vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
+      "value": "<pre class=\\"solarized-light pd--monokai pl--quiet-light vscode-highlight\\" data-language=\\"js\\" data-index=\\"1\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\"><span class=\\"mtk7\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk7\\">x</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">=</span><span class=\\"mtk1\\"> </span><span class=\\"mtk5\\">3</span><span class=\\"mtk6\\">;</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3 mtki\\">// Comment</span></span></code></pre>",
     },
     Object {
@@ -759,7 +759,7 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
+      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
 <span class=\\"vscode-highlight-line\\"><span class=\\"mtk3\\">// 2</span></span>
 <span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
 <span class=\\"vscode-highlight-line vscode-highlight-line-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
