@@ -30,7 +30,7 @@ function createPlugin() {
   const getRegistry = createGetRegistry();
 
   /**
-   * @param {*} _
+   * @param {RemarkPluginArguments} _
    * @param {PluginOptions=} options
    */
   async function textmateHighlight(
@@ -160,10 +160,7 @@ function createPlugin() {
             line = txResult.line.text;
           }
 
-          const lineClassName = joinClassNames(
-            getLineClassName(lineData),
-            'vscode-highlight-line'
-          );
+          const lineClassName = joinClassNames(getLineClassName(lineData), 'vscode-highlight-line');
 
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
@@ -172,7 +169,7 @@ function createPlugin() {
                 tokens: grammar.tokenizeLine(line, ruleStack).tokens.map(token => ({
                   ...token,
                   text: line.slice(token.startIndex, token.endIndex),
-                  className: getClassNameFromMetadata(getMetadataForToken(token, result)),
+                  className: getClassNameFromMetadata(getMetadataForToken(token, result))
                 })),
                 binaryTokens: Array.from(result.tokens),
                 text: line,
@@ -197,7 +194,9 @@ function createPlugin() {
           }
 
           htmlLines.push(
-            span(mergeAttributes({ class: lineClassName }, attrs), htmlLine, { whitespace: TriviaRenderFlags.NoWhitespace })
+            span(mergeAttributes({ class: lineClassName }, attrs), htmlLine, {
+              whitespace: TriviaRenderFlags.NoWhitespace
+            })
           );
         }
 
@@ -227,17 +226,19 @@ function createPlugin() {
             lines: linesData,
             preClassName,
             codeClassName,
-            language: languageName,
+            language: languageName
           };
 
           const childNode = {
             ...nodeData,
             internal: {
               type: 'VSCodeHighlightCodeBlock',
-              contentDigest: createHash('md5').update(JSON.stringify(nodeData)).digest('hex'),
-            },
+              contentDigest: createHash('md5')
+                .update(JSON.stringify(nodeData))
+                .digest('hex')
+            }
           };
-          
+
           (graphQLNodes || (graphQLNodes = [])).push(childNode);
         }
       } finally {
@@ -251,7 +252,7 @@ function createPlugin() {
         await actions.createNode(childNode);
         await actions.createParentChildLink({
           parent: markdownNode,
-          child: childNode,
+          child: childNode
         });
       }
     }

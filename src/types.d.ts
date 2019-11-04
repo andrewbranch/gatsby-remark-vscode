@@ -1,3 +1,11 @@
+interface RemarkPluginArguments {
+  cache: Cache;
+  markdownAST: any;
+  markdownNode: any;
+  actions: any;
+  createNodeId: (key: string) => string;
+}
+
 interface ExtensionDemand {
   identifier: string;
   version: string;
@@ -52,6 +60,11 @@ interface PluginOptions {
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
   createNodes?: boolean;
+}
+
+interface Cache {
+  get(key: string): Promise<any>;
+  set(key: string, data: any): Promise<void>;
 }
 
 // Line transformers

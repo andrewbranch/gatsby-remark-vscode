@@ -3,13 +3,7 @@ const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const { ensureThemeLocation } = require('./storeUtils');
 const { sanitizeForClassName } = require('./utils');
-const {
-  joinClassNames,
-  renderRule,
-  prefersDark,
-  prefersLight,
-  prefixRules
-} = require('./renderUtils');
+const { joinClassNames, renderRule, prefersDark, prefersLight, prefixRules } = require('./renderUtils');
 
 /**
  * @param {ColorThemeSettings} settings

@@ -1,5 +1,4 @@
 // @ts-check
-const { execSync } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs');
 const glob = require('glob');

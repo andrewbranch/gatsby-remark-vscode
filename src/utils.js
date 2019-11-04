@@ -76,8 +76,8 @@ function sanitizeForClassName(str) {
 }
 
 /**
- * @param {import('vscode-textmate').IToken} token 
- * @param {import('vscode-textmate').ITokenizeLineResult2} binaryTokens 
+ * @param {import('vscode-textmate').IToken} token
+ * @param {import('vscode-textmate').ITokenizeLineResult2} binaryTokens
  */
 function getMetadataForToken(token, binaryTokens) {
   const index = binaryTokens.tokens.findIndex((_, i) => {
@@ -87,7 +87,7 @@ function getMetadataForToken(token, binaryTokens) {
   if (index > -1) {
     return binaryTokens.tokens[index + 1];
   }
-  return binaryTokens.tokens[binaryTokens.tokens.length - 1]
+  return binaryTokens.tokens[binaryTokens.tokens.length - 1];
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -106,5 +106,5 @@ module.exports = {
   sanitizeForClassName,
   requireJson,
   requirePlistOrJson,
-  getMetadataForToken,
+  getMetadataForToken
 };
