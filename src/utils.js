@@ -90,6 +90,15 @@ function getMetadataForToken(token, binaryTokens) {
   return binaryTokens.tokens[binaryTokens.tokens.length - 1];
 }
 
+/**
+ * @param {*} cache
+ * @param {string} key
+ * @param {object} value
+ */
+async function mergeCache(cache, key, value) {
+  await cache.set(key, { ...(await cache.get(key)), ...value });
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -106,5 +115,6 @@ module.exports = {
   sanitizeForClassName,
   requireJson,
   requirePlistOrJson,
-  getMetadataForToken
+  getMetadataForToken,
+  mergeCache,
 };

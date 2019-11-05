@@ -9,6 +9,7 @@ const createThemeStyles = require('./createThemeStyles');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { createHash } = require('crypto');
+const { setChildNodes } = require('./cacheUtils');
 const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope } = require('./storeUtils');
@@ -47,7 +48,6 @@ function createPlugin() {
       logLevel = 'error',
       host = defaultHost,
       getLineTransformers = getDefaultLineTransformers,
-      createNodes,
       ...rest
     } = {}
   ) {
@@ -74,7 +74,7 @@ function createPlugin() {
 
     let nodeIndex = 0;
     /** @type {object[]} */
-    let graphQLNodes;
+    const graphQLNodes = [];
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
@@ -164,18 +164,16 @@ function createPlugin() {
 
           if (grammar) {
             const result = grammar.tokenizeLine2(line, ruleStack);
-            if (createNodes) {
-              linesData.push({
-                tokens: grammar.tokenizeLine(line, ruleStack).tokens.map(token => ({
-                  ...token,
-                  text: line.slice(token.startIndex, token.endIndex),
-                  className: getClassNameFromMetadata(getMetadataForToken(token, result))
-                })),
-                binaryTokens: Array.from(result.tokens),
-                text: line,
-                className: joinClassNames(lineClassName, attrs.class)
-              });
-            }
+            linesData.push({
+              tokens: grammar.tokenizeLine(line, ruleStack).tokens.map(token => ({
+                ...token,
+                text: line.slice(token.startIndex, token.endIndex),
+                className: getClassNameFromMetadata(getMetadataForToken(token, result))
+              })),
+              binaryTokens: Array.from(result.tokens),
+              text: line,
+              className: joinClassNames(lineClassName, attrs.class)
+            });
 
             ruleStack = result.ruleStack;
             for (let i = 0; i < result.tokens.length; i += 2) {
@@ -216,46 +214,44 @@ function createPlugin() {
 
         node.type = 'html';
         node.value = html;
-        if (createNodes) {
-          const nodeData = {
-            id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
-            parent: markdownNode.id,
-            index: nodeIndex,
-            rawContent: text,
-            htmlContent: html,
-            lines: linesData,
-            preClassName,
-            codeClassName,
-            language: languageName
-          };
+        const nodeData = {
+          id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
+          parent: markdownNode.id,
+          index: nodeIndex,
+          rawContent: text,
+          htmlContent: html,
+          lines: linesData,
+          preClassName,
+          codeClassName,
+          language: languageName
+        };
 
-          const childNode = {
-            ...nodeData,
-            internal: {
-              type: 'VSCodeHighlightCodeBlock',
-              contentDigest: createHash('md5')
-                .update(JSON.stringify(nodeData))
-                .digest('hex')
-            }
-          };
+        const childNode = {
+          ...nodeData,
+          internal: {
+            type: 'VSCodeHighlightCodeBlock',
+            contentDigest: createHash('md5')
+              .update(JSON.stringify(nodeData))
+              .digest('hex')
+          }
+        };
 
-          (graphQLNodes || (graphQLNodes = [])).push(childNode);
-        }
+        graphQLNodes.push(childNode);
       } finally {
         nodeIndex++;
         unlockRegistry();
       }
     }
 
-    if (createNodes && graphQLNodes) {
-      for (const childNode of graphQLNodes) {
-        await actions.createNode(childNode);
-        await actions.createParentChildLink({
-          parent: markdownNode,
-          child: childNode
-        });
-      }
+    for (const childNode of graphQLNodes) {
+      await actions.createNode(childNode);
+      await actions.createParentChildLink({
+        parent: markdownNode,
+        child: childNode
+      });
     }
+
+    await setChildNodes(cache, markdownNode.id, markdownNode.internal.contentDigest, graphQLNodes);
 
     const themeNames = Object.keys(stylesheets);
     if (themeNames.length) {
@@ -270,6 +266,7 @@ function createPlugin() {
       });
     }
   }
+
   return textmateHighlight;
 }
 

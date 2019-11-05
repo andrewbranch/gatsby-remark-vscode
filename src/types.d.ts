@@ -1,5 +1,5 @@
 interface RemarkPluginArguments {
-  cache: Cache;
+  cache: GatsbyCache;
   markdownAST: any;
   markdownNode: any;
   actions: any;
@@ -59,10 +59,9 @@ interface PluginOptions {
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
-  createNodes?: boolean;
 }
 
-interface Cache {
+interface GatsbyCache {
   get(key: string): Promise<any>;
   set(key: string, data: any): Promise<void>;
 }
