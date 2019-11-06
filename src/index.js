@@ -5,6 +5,7 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
+const createSchemaCustomization = require('./schema');
 const createThemeStyles = require('./createThemeStyles');
 const createGetRegistry = require('./createGetRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
@@ -51,7 +52,6 @@ function createPlugin() {
       ...rest
     } = {}
   ) {
-    logger.setLevel(logLevel);
     const lineTransformers = getLineTransformers({
       colorTheme,
       wrapperClassName,
@@ -140,10 +140,12 @@ function createPlugin() {
           const htmlLine = [];
           /** @type {LineData} */
           const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
-          let attrs = {};
+          const attrs = {};
+          const graphQLData = {};
           for (let i = 0; i < lineTransformers.length; i++) {
             const transformer = lineTransformers[i];
             const state = prevTransformerStates[i];
+            /** @type {LineTransformerResult<any>} */
             const txResult = transformer({
               state,
               line: { text: line, attrs },
@@ -157,6 +159,7 @@ function createPlugin() {
             }
 
             Object.assign(attrs, txResult.line.attrs);
+            Object.assign(graphQLData, txResult.data);
             line = txResult.line.text;
           }
 
@@ -172,7 +175,8 @@ function createPlugin() {
               })),
               binaryTokens: Array.from(result.tokens),
               text: line,
-              className: joinClassNames(lineClassName, attrs.class)
+              className: joinClassNames(lineClassName, attrs.class),
+              ...graphQLData
             });
 
             ruleStack = result.ruleStack;
@@ -180,7 +184,6 @@ function createPlugin() {
               const startIndex = result.tokens[i];
               const metadata = result.tokens[i + 1];
               const endIndex = result.tokens[i + 2] || line.length;
-              /** @type {LineData} */
               htmlLine.push(
                 span({ class: getClassNameFromMetadata(metadata) }, [escapeHTML(line.slice(startIndex, endIndex))], {
                   whitespace: TriviaRenderFlags.NoWhitespace
@@ -267,6 +270,7 @@ function createPlugin() {
     }
   }
 
+  textmateHighlight.createSchemaCustomization = createSchemaCustomization;
   return textmateHighlight;
 }
 

@@ -2,36 +2,6 @@
 const logger = require('loglevel');
 const { getChildNodes } = require('./src/cacheUtils');
 
-exports.createSchemaCustomization = ({ actions }) => {
-  const { createTypes } = actions;
-  const typeDefs = `
-    type VSCodeHighlightToken {
-      text: String!
-      startIndex: Int!
-      endIndex: Int!
-      scopes: [String!]!
-      className: String!
-    }
-    type VSCodeHighlightLine {
-      tokens: [VSCodeHighlightToken!]!
-      binaryTokens: [Int!]!
-      text: String!
-      className: String!
-      isHighlighted: Boolean!
-    }
-    type VSCodeHighlightCodeBlock implements Node {
-      lines: [VSCodeHighlightLine!]!
-      index: Int!
-      htmlContent: String!
-      rawContent: String!
-      preClassName: String!
-      codeClassName: String!
-      language: String
-    }
-  `;
-  createTypes(typeDefs);
-};
-
 exports.createResolvers = ({
   createResolvers,
   cache,

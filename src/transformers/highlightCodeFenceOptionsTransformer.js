@@ -38,15 +38,23 @@ function getInitialState(codeFenceOptions) {
 }
 
 /** @type {LineTransformer<State>} */
-function highlightCodeFenceOptionsTransformer({ codeFenceOptions, line, state = getInitialState(codeFenceOptions) }) {
-  const isHighlightedLine = state.highlightedLines[0] === state.lineNumber;
+const highlightCodeFenceOptionsTransformer = ({ codeFenceOptions, line, state = getInitialState(codeFenceOptions) }) => {
+  const isHighlighted = state.highlightedLines[0] === state.lineNumber;
   return {
-    line: isHighlightedLine ? highlightLine(line) : line,
+    line: isHighlighted ? highlightLine(line) : line,
+    ...isHighlighted && { data: { isHighlighted } },
     state: {
       lineNumber: state.lineNumber + 1,
-      highlightedLines: isHighlightedLine ? state.highlightedLines.slice(1) : state.highlightedLines
+      highlightedLines: isHighlighted ? state.highlightedLines.slice(1) : state.highlightedLines
     }
   };
 }
+
+highlightCodeFenceOptionsTransformer.displayName = 'highlightCodeFenceOptions';
+highlightCodeFenceOptionsTransformer.schemaExtension = `
+  type VSCodeHighlightLine {
+    isHighlighted: Boolean
+  }
+`;
 
 module.exports = { highlightCodeFenceOptionsTransformer };

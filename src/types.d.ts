@@ -68,7 +68,7 @@ interface GatsbyCache {
 
 // Line transformers
 
-interface LineTransformerResult<T> {
+interface LineTransformerInfo<T> {
   line?: {
     text: string;
     attrs: object;
@@ -76,12 +76,20 @@ interface LineTransformerResult<T> {
   state: T | undefined;
 }
 
-interface LineTransformerArgs<T> extends LineTransformerResult<T> {
+interface LineTransformerResult<T> extends LineTransformerInfo<T> {
+  data?: object;
+}
+
+interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
   language: string;
   codeFenceOptions: object;
 }
 
-type LineTransformer<T = any> = (args: LineTransformerArgs<T>) => LineTransformerResult<T> | undefined;
+interface LineTransformer<T = any> {
+  (args: LineTransformerArgs<T>): LineTransformerResult<T>;
+  displayName: string;
+  schemaExtension?: string;
+}
 
 type HighlightCommentTransfomerState = {
   inHighlightRange?: boolean;
