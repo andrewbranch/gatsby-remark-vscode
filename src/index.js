@@ -73,7 +73,7 @@ function createPlugin() {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
-      const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '');
+      const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '', node.meta);
       await downloadExtensionsIfNeeded({
         extensions,
         cache,
