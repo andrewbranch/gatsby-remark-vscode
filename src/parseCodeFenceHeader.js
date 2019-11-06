@@ -14,12 +14,14 @@ function test(input, pattern) {
 }
 
 /**
- * @param {string} input
+ * @param {string} lang
+ * @param {string | undefined} meta
  */
-function parseCodeFenceHeader(input) {
+function parseCodeFenceHeader(lang, meta) {
   let pos = 0;
   let options = {};
   let languageName = '';
+  const input = lang + (meta || '');
   skipTrivia();
   if (!isEnd() && current() !== '{') {
     languageName = parseIdentifier();
