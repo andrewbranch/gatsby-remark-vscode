@@ -50,6 +50,8 @@ interface PluginOptions {
   extensionDataDirectory?: string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
+  selectorDark?: string;
+  selectorLight?: string;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
 }
 
