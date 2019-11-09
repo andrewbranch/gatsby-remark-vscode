@@ -1,11 +1,11 @@
 const escape = require('lodash.escape');
 
 /**
- * @param {string} className
+ * @param {string} selector
  * @param {string | string[]} propertyList
  */
-function renderRule(className, propertyList) {
-  return `.${className} {\n${typeof propertyList === 'string' ? propertyList : propertyList.join('\n')}\n}`;
+function renderRule(selector, propertyList) {
+  return `${selector} {\n${typeof propertyList === 'string' ? propertyList : propertyList.join('\n')}\n}`;
 }
 
 /**
@@ -18,16 +18,18 @@ function renderMediaQuery(condition, rules) {
 
 /**
  * @param {string | string[]} rules
+ * @param {boolean} skipMediaQuery
  */
-function prefersLight(rules) {
-  return renderMediaQuery('prefers-color-scheme: light', rules);
+function prefersLight(rules, skipMediaQuery) {
+  return skipMediaQuery ? rules.join('\n') : renderMediaQuery('prefers-color-scheme: light', rules);
 }
 
 /**
  * @param {string | string[]} rules
+ * @param {boolean} skipMediaQuery
  */
-function prefersDark(rules) {
-  return renderMediaQuery('prefers-color-scheme: dark', rules);
+function prefersDark(rules, skipMediaQuery) {
+  return skipMediaQuery ? rules.join('\n') : renderMediaQuery('prefers-color-scheme: dark', rules);
 }
 
 /**

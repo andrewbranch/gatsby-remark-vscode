@@ -3,13 +3,7 @@ const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 const { generateTokensCSSForColorMap } = require('../lib/vscode/tokenization');
 const { ensureThemeLocation } = require('./storeUtils');
 const { sanitizeForClassName } = require('./utils');
-const {
-  joinClassNames,
-  renderRule,
-  prefersDark,
-  prefersLight,
-  prefixRules
-} = require('./renderUtils');
+const { joinClassNames, renderRule, prefersDark, prefersLight, prefixRules } = require('./renderUtils');
 
 /**
  * @param {ColorThemeSettings} settings
@@ -66,7 +60,9 @@ function getStylesFromSettings(settings) {
  *  codeFenceOptions: object,
  *  languageName: string,
  *  scopeName: string,
- *  stylesheets: Record<string, string>
+ *  stylesheets: Record<string, string>,
+ *  selectorDark: string,
+    selectorLight string:
  * }} options
  * @returns {Promise<string>}
  */
@@ -80,7 +76,9 @@ async function createThemeStyles({
   languageName,
   scopeName,
   cache,
-  stylesheets
+  stylesheets,
+  selectorDark,
+  selectorLight
 }) {
   const colorThemeValue =
     typeof colorTheme === 'function'
@@ -111,22 +109,30 @@ async function createThemeStyles({
 
     registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
     if (!stylesheets[themeClassName] || scopeName) {
+      let prefix = `.${themeClassName} `;
+
+      if (setting === 'prefersDarkTheme' && selectorDark) {
+        prefix = `${selectorDark} ${prefix}`;
+      } else if (setting === 'prefersLightTheme' && selectorLight) {
+        prefix = `${selectorLight} ${prefix}`;
+      }
+
       const rules = [
-        renderRule(themeClassName, getStylesFromSettings(settings)),
+        renderRule(prefix, getStylesFromSettings(settings)),
         ...(scopeName
           ? prefixRules(
               generateTokensCSSForColorMap(
                 registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))
               ).split('\n'),
-              `.${themeClassName} `
+              prefix
             )
           : [])
       ];
 
       if (setting === 'prefersDarkTheme') {
-        stylesheets[themeClassName] = prefersDark(rules);
+        stylesheets[themeClassName] = prefersDark(rules, !!selectorDark);
       } else if (setting === 'prefersLightTheme') {
-        stylesheets[themeClassName] = prefersLight(rules);
+        stylesheets[themeClassName] = prefersLight(rules, !!selectorLight);
       } else {
         stylesheets[themeClassName] = rules.join('\n');
       }

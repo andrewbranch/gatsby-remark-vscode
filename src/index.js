@@ -44,6 +44,8 @@ function createPlugin() {
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'error',
       host = defaultHost,
+      selectorDark = '',
+      selectorLight = '',
       getLineTransformers = getDefaultLineTransformers,
       ...rest
     } = {}
@@ -107,7 +109,9 @@ function createPlugin() {
           scopeName: scope,
           registry,
           replaceColor,
-          stylesheets
+          stylesheets,
+          selectorDark,
+          selectorLight
         });
 
         const rawLines = text.split(/\r?\n/);
