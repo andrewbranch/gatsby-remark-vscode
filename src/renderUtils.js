@@ -17,7 +17,7 @@ function renderMediaQuery(condition, rules) {
 }
 
 /**
- * @param {string | string[]} rules
+ * @param {string[]} rules
  * @param {boolean} skipMediaQuery
  */
 function prefersLight(rules, skipMediaQuery) {
@@ -25,7 +25,7 @@ function prefersLight(rules, skipMediaQuery) {
 }
 
 /**
- * @param {string | string[]} rules
+ * @param {string[]} rules
  * @param {boolean} skipMediaQuery
  */
 function prefersDark(rules, skipMediaQuery) {

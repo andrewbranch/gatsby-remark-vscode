@@ -62,7 +62,7 @@ function getStylesFromSettings(settings) {
  *  scopeName: string,
  *  stylesheets: Record<string, string>,
  *  selectorDark: string,
-    selectorLight string:
+ *  selectorLight: string,
  * }} options
  * @returns {Promise<string>}
  */
