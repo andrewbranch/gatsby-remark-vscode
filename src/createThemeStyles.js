@@ -109,7 +109,7 @@ async function createThemeStyles({
 
     registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
     if (!stylesheets[themeClassName] || scopeName) {
-      let prefix = `.${themeClassName} `;
+      let prefix = `.${themeClassName}`;
 
       if (setting === 'prefersDarkTheme' && selectorDark) {
         prefix = `${selectorDark} ${prefix}`;
@@ -124,7 +124,7 @@ async function createThemeStyles({
               generateTokensCSSForColorMap(
                 registry.getColorMap().map(color => replaceColor(color, colorThemeIdentifier))
               ).split('\n'),
-              prefix
+              `${prefix} `
             )
           : [])
       ];
