@@ -68,7 +68,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             content,              //   - the string content of the line
             index,                //   - the zero-based index of the line within the code fence
             language,             //   - the language specified for the code fence
-            codeFenceOptions      //   - any options set on the code fence alongside the language (more on this later)
+            meta      //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
           logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
         }

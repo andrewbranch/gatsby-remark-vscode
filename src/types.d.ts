@@ -18,7 +18,7 @@ interface LineData {
   /** The code fence’s language */
   language: string;
   /** The code fence’s options parsed from the language suffix */
-  codeFenceOptions: object;
+  meta: object;
 }
 
 interface ColorThemeSettings {
@@ -55,17 +55,19 @@ interface PluginOptions {
 
 // Line transformers
 
+type Line = {
+  text: string;
+  attrs: object;
+};
+
 interface LineTransformerResult<T> {
-  line?: {
-    text: string;
-    attrs: object;
-  };
+  line?: Line;
   state: T | undefined;
 }
 
 interface LineTransformerArgs<T> extends LineTransformerResult<T> {
   language: string;
-  codeFenceOptions: object;
+  meta: object;
 }
 
 type LineTransformer<T = any> = (args: LineTransformerArgs<T>) => LineTransformerResult<T> | undefined;

@@ -1,12 +1,13 @@
 // @ts-check
-const { highlightCodeFenceOptionsTransformer } = require('./highlightCodeFenceOptionsTransformer');
+const { highlightMetaTransformer } = require('./highlightmetaTransformer');
 const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiveLineTransformer');
+const getTransformedLines = require('./getTransformedLines');
 
 /**
  * @returns {LineTransformer[]}
  */
 function getDefaultLineTransformers() {
-  return [createHighlightDirectiveLineTransformer({}), highlightCodeFenceOptionsTransformer];
+  return [createHighlightDirectiveLineTransformer({}), highlightMetaTransformer];
 }
 
 /**
@@ -16,4 +17,4 @@ function addLineTransformers(...transformers) {
   return () => [...transformers, ...getDefaultLineTransformers()];
 }
 
-module.exports = { getDefaultLineTransformers, addLineTransformers };
+module.exports = { getDefaultLineTransformers, addLineTransformers, getTransformedLines };
