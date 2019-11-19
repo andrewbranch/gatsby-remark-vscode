@@ -36,6 +36,7 @@ function createPlugin() {
     {
       colorTheme = 'Default Dark+',
       wrapperClassName = '',
+      getWrapperClassName = () => '',
       languageAliases = {},
       extensions = [],
       getLineClassName = () => '',
@@ -52,6 +53,7 @@ function createPlugin() {
     const lineTransformers = getLineTransformers({
       colorTheme,
       wrapperClassName,
+      getWrapperClassName,
       languageAliases,
       extensions,
       getLineClassName,
@@ -177,7 +179,17 @@ function createPlugin() {
           );
         }
 
-        const className = joinClassNames(wrapperClassName, themeClassNames, 'vscode-highlight');
+        const className = joinClassNames(
+          wrapperClassName,
+          getWrapperClassName({
+            language: languageName,
+            markdownNode,
+            codeFenceNode: node,
+            parsedOptions: options,
+          }),
+          themeClassNames,
+          'vscode-highlight'
+        );
         node.type = 'html';
         node.value = renderHTML(
           pre(
