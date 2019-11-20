@@ -1,9 +1,9 @@
 module.exports = {
-  wrapperClassName: 'test-wrapper',
-  getWrapperClassName: ({ language, parsedOptions }) => {
+  wrapperClassName: ({ language, parsedOptions }) => {
     const { wrapperClass } = parsedOptions;
     if (wrapperClass) {
-      return `${language}-${wrapperClass}`;
+      return `test-wrapper ${language}-${wrapperClass}`;
     }
+    return 'test-wrapper';
   },
 };
