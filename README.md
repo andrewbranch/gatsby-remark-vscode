@@ -57,13 +57,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
         // All options are optional. Defaults shown here.
         options: {
           colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
-          wrapperClassName: '',   // Additional class put on 'pre' tag
-          getWrapperClassName: ({ // Function allowing dynamic setting of additional class names on 'pre' tag
-            language,             //   - the language specified for the code fence
-            markdownNode,         //   - the gatsby-transformer-remark GraphQL node
-            codeFenceNode,        //   - the Markdown AST node of the current code fence
-            parsedOptions         //   - any options set on the code fence alongside the language (more on this later)
-          }) => '',
+          wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
           extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
@@ -239,7 +233,7 @@ import 'gatsby-remark-vscode/styles.css';
 
 ### Class names
 
-The generated HTML has ample stable class names, and you can add your own with the `wrapperClassName`, `getWrapperClassName` and `getLineClassName` option. All (non-token-color) included styles have a single class name’s worth of specificity, so it should be easy to override the built-in styles.
+The generated HTML has ample stable class names, and you can add your own with the `wrapperClassName` and `getLineClassName` option. All (non-token-color) included styles have a single class name’s worth of specificity, so it should be easy to override the built-in styles.
 
 ### Variables
 
@@ -341,7 +335,7 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     <Amazing><Stuff /></Amazing>
     ```
 
-`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `getWrapperClassName` and `getLineClassName` functions:
+`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `wrapperClassName` and `getLineClassName` functions:
 
 ```js
 {
@@ -356,7 +350,8 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     //   nested: { objects: 'yep' }
     // }
     return parsedOptions.theme || 'Dark+ (default dark)';
-  }
+  },
+  wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
 }
 ```
 
