@@ -41,7 +41,7 @@ type ColorThemeOption = string | ColorThemeSettings | ((data: CodeFenceData) => 
 
 interface PluginOptions {
   colorTheme?: ColorThemeOption;
-  wrapperClassName?: string;
+  wrapperClassName?: string | ((data: CodeFenceData) => string);
   languageAliases?: Record<string, string>;
   extensions?: ExtensionDemand[];
   getLineClassName?: (line: LineData) => string;

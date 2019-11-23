@@ -57,7 +57,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
         // All options are optional. Defaults shown here.
         options: {
           colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
-          wrapperClassName: '',   // Additional class put on 'pre' tag
+          wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
           extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
@@ -335,7 +335,7 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     <Amazing><Stuff /></Amazing>
     ```
 
-`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme` and `getLineClassName` functions:
+`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `wrapperClassName` and `getLineClassName` functions:
 
 ```js
 {
@@ -350,7 +350,8 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     //   nested: { objects: 'yep' }
     // }
     return parsedOptions.theme || 'Dark+ (default dark)';
-  }
+  },
+  wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
 }
 ```
 
