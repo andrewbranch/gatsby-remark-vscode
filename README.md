@@ -79,9 +79,11 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
 
 Write code examples in your markdown file as usual:
 
-    ```js
-    this.willBe(highlighted);
-    ```
+````md
+```js
+this.willBe(highlighted);
+```
+````
 
 ## Dark mode support via `prefers-color-scheme`
 
@@ -107,7 +109,8 @@ Generally, you probably don’t need or want to set all three `colorTheme` optio
 
 The following can be used without specifying an extension to download from the marketplace:
 
-#### Languages
+### Languages
+
 <details>
   <summary>See all 55 languages</summary>
 
@@ -166,11 +169,13 @@ The following can be used without specifying an extension to download from the m
   - XML
   - XML XSL
   - YAML
+
 </details>
 
 Language names are resolve case-insensitively by any aliases and file extensions listed in the grammar’s metadata. For example, a code fence with C++ code in it can use [any of these language codes](https://github.com/Microsoft/vscode/blob/da3c97f3668393ebfcb9f8208d7616018d6d1859/extensions/cpp/package.json#L20-L21). You could also check the [built-in grammar manifest](https://unpkg.com/gatsby-remark-vscode@1.0.3/lib/grammars/manifest.json) for an exact list of mappings.
 
-#### Themes
+### Themes
+
 Pro tip: a good way to preview themes is by flipping through them in VS Code. Here’s the list of included ones:
 
 - Abyss
@@ -221,7 +226,7 @@ Next time you `gatsby develop` or `gatsby build`, the extension will be download
 
 Anonymous requests to the Visual Studio Marketplace are rate limited, so if you’re downloading a lot of extensions or running builds in quick succession in an environment where the extensions aren’t already cached on disk (like on a build server), you might see failed requests.
 
-As a workaround, you can set the `extensionDataDirectory` plugin option to an absolute path pointing to a folder that you check into source control. After running a build locally, any extensions you’ve requested will appear in that directory. Then, in CI, gatsby-remark-vscode will check that directory and determine if anything needs to be downloaded. By checking including the extensions alongside your own source code, you can avoid making requests to the Visual Studio Marketplace in CI entirely.
+As a workaround, you can set the `extensionDataDirectory` plugin option to an absolute path pointing to a folder that you check into source control. After running a build locally, any extensions you’ve requested will appear in that directory. Then, in CI, gatsby-remark-vscode will check that directory and determine if anything needs to be downloaded. By including the extensions alongside your own source code, you can avoid making requests to the Visual Studio Marketplace in CI entirely.
 
 ## Styles
 
@@ -278,31 +283,35 @@ Since the CSS for token colors is auto-generated, it’s fragile and inconvenien
 
 `gatsby-remark-vscode` offers the same line-range-after-language-name strategy of highlighting or emphasizing lines as [gatsby-remark-prismjs](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-remark-prismjs):
 
-    ```js{1,3-5}
-    this.isLine(1); // highlighted
-    this.isLine(2);
-    this.isLine(3); // highlighted
-    this.isLine(4); // highlighted
-    this.isLine(5); // highlighted
-    ```
+````md
+```js{1,3-5}
+this.isLine(1); // highlighted
+this.isLine(2);
+this.isLine(3); // highlighted
+this.isLine(4); // highlighted
+this.isLine(5); // highlighted
+```
+````
 
 Comment directives are also supported:
 
-    ```js
-    function constant(value) {
-      return () => value; // highlight-line
-    }
+````md
+```js
+function constant(value) {
+  return () => value; // highlight-line
+}
 
-    // highlight-next-line
-    const alwaysFour = constant(4);
+// highlight-next-line
+const alwaysFour = constant(4);
 
-    // highlight-start
-    const zero = [0, 1, 2, 3, 4, 5]
-      .map(alwaysFour)
-      .filter(x => x !== 4)
-      .length;
-    // highlight-end
-    ```
+// highlight-start
+const zero = [0, 1, 2, 3, 4, 5]
+  .map(alwaysFour)
+  .filter(x => x !== 4)
+  .length;
+// highlight-end
+```
+````
 
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 
@@ -331,9 +340,11 @@ The `colorTheme` option can take a function instead of a constant value. The fun
 
 Line numbers and ranges aren’t the only things you can pass as options on your code fence. A JSON-like syntax is supported:
 
-    ```jsx{theme: 'Monokai', someNumbers: {1,2,3}, nested: {objects: 'yep'}}
-    <Amazing><Stuff /></Amazing>
-    ```
+````md
+```jsx{theme: 'Monokai', someNumbers: {1,2,3}, nested: {objects: 'yep'}}
+<Amazing><Stuff /></Amazing>
+```
+````
 
 `gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `wrapperClassName` and `getLineClassName` functions:
 
