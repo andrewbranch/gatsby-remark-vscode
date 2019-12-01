@@ -6,10 +6,20 @@ const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
+const { createHash } = require('crypto');
 
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
+
+/**
+ * @template T
+ * @param {T} x
+ * @returns {T}
+ */
+function identity(x) {
+  return x;
+}
 
 /**
  * Splits a Visual Studio Marketplace extension identifier into publisher and extension name.
@@ -75,6 +85,64 @@ function sanitizeForClassName(str) {
     .toLowerCase();
 }
 
+/**
+ * @param {string} themeIdentifier
+ */
+function getThemeHash(themeIdentifier) {
+  return createHash('md5')
+    .update(themeIdentifier)
+    .digest('base64')
+    .substr(0, 5);
+}
+
+/**
+ * @param {string} canonicalClassName
+ * @param {string} themeIdentifier
+ */
+function getThemePrefixedTokenClassName(canonicalClassName, themeIdentifier) {
+  return 'grvsc-t' + getThemeHash(themeIdentifier) + '-' + canonicalClassName.substr('mtk'.length);
+}
+
+/**
+ * @param {ConditionalTheme} theme
+ * @returns {string[]}
+ */
+function getThemeClassNames(theme) {
+  return theme.conditions.map(({ condition }) => {
+    switch (condition) {
+      case 'default':
+        return sanitizeForClassName(theme.identifier);
+      case 'matchMedia':
+        return 'grvsc-mm-t' + getThemeHash(theme.identifier);
+      default:
+        throw new Error(`Unrecognized theme codition '${condition}'`);
+    }
+  });
+}
+
+/**
+ * @template T
+ * @template U
+ * @param {T[]} arr
+ * @param {(element: T) => U | U[]} mapper
+ * @returns {U[]}
+ */
+function flatMap(arr, mapper) {
+  /** @type {U[]} */
+  const flattened = [];
+  for (const input of arr) {
+    const mapped = mapper(input);
+    if (Array.isArray(mapped)) {
+      for (const output of mapped) {
+        flattened.push(output);
+      }
+    } else {
+      flattened.push(mapped);
+    }
+  }
+  return flattened;
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -90,5 +158,8 @@ module.exports = {
   getLanguageNames,
   sanitizeForClassName,
   requireJson,
-  requirePlistOrJson
+  requirePlistOrJson,
+  getThemePrefixedTokenClassName,
+  getThemeClassNames,
+  flatMap
 };

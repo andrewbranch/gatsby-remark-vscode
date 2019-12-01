@@ -5,7 +5,7 @@ interface ExtensionDemand {
 
 interface CodeFenceData {
   language: string;
-  markdownNode: any;
+  markdownNode: MDASTNode;
   codeFenceNode: any;
   parsedOptions: any;
 }
@@ -51,6 +51,48 @@ interface PluginOptions {
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
+}
+
+interface BinaryToken {
+  start: number;
+  end: number;
+  metadata: number;
+}
+
+interface TokenizeWithThemeResult {
+  lines: BinaryToken[][];
+  colorMap: string[];
+  theme: ConditionalTheme;
+}
+
+type ThemeCondition = 
+  | { condition: 'default' }
+  | { condition: 'matchMedia', value: string };
+
+interface ConditionalTheme {
+  identifier: string;
+  path: string;
+  conditions: ThemeCondition[];
+}
+
+interface RegisteredNodeData {
+  meta: object;
+  languageName: string;
+  lines: Line[];
+  possibleThemes: ConditionalTheme[];
+  tokenizationResults: TokenizeWithThemeResult[];
+}
+
+interface MDASTNode {
+  type: string;
+  value: string;
+}
+
+interface NodeRegistry {
+  register: (node: MDASTNode, data: RegisteredNodeData) => void;
+  mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
+  mapTokens: <T>(node: MDASTNode, lineIndex: number, mapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T) => T[];
+  forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
 }
 
 // Line transformers

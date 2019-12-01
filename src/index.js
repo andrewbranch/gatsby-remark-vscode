@@ -5,12 +5,14 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
-const createThemeStyles = require('./createThemeStyles');
 const createGetRegistry = require('./createGetRegistry');
+const tokenizeWithTheme = require('./tokenizeWithTheme');
+const getPossibleThemes = require('./getPossibleThemes');
+const createNodeRegistry = require('./createNodeRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const { getClassNameFromMetadata } = require('../lib/vscode/modes');
 const { getDefaultLineTransformers, getTransformedLines } = require('./transformers');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
+const { getThemeClassNames, flatMap } = require('./utils');
 const { getGrammar, getScope } = require('./storeUtils');
 const {
   joinClassNames,
@@ -28,7 +30,7 @@ function createPlugin() {
   const getRegistry = createGetRegistry();
 
   /**
-   * @param {*} _
+   * @param {{ markdownAST: any, markdownNode: MDASTNode, cache: any }} _
    * @param {PluginOptions=} options
    */
   async function textmateHighlight(
@@ -69,6 +71,7 @@ function createPlugin() {
       nodes.push(node);
     });
 
+    const nodeRegistry = createNodeRegistry();
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
@@ -91,28 +94,19 @@ function createPlugin() {
         );
       }
 
+      const possibleThemes = await getPossibleThemes(
+        colorTheme,
+        await cache.get('themes'),
+        markdownNode,
+        node,
+        languageName,
+        meta
+      );
+
       const [registry, unlockRegistry] = await getRegistry(cache, scope);
 
       try {
         const lines = getTransformedLines(lineTransformers, text, languageName, meta);
-        // Generate stylesheets and class names for theme selections.
-        // Adds stylesheet content to `stylesheets` if necessary and returns
-        // corresponding class name to add to code fence.
-        const themeClassNames = await createThemeStyles({
-          cache,
-          markdownNode,
-          meta: meta,
-          codeFenceNode: node,
-          colorTheme,
-          languageName,
-          scopeName: scope,
-          registry,
-          replaceColor,
-          stylesheets
-        });
-
-        /** @type {ElementTemplate[]} */
-        const htmlLines = [];
         /** @type {import('vscode-textmate').ITokenTypeMap} */
         let tokenTypes = {};
         /** @type {number} */
@@ -125,70 +119,61 @@ function createPlugin() {
         }
 
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
-        let ruleStack = undefined;
-        for (const line of lines) {
-          /** @type {(ElementTemplate | string)[]} */
-          const htmlLine = [];
-          if (grammar) {
-            const result = grammar.tokenizeLine2(line.text, ruleStack);
-            ruleStack = result.ruleStack;
-            for (let i = 0; i < result.tokens.length; i += 2) {
-              const startIndex = result.tokens[i];
-              const metadata = result.tokens[i + 1];
-              const endIndex = result.tokens[i + 2] || line.text.length;
-              /** @type {LineData} */
-              htmlLine.push(
-                span(
-                  { class: getClassNameFromMetadata(metadata) },
-                  [escapeHTML(line.text.slice(startIndex, endIndex))],
-                  {
-                    whitespace: TriviaRenderFlags.NoWhitespace
-                  }
-                )
-              );
-            }
-          } else {
-            htmlLine.push(escapeHTML(line.text));
-          }
-
-          /** @type {LineData} */
-          const lineData = { meta: meta, index: lines.indexOf(line), content: line.text, language: languageName };
-          const className = joinClassNames(getLineClassName(lineData), 'vscode-highlight-line');
-
-          htmlLines.push(
-            span(mergeAttributes({ class: className }, line.attrs), htmlLine, {
-              whitespace: TriviaRenderFlags.NoWhitespace
-            })
-          );
+        if (grammar) {
+          nodeRegistry.register(node, {
+            lines,
+            meta,
+            languageName,
+            possibleThemes,
+            tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
+          });
         }
-
-        const wrapperClassNameValue =
-          typeof wrapperClassName === 'function'
-            ? wrapperClassName({
-                language: languageName,
-                markdownNode,
-                codeFenceNode: node,
-                parsedOptions: options
-              })
-            : wrapperClassName;
-
-        const className = joinClassNames(wrapperClassNameValue, themeClassNames, 'vscode-highlight');
-        node.type = 'html';
-        node.value = renderHTML(
-          pre(
-            { class: className, 'data-language': languageName },
-            [
-              code({ class: 'vscode-highlight-code' }, htmlLines, {
-                whitespace: TriviaRenderFlags.NewlineBetweenChildren
-              })
-            ],
-            { whitespace: TriviaRenderFlags.NoWhitespace }
-          )
-        );
       } finally {
         unlockRegistry();
       }
     }
+
+    nodeRegistry.forEachNode(({ meta, lines, languageName, possibleThemes }, node) => {
+      const lineElements = nodeRegistry.mapLines(node, (line, lineIndex) => {
+        /** @type {LineData} */
+        const lineData = { meta, index: lines.indexOf(line), content: line.text, language: languageName };
+        const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
+        return span(
+          mergeAttributes({ class: lineClassName }, line.attrs),
+          nodeRegistry.mapTokens(node, lineIndex, (tokenText, classNamesByTheme) =>
+            span({ class: classNamesByTheme.map(name => name.value).join(' ') }, [escapeHTML(tokenText)], {
+              whitespace: TriviaRenderFlags.NoWhitespace
+            })
+          ),
+          { whitespace: TriviaRenderFlags.NoWhitespace }
+        );
+      });
+
+      const wrapperClassNameValue =
+        typeof wrapperClassName === 'function'
+          ? wrapperClassName({
+              language: languageName,
+              markdownNode,
+              codeFenceNode: node,
+              parsedOptions: meta
+            })
+          : wrapperClassName;
+
+      const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
+      const preClassName = joinClassNames(wrapperClassNameValue, ...themeClassNames);
+      node.type = 'html';
+      node.value = renderHTML(
+        pre(
+          { class: preClassName, 'data-language': languageName },
+          [
+            code({ class: 'vscode-highlight-code' }, lineElements, {
+              whitespace: TriviaRenderFlags.NewlineBetweenChildren
+            })
+          ],
+          { whitespace: TriviaRenderFlags.NoWhitespace }
+        )
+      );
+    });
 
     const themeNames = Object.keys(stylesheets);
     if (themeNames.length) {
