@@ -15,7 +15,7 @@ function createNodeRegistry() {
 
   return {
     register: (node, data) => {
-      data.tokenizationResults.forEach(({ theme, lines }) => {
+      data.tokenizationResults.forEach(({ theme }) => {
         let themeClassNames = themeTokenClassNameMap.get(theme.identifier);
         if (!themeClassNames) {
           themeClassNames = new Map();

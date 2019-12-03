@@ -13,15 +13,6 @@ const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
 
 /**
- * @template T
- * @param {T} x
- * @returns {T}
- */
-function identity(x) {
-  return x;
-}
-
-/**
  * Splits a Visual Studio Marketplace extension identifier into publisher and extension name.
  * @param {string} identifier The unique identifier of a VS Code Marketplace extension in the format 'publisher.extension-name'.
  */

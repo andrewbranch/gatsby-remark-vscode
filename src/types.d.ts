@@ -93,6 +93,7 @@ interface NodeRegistry {
   mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
   mapTokens: <T>(node: MDASTNode, lineIndex: number, mapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T) => T[];
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
+
 }
 
 // Line transformers
@@ -119,15 +120,36 @@ type HighlightCommentTransfomerState = {
   highlightNextLine?: boolean;
 };
 
-type ElementTemplate = {
-  tagName: string;
-  attributes: Record<string, string>;
-  children: (ElementTemplate | string)[];
-  renderOptions?: RenderOptions;
-};
+// Renderers
 
-// Utils
+declare namespace grvsc {
+  type HTMLElement = {
+    tagName: string;
+    attributes: Record<string, string>;
+    children: (HTMLElement | string)[];
+    renderOptions?: RenderOptions;
+  };
 
-interface RenderOptions {
-  whitespace?: number;
+  interface RenderOptions {
+    whitespace?: number;
+  }
+
+  type CSSMediaQuery = {
+    kind: 'MediaQuery';
+    mediaQueryList: string;
+    body: CSSRuleset[];
+  }
+
+  type CSSRuleset = {
+    kind: 'Ruleset';
+    selectors: string[];
+    body: CSSDeclaration[];
+  };
+
+  type CSSDeclaration = {
+    property: string;
+    value: string;
+  };
+
+  type CSSElement = CSSMediaQuery | CSSRuleset;
 }

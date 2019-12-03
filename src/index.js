@@ -14,16 +14,8 @@ const { getDefaultLineTransformers, getTransformedLines } = require('./transform
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getThemeClassNames, flatMap } = require('./utils');
 const { getGrammar, getScope } = require('./storeUtils');
-const {
-  joinClassNames,
-  renderHTML,
-  span,
-  code,
-  pre,
-  style,
-  mergeAttributes,
-  TriviaRenderFlags
-} = require('./renderUtils');
+const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
+const { joinClassNames } = require('./renderers/css');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
