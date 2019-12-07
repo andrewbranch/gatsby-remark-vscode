@@ -128,6 +128,7 @@ function renderCSS(elements) {
 module.exports = {
   media,
   ruleset,
+  declaration,
   renderCSS,
   prefersDark,
   prefersLight,

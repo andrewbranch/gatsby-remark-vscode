@@ -99,16 +99,23 @@ function getThemePrefixedTokenClassName(canonicalClassName, themeIdentifier) {
  * @returns {string[]}
  */
 function getThemeClassNames(theme) {
-  return theme.conditions.map(({ condition }) => {
-    switch (condition) {
-      case 'default':
-        return sanitizeForClassName(theme.identifier);
-      case 'matchMedia':
-        return 'grvsc-mm-t' + getThemeHash(theme.identifier);
-      default:
-        throw new Error(`Unrecognized theme codition '${condition}'`);
-    }
-  });
+  return theme.conditions.map(({ condition }) => getThemeClassName(theme.identifier, condition));
+}
+
+/**
+ * 
+ * @param {string} themeIdentifier 
+ * @param {ThemeCondition['condition']} conditionKind
+ */
+function getThemeClassName(themeIdentifier, conditionKind) {
+  switch (conditionKind) {
+    case 'default':
+      return sanitizeForClassName(themeIdentifier);
+    case 'matchMedia':
+      return 'grvsc-mm-t' + getThemeHash(themeIdentifier);
+    default:
+      throw new Error(`Unrecognized theme condition '${conditionKind}'`);
+  }
 }
 
 /**
@@ -134,6 +141,97 @@ function flatMap(arr, mapper) {
   return flattened;
 }
 
+/**
+ * @param {ConditionalTheme[] | undefined} arr1
+ * @param {ConditionalTheme[]} arr2
+ * @returns {ConditionalTheme[]}
+ */
+function concatConditionalThemes(arr1, arr2) {
+  if (!arr1) arr1 = [];
+  arr2.forEach(addTheme);
+  return arr1;
+
+  /** @param {ConditionalTheme} theme */
+  function addTheme(theme) {
+    const existing = arr1.find(t => t.identifier === theme.identifier);
+    if (existing) {
+      if (conditionalThemesAreEqual(existing, theme)) return;
+      existing.conditions = concatConditions(existing.conditions, theme.conditions);
+    } else {
+      arr1 = arr1.concat(theme);
+    }
+  }
+}
+
+/**
+ * @param {ThemeCondition[]} arr1 
+ * @param {ThemeCondition[]} arr2 
+ */
+function concatConditions(arr1, arr2) {
+  arr2.forEach(addCondition);
+  return arr1;
+
+  /** @param {ThemeCondition} condition */
+  function addCondition(condition) {
+    if (!arr1.some(c => !compareConditions(c, condition))) {
+      arr1 = arr1.concat(condition);
+    }
+  }
+}
+
+
+/**
+ * @param {ConditionalTheme} a 
+ * @param {ConditionalTheme} b 
+ */
+function conditionalThemesAreEqual(a, b) {
+  if (a.identifier !== b.identifier) return false;
+  if (a.conditions.length !== b.conditions.length) return false;
+  const aConditions = sortConditions(a.conditions);
+  const bConditions = sortConditions(b.conditions);
+  for (let i = 0; i < aConditions.length; i++) {
+    if (compareConditions(aConditions[i], bConditions[i])) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * @param {ThemeCondition[]} conditions 
+ */
+function sortConditions(conditions) {
+  return conditions.slice().sort(compareConditions);
+}
+
+/**
+ * @param {ThemeCondition} a 
+ * @param {ThemeCondition} b 
+ */
+function compareConditions(a, b) {
+  if (a.condition < b.condition) return -1;
+  if (a.condition > b.condition) return 1;
+  switch (a.condition) {
+    case "matchMedia":
+      // @ts-ignore
+      const bValue = b.value;
+      if (a.value < bValue) return -1;
+      if (a.value > bValue) return 1;
+  }
+  return 0;
+}
+
+/**
+ * @param {ThemeCondition[]} conditions
+ * @returns {{ default: DefaultThemeCondition | undefined, matchMedia: MatchMediaThemeCondition[] }}
+ */
+function groupConditions(conditions) {
+  return {
+    default: conditions.find(/** @returns {c is DefaultThemeCondition} */ c => c.condition === 'default'),
+    matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia')
+  };
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -151,6 +249,9 @@ module.exports = {
   requireJson,
   requirePlistOrJson,
   getThemePrefixedTokenClassName,
+  getThemeClassName,
   getThemeClassNames,
-  flatMap
+  flatMap,
+  concatConditionalThemes,
+  groupConditions
 };

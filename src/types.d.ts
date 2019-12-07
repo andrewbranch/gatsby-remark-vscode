@@ -65,9 +65,9 @@ interface TokenizeWithThemeResult {
   theme: ConditionalTheme;
 }
 
-type ThemeCondition = 
-  | { condition: 'default' }
-  | { condition: 'matchMedia', value: string };
+type DefaultThemeCondition = { condition: 'default' };
+type MatchMediaThemeCondition = { condition: 'matchMedia', value: string };
+type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition;
 
 interface ConditionalTheme {
   identifier: string;
@@ -93,7 +93,8 @@ interface NodeRegistry {
   mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
   mapTokens: <T>(node: MDASTNode, lineIndex: number, mapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T) => T[];
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
-
+  getAllPossibleThemes: () => ConditionalTheme[];
+  getTokenClassNamesForTheme: (themeIdentifier: string) => { className: string, color: string }[];
 }
 
 // Line transformers

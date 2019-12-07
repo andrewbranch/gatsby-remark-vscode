@@ -12,10 +12,10 @@ const createNodeRegistry = require('./createNodeRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { getDefaultLineTransformers, getTransformedLines } = require('./transformers');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
-const { getThemeClassNames, flatMap } = require('./utils');
 const { getGrammar, getScope } = require('./storeUtils');
+const { getThemeClassName, getThemeClassNames, flatMap, groupConditions } = require('./utils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
-const { joinClassNames } = require('./renderers/css');
+const { joinClassNames, ruleset, media, renderCSS } = require('./renderers/css');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
@@ -56,8 +56,6 @@ function createPlugin() {
       ...rest
     });
 
-    /** @type {Record<string, string>} */
-    const stylesheets = {};
     const nodes = [];
     visit(markdownAST, 'code', node => {
       nodes.push(node);
@@ -167,14 +165,45 @@ function createPlugin() {
       );
     });
 
-    const themeNames = Object.keys(stylesheets);
-    if (themeNames.length) {
+    const stylesheets = flatMap(nodeRegistry.getAllPossibleThemes(), theme => {
+      const conditions = groupConditions(theme.conditions);
+      /** @type {grvsc.CSSElement[]} */
+      const elements = [];
+      const tokenClassNames = nodeRegistry.getTokenClassNamesForTheme(theme.identifier);
+      if (conditions.default) {
+        pushColorRules(elements, getThemeClassName(theme.identifier, 'default'));
+      }
+      for (const condition of conditions.matchMedia) {
+        /** @type {grvsc.CSSRuleset[]} */
+        const ruleset = [];
+        pushColorRules(ruleset, getThemeClassName(theme.identifier, 'matchMedia'));
+        elements.push(media(condition.value, ruleset));
+      }
+      return elements;
+
+      /**
+       * @param {grvsc.CSSElement[]} container
+       * @param {string} parentClassName
+       */
+      function pushColorRules(container, parentClassName) {
+        for (const { className, color } of tokenClassNames) {
+          container.push(ruleset(`.${parentClassName} .${className}`, { color: replaceColor(color, theme.identifier) }));
+        }
+      }
+    });
+
+    if (stylesheets.length) {
       markdownAST.children.push({
         type: 'html',
         value: renderHTML(
           style({ class: 'vscode-highlight-styles' }, [
             injectStyles ? styles : '',
-            ...themeNames.map(theme => stylesheets[theme])
+            renderCSS([
+              ruleset('.mtki', { 'font-style': 'italic' }),
+              ruleset('.mtkb', { 'font-weight': 'bold' }),
+              ruleset('.mtku', { 'text-decoration': 'underline', 'text-underline-position': 'under' })
+            ]),
+            renderCSS(stylesheets)
           ])
         )
       });

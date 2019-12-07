@@ -1,4 +1,5 @@
 // @ts-check
+const { concatConditionalThemes } = require('./utils');
 const { ensureThemeLocation } = require('./storeUtils');
 
 /**
@@ -51,7 +52,7 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
     );
   }
   if (themeOption.prefersDarkTheme) {
-    themes = concatThemes(themes, [
+    themes = concatConditionalThemes(themes, [
       {
         identifier: themeOption.prefersDarkTheme,
         path: await ensureThemeLocation(themeOption.prefersDarkTheme, themeCache, markdownNode.fileAbsolutePath),
@@ -60,7 +61,7 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
     ]);
   }
   if (themeOption.prefersLightTheme) {
-    themes = concatThemes(themes, [
+    themes = concatConditionalThemes(themes, [
       {
         identifier: themeOption.prefersDarkTheme,
         path: await ensureThemeLocation(themeOption.prefersDarkTheme, themeCache, markdownNode.fileAbsolutePath),
@@ -72,25 +73,6 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
   return themes;
 }
 
-/**
- * @param {ConditionalTheme[] | undefined} arr1
- * @param {ConditionalTheme[]} arr2
- * @returns {ConditionalTheme[]}
- */
-function concatThemes(arr1, arr2) {
-  if (!arr1) arr1 = [];
-  arr2.forEach(addTheme);
-  return arr1;
 
-  /** @param {ConditionalTheme} theme */
-  function addTheme(theme) {
-    const existing = arr1.find(t => t.identifier === theme.identifier);
-    if (existing) {
-      existing.conditions = existing.conditions.concat(theme.conditions);
-    } else {
-      arr1 = arr1.concat(theme);
-    }
-  }
-}
 
 module.exports = getPossibleThemes;
