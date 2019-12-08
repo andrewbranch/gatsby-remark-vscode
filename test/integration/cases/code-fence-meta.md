@@ -3,5 +3,5 @@
 ```
 
 ```js {wrapperClass: 'test'}
-// should be highlighted
+// should not be highlighted
 ```

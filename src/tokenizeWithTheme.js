@@ -4,7 +4,7 @@ const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 /**
  * @param {Line[]} lines
  * @param {ConditionalTheme} theme
- * @param {import('vscode-textmate').IGrammar} grammar
+ * @param {import('vscode-textmate').IGrammar | undefined} grammar
  * @param {import('vscode-textmate').Registry} registry
  * @returns {TokenizeWithThemeResult}
  */
@@ -18,6 +18,14 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
   };
 
   registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
+  if (!grammar) {
+    return {
+      theme,
+      lines: undefined,
+      colorMap: registry.getColorMap(),
+      settings
+    };
+  }
 
   /** @type {BinaryToken[][]} */
   const tokens = [];

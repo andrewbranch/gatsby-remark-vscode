@@ -60,7 +60,7 @@ interface BinaryToken {
 }
 
 interface TokenizeWithThemeResult {
-  lines: BinaryToken[][];
+  lines: BinaryToken[][] | undefined;
   theme: ConditionalTheme;
   colorMap: string[];
   settings: Record<string, string>;
@@ -81,6 +81,7 @@ interface RegisteredNodeData {
   languageName: string;
   lines: Line[];
   possibleThemes: ConditionalTheme[];
+  isTokenized: boolean;
   tokenizationResults: TokenizeWithThemeResult[];
 }
 
@@ -92,7 +93,12 @@ interface MDASTNode {
 interface NodeRegistry {
   register: (node: MDASTNode, data: RegisteredNodeData) => void;
   mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
-  mapTokens: <T>(node: MDASTNode, lineIndex: number, mapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T) => T[];
+  mapTokens: <T>(
+    node: MDASTNode,
+    lineIndex: number,
+    tokenMapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T,
+    plainLineMapper: (text: string) => T
+  ) => T[];
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenClassNamesForTheme: (themeIdentifier: string) => { className: string, color: string }[];

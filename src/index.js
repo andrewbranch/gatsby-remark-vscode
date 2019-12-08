@@ -109,15 +109,14 @@ function createPlugin() {
         }
 
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
-        if (grammar) {
-          nodeRegistry.register(node, {
-            lines,
-            meta,
-            languageName,
-            possibleThemes,
-            tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
-          });
-        }
+        nodeRegistry.register(node, {
+          lines,
+          meta,
+          languageName,
+          possibleThemes,
+          isTokenized: !!grammar,
+          tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
+        });
       } finally {
         unlockRegistry();
       }
@@ -130,10 +129,15 @@ function createPlugin() {
         const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
         return span(
           mergeAttributes({ class: lineClassName }, line.attrs),
-          nodeRegistry.mapTokens(node, lineIndex, (tokenText, classNamesByTheme) =>
-            span({ class: classNamesByTheme.map(name => name.value).join(' ') }, [escapeHTML(tokenText)], {
-              whitespace: TriviaRenderFlags.NoWhitespace
-            })
+          nodeRegistry.mapTokens(
+            node,
+            lineIndex,
+            /** @returns {grvsc.HTMLElement | string} */
+            (tokenText, classNamesByTheme) =>
+              span({ class: classNamesByTheme.map(name => name.value).join(' ') }, [escapeHTML(tokenText)], {
+                whitespace: TriviaRenderFlags.NoWhitespace
+              }),
+            lineText => lineText
           ),
           { whitespace: TriviaRenderFlags.NoWhitespace }
         );

@@ -24,13 +24,17 @@ function createNodeRegistry() {
       data.tokenizationResults.forEach(({ theme, colorMap, settings }) => themeColors.set(theme.identifier, { colorMap, settings }));
     },
     mapLines: (node, mapper) => nodeMap.get(node).lines.map(mapper),
-    mapTokens: (node, lineIndex, mapper) => {
+    mapTokens: (node, lineIndex, tokenMapper, plainLineMapper) => {
       generateClassNames();
-      const { tokenizationResults, lines } = nodeMap.get(node);
+      const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
       const line = lines[lineIndex];
+      if (!isTokenized) {
+        return [plainLineMapper(line.text)];
+      }
+
       const zipped = zippedLines.get(node)[lineIndex];
       return zipped.map(tokens =>
-        mapper(
+        tokenMapper(
           line.text.slice(tokens[0].start, tokens[0].end),
           tokens.map(({ metadata }, i) => {
             const { theme } = tokenizationResults[i];
@@ -61,7 +65,8 @@ function createNodeRegistry() {
     if (themeTokenClassNameMap) return;
     themeTokenClassNameMap = new Map();
     zippedLines = new Map();
-    nodeMap.forEach(({ lines, tokenizationResults }, node) => {
+    nodeMap.forEach(({ lines, tokenizationResults, isTokenized }, node) => {
+      if (!isTokenized) return;
       /** @type {BinaryToken[][][]} */
       const zippedLinesForNode = [];
       zippedLines.set(node, zippedLinesForNode);
