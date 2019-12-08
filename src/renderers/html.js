@@ -43,7 +43,8 @@ const TriviaRenderFlags = {
   NewlineAfterOpeningTag: 1 << 0,
   NewlineBeforeClosingTag: 1 << 1,
   NewlineBetweenChildren: 1 << 2,
-  IndentChildren: 1 << 3
+  IndentChildren: 1 << 3,
+  SplitStringsIntoLines: 1 << 4
 };
 
 /**
@@ -78,7 +79,7 @@ function renderHTML(element) {
     }
 
     const writeSeparator = whitespace & TriviaRenderFlags.NewlineBetweenChildren ? writer.writeNewLine : writer.noop;
-    writer.writeList(children, writeChild, writeSeparator);
+    writer.writeList(children, child => writeChild(child, whitespace), writeSeparator);
     if (indented) {
       writer.decreaseIndent();
     }
@@ -89,10 +90,17 @@ function renderHTML(element) {
     writer.write(`</${tagName}>`);
   }
 
-  /** @param {grvsc.HTMLElement | grvsc.CSSElement | string} child */
-  function writeChild(child) {
+  /**
+   * @param {grvsc.HTMLElement | grvsc.CSSElement | string} child
+   * @param {number} parentWhitespace
+   */
+  function writeChild(child, parentWhitespace) {
     if (typeof child === 'string') {
-      writer.write(child);
+      if (parentWhitespace & TriviaRenderFlags.SplitStringsIntoLines) {
+        writer.writeList(child.split(/\r?\n/), writer.write, writer.writeNewLine);
+      } else {
+        writer.write(child);
+      }
     } else if ('tagName' in child) {
       writeElement(child);
     } else {

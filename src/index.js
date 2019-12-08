@@ -14,8 +14,14 @@ const { getDefaultLineTransformers, getTransformedLines } = require('./transform
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
-const { joinClassNames, ruleset, media } = require('./renderers/css');
-const { getThemeClassName, getThemeClassNames, getStylesFromThemeSettings, flatMap, groupConditions } = require('./utils');
+const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
+const {
+  getThemeClassName,
+  getThemeClassNames,
+  getStylesFromThemeSettings,
+  flatMap,
+  groupConditions
+} = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
@@ -173,7 +179,7 @@ function createPlugin() {
       const conditions = groupConditions(theme.conditions);
       /** @type {grvsc.CSSElement[]} */
       const elements = [];
-      const tokenClassNames = nodeRegistry.getTokenClassNamesForTheme(theme.identifier);
+      const tokenClassNames = nodeRegistry.getTokenStylesForTheme(theme.identifier);
       const containerStyles = getStylesFromThemeSettings(settings);
       if (conditions.default) {
         pushColorRules(elements, getThemeClassName(theme.identifier, 'default'));
@@ -182,20 +188,31 @@ function createPlugin() {
         /** @type {grvsc.CSSRuleset[]} */
         const ruleset = [];
         pushColorRules(ruleset, getThemeClassName(theme.identifier, 'matchMedia'));
-        elements.push(media(condition.value, ruleset));
+        elements.push(media(condition.value, ruleset, theme.identifier));
       }
       return elements;
 
       /**
        * @param {grvsc.CSSElement[]} container
        * @param {string} parentClassName
+       * @param {string=} leadingComment
        */
-      function pushColorRules(container, parentClassName) {
+      function pushColorRules(container, parentClassName, leadingComment) {
         if (containerStyles.length) {
-          container.push(ruleset(`.${parentClassName}`, containerStyles));
+          container.push(ruleset(`.${parentClassName}`, containerStyles, leadingComment));
+          leadingComment = undefined;
         }
-        for (const { className, color } of tokenClassNames) {
-          container.push(ruleset(`.${parentClassName} .${className}`, { color: replaceColor(color, theme.identifier) }));
+        for (const { className, css } of tokenClassNames) {
+          container.push(
+            ruleset(
+              `.${parentClassName} .${className}`,
+              css.map(decl =>
+                decl.property === 'color' ? declaration('color', replaceColor(decl.value, theme.identifier)) : decl
+              ),
+              leadingComment
+            )
+          );
+          leadingComment = undefined;
         }
       }
     });
@@ -203,15 +220,7 @@ function createPlugin() {
     if (themeRules.length) {
       markdownAST.children.push({
         type: 'html',
-        value: renderHTML(
-          style({ class: 'grvsc-styles' }, [
-            injectStyles ? styles : '',
-            ruleset('.mtki', { 'font-style': 'italic' }),
-            ruleset('.mtkb', { 'font-weight': 'bold' }),
-            ruleset('.mtku', { 'text-decoration': 'underline', 'text-underline-position': 'under' }),
-            ...themeRules
-          ])
-        )
+        value: renderHTML(style({ class: 'grvsc-styles' }, [injectStyles ? styles : '', ...themeRules]))
       });
     }
   }

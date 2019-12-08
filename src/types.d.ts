@@ -96,12 +96,12 @@ interface NodeRegistry {
   mapTokens: <T>(
     node: MDASTNode,
     lineIndex: number,
-    tokenMapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T,
+    tokenMapper: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => T,
     plainLineMapper: (text: string) => T
   ) => T[];
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
-  getTokenClassNamesForTheme: (themeIdentifier: string) => { className: string, color: string }[];
+  getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }
 
 // Line transformers
@@ -156,12 +156,14 @@ declare namespace grvsc {
     kind: 'MediaQuery';
     mediaQueryList: string;
     body: CSSRuleset[];
+    leadingComment?: string;
   }
 
   type CSSRuleset = {
     kind: 'Ruleset';
     selectors: string[];
     body: CSSDeclaration[];
+    leadingComment?: string;
   };
 
   type CSSDeclaration = {

@@ -73,6 +73,4 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
   return themes;
 }
 
-
-
 module.exports = getPossibleThemes;

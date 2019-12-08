@@ -1,6 +1,7 @@
 // @ts-check
 const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./utils');
-const { getClassNameFromMetadata } = require('../lib/vscode/modes');
+const { getClassNamesFromMetadata } = require('../lib/vscode/modes');
+const { declaration } = require('./renderers/css');
 
 /**
  * @returns {NodeRegistry}
@@ -21,7 +22,9 @@ function createNodeRegistry() {
     register: (node, data) => {
       nodeMap.set(node, data);
       themes = concatConditionalThemes(themes, data.possibleThemes);
-      data.tokenizationResults.forEach(({ theme, colorMap, settings }) => themeColors.set(theme.identifier, { colorMap, settings }));
+      data.tokenizationResults.forEach(({ theme, colorMap, settings }) =>
+        themeColors.set(theme.identifier, { colorMap, settings })
+      );
     },
     mapLines: (node, mapper) => nodeMap.get(node).lines.map(mapper),
     mapTokens: (node, lineIndex, tokenMapper, plainLineMapper) => {
@@ -39,9 +42,9 @@ function createNodeRegistry() {
           tokens.map(({ metadata }, i) => {
             const { theme } = tokenizationResults[i];
             const themeClassNames = themeTokenClassNameMap.get(theme.identifier);
-            const canonicalClassName = getClassNameFromMetadata(metadata);
+            const canonicalClassNames = getClassNamesFromMetadata(metadata);
             return {
-              value: themeClassNames.get(canonicalClassName),
+              value: canonicalClassNames.map(c => themeClassNames.get(c)),
               theme
             };
           })
@@ -50,12 +53,26 @@ function createNodeRegistry() {
     },
     forEachNode: nodeMap.forEach.bind(nodeMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
-    getTokenClassNamesForTheme: themeIdentifier => {
-      /** @type {ReturnType<NodeRegistry['getTokenClassNamesForTheme']>} */
+    getTokenStylesForTheme: themeIdentifier => {
+      /** @type {ReturnType<NodeRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
       themeTokenClassNameMap.get(themeIdentifier).forEach((className, canonicalClassName) => {
-        result.push({ className, color: getColorFromColorMap(colors.colorMap, canonicalClassName) });
+        if (canonicalClassName === 'mtkb') {
+          result.unshift({ className, css: [declaration('font-weight', 'bold')] });
+        } else if (canonicalClassName === 'mtki') {
+          result.unshift({ className, css: [declaration('font-style', 'italic')] });
+        } else if (canonicalClassName === 'mtku') {
+          result.unshift({
+            className,
+            css: [declaration('text-decoration', 'underline'), declaration('text-underline-position', 'under')]
+          });
+        } else {
+          result.push({
+            className,
+            css: [declaration('color', getColorFromColorMap(colors.colorMap, canonicalClassName))]
+          });
+        }
       });
       return result;
     }
@@ -75,19 +92,21 @@ function createNodeRegistry() {
         zippedLinesForNode[lineIndex] = zipped;
         zipped.forEach(tokensAtPosition => {
           tokensAtPosition.forEach((token, themeIndex) => {
-            const canonicalClassName = getClassNameFromMetadata(token.metadata);
+            const canonicalClassNames = getClassNamesFromMetadata(token.metadata);
             const { theme } = tokenizationResults[themeIndex];
             let themeClassNames = themeTokenClassNameMap.get(theme.identifier);
             if (!themeClassNames) {
               themeClassNames = new Map();
               themeTokenClassNameMap.set(theme.identifier, themeClassNames);
             }
-            themeClassNames.set(
-              canonicalClassName,
-              tokensAtPosition.length > 1
-                ? getThemePrefixedTokenClassName(canonicalClassName, theme.identifier)
-                : canonicalClassName
-            );
+            canonicalClassNames.forEach(canonicalClassName => {
+              themeClassNames.set(
+                canonicalClassName,
+                tokensAtPosition.length > 1
+                  ? getThemePrefixedTokenClassName(canonicalClassName, theme.identifier)
+                  : canonicalClassName
+              );
+            });
           });
         });
       });

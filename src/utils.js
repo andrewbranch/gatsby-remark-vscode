@@ -104,8 +104,8 @@ function getThemeClassNames(theme) {
 }
 
 /**
- * 
- * @param {string} themeIdentifier 
+ *
+ * @param {string} themeIdentifier
  * @param {ThemeCondition['condition']} conditionKind
  */
 function getThemeClassName(themeIdentifier, conditionKind) {
@@ -165,8 +165,8 @@ function concatConditionalThemes(arr1, arr2) {
 }
 
 /**
- * @param {ThemeCondition[]} arr1 
- * @param {ThemeCondition[]} arr2 
+ * @param {ThemeCondition[]} arr1
+ * @param {ThemeCondition[]} arr2
  */
 function concatConditions(arr1, arr2) {
   arr2.forEach(addCondition);
@@ -180,10 +180,9 @@ function concatConditions(arr1, arr2) {
   }
 }
 
-
 /**
- * @param {ConditionalTheme} a 
- * @param {ConditionalTheme} b 
+ * @param {ConditionalTheme} a
+ * @param {ConditionalTheme} b
  */
 function conditionalThemesAreEqual(a, b) {
   if (a.identifier !== b.identifier) return false;
@@ -199,21 +198,21 @@ function conditionalThemesAreEqual(a, b) {
 }
 
 /**
- * @param {ThemeCondition[]} conditions 
+ * @param {ThemeCondition[]} conditions
  */
 function sortConditions(conditions) {
   return conditions.slice().sort(compareConditions);
 }
 
 /**
- * @param {ThemeCondition} a 
- * @param {ThemeCondition} b 
+ * @param {ThemeCondition} a
+ * @param {ThemeCondition} b
  */
 function compareConditions(a, b) {
   if (a.condition < b.condition) return -1;
   if (a.condition > b.condition) return 1;
   switch (a.condition) {
-    case "matchMedia":
+    case 'matchMedia':
       // @ts-ignore
       const bValue = b.value;
       if (a.value < bValue) return -1;

@@ -243,7 +243,7 @@ describe('utils', () => {
 });
 
 describe('integration tests', () => {
-  const update = /^|\b(-u|--update|--updateSnapshot|--update-snapshot)\b|$/.test(process.argv.join(' '));
+  const update = /(\s|^)(-u|--update|--updateSnapshot|--update-snapshot)(\s|$)/.test(process.argv.join(' '));
   const defaultOptions = require('./integration/options');
   const processor = unified()
     .use(remark, { commonmark: true })
@@ -270,17 +270,15 @@ describe('integration tests', () => {
     const md = await readFile(extensionless + '.md');
     const options = tryRequire(extensionless);
     const expected = await tryReadFile(extensionless + '.expected.html');
-    const markdownAST =  processor.parse(md);
+    const markdownAST = processor.parse(md);
     await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
     if (!expected || update) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');
       newCaseHTML.push(renderNewCase(name, html));
-    } else {
-      if (html !== expected) {
-        failedCaseHTML.push(renderTestDiff(name, html, expected));
-        expect(html).toBe(expected);
-      }
+    } else if (html !== expected) {
+      failedCaseHTML.push(renderTestDiff(name, html, expected));
+      expect(html).toBe(expected);
     }
   });
 

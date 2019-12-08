@@ -48,22 +48,25 @@ function joinClassNames(...classNames) {
 /**
  * @param {string} mediaQueryList
  * @param {grvsc.CSSRuleset[]} body
+ * @param {string=} leadingComment
  * @returns {grvsc.CSSMediaQuery}
  */
-function media(mediaQueryList, body) {
-  return { kind: 'MediaQuery', mediaQueryList, body };
+function media(mediaQueryList, body, leadingComment) {
+  return { kind: 'MediaQuery', mediaQueryList, body, leadingComment };
 }
 
 /**
  * @param {string | string[]} selector
  * @param {grvsc.CSSDeclaration[] | Record<string, string>} body
+ * * @param {string=} leadingComment
  * @returns {grvsc.CSSRuleset}
  */
-function ruleset(selector, body) {
+function ruleset(selector, body, leadingComment) {
   return {
     kind: 'Ruleset',
     selectors: Array.isArray(selector) ? selector : [selector],
-    body: Array.isArray(body) ? body : Object.keys(body).map(property => declaration(property, body[property]))
+    body: Array.isArray(body) ? body : Object.keys(body).map(property => declaration(property, body[property])),
+    leadingComment
   };
 }
 
@@ -86,9 +89,14 @@ function renderCSS(elements, writer = createWriter()) {
     elements,
     element => {
       if (element.kind === 'MediaQuery') {
+        writeComment(element);
         writer.write(`@media ${element.mediaQueryList} {`);
         writer.increaseIndent();
+        writer.writeNewLine();
         writer.writeList(element.body, renderRuleset, writer.writeNewLine);
+        writer.decreaseIndent();
+        writer.writeNewLine();
+        writer.write('}');
       } else {
         renderRuleset(element);
       }
@@ -100,6 +108,7 @@ function renderCSS(elements, writer = createWriter()) {
 
   /** @param {grvsc.CSSRuleset} ruleset */
   function renderRuleset(ruleset) {
+    writeComment(ruleset);
     writer.writeList(ruleset.selectors, writer.write, () => {
       writer.write(',');
       writer.writeNewLine();
@@ -109,14 +118,27 @@ function renderCSS(elements, writer = createWriter()) {
     const multiline = ruleset.body.length > 1;
     if (multiline) {
       writer.increaseIndent();
+      writer.writeNewLine();
+    } else {
+      writer.write(' ');
     }
     writer.writeList(ruleset.body, writeDeclaration, writer.writeNewLine);
     if (multiline) {
       writer.decreaseIndent();
+      writer.writeNewLine();
     } else {
       writer.write(' ');
     }
     writer.write('}');
+  }
+
+  /** @param {grvsc.CSSElement} element */
+  function writeComment(element) {
+    if (element.leadingComment) {
+      writer.writeNewLine();
+      writer.write(`/* ${element.leadingComment} */`);
+      writer.writeNewLine();
+    }
   }
 
   /** @param {grvsc.CSSDeclaration} declaration */

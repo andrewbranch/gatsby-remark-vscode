@@ -8,7 +8,8 @@
     "prebuild": "git submodule update --init",
     "check": "tsc -p .",
     "test": "jest",
-    "pretest": "npm run check && npm run build && prettier --check src/**/*.js",
+    "test:update": "jest --runInBand -u",
+    "pretest": "npm run check && npm run build && prettier --check 'src/**/*.js'",
     "prepublishOnly": "npm test",
     "format": "prettier --write 'src/**/*.js'"
   },
