@@ -13,9 +13,9 @@ const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { getDefaultLineTransformers, getTransformedLines } = require('./transformers');
 const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
 const { getGrammar, getScope } = require('./storeUtils');
-const { getThemeClassName, getThemeClassNames, flatMap, groupConditions } = require('./utils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
-const { joinClassNames, ruleset, media, renderCSS } = require('./renderers/css');
+const { joinClassNames, ruleset, media } = require('./renderers/css');
+const { getThemeClassName, getThemeClassNames, getStylesFromThemeSettings, flatMap, groupConditions } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
@@ -123,10 +123,10 @@ function createPlugin() {
       }
     }
 
-    nodeRegistry.forEachNode(({ meta, lines, languageName, possibleThemes }, node) => {
+    nodeRegistry.forEachNode(({ meta, languageName, possibleThemes }, node) => {
       const lineElements = nodeRegistry.mapLines(node, (line, lineIndex) => {
         /** @type {LineData} */
-        const lineData = { meta, index: lines.indexOf(line), content: line.text, language: languageName };
+        const lineData = { meta, index: lineIndex, content: line.text, language: languageName };
         const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
         return span(
           mergeAttributes({ class: lineClassName }, line.attrs),
@@ -150,13 +150,13 @@ function createPlugin() {
           : wrapperClassName;
 
       const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
-      const preClassName = joinClassNames(wrapperClassNameValue, ...themeClassNames);
+      const preClassName = joinClassNames('grvsc-container', wrapperClassNameValue, ...themeClassNames);
       node.type = 'html';
       node.value = renderHTML(
         pre(
           { class: preClassName, 'data-language': languageName },
           [
-            code({ class: 'vscode-highlight-code' }, lineElements, {
+            code({ class: 'grvsc-code' }, lineElements, {
               whitespace: TriviaRenderFlags.NewlineBetweenChildren
             })
           ],
@@ -165,11 +165,12 @@ function createPlugin() {
       );
     });
 
-    const stylesheets = flatMap(nodeRegistry.getAllPossibleThemes(), theme => {
+    const themeRules = flatMap(nodeRegistry.getAllPossibleThemes(), ({ theme, settings }) => {
       const conditions = groupConditions(theme.conditions);
       /** @type {grvsc.CSSElement[]} */
       const elements = [];
       const tokenClassNames = nodeRegistry.getTokenClassNamesForTheme(theme.identifier);
+      const containerStyles = getStylesFromThemeSettings(settings);
       if (conditions.default) {
         pushColorRules(elements, getThemeClassName(theme.identifier, 'default'));
       }
@@ -186,24 +187,25 @@ function createPlugin() {
        * @param {string} parentClassName
        */
       function pushColorRules(container, parentClassName) {
+        if (containerStyles.length) {
+          container.push(ruleset(`.${parentClassName}`, containerStyles));
+        }
         for (const { className, color } of tokenClassNames) {
           container.push(ruleset(`.${parentClassName} .${className}`, { color: replaceColor(color, theme.identifier) }));
         }
       }
     });
 
-    if (stylesheets.length) {
+    if (themeRules.length) {
       markdownAST.children.push({
         type: 'html',
         value: renderHTML(
-          style({ class: 'vscode-highlight-styles' }, [
+          style({ class: 'grvsc-styles' }, [
             injectStyles ? styles : '',
-            renderCSS([
-              ruleset('.mtki', { 'font-style': 'italic' }),
-              ruleset('.mtkb', { 'font-weight': 'bold' }),
-              ruleset('.mtku', { 'text-decoration': 'underline', 'text-underline-position': 'under' })
-            ]),
-            renderCSS(stylesheets)
+            ruleset('.mtki', { 'font-style': 'italic' }),
+            ruleset('.mtkb', { 'font-weight': 'bold' }),
+            ruleset('.mtku', { 'text-decoration': 'underline', 'text-underline-position': 'under' }),
+            ...themeRules
           ])
         )
       });

@@ -61,8 +61,9 @@ interface BinaryToken {
 
 interface TokenizeWithThemeResult {
   lines: BinaryToken[][];
-  colorMap: string[];
   theme: ConditionalTheme;
+  colorMap: string[];
+  settings: Record<string, string>;
 }
 
 type DefaultThemeCondition = { condition: 'default' };
@@ -93,7 +94,7 @@ interface NodeRegistry {
   mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
   mapTokens: <T>(node: MDASTNode, lineIndex: number, mapper: (text: string, classNames: { value: string, theme: ConditionalTheme }[]) => T) => T[];
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
-  getAllPossibleThemes: () => ConditionalTheme[];
+  getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenClassNamesForTheme: (themeIdentifier: string) => { className: string, color: string }[];
 }
 
@@ -124,10 +125,20 @@ type HighlightCommentTransfomerState = {
 // Renderers
 
 declare namespace grvsc {
+  interface Writer {
+    write: (text: string) => void;
+    writeList: <T>(list: T[], writeElement: (element: T) => void, writeSeparator: () => void) => void;
+    writeNewLine: () => void;
+    increaseIndent: () => void;
+    decreaseIndent: () => void;
+    getText: () => string;
+    noop: () => void;
+  }
+
   type HTMLElement = {
     tagName: string;
     attributes: Record<string, string>;
-    children: (HTMLElement | string)[];
+    children: (HTMLElement | CSSElement | string)[];
     renderOptions?: RenderOptions;
   };
 

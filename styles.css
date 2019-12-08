@@ -12,7 +12,7 @@
   --vscode-highlight-line-highlighted-border-color: transparent;
 }
 
-.vscode-highlight {
+.grvsc-container {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   padding-top: 1rem;
@@ -24,12 +24,12 @@
   font-feature-settings: normal;
 }
 
-.vscode-highlight-code {
+.grvsc-code {
   display: inline-block;
   min-width: 100%;
 }
 
-.vscode-highlight-line {
+.grvsc-line {
   display: inline-block;
   box-sizing: border-box;
   width: 100%;
@@ -39,7 +39,7 @@
   padding-right: var(--vscode-highlight-padding-right);
 }
 
-.vscode-highlight-line-highlighted {
+.grvsc-highlighted {
   background-color: var(--vscode-highlight-line-highlighted-background-color);
   box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
 }

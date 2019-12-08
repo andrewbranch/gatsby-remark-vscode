@@ -10,25 +10,25 @@ function createNodeRegistry() {
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
   let themes;
-  /** @type {Map<string, string[]>} */
-  const colorMaps = new Map();
+  /** @type {Map<string, { colorMap: string[], settings: Record<string, string> }>} */
+  const themeColors = new Map();
   /** @type {Map<string, Map<string, string>>} */
   let themeTokenClassNameMap;
-  /** @type {Map<MDASTNode, BinaryToken[][]>} */
+  /** @type {Map<MDASTNode, BinaryToken[][][]>} */
   let zippedLines;
 
   return {
     register: (node, data) => {
       nodeMap.set(node, data);
       themes = concatConditionalThemes(themes, data.possibleThemes);
-      data.tokenizationResults.forEach(({ theme, colorMap }) => colorMaps.set(theme.identifier, colorMap));
+      data.tokenizationResults.forEach(({ theme, colorMap, settings }) => themeColors.set(theme.identifier, { colorMap, settings }));
     },
     mapLines: (node, mapper) => nodeMap.get(node).lines.map(mapper),
     mapTokens: (node, lineIndex, mapper) => {
       generateClassNames();
       const { tokenizationResults, lines } = nodeMap.get(node);
       const line = lines[lineIndex];
-      const zipped = zippedLines.get(node);
+      const zipped = zippedLines.get(node)[lineIndex];
       return zipped.map(tokens =>
         mapper(
           line.text.slice(tokens[0].start, tokens[0].end),
@@ -45,13 +45,13 @@ function createNodeRegistry() {
       );
     },
     forEachNode: nodeMap.forEach.bind(nodeMap),
-    getAllPossibleThemes: () => themes,
+    getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenClassNamesForTheme: themeIdentifier => {
       /** @type {ReturnType<NodeRegistry['getTokenClassNamesForTheme']>} */
       const result = [];
-      const colorMap = colorMaps.get(themeIdentifier);
+      const colors = themeColors.get(themeIdentifier);
       themeTokenClassNameMap.get(themeIdentifier).forEach((className, canonicalClassName) => {
-        result.push({ className, color: getColorFromColorMap(colorMap, canonicalClassName) });
+        result.push({ className, color: getColorFromColorMap(colors.colorMap, canonicalClassName) });
       });
       return result;
     }
@@ -62,9 +62,12 @@ function createNodeRegistry() {
     themeTokenClassNameMap = new Map();
     zippedLines = new Map();
     nodeMap.forEach(({ lines, tokenizationResults }, node) => {
+      /** @type {BinaryToken[][][]} */
+      const zippedLinesForNode = [];
+      zippedLines.set(node, zippedLinesForNode);
       lines.forEach((_, lineIndex) => {
         const zipped = zipLineTokens(tokenizationResults.map(t => t.lines[lineIndex]));
-        zippedLines.set(node, zipped);
+        zippedLinesForNode[lineIndex] = zipped;
         zipped.forEach(tokensAtPosition => {
           tokensAtPosition.forEach((token, themeIndex) => {
             const canonicalClassName = getClassNameFromMetadata(token.metadata);
@@ -124,6 +127,7 @@ function zipLineTokens(lineTokenSets) {
       }
     }
     result.push(tokensAtPosition);
+    start = end;
   }
 
   return result;

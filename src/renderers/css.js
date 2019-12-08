@@ -78,10 +78,10 @@ function declaration(property, value) {
 
 /**
  * @param {grvsc.CSSElement[]} elements
+ * @param {grvsc.Writer} writer
  * @returns {string}
  */
-function renderCSS(elements) {
-  const writer = createWriter();
+function renderCSS(elements, writer = createWriter()) {
   writer.writeList(
     elements,
     element => {

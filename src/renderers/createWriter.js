@@ -1,3 +1,6 @@
+/**
+ * @returns {grvsc.Writer}
+ */
 function createWriter() {
   let out = '';
   let indent = 0;

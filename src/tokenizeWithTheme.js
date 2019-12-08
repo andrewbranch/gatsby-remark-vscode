@@ -39,7 +39,8 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
   return {
     theme,
     lines: tokens,
-    colorMap: registry.getColorMap()
+    colorMap: registry.getColorMap(),
+    settings
   };
 }
 

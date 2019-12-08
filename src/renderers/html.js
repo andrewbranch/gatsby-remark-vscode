@@ -1,12 +1,12 @@
 // @ts-check
 const escape = require('lodash.escape');
 const createWriter = require('./createWriter');
-const { joinClassNames } = require('./css');
+const { joinClassNames, renderCSS } = require('./css');
 
 /**
  * @param {string} tagName
  * @param {object} attributes
- * @param {(grvsc.HTMLElement | string)[]} children
+ * @param {(grvsc.HTMLElement | grvsc.CSSElement | string)[]} children
  * @param {grvsc.RenderOptions=} renderOptions
  * @returns {grvsc.HTMLElement}
  */
@@ -27,7 +27,7 @@ function mergeAttributes(...attrs) {
 
 /**
  * @param {string} tagName
- * @returns {(attributes?: object, children?: (grvsc.HTMLElement | string)[], options?: grvsc.RenderOptions) => grvsc.HTMLElement}
+ * @returns {(attributes?: object, children?: (grvsc.HTMLElement | grvsc.CSSElement | string)[], options?: grvsc.RenderOptions) => grvsc.HTMLElement}
  */
 function factory(tagName) {
   return (attributes, children, options) => createElement(tagName, attributes || {}, children || [], options);
@@ -89,12 +89,14 @@ function renderHTML(element) {
     writer.write(`</${tagName}>`);
   }
 
-  /** @param {grvsc.HTMLElement | string} child */
+  /** @param {grvsc.HTMLElement | grvsc.CSSElement | string} child */
   function writeChild(child) {
     if (typeof child === 'string') {
       writer.write(child);
-    } else {
+    } else if ('tagName' in child) {
       writeElement(child);
+    } else {
+      renderCSS([child], writer);
     }
   }
 }

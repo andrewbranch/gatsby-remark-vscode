@@ -6,6 +6,7 @@ const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
+const { declaration } = require('./renderers/css');
 const { createHash } = require('crypto');
 
 const readFile = util.promisify(fs.readFile);
@@ -223,13 +224,30 @@ function compareConditions(a, b) {
 
 /**
  * @param {ThemeCondition[]} conditions
- * @returns {{ default: DefaultThemeCondition | undefined, matchMedia: MatchMediaThemeCondition[] }}
  */
 function groupConditions(conditions) {
   return {
     default: conditions.find(/** @returns {c is DefaultThemeCondition} */ c => c.condition === 'default'),
     matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia')
   };
+}
+
+const settingPropertyMap = { 'editor.background': 'background-color', 'editor.foreground': 'color' };
+
+/**
+ * @param {Record<string, string>} settings
+ * @returns {grvsc.CSSDeclaration[]}
+ */
+function getStylesFromThemeSettings(settings) {
+  /** @type {grvsc.CSSDeclaration[]} */
+  const decls = [];
+  for (const key in settings) {
+    const property = settingPropertyMap[key];
+    if (property) {
+      decls.push(declaration(property, settings[key]));
+    }
+  }
+  return decls;
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -253,5 +271,6 @@ module.exports = {
   getThemeClassNames,
   flatMap,
   concatConditionalThemes,
-  groupConditions
+  groupConditions,
+  getStylesFromThemeSettings
 };
