@@ -56,10 +56,10 @@ class Layout extends React.Component {
       <>
         <Helmet>
           <style children={`
-            .vscode-highlight {
-              --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.1); /* default: transparent */
-              --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.6); /* default: transparent */
-              --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+            .grvsc-container {
+              --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.1); /* default: transparent */
+              --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.6); /* default: transparent */
+              --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
             }
           `} />
         </Helmet>
