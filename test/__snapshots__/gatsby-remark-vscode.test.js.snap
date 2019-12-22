@@ -223,8 +223,8 @@ Object {
     Object {
       "lang": "embedded",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"embedded\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
-<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"embedded\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
+<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -232,33 +232,12 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">
+      "value": "<style class=\\"grvsc-styles\\">
   
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
 </style>",
     },
   ],
@@ -313,8 +292,8 @@ Object {
     Object {
       "lang": "",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
-<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
+<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -322,12 +301,12 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">
+      "value": "<style class=\\"grvsc-styles\\">
   
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
 </style>",
     },
   ],
@@ -345,8 +324,8 @@ Object {
     Object {
       "lang": "none",
       "type": "html",
-      "value": "<pre class=\\"default-dark vscode-highlight\\" data-language=\\"none\\"><code class=\\"vscode-highlight-code\\"><span class=\\"vscode-highlight-line\\">const x = 3;</span>
-<span class=\\"vscode-highlight-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"none\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
+<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -354,12 +333,12 @@ Object {
     },
     Object {
       "type": "html",
-      "value": "<style class=\\"vscode-highlight-styles\\">
+      "value": "<style class=\\"grvsc-styles\\">
   
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
 </style>",
     },
   ],

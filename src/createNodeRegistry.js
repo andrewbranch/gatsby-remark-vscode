@@ -57,23 +57,27 @@ function createNodeRegistry() {
       /** @type {ReturnType<NodeRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
-      themeTokenClassNameMap.get(themeIdentifier).forEach((className, canonicalClassName) => {
-        if (canonicalClassName === 'mtkb') {
-          result.unshift({ className, css: [declaration('font-weight', 'bold')] });
-        } else if (canonicalClassName === 'mtki') {
-          result.unshift({ className, css: [declaration('font-style', 'italic')] });
-        } else if (canonicalClassName === 'mtku') {
-          result.unshift({
-            className,
-            css: [declaration('text-decoration', 'underline'), declaration('text-underline-position', 'under')]
-          });
-        } else {
-          result.push({
-            className,
-            css: [declaration('color', getColorFromColorMap(colors.colorMap, canonicalClassName))]
-          });
-        }
-      });
+      const classNameMap = themeTokenClassNameMap.get(themeIdentifier);
+      if (classNameMap) {
+        classNameMap.forEach((className, canonicalClassName) => {
+          if (canonicalClassName === 'mtkb') {
+            result.unshift({ className, css: [declaration('font-weight', 'bold')] });
+          } else if (canonicalClassName === 'mtki') {
+            result.unshift({ className, css: [declaration('font-style', 'italic')] });
+          } else if (canonicalClassName === 'mtku') {
+            result.unshift({
+              className,
+              css: [declaration('text-decoration', 'underline'), declaration('text-underline-position', 'under')]
+            });
+          } else {
+            result.push({
+              className,
+              css: [declaration('color', getColorFromColorMap(colors.colorMap, canonicalClassName))]
+            });
+          }
+        });
+      }
+
       return result;
     }
   };
