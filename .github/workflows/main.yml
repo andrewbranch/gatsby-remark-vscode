@@ -72,3 +72,5 @@ jobs:
         version=`node .github/workflows/getVersion.js 2.0.0`
         npm --no-git-tag-version version $version
         npm publish --tag alpha
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
