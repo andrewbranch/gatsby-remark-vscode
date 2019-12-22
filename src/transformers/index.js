@@ -1,5 +1,5 @@
 // @ts-check
-const { highlightMetaTransformer } = require('./highlightmetaTransformer');
+const { highlightMetaTransformer } = require('./highlightMetaTransformer');
 const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiveLineTransformer');
 const getTransformedLines = require('./getTransformedLines');
 

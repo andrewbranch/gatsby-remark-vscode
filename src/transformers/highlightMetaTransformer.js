@@ -12,7 +12,7 @@ const numberRegExp = /^\d+$/;
  * @param {object} meta
  * @returns {number[]}
  */
-function getLinesFrommeta(meta) {
+function getLinesFromMeta(meta) {
   const lines = [];
   for (const key in meta) {
     if (meta[key] === true) {
@@ -33,7 +33,7 @@ function getLinesFrommeta(meta) {
 function getInitialState(meta) {
   return {
     lineNumber: 1,
-    highlightedLines: getLinesFrommeta(meta)
+    highlightedLines: getLinesFromMeta(meta)
   };
 }
 
