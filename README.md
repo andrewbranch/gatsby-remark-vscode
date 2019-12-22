@@ -6,6 +6,16 @@ A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses V
 
 Includes OS dark mode support 🌙
 
+## v2 is underway! 🎉
+
+Feedback on the WIP v2 is greatly appreciated. You can try it out with
+
+```bash
+npm install gatsby-remark-vscode@alpha
+```
+
+and leave feedback at [#64](https://github.com/andrewbranch/gatsby-remark-vscode/issues/64).
+
 ## Table of contents
 
 - [Why gatsby-remark-vscode?](#why-gatsby-remark-vscode)
