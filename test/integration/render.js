@@ -47,10 +47,10 @@ function renderInIframe(html) {
     <html>
       <head>
         <style>
-          .vscode-highlight {
-            --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+          .grvsc-container {
+            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
           }
         </style>
       </head>

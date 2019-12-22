@@ -16,7 +16,7 @@ function addClassName(attrs, className) {
  */
 function highlightLine(line, newText) {
   return {
-    attrs: addClassName(line.attrs, 'vscode-highlight-line-highlighted'),
+    attrs: addClassName(line.attrs, 'grvsc-highlighted'),
     text: typeof newText === 'string' ? newText : line.text
   };
 }

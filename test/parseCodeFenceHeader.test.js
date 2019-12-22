@@ -2,50 +2,50 @@
 const parse = require('../src/parseCodeFenceHeader');
 
 describe('parseCodeFenceHeader', () => {
-  it('parses language name without options', () => {
-    expect(parse('jsx')).toEqual({ languageName: 'jsx', options: {} });
-    expect(parse('c++')).toEqual({ languageName: 'c++', options: {} });
+  it('parses language name without meta', () => {
+    expect(parse('jsx')).toEqual({ languageName: 'jsx', meta: {} });
+    expect(parse('c++')).toEqual({ languageName: 'c++', meta: {} });
   });
 
-  it('parses empty options', () => {
-    expect(parse('jsx{}')).toEqual({ languageName: 'jsx', options: {} });
+  it('parses empty meta', () => {
+    expect(parse('jsx{}')).toEqual({ languageName: 'jsx', meta: {} });
   });
 
-  it('ignores space between language name and options', () => {
-    expect(parse('jsx     {}')).toEqual({ languageName: 'jsx', options: {} });
+  it('ignores space between language name and meta', () => {
+    expect(parse('jsx     {}')).toEqual({ languageName: 'jsx', meta: {} });
   });
 
-  it('ignores space within options object', () => {
-    expect(parse('jsx{    }')).toEqual({ languageName: 'jsx', options: {} });
+  it('ignores space within meta object', () => {
+    expect(parse('jsx{    }')).toEqual({ languageName: 'jsx', meta: {} });
   });
 
   it('parses gatsby-remark-prismjs line highlighting syntax', () => {
-    expect(parse('jsx{1,4-6}')).toEqual({ languageName: 'jsx', options: { 1: true, '4-6': true } });
+    expect(parse('jsx{1,4-6}')).toEqual({ languageName: 'jsx', meta: { 1: true, '4-6': true } });
   });
 
   it('ignores space between object keys', () => {
-    expect(parse('jsx{1,    4-6}')).toEqual({ languageName: 'jsx', options: { 1: true, '4-6': true } });
+    expect(parse('jsx{1,    4-6}')).toEqual({ languageName: 'jsx', meta: { 1: true, '4-6': true } });
   });
 
   it('parses objects with number values', () => {
     expect(parse('jsx{a: 24e3, b: .9, c: -4.2}'))
-      .toEqual({ languageName: 'jsx', options: { a: 24e3, b: 0.9, c: -4.2 } });
+      .toEqual({ languageName: 'jsx', meta: { a: 24e3, b: 0.9, c: -4.2 } });
   });
 
   it('parses objects with string values', () => {
-    expect(parse(`jsx{a: "b", c: 'd'}`)).toEqual({ languageName: 'jsx', options: { a: 'b', c: 'd' } });
+    expect(parse(`jsx{a: "b", c: 'd'}`)).toEqual({ languageName: 'jsx', meta: { a: 'b', c: 'd' } });
   });
 
   it('parses objects with boolean values', () => {
-    expect(parse('jsx{a: true, b: false}')).toEqual({ languageName: 'jsx', options: { a: true, b: false } });
+    expect(parse('jsx{a: true, b: false}')).toEqual({ languageName: 'jsx', meta: { a: true, b: false } });
   });
 
   it('parses nested objects', () => {
-    expect(parse('jsx{ a: { 1 } }')).toEqual({ languageName: 'jsx', options: { a: { 1: true } } });
+    expect(parse('jsx{ a: { 1 } }')).toEqual({ languageName: 'jsx', meta: { a: { 1: true } } });
   });
 
   it('parses strings with escape characters', () => {
-    expect(parse(`jsx{a: '\\''}`)).toEqual({ languageName: 'jsx', options: { a: `'` } });
+    expect(parse(`jsx{a: '\\''}`)).toEqual({ languageName: 'jsx', meta: { a: `'` } });
   });
 
   it('gives good error messages', () => {

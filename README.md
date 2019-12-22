@@ -68,7 +68,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             content,              //   - the string content of the line
             index,                //   - the zero-based index of the line within the code fence
             language,             //   - the language specified for the code fence
-            codeFenceOptions      //   - any options set on the code fence alongside the language (more on this later)
+            meta      //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
           logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
         }
@@ -245,23 +245,23 @@ The generated HTML has ample stable class names, and you can add your own with t
 The styles also include a few CSS variables you can override. The defaults are:
 
 ```css
-.vscode-highlight {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
+.grvsc-container {
+  --grvsc-padding-v: 1rem;
+  --grvsc-padding-h: 1.5rem;
+  --grvsc-padding-top: var(--grvsc-padding-v);
+  --grvsc-padding-right: var(--grvsc-padding-h);
+  --grvsc-padding-bottom: var(--grvsc-padding-v);
+  --grvsc-padding-left: var(--grvsc-padding-h);
+  --grvsc-border-radius: 8px;
 
   /* Line highlighting: see next section */
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
+  --grvsc-line-highlighted-background-color: transparent;
+  --grvsc-line-highlighted-border-width: 4px;
+  --grvsc-line-highlighted-border-color: transparent;
 }
 ```
 
-The default values are set on `:root`, so you can set them on `.vscode-highlight`, `pre`, your own `wrapperClassName`, the class name matching the theme, or generally any selector more specific than `:root`.
+The default values are set on `:root`, so you can set them on `.grvsc-container`, `pre`, your own `wrapperClassName`, the class name matching the theme, or generally any selector more specific than `:root`.
 
 ### Tweaking or replacing theme colors
 
@@ -316,17 +316,17 @@ const zero = [0, 1, 2, 3, 4, 5]
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 
 ```css
-.vscode-highlight {
-  --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-  --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-  --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+.grvsc-container {
+  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+  --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
 }
 ```
 
 or by setting custom styles on the lines:
 
 ```css
-.vscode-highlight .vscode-highlight-line-highlighted {
+.grvsc-container .grvsc-line-highlighted {
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: inset 2px 0 0 0 rgba(255, 255, 255, 0.5);
 }

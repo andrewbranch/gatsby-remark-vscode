@@ -5,7 +5,7 @@ interface ExtensionDemand {
 
 interface CodeFenceData {
   language: string;
-  markdownNode: any;
+  markdownNode: MDASTNode;
   codeFenceNode: any;
   parsedOptions: any;
 }
@@ -18,7 +18,7 @@ interface LineData {
   /** The code fence’s language */
   language: string;
   /** The code fence’s options parsed from the language suffix */
-  codeFenceOptions: object;
+  meta: object;
 }
 
 interface ColorThemeSettings {
@@ -53,19 +53,72 @@ interface PluginOptions {
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
 }
 
+interface BinaryToken {
+  start: number;
+  end: number;
+  metadata: number;
+}
+
+interface TokenizeWithThemeResult {
+  lines: BinaryToken[][] | undefined;
+  theme: ConditionalTheme;
+  colorMap: string[];
+  settings: Record<string, string>;
+}
+
+type DefaultThemeCondition = { condition: 'default' };
+type MatchMediaThemeCondition = { condition: 'matchMedia', value: string };
+type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition;
+
+interface ConditionalTheme {
+  identifier: string;
+  path: string;
+  conditions: ThemeCondition[];
+}
+
+interface RegisteredNodeData {
+  meta: object;
+  languageName: string;
+  lines: Line[];
+  possibleThemes: ConditionalTheme[];
+  isTokenized: boolean;
+  tokenizationResults: TokenizeWithThemeResult[];
+}
+
+interface MDASTNode {
+  type: string;
+  value: string;
+}
+
+interface NodeRegistry {
+  register: (node: MDASTNode, data: RegisteredNodeData) => void;
+  mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
+  mapTokens: <T>(
+    node: MDASTNode,
+    lineIndex: number,
+    tokenMapper: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => T,
+    plainLineMapper: (text: string) => T
+  ) => T[];
+  forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
+  getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
+  getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
+}
+
 // Line transformers
 
+type Line = {
+  text: string;
+  attrs: object;
+};
+
 interface LineTransformerResult<T> {
-  line?: {
-    text: string;
-    attrs: object;
-  };
+  line?: Line;
   state: T | undefined;
 }
 
 interface LineTransformerArgs<T> extends LineTransformerResult<T> {
   language: string;
-  codeFenceOptions: object;
+  meta: object;
 }
 
 type LineTransformer<T = any> = (args: LineTransformerArgs<T>) => LineTransformerResult<T> | undefined;
@@ -75,15 +128,48 @@ type HighlightCommentTransfomerState = {
   highlightNextLine?: boolean;
 };
 
-type ElementTemplate = {
-  tagName: string;
-  attributes: Record<string, string>;
-  children: (ElementTemplate | string)[];
-  renderOptions?: RenderOptions;
-};
+// Renderers
 
-// Utils
+declare namespace grvsc {
+  interface Writer {
+    write: (text: string) => void;
+    writeList: <T>(list: T[], writeElement: (element: T) => void, writeSeparator: () => void) => void;
+    writeNewLine: () => void;
+    increaseIndent: () => void;
+    decreaseIndent: () => void;
+    getText: () => string;
+    noop: () => void;
+  }
 
-interface RenderOptions {
-  whitespace?: number;
+  type HTMLElement = {
+    tagName: string;
+    attributes: Record<string, string>;
+    children: (HTMLElement | CSSElement | string)[];
+    renderOptions?: RenderOptions;
+  };
+
+  interface RenderOptions {
+    whitespace?: number;
+  }
+
+  type CSSMediaQuery = {
+    kind: 'MediaQuery';
+    mediaQueryList: string;
+    body: CSSRuleset[];
+    leadingComment?: string;
+  }
+
+  type CSSRuleset = {
+    kind: 'Ruleset';
+    selectors: string[];
+    body: CSSDeclaration[];
+    leadingComment?: string;
+  };
+
+  type CSSDeclaration = {
+    property: string;
+    value: string;
+  };
+
+  type CSSElement = CSSMediaQuery | CSSRuleset;
 }
