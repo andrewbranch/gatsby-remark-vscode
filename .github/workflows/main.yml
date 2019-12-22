@@ -51,3 +51,23 @@ jobs:
       run: npm publish
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+  publish_alpha:
+    if: github.event_name == 'push' && github.ref == 'v2'
+    needs: build_test
+    name: publish alpha version to npm
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12'
+        registry-url: 'https://registry.npmjs.org'
+    - name: install
+      run: npm ci
+    - name: build
+      run: npm run build
+    - name: publish alpha
+      run: |
+        version=`node .github/workflows/getVersion.js 2.0.0`
+        npm --no-git-tag-version version $version
+        npm publish --tag alpha
