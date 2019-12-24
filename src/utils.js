@@ -84,6 +84,7 @@ function getThemeHash(themeIdentifier) {
   return createHash('md5')
     .update(themeIdentifier)
     .digest('base64')
+    .replace(/[^a-zA-Z0-9-_]/g, '')
     .substr(0, 5);
 }
 

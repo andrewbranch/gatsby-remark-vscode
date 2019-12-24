@@ -147,7 +147,7 @@ function createPlugin() {
             lineIndex,
             /** @returns {grvsc.HTMLElement | string} */
             (tokenText, classNamesByTheme) =>
-              span({ class: classNamesByTheme.map(name => name.value).join(' ') }, [escapeHTML(tokenText)], {
+              span({ class: flatMap(classNamesByTheme, name => name.value).join(' ') }, [escapeHTML(tokenText)], {
                 whitespace: TriviaRenderFlags.NoWhitespace
               }),
             lineText => lineText
