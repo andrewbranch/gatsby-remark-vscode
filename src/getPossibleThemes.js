@@ -42,14 +42,7 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
   /** @type {ConditionalTheme[]} */
   let themes;
   if (themeOption.default) {
-    themes = await getPossibleThemes(
-      themeOption.default,
-      themeCache,
-      markdownNode,
-      codeFenceNode,
-      languageName,
-      meta
-    );
+    themes = await getPossibleThemes(themeOption.default, themeCache, markdownNode, codeFenceNode, languageName, meta);
   }
   if (themeOption.dark) {
     themes = concatConditionalThemes(themes, [
@@ -61,18 +54,28 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
     ]);
   }
   if (themeOption.media) {
-    themes = concatConditionalThemes(themes, await Promise.all(themeOption.media.map(async setting => ({
-      identifier: setting.theme,
-      path: await ensureThemeLocation(setting.theme, themeCache, markdownNode.fileAbsolutePath),
-      conditions: [{ condition: /** @type {'matchMedia'} */ ('matchMedia'), value: setting.match }]
-    }))));
+    themes = concatConditionalThemes(
+      themes,
+      await Promise.all(
+        themeOption.media.map(async setting => ({
+          identifier: setting.theme,
+          path: await ensureThemeLocation(setting.theme, themeCache, markdownNode.fileAbsolutePath),
+          conditions: [{ condition: /** @type {'matchMedia'} */ ('matchMedia'), value: setting.match }]
+        }))
+      )
+    );
   }
   if (themeOption.parentSelector) {
-    themes = concatConditionalThemes(themes, await Promise.all(Object.keys(themeOption.parentSelector).map(async key => ({
-      identifier: themeOption.parentSelector[key],
-      path: await ensureThemeLocation(themeOption.parentSelector[key], themeCache, markdownNode.fileAbsolutePath),
-      conditions: [{ condition: /** @type {'parentSelector'} */ ('parentSelector'), value: key }]
-    }))));
+    themes = concatConditionalThemes(
+      themes,
+      await Promise.all(
+        Object.keys(themeOption.parentSelector).map(async key => ({
+          identifier: themeOption.parentSelector[key],
+          path: await ensureThemeLocation(themeOption.parentSelector[key], themeCache, markdownNode.fileAbsolutePath),
+          conditions: [{ condition: /** @type {'parentSelector'} */ ('parentSelector'), value: key }]
+        }))
+      )
+    );
   }
 
   return themes;

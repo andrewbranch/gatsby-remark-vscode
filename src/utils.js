@@ -230,7 +230,9 @@ function groupConditions(conditions) {
   return {
     default: conditions.find(/** @returns {c is DefaultThemeCondition} */ c => c.condition === 'default'),
     matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia'),
-    parentSelector: conditions.filter(/** @returns {c is ParentSelectorThemeCondition} */ c => c.condition === 'parentSelector')
+    parentSelector: conditions.filter(
+      /** @returns {c is ParentSelectorThemeCondition} */ c => c.condition === 'parentSelector'
+    )
   };
 }
 
@@ -253,7 +255,7 @@ function getStylesFromThemeSettings(settings) {
 }
 
 /**
- * @param {LegacyThemeOption} themeOption 
+ * @param {LegacyThemeOption} themeOption
  * @returns {ThemeOption}
  */
 function convertLegacyThemeOption(themeOption) {
