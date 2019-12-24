@@ -293,7 +293,7 @@ function convertLegacyThemeSettings(themeSettings) {
 
 const fns = new Set();
 /**
- * @param {() => void} fn 
+ * @param {() => void} fn
  * @param {any=} key
  */
 function once(fn, key = fn) {
