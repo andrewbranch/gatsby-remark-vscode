@@ -114,6 +114,8 @@ function getThemeClassName(themeIdentifier, conditionKind) {
       return sanitizeForClassName(themeIdentifier);
     case 'matchMedia':
       return 'grvsc-mm-t' + getThemeHash(themeIdentifier);
+    case 'parentSelector':
+      return 'grvsc-ps-t' + getThemeHash(themeIdentifier);
     default:
       throw new Error(`Unrecognized theme condition '${conditionKind}'`);
   }
@@ -227,7 +229,8 @@ function compareConditions(a, b) {
 function groupConditions(conditions) {
   return {
     default: conditions.find(/** @returns {c is DefaultThemeCondition} */ c => c.condition === 'default'),
-    matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia')
+    matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia'),
+    parentSelector: conditions.filter(/** @returns {c is ParentSelectorThemeCondition} */ c => c.condition === 'parentSelector')
   };
 }
 
@@ -247,6 +250,41 @@ function getStylesFromThemeSettings(settings) {
     }
   }
   return decls;
+}
+
+/**
+ * @param {LegacyThemeOption} themeOption 
+ * @returns {ThemeOption}
+ */
+function convertLegacyThemeOption(themeOption) {
+  if (typeof themeOption === 'function') {
+    return data => convertLegacyThemeSettings(themeOption(data));
+  }
+  return convertLegacyThemeSettings(themeOption);
+}
+
+/**
+ * @param {LegacyThemeSettings | string} themeSettings
+ * @returns {ThemeSettings | string}
+ */
+function convertLegacyThemeSettings(themeSettings) {
+  if (typeof themeSettings === 'string') {
+    return themeSettings;
+  }
+
+  /** @type {MediaQuerySetting[]} */
+  const media = [];
+  if (themeSettings.prefersDarkTheme) {
+    media.push({ match: '(prefers-color-scheme: dark)', theme: themeSettings.prefersDarkTheme });
+  }
+  if (themeSettings.prefersLightTheme) {
+    media.push({ match: '(prefers-color-scheme: light)', theme: themeSettings.prefersLightTheme });
+  }
+
+  return {
+    default: themeSettings.defaultTheme,
+    media
+  };
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -271,5 +309,6 @@ module.exports = {
   flatMap,
   concatConditionalThemes,
   groupConditions,
-  getStylesFromThemeSettings
+  getStylesFromThemeSettings,
+  convertLegacyThemeOption
 };

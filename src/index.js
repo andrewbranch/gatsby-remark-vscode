@@ -20,7 +20,8 @@ const {
   getThemeClassNames,
   getStylesFromThemeSettings,
   flatMap,
-  groupConditions
+  groupConditions,
+  convertLegacyThemeOption
 } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
@@ -34,7 +35,8 @@ function createPlugin() {
   async function textmateHighlight(
     { markdownAST, markdownNode, cache },
     {
-      colorTheme = 'Default Dark+',
+      theme = 'Default Dark+',
+      colorTheme: legacyTheme,
       wrapperClassName = '',
       languageAliases = {},
       extensions = [],
@@ -49,8 +51,13 @@ function createPlugin() {
     } = {}
   ) {
     logger.setLevel(logLevel);
+    if (legacyTheme) {
+      // TODO: deprecation notice
+      theme = convertLegacyThemeOption(legacyTheme);
+    }
+
     const lineTransformers = getLineTransformers({
-      colorTheme,
+      theme,
       wrapperClassName,
       languageAliases,
       extensions,
@@ -91,7 +98,7 @@ function createPlugin() {
       }
 
       const possibleThemes = await getPossibleThemes(
-        colorTheme,
+        theme,
         await cache.get('themes'),
         markdownNode,
         node,
@@ -182,30 +189,33 @@ function createPlugin() {
       const tokenClassNames = nodeRegistry.getTokenStylesForTheme(theme.identifier);
       const containerStyles = getStylesFromThemeSettings(settings);
       if (conditions.default) {
-        pushColorRules(elements, getThemeClassName(theme.identifier, 'default'));
+        pushColorRules(elements, '.' + getThemeClassName(theme.identifier, 'default'));
+      }
+      for (const condition of conditions.parentSelector) {
+        pushColorRules(elements, `${condition.value} .${getThemeClassName(theme.identifier, 'parentSelector')}`);
       }
       for (const condition of conditions.matchMedia) {
         /** @type {grvsc.CSSRuleset[]} */
         const ruleset = [];
-        pushColorRules(ruleset, getThemeClassName(theme.identifier, 'matchMedia'));
+        pushColorRules(ruleset, '.' + getThemeClassName(theme.identifier, 'matchMedia'));
         elements.push(media(condition.value, ruleset, theme.identifier));
       }
       return elements;
 
       /**
        * @param {grvsc.CSSElement[]} container
-       * @param {string} parentClassName
+       * @param {string} selector
        * @param {string=} leadingComment
        */
-      function pushColorRules(container, parentClassName, leadingComment) {
+      function pushColorRules(container, selector, leadingComment) {
         if (containerStyles.length) {
-          container.push(ruleset(`.${parentClassName}`, containerStyles, leadingComment));
+          container.push(ruleset(selector, containerStyles, leadingComment));
           leadingComment = undefined;
         }
         for (const { className, css } of tokenClassNames) {
           container.push(
             ruleset(
-              `.${parentClassName} .${className}`,
+              `${selector} .${className}`,
               css.map(decl =>
                 decl.property === 'color' ? declaration('color', replaceColor(decl.value, theme.identifier)) : decl
               ),

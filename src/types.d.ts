@@ -21,10 +21,22 @@ interface LineData {
   meta: object;
 }
 
-interface ColorThemeSettings {
+interface LegacyThemeSettings {
   defaultTheme: string;
   prefersLightTheme?: string;
   prefersDarkTheme?: string;
+}
+
+interface ThemeSettings {
+  default: string;
+  dark?: string;
+  parentSelector?: Record<string, string>;
+  media?: MediaQuerySetting[];
+}
+
+interface MediaQuerySetting {
+  match: string;
+  theme: string;
 }
 
 interface FetchResponse {
@@ -37,10 +49,12 @@ interface Host {
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type ColorThemeOption = string | ColorThemeSettings | ((data: CodeFenceData) => string | ColorThemeSettings);
+type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeFenceData) => string | LegacyThemeSettings);
+type ThemeOption = string | ThemeSettings | ((data: CodeFenceData) => string | ThemeSettings);
 
 interface PluginOptions {
-  colorTheme?: ColorThemeOption;
+  theme?: ThemeOption;
+  colorTheme?: LegacyThemeOption;
   wrapperClassName?: string | ((data: CodeFenceData) => string);
   languageAliases?: Record<string, string>;
   extensions?: ExtensionDemand[];
@@ -68,7 +82,8 @@ interface TokenizeWithThemeResult {
 
 type DefaultThemeCondition = { condition: 'default' };
 type MatchMediaThemeCondition = { condition: 'matchMedia', value: string };
-type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition;
+type ParentSelectorThemeCondition = { condition: 'parentSelector', value: string };
+type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition | ParentSelectorThemeCondition;
 
 interface ConditionalTheme {
   identifier: string;
