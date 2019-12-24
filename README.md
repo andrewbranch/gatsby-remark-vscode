@@ -56,7 +56,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
         resolve: `gatsby-remark-vscode`,
         // All options are optional. Defaults shown here.
         options: {
-          colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
+          theme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
           wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
@@ -68,13 +68,14 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             content,              //   - the string content of the line
             index,                //   - the zero-based index of the line within the code fence
             language,             //   - the language specified for the code fence
-            meta      //   - any options set on the code fence alongside the language (more on this later)
+            meta                  //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
           logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
         }
       }]
     }
-  }
+  }]
+}
 ```
 
 Write code examples in your markdown file as usual:
@@ -85,25 +86,60 @@ this.willBe(highlighted);
 ```
 ````
 
-## Dark mode support via `prefers-color-scheme`
+## Multi-theme support
 
-Instead of passing a string for `colorTheme`, you can pass an object specifying which theme to use for different values of a user’s operating system color scheme preference.
+You can select different themes to be activated by media query or by parent selector (e.g. a class or data attribute on the `html` or `body` element).
+
+### Reacting to OS dark mode with `prefers-color-scheme`
 
 ```js
-// Note: you probably don’t actually want to provide all three options,
-// this example just aims to show all possible options.
 {
-  colorTheme: {
-    defaultTheme: 'Solarized Light',    // Required
-    prefersDarkTheme: 'Monokai Dimmed', // Optional: used with `prefers-color-scheme: dark`
-    prefersLightTheme: 'Quiet Light'    // Optional: used with `prefers-color-scheme: light`
+  theme: {
+    default: 'Solarized Light',
+    dark: 'Monokai Dimmed'
   }
 }
 ```
 
-This places CSS for each theme inside a corresponding [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) media query. [See browser support.](https://caniuse.com/#feat=prefers-color-scheme)
+### Reacting to a parent selector
 
-Generally, you probably don’t need or want to set all three `colorTheme` options—typical usage would be to set `defaultTheme` to a light theme and `prefersDarkTheme` to a dark theme.
+```js
+{
+  theme: {
+    default: 'Solarized Light',
+    parentSelector: {
+      // Any CSS selector will work!
+      'html[data-theme=dark]': 'Monokai Dimed',
+      'html[data-theme=hc]': 'My Cool Custom High Contrast Theme'
+    }
+  }
+}
+```
+
+### Reacting to other media queries
+
+The `dark` option is shorthand for a general-purpose `media` option that can be used to match any media query:
+
+```js
+{
+  theme: {
+    default: 'Solarized Light',
+    media: [{
+      // Longhand for `dark` option.
+      // Don’t forget the parentheses!
+      match: '(prefers-color-scheme: dark)',
+      theme: 'Monokai Dimmed'
+    }, {
+      // Proposed in Media Queries Level 5 Draft
+      match: '(prefers-contrast: high)',
+      theme: 'My Cool Custom High Contrast Theme'
+    }, {
+      match: 'print',
+      theme: 'My Printer Friendly Theme???'
+    }]
+  }
+}
+```
 
 ## Built-in languages and themes
 
@@ -334,7 +370,7 @@ or by setting custom styles on the lines:
 
 ### Using different themes for different code fences
 
-The `colorTheme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
+The `theme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
 
 ### Arbitrary code fence options
 
@@ -346,11 +382,11 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 ```
 ````
 
-`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `wrapperClassName` and `getLineClassName` functions:
+`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `theme`, `wrapperClassName` and `getLineClassName` functions:
 
 ```js
 {
-  colorTheme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
+  theme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
     // 'language' is 'jsx', in this case
     // 'markdownNode' is the gatsby-transformer-remark GraphQL node
     // 'codeFenceNode' is the Markdown AST node of the current code fence
