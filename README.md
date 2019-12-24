@@ -1,6 +1,6 @@
 # gatsby-remark-vscode
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/andrewbranch/gatsby-remark-vscode.svg)](https://greenkeeper.io/) [![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
+[![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
 
 A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
 
@@ -70,7 +70,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             language,             //   - the language specified for the code fence
             meta                  //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
-          logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
+          logLevel: 'warn'       // Set to 'info' to debug if something looks wrong
         }
       }]
     }

@@ -6,6 +6,7 @@ const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
+const logger = require('loglevel');
 const { declaration } = require('./renderers/css');
 const { createHash } = require('crypto');
 
@@ -290,6 +291,24 @@ function convertLegacyThemeSettings(themeSettings) {
   };
 }
 
+const fns = new Set();
+/**
+ * @param {() => void} fn 
+ * @param {any=} key
+ */
+function once(fn, key = fn) {
+  if (!fns.has(key)) {
+    fns.add(key);
+    return fn();
+  }
+}
+
+function deprecationNotice(message, key = message) {
+  once(() => {
+    logger.warn(`Deprecation notice: ${message}`);
+  }, key);
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -313,5 +332,7 @@ module.exports = {
   concatConditionalThemes,
   groupConditions,
   getStylesFromThemeSettings,
-  convertLegacyThemeOption
+  convertLegacyThemeOption,
+  once,
+  deprecationNotice
 };

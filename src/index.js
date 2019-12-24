@@ -16,6 +16,7 @@ const { getGrammar, getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
 const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
 const {
+  deprecationNotice,
   getThemeClassName,
   getThemeClassNames,
   getStylesFromThemeSettings,
@@ -44,7 +45,7 @@ function createPlugin() {
       injectStyles = true,
       replaceColor = x => x,
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
-      logLevel = 'error',
+      logLevel = 'warn',
       host = defaultHost,
       getLineTransformers = getDefaultLineTransformers,
       ...rest
@@ -52,7 +53,11 @@ function createPlugin() {
   ) {
     logger.setLevel(logLevel);
     if (legacyTheme) {
-      // TODO: deprecation notice
+      deprecationNotice(
+        `The 'colorTheme' option has been replaced by 'theme' and will be removed in a future version. ` +
+        `See https://github.com/andrewbranch/gatsby-remark-vscode/blob/master/MIGRATING.md for details.`,
+        'colorThemeWarning'
+      );
       theme = convertLegacyThemeOption(legacyTheme);
     }
 
