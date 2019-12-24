@@ -33,10 +33,12 @@ function tryRequire(specifier) {
   }
 }
 
+/** @type {any} */
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,
+  logLevel: 'error',
   extensionDataDirectory: path.join(__dirname, 'extensions'),
   host: {
     fetch: () => fail('host.fetch should not be called without providing a test host'),
@@ -48,6 +50,7 @@ function createCache() {
   return new Map();
 }
 
+/** @returns {any} */
 function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
   return {
     type: 'root',

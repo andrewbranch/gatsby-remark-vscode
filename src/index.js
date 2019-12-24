@@ -16,11 +16,13 @@ const { getGrammar, getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
 const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
 const {
+  deprecationNotice,
   getThemeClassName,
   getThemeClassNames,
   getStylesFromThemeSettings,
   flatMap,
-  groupConditions
+  groupConditions,
+  convertLegacyThemeOption
 } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
@@ -34,7 +36,8 @@ function createPlugin() {
   async function textmateHighlight(
     { markdownAST, markdownNode, cache },
     {
-      colorTheme = 'Default Dark+',
+      theme = 'Default Dark+',
+      colorTheme: legacyTheme,
       wrapperClassName = '',
       languageAliases = {},
       extensions = [],
@@ -42,15 +45,24 @@ function createPlugin() {
       injectStyles = true,
       replaceColor = x => x,
       extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
-      logLevel = 'error',
+      logLevel = 'warn',
       host = defaultHost,
       getLineTransformers = getDefaultLineTransformers,
       ...rest
     } = {}
   ) {
     logger.setLevel(logLevel);
+    if (legacyTheme) {
+      deprecationNotice(
+        `The 'colorTheme' option has been replaced by 'theme' and will be removed in a future version. ` +
+          `See https://github.com/andrewbranch/gatsby-remark-vscode/blob/master/MIGRATING.md for details.`,
+        'colorThemeWarning'
+      );
+      theme = convertLegacyThemeOption(legacyTheme);
+    }
+
     const lineTransformers = getLineTransformers({
-      colorTheme,
+      theme,
       wrapperClassName,
       languageAliases,
       extensions,
@@ -91,7 +103,7 @@ function createPlugin() {
       }
 
       const possibleThemes = await getPossibleThemes(
-        colorTheme,
+        theme,
         await cache.get('themes'),
         markdownNode,
         node,
@@ -140,7 +152,7 @@ function createPlugin() {
             lineIndex,
             /** @returns {grvsc.HTMLElement | string} */
             (tokenText, classNamesByTheme) =>
-              span({ class: classNamesByTheme.map(name => name.value).join(' ') }, [escapeHTML(tokenText)], {
+              span({ class: flatMap(classNamesByTheme, name => name.value).join(' ') }, [escapeHTML(tokenText)], {
                 whitespace: TriviaRenderFlags.NoWhitespace
               }),
             lineText => lineText
@@ -182,30 +194,33 @@ function createPlugin() {
       const tokenClassNames = nodeRegistry.getTokenStylesForTheme(theme.identifier);
       const containerStyles = getStylesFromThemeSettings(settings);
       if (conditions.default) {
-        pushColorRules(elements, getThemeClassName(theme.identifier, 'default'));
+        pushColorRules(elements, '.' + getThemeClassName(theme.identifier, 'default'));
+      }
+      for (const condition of conditions.parentSelector) {
+        pushColorRules(elements, `${condition.value} .${getThemeClassName(theme.identifier, 'parentSelector')}`);
       }
       for (const condition of conditions.matchMedia) {
         /** @type {grvsc.CSSRuleset[]} */
         const ruleset = [];
-        pushColorRules(ruleset, getThemeClassName(theme.identifier, 'matchMedia'));
+        pushColorRules(ruleset, '.' + getThemeClassName(theme.identifier, 'matchMedia'));
         elements.push(media(condition.value, ruleset, theme.identifier));
       }
       return elements;
 
       /**
        * @param {grvsc.CSSElement[]} container
-       * @param {string} parentClassName
+       * @param {string} selector
        * @param {string=} leadingComment
        */
-      function pushColorRules(container, parentClassName, leadingComment) {
+      function pushColorRules(container, selector, leadingComment) {
         if (containerStyles.length) {
-          container.push(ruleset(`.${parentClassName}`, containerStyles, leadingComment));
+          container.push(ruleset(selector, containerStyles, leadingComment));
           leadingComment = undefined;
         }
         for (const { className, css } of tokenClassNames) {
           container.push(
             ruleset(
-              `.${parentClassName} .${className}`,
+              `${selector} .${className}`,
               css.map(decl =>
                 decl.property === 'color' ? declaration('color', replaceColor(decl.value, theme.identifier)) : decl
               ),

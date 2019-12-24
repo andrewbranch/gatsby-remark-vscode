@@ -6,6 +6,7 @@ const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
 const uniq = require('lodash.uniq');
+const logger = require('loglevel');
 const { declaration } = require('./renderers/css');
 const { createHash } = require('crypto');
 
@@ -84,6 +85,7 @@ function getThemeHash(themeIdentifier) {
   return createHash('md5')
     .update(themeIdentifier)
     .digest('base64')
+    .replace(/[^a-zA-Z0-9-_]/g, '')
     .substr(0, 5);
 }
 
@@ -114,6 +116,8 @@ function getThemeClassName(themeIdentifier, conditionKind) {
       return sanitizeForClassName(themeIdentifier);
     case 'matchMedia':
       return 'grvsc-mm-t' + getThemeHash(themeIdentifier);
+    case 'parentSelector':
+      return 'grvsc-ps-t' + getThemeHash(themeIdentifier);
     default:
       throw new Error(`Unrecognized theme condition '${conditionKind}'`);
   }
@@ -227,7 +231,10 @@ function compareConditions(a, b) {
 function groupConditions(conditions) {
   return {
     default: conditions.find(/** @returns {c is DefaultThemeCondition} */ c => c.condition === 'default'),
-    matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia')
+    matchMedia: conditions.filter(/** @returns {c is MatchMediaThemeCondition} */ c => c.condition === 'matchMedia'),
+    parentSelector: conditions.filter(
+      /** @returns {c is ParentSelectorThemeCondition} */ c => c.condition === 'parentSelector'
+    )
   };
 }
 
@@ -247,6 +254,59 @@ function getStylesFromThemeSettings(settings) {
     }
   }
   return decls;
+}
+
+/**
+ * @param {LegacyThemeOption} themeOption
+ * @returns {ThemeOption}
+ */
+function convertLegacyThemeOption(themeOption) {
+  if (typeof themeOption === 'function') {
+    return data => convertLegacyThemeSettings(themeOption(data));
+  }
+  return convertLegacyThemeSettings(themeOption);
+}
+
+/**
+ * @param {LegacyThemeSettings | string} themeSettings
+ * @returns {ThemeSettings | string}
+ */
+function convertLegacyThemeSettings(themeSettings) {
+  if (typeof themeSettings === 'string') {
+    return themeSettings;
+  }
+
+  /** @type {MediaQuerySetting[]} */
+  const media = [];
+  if (themeSettings.prefersDarkTheme) {
+    media.push({ match: '(prefers-color-scheme: dark)', theme: themeSettings.prefersDarkTheme });
+  }
+  if (themeSettings.prefersLightTheme) {
+    media.push({ match: '(prefers-color-scheme: light)', theme: themeSettings.prefersLightTheme });
+  }
+
+  return {
+    default: themeSettings.defaultTheme,
+    media
+  };
+}
+
+const fns = new Set();
+/**
+ * @param {() => void} fn
+ * @param {any=} key
+ */
+function once(fn, key = fn) {
+  if (!fns.has(key)) {
+    fns.add(key);
+    return fn();
+  }
+}
+
+function deprecationNotice(message, key = message) {
+  once(() => {
+    logger.warn(`Deprecation notice: ${message}`);
+  }, key);
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -271,5 +331,8 @@ module.exports = {
   flatMap,
   concatConditionalThemes,
   groupConditions,
-  getStylesFromThemeSettings
+  getStylesFromThemeSettings,
+  convertLegacyThemeOption,
+  once,
+  deprecationNotice
 };

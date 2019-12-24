@@ -356,8 +356,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tuw09S\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13,grvsc-tiaGIi-b grvsc-tuw09S-11\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tuw09S-3\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tuw09S-15\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tuw09S-3\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3,grvsc-tiaGIi-i grvsc-tuw09S-4\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tuw09S grvsc-mm-tZ0ymb\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tuw09S-11 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tuw09S-3 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tuw09S-15 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tuw09S-3 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-6\\">;</span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tuw09S-4 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -389,6 +389,17 @@ Object {
     .grvsc-mm-tuw09S .grvsc-tuw09S-15 { color: #676867; }
     .grvsc-mm-tuw09S .grvsc-tuw09S-4 { color: #9A9B99; }
   }
+  
+  /* Quiet Light */
+  @media (prefers-color-scheme: light) {
+    .grvsc-mm-tZ0ymb { background-color: #F5F5F5; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-i { font-style: italic; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-7 { color: #7A3E9D; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-1 { color: #333333; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-6 { color: #777777; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-5 { color: #9C5D27; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-3 { color: #AAAAAA; }
+  }
 </style>",
     },
   ],
@@ -406,8 +417,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tlfloc\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13,grvsc-tiaGIi-b grvsc-tlfloc-4\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tlfloc-12\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tlfloc-1\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1\\"> </span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3,grvsc-tiaGIi-i grvsc-tlfloc-3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tlfloc grvsc-mm-tZ0ymb\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tlfloc-4 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tlfloc-12 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tlfloc-1 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tlfloc-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -420,8 +431,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tsSx3w\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13,grvsc-tiaGIi-b grvsc-tsSx3w-9,grvsc-tsSx3w-i\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tsSx3w-1\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1\\"> </span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3,grvsc-tiaGIi-i grvsc-tsSx3w-3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tsSx3w grvsc-mm-tZ0ymb\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tsSx3w-9 grvsc-tsSx3w-i grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tsSx3w-1 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tsSx3w-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -450,6 +461,16 @@ Object {
     .grvsc-mm-tlfloc .grvsc-tlfloc-1 { color: #D4D4D4; }
     .grvsc-mm-tlfloc .grvsc-tlfloc-12 { color: #9CDCFE; }
     .grvsc-mm-tlfloc .grvsc-tlfloc-3 { color: #6A9955; }
+  }
+  
+  /* Quiet Light */
+  @media (prefers-color-scheme: light) {
+    .grvsc-mm-tZ0ymb { background-color: #F5F5F5; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-i { font-style: italic; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-7 { color: #7A3E9D; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-1 { color: #333333; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-6 { color: #777777; }
+    .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-3 { color: #AAAAAA; }
   }
   
   /* Monokai */
