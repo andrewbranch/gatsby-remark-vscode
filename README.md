@@ -231,38 +231,32 @@ Pro tip: a good way to preview themes is by flipping through them in VS Code. He
 
 ## Using languages and themes from an extension
 
-If you want to use a language or theme not included by default, you can use an extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/vscode) that provides that language or theme. `gatsby-remark-vscode` will download it for you; you just need to provide the unique identifier and version of the extension:
+If you want to use a language or theme not included by default, the recommended approach is to `npm install` it from GitHub, provided its license permits doing so. For example, you can use [robb0wen/synthwave-vscode](https://github.com/robb0wen/synthwave-vscode) by running
 
-![The version and unique identifier can be found in the bottom right corner of the extension’s page on the Visual Studio Marketplace](https://user-images.githubusercontent.com/3277153/56478345-80fb3f00-6463-11e9-84dc-3082d0e6b8f9.png)
+```bash
+npm install robb0wen/synthwave-vscode
+```
 
-Add those strings to the `extensions` option in your plugin configuration in `gatsby-config.js`:
+Then, in gatsby-config.js, use the options
 
 ```js
 {
-  // ...
-  plugins: [{
-    resolve: `gatsby-transformer-remark`,
-    options: {
-      plugins: [{
-        resolve: `gatsby-remark-vscode`,
-        options: {
-          extensions: [{
-            identifier: 'daltonjorge.scala',
-            version: '0.0.5'
-          }]
-        }
-      ]}
-    }
-  }]
+  theme: `SynthWave '84`, // From package.json: contributes.themes[0].label
+  extensions: ['synthwave-vscode'] // From package.json: name
+}
 ```
 
-Next time you `gatsby develop` or `gatsby build`, the extension will be downloaded and Scala code fences will be highlighted. Extensions are downloaded to `node_modules/gatsby-remark-vscode/lib/extensions` by default (but can go elsewhere by setting the `extensionDataDirectory` option), so they remain cached on disk as long as `gastsby-remark-vscode` does.
+You can also clone an extension into your project, or build a .vsix file from its source, and specify its path in `extensions`:
 
-### Dealing with rate limiting in CI
-
-Anonymous requests to the Visual Studio Marketplace are rate limited, so if you’re downloading a lot of extensions or running builds in quick succession in an environment where the extensions aren’t already cached on disk (like on a build server), you might see failed requests.
-
-As a workaround, you can set the `extensionDataDirectory` plugin option to an absolute path pointing to a folder that you check into source control. After running a build locally, any extensions you’ve requested will appear in that directory. Then, in CI, gatsby-remark-vscode will check that directory and determine if anything needs to be downloaded. By including the extensions alongside your own source code, you can avoid making requests to the Visual Studio Marketplace in CI entirely.
+```js
+{
+  theme: {
+    default: 'My Custom Theme',
+    dark: 'My Custom Dark Theme'
+  },
+  extensions: ['./vendor/my-custom-theme', './vendor/my-custom-dark-theme.vsix']
+}
+```
 
 ## Styles
 

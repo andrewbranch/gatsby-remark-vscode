@@ -293,8 +293,10 @@ function convertLegacyThemeSettings(themeSettings) {
 
 const fns = new Set();
 /**
- * @param {() => void} fn
+ * @template {void | Promise<void>} T
+ * @param {() => T} fn
  * @param {any=} key
+ * @returns {T | undefined}
  */
 function once(fn, key = fn) {
   if (!fns.has(key)) {
@@ -307,6 +309,13 @@ function deprecationNotice(message, key = message) {
   once(() => {
     logger.warn(`Deprecation notice: ${message}`);
   }, key);
+}
+
+/**
+ * @param {string} p 
+ */
+function isRelativePath(p) {
+  return /^\.\.?[\\/]/.test(p);
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -334,5 +343,6 @@ module.exports = {
   getStylesFromThemeSettings,
   convertLegacyThemeOption,
   once,
-  deprecationNotice
+  deprecationNotice,
+  isRelativePath
 };

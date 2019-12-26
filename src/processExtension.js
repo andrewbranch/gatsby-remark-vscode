@@ -1,7 +1,13 @@
 // @ts-check
 const path = require('path');
-const { getLanguageNames, requireJson, requirePlistOrJson } = require('./utils');
+const { getLanguageNames, requireJson, requirePlistOrJson, isRelativePath, readFile } = require('./utils');
+const { highestBuiltinLanguageId } = require('./storeUtils');
+const unzipDir = path.resolve(__dirname, '../lib/extensions');
+let languageId = highestBuiltinLanguageId + 1;
 
+/**
+ * @param {string} packageJsonPath 
+ */
 async function processExtension(packageJsonPath) {
   const packageJson = requireJson(packageJsonPath);
   let grammars = {};
@@ -66,4 +72,49 @@ async function processExtension(packageJsonPath) {
   return { grammars, themes };
 }
 
-module.exports = processExtension;
+/**
+ * @param {*} cache
+ * @param {string} key
+ * @param {object} value
+ */
+async function mergeCache(cache, key, value) {
+  await cache.set(key, { ...(await cache.get(key)), ...value });
+}
+
+/**
+ * @param {string} specifier
+ * @param {string} contextDir
+ * @param {Host} host
+ */
+async function getExtensionPath(specifier, contextDir, host) {
+  const absolute = path.isAbsolute(specifier) ? specifier :
+    isRelativePath(specifier) ? path.normalize(path.join(contextDir, specifier)) :
+    require.resolve(specifier);
+  
+  const ext = path.extname(absolute);
+  if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
+    const outDir = path.join(unzipDir, path.basename(absolute, ext));
+    await host.decompress(await readFile(absolute), outDir);
+    return path.join(outDir, 'extension');
+  }
+
+  return absolute;
+}
+
+/**
+ * @param {string[]} extensions
+ * @param {string} contextDir
+ * @param {Host} host
+ * @param {*} cache
+ */
+function processExtensions(extensions, contextDir, host, cache) {
+  return Promise.all(extensions.map(async extension => {
+    const packageJsonPath = path.join(await getExtensionPath(extension, contextDir, host), 'package.json');
+    const { grammars, themes } = await processExtension(packageJsonPath);
+    Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
+    await mergeCache(cache, 'grammars', grammars);
+    await mergeCache(cache, 'themes', themes);
+  }));
+}
+
+module.exports = { processExtension, processExtensions };

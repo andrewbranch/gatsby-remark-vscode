@@ -5,7 +5,7 @@ const { ensureThemeLocation } = require('./storeUtils');
 /**
  * @param {ThemeOption} themeOption
  * @param {object} themeCache
- * @param {object} markdownNode
+ * @param {MarkdownNode} markdownNode
  * @param {object} codeFenceNode
  * @param {string} languageName
  * @param {object} meta
