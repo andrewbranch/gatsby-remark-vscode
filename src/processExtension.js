@@ -1,5 +1,6 @@
 // @ts-check
 const path = require('path');
+const logger = require('loglevel');
 const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile, readdir } = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
@@ -18,6 +19,10 @@ async function processExtension(packageJsonPath) {
         const content = await requirePlistOrJson(sourcePath);
         const { scopeName } = content;
         const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
+        const languageNames = getLanguageNames(languageRegistration);
+        logger.info(
+          `Registering grammar '${scopeName}' from package ${packageJson.name} with language names: ${languageNames}`
+        );
 
         return {
           scopeName,
@@ -25,7 +30,7 @@ async function processExtension(packageJsonPath) {
           tokenTypes: grammar.tokenTypes,
           embeddedLanguages: grammar.embeddedLanguages,
           injectTo: grammar.injectTo,
-          languageNames: languageRegistration ? getLanguageNames(languageRegistration) : []
+          languageNames: languageRegistration ? languageNames : []
         };
       })
     );
@@ -50,8 +55,11 @@ async function processExtension(packageJsonPath) {
       packageJson.contributes.themes.map(async theme => {
         const sourcePath = path.resolve(path.dirname(packageJsonPath), theme.path);
         const themeContents = await requirePlistOrJson(sourcePath);
+        const id = theme.id || path.basename(theme.path).split('.')[0];
+        logger.info(`Registering theme '${theme.label || id}' from package ${packageJson.name}`);
+
         return {
-          id: theme.id || path.basename(theme.path).split('.')[0],
+          id,
           path: sourcePath,
           label: theme.label,
           include: themeContents.include,

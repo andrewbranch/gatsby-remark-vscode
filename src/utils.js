@@ -59,6 +59,7 @@ function getExtensionPackageJson(identifier, extensionDir) {
 /**
  * Gets the array of language codes that can be used to set the language of a Markdown code fence.
  * @param {*} languageRegistration A 'contributes.languages' entry from an extension’s package.json.
+ * @returns {string[]}
  */
 function getLanguageNames(languageRegistration) {
   return uniq(
