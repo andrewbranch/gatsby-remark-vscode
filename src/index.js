@@ -5,32 +5,34 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
+const validateOptions = require('./validateOptions');
 const createGetRegistry = require('./createGetRegistry');
 const tokenizeWithTheme = require('./tokenizeWithTheme');
 const getPossibleThemes = require('./getPossibleThemes');
 const createNodeRegistry = require('./createNodeRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const { getDefaultLineTransformers, getTransformedLines } = require('./transformers');
-const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
+const { processExtensions } = require('./processExtension');
 const { getGrammar, getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
 const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
 const {
-  deprecationNotice,
   getThemeClassName,
   getThemeClassNames,
   getStylesFromThemeSettings,
   flatMap,
   groupConditions,
-  convertLegacyThemeOption
+  convertLegacyThemeOption,
+  createOnce
 } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
   const getRegistry = createGetRegistry();
+  const once = createOnce();
 
   /**
-   * @param {{ markdownAST: any, markdownNode: MDASTNode, cache: any }} _
+   * @param {{ markdownAST: MDASTNode, markdownNode: MarkdownNode, cache: any }} _
    * @param {PluginOptions=} options
    */
   async function textmateHighlight(
@@ -44,22 +46,34 @@ function createPlugin() {
       getLineClassName = () => '',
       injectStyles = true,
       replaceColor = x => x,
-      extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
       logLevel = 'warn',
       host = defaultHost,
       getLineTransformers = getDefaultLineTransformers,
       ...rest
     } = {}
   ) {
-    logger.setLevel(logLevel);
-    if (legacyTheme) {
-      deprecationNotice(
-        `The 'colorTheme' option has been replaced by 'theme' and will be removed in a future version. ` +
-          `See https://github.com/andrewbranch/gatsby-remark-vscode/blob/master/MIGRATING.md for details.`,
-        'colorThemeWarning'
-      );
-      theme = convertLegacyThemeOption(legacyTheme);
-    }
+    await once(async () => {
+      logger.setLevel(logLevel);
+      if (legacyTheme) {
+        theme = convertLegacyThemeOption(legacyTheme);
+      }
+
+      validateOptions({
+        theme,
+        colorTheme: legacyTheme,
+        wrapperClassName,
+        languageAliases,
+        extensions,
+        getLineClassName,
+        injectStyles,
+        replaceColor,
+        logLevel,
+        host,
+        getLineTransformers
+      });
+
+      await processExtensions(extensions, host, cache);
+    }, 'setup');
 
     const lineTransformers = getLineTransformers({
       theme,
@@ -69,7 +83,6 @@ function createPlugin() {
       getLineClassName,
       injectStyles,
       replaceColor,
-      extensionDataDirectory,
       logLevel,
       ...rest
     });
@@ -85,13 +98,6 @@ function createPlugin() {
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
       const { languageName, meta } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '', node.meta);
-      await downloadExtensionsIfNeeded({
-        extensions,
-        cache,
-        extensionDir: extensionDataDirectory,
-        host
-      });
-
       const grammarCache = await cache.get('grammars');
       const scope = getScope(languageName, grammarCache, languageAliases);
       if (!scope && languageName) {
@@ -239,6 +245,7 @@ function createPlugin() {
       });
     }
   }
+
   return textmateHighlight;
 }
 

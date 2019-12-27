@@ -4,14 +4,12 @@ const { promisify } = require('util');
 const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
-const rimraf = require('rimraf');
 const unified = require('unified');
 const reparseHast = require('hast-util-raw');
 const mdastToHast = require('mdast-util-to-hast');
 const remark = require('remark-parse');
 const stringify = require('rehype-stringify');
 const createPlugin = require('../src');
-const host = require('../src/host');
 const utils = require('../src/utils');
 const { renderDocument, renderNewCase, renderTestDiff } = require('./integration/render');
 
@@ -33,15 +31,13 @@ function tryRequire(specifier) {
   }
 }
 
-/** @type {any} */
+/** @type {MarkdownNode} */
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,
   logLevel: 'error',
-  extensionDataDirectory: path.join(__dirname, 'extensions'),
   host: {
-    fetch: () => fail('host.fetch should not be called without providing a test host'),
     decompress: () => fail('host.decompress should not be called without providing a test host')
   }
 };
@@ -126,78 +122,6 @@ describe('included languages and themes', () => {
   });
 });
 
-describe('extension downloading', () => {
-  const testHost = {
-    ...host,
-    fetch: jest.fn(async url => ({
-      statusCode: 200,
-      body: await readFile(path.join(__dirname, 'fixtures', url.includes('wrong-one')
-        ? 'wrong-extension.zip'
-        : 'extension.zip')),
-    })),
-  };
-
-  beforeEach(() => {
-    rimraf.sync(defaultOptions.extensionDataDirectory);
-    testHost.fetch.mockClear();
-  });
-
-  afterAll(() => {
-    rimraf.sync(defaultOptions.extensionDataDirectory);
-  });
-
-
-  it('can download an extension to resolve a theme', async () => {
-    await testSnapshot({
-      colorTheme: 'Custom Theme',
-      extensions: [{
-        identifier: 'publisher.wrong-one',
-        version: '1.0.0',
-      }, {
-        identifier: 'publisher.custom-theme',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    });
-
-    expect(testHost.fetch).toHaveBeenCalledTimes(2);
-  });
-
-  it('can download an extension to resolve a grammar', async () => {
-    await testSnapshot({
-      extensions: [{
-        identifier: 'publisher.wrong-one',
-        version: '1.0.0',
-      }, {
-        identifier: 'publisher.custom-language',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    }, createMarkdownAST('custom'));
-
-    expect(testHost.fetch).toHaveBeenCalledTimes(2);
-  });
-
-  it('can download an extension to a custom location', async () => {
-    const plugin = createPlugin();
-    const extensionDataDirectory = path.join(__dirname, 'extensions/one/two/three');
-    await plugin({
-      markdownAST: createMarkdownAST('custom'),
-      markdownNode,
-      cache: createCache(),
-    }, {
-      extensionDataDirectory,
-      extensions: [{
-        identifier: 'publisher.custom-language',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    });
-
-    expect(await exists(extensionDataDirectory)).toBeTruthy();
-  });
-});
-
 it('sets highlighted line class names', async () => {
   const plugin = createPlugin();
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
@@ -261,11 +185,6 @@ describe('integration tests', () => {
   const failedCaseHTML = [];
   /** @type {string[]} */
   const newCaseHTML = [];
-
-  beforeAll(() => {
-    jest.resetAllMocks();
-    jest.resetModuleRegistry();
-  });
 
   it.each(cases)('%s', async name => {
     const plugin = createPlugin();

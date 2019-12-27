@@ -40,7 +40,6 @@
     "@types/lodash.uniq": "^4.5.6",
     "@types/node": "^12.12.5",
     "@types/plist": "^3.0.2",
-    "@types/request": "^2.48.3",
     "glob": "^7.1.5",
     "hast-util-raw": "^5.0.1",
     "jest": "^24.9.0",
@@ -49,6 +48,7 @@
     "rehype-stringify": "^6.0.0",
     "remark-parse": "^7.0.1",
     "remark-rehype": "^5.0.0",
+    "synthwave-vscode": "github:robb0wen/synthwave-vscode",
     "typescript": "^3.6.4",
     "unified": "^8.4.1"
   },

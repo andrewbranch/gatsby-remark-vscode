@@ -10,6 +10,7 @@ const logger = require('loglevel');
 const { declaration } = require('./renderers/css');
 const { createHash } = require('crypto');
 
+const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
@@ -58,6 +59,7 @@ function getExtensionPackageJson(identifier, extensionDir) {
 /**
  * Gets the array of language codes that can be used to set the language of a Markdown code fence.
  * @param {*} languageRegistration A 'contributes.languages' entry from an extension’s package.json.
+ * @returns {string[]}
  */
 function getLanguageNames(languageRegistration) {
   return uniq(
@@ -291,22 +293,31 @@ function convertLegacyThemeSettings(themeSettings) {
   };
 }
 
-const fns = new Set();
-/**
- * @param {() => void} fn
- * @param {any=} key
- */
-function once(fn, key = fn) {
-  if (!fns.has(key)) {
-    fns.add(key);
-    return fn();
-  }
+function createOnce() {
+  const onceFns = new Set();
+  /**
+   * @template {void | Promise<void>} T
+   * @param {() => T} fn
+   * @param {any=} key
+   * @returns {T | undefined}
+   */
+  return function once(fn, key = fn) {
+    if (!onceFns.has(key)) {
+      onceFns.add(key);
+      return fn();
+    }
+  };
 }
 
-function deprecationNotice(message, key = message) {
-  once(() => {
-    logger.warn(`Deprecation notice: ${message}`);
-  }, key);
+function deprecationNotice(message) {
+  logger.warn(`Deprecation notice: ${message}`);
+}
+
+/**
+ * @param {string} p
+ */
+function isRelativePath(p) {
+  return /^\.\.?[\\/]/.test(p);
 }
 
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
@@ -315,6 +326,7 @@ const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
 
 module.exports = {
   readFile,
+  readdir,
   exists,
   gunzip,
   parseExtensionIdentifier,
@@ -333,6 +345,7 @@ module.exports = {
   groupConditions,
   getStylesFromThemeSettings,
   convertLegacyThemeOption,
-  once,
-  deprecationNotice
+  deprecationNotice,
+  isRelativePath,
+  createOnce
 };

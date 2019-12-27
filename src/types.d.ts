@@ -1,11 +1,6 @@
-interface ExtensionDemand {
-  identifier: string;
-  version: string;
-}
-
 interface CodeFenceData {
   language: string;
-  markdownNode: MDASTNode;
+  markdownNode: MarkdownNode;
   codeFenceNode: any;
   parsedOptions: any;
 }
@@ -39,13 +34,7 @@ interface MediaQuerySetting {
   theme: string;
 }
 
-interface FetchResponse {
-  body: Buffer | undefined;
-  statusCode: number;
-}
-
 interface Host {
-  fetch: (url: string, options: import('request').CoreOptions) => Promise<FetchResponse>;
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
@@ -57,11 +46,10 @@ interface PluginOptions {
   colorTheme?: LegacyThemeOption;
   wrapperClassName?: string | ((data: CodeFenceData) => string);
   languageAliases?: Record<string, string>;
-  extensions?: ExtensionDemand[];
+  extensions?: string[];
   getLineClassName?: (line: LineData) => string;
   injectStyles?: boolean;
   replaceColor?: (colorValue: string, theme: string) => string;
-  extensionDataDirectory?: string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
@@ -102,7 +90,12 @@ interface RegisteredNodeData {
 
 interface MDASTNode {
   type: string;
-  value: string;
+  value?: string;
+  children?: MDASTNode[];
+}
+
+interface MarkdownNode {
+  fileAbsolutePath: string;
 }
 
 interface NodeRegistry {
