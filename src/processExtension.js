@@ -1,6 +1,6 @@
 // @ts-check
 const path = require('path');
-const { getLanguageNames, requireJson, requirePlistOrJson, readFile } = require('./utils');
+const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile } = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 
@@ -91,8 +91,11 @@ async function getExtensionPackageJsonPath(specifier, host) {
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));
-    await host.decompress(await readFile(absolute), outDir);
-    return path.join(outDir, 'extension', 'package.json');
+    await host.decompress(await readFile(absolute), unzipDir);
+    if (await exists(path.join(absolute, 'extension', 'package.json'))) {
+      return path.join(outDir, 'extension', 'package.json');
+    }
+    return path.join(outDir, 'package.json');
   }
 
   return absolute;
