@@ -291,28 +291,28 @@ function convertLegacyThemeSettings(themeSettings) {
   };
 }
 
-const fns = new Set();
-/**
- * @template {void | Promise<void>} T
- * @param {() => T} fn
- * @param {any=} key
- * @returns {T | undefined}
- */
-function once(fn, key = fn) {
-  if (!fns.has(key)) {
-    fns.add(key);
-    return fn();
-  }
+function createOnce() {
+  const onceFns = new Set();
+  /**
+   * @template {void | Promise<void>} T
+   * @param {() => T} fn
+   * @param {any=} key
+   * @returns {T | undefined}
+   */
+  return function once(fn, key = fn) {
+    if (!onceFns.has(key)) {
+      onceFns.add(key);
+      return fn();
+    }
+  };
 }
 
-function deprecationNotice(message, key = message) {
-  once(() => {
-    logger.warn(`Deprecation notice: ${message}`);
-  }, key);
+function deprecationNotice(message) {
+  logger.warn(`Deprecation notice: ${message}`);
 }
 
 /**
- * @param {string} p 
+ * @param {string} p
  */
 function isRelativePath(p) {
   return /^\.\.?[\\/]/.test(p);
@@ -342,7 +342,7 @@ module.exports = {
   groupConditions,
   getStylesFromThemeSettings,
   convertLegacyThemeOption,
-  once,
   deprecationNotice,
-  isRelativePath
+  isRelativePath,
+  createOnce
 };

@@ -1,12 +1,12 @@
 // @ts-check
 const path = require('path');
-const { getLanguageNames, requireJson, requirePlistOrJson, isRelativePath, readFile } = require('./utils');
+const { getLanguageNames, requireJson, requirePlistOrJson, readFile } = require('./utils');
 const { highestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 let languageId = highestBuiltinLanguageId + 1;
 
 /**
- * @param {string} packageJsonPath 
+ * @param {string} packageJsonPath
  */
 async function processExtension(packageJsonPath) {
   const packageJson = requireJson(packageJsonPath);
@@ -83,14 +83,10 @@ async function mergeCache(cache, key, value) {
 
 /**
  * @param {string} specifier
- * @param {string} contextDir
  * @param {Host} host
  */
-async function getExtensionPath(specifier, contextDir, host) {
-  const absolute = path.isAbsolute(specifier) ? specifier :
-    isRelativePath(specifier) ? path.normalize(path.join(contextDir, specifier)) :
-    require.resolve(specifier);
-  
+async function getExtensionPath(specifier, host) {
+  const absolute = path.isAbsolute(specifier) ? specifier : require.resolve(specifier);
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));
@@ -103,18 +99,19 @@ async function getExtensionPath(specifier, contextDir, host) {
 
 /**
  * @param {string[]} extensions
- * @param {string} contextDir
  * @param {Host} host
  * @param {*} cache
  */
-function processExtensions(extensions, contextDir, host, cache) {
-  return Promise.all(extensions.map(async extension => {
-    const packageJsonPath = path.join(await getExtensionPath(extension, contextDir, host), 'package.json');
-    const { grammars, themes } = await processExtension(packageJsonPath);
-    Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
-    await mergeCache(cache, 'grammars', grammars);
-    await mergeCache(cache, 'themes', themes);
-  }));
+function processExtensions(extensions, host, cache) {
+  return Promise.all(
+    extensions.map(async extension => {
+      const packageJsonPath = path.join(await getExtensionPath(extension, host), 'package.json');
+      const { grammars, themes } = await processExtension(packageJsonPath);
+      Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
+      await mergeCache(cache, 'grammars', grammars);
+      await mergeCache(cache, 'themes', themes);
+    })
+  );
 }
 
 module.exports = { processExtension, processExtensions };
