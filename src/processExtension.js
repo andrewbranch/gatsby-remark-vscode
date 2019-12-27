@@ -1,9 +1,8 @@
 // @ts-check
 const path = require('path');
 const { getLanguageNames, requireJson, requirePlistOrJson, readFile } = require('./utils');
-const { highestBuiltinLanguageId } = require('./storeUtils');
+const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
-let languageId = highestBuiltinLanguageId + 1;
 
 /**
  * @param {string} packageJsonPath
@@ -105,6 +104,7 @@ async function getExtensionPackageJsonPath(specifier, host) {
  * @param {*} cache
  */
 function processExtensions(extensions, host, cache) {
+  let languageId = getHighestBuiltinLanguageId() + 1;
   return Promise.all(
     extensions.map(async extension => {
       const packageJsonPath = await getExtensionPackageJsonPath(extension, host);

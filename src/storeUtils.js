@@ -84,10 +84,12 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
   return locallyResolved;
 }
 
-const highestBuiltinLanguageId = Object.keys(getGrammarManifest()).reduce(
-  (highest, scopeName) => Math.max(highest, getGrammarManifest()[scopeName].languageId),
-  1
-);
+function getHighestBuiltinLanguageId() {
+  return Object.keys(getGrammarManifest()).reduce(
+    (highest, scopeName) => Math.max(highest, getGrammarManifest()[scopeName].languageId),
+    1
+  );
+}
 
 /**
  * @param {string} scopeName
@@ -109,6 +111,6 @@ module.exports = {
   getGrammar,
   getGrammarLocation,
   ensureThemeLocation,
-  highestBuiltinLanguageId,
+  getHighestBuiltinLanguageId,
   getAllGrammars
 };
