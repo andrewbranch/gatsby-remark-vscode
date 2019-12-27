@@ -19,7 +19,7 @@ async function processExtension(packageJsonPath) {
         const content = await requirePlistOrJson(sourcePath);
         const { scopeName } = content;
         const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
-        const languageNames = getLanguageNames(languageRegistration);
+        const languageNames = languageRegistration ? getLanguageNames(languageRegistration) : [];
         logger.info(
           `Registering grammar '${scopeName}' from package ${packageJson.name} with language names: ${languageNames}`
         );
@@ -30,7 +30,7 @@ async function processExtension(packageJsonPath) {
           tokenTypes: grammar.tokenTypes,
           embeddedLanguages: grammar.embeddedLanguages,
           injectTo: grammar.injectTo,
-          languageNames: languageRegistration ? languageNames : []
+          languageNames
         };
       })
     );
@@ -118,7 +118,7 @@ async function getExtensionPackageJsonPath(specifier, host) {
 
     for (const subdir of await readdir(dir, { withFileTypes: true })) {
       if (subdir.isDirectory) {
-        const result = await searchDirectory(subdir.name, true);
+        const result = await searchDirectory(path.join(dir, subdir.name), true);
         if (result) {
           return result;
         }
