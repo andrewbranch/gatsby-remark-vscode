@@ -10,6 +10,7 @@ const logger = require('loglevel');
 const { declaration } = require('./renderers/css');
 const { createHash } = require('crypto');
 
+const readdir = util.promisify(fs.readdir);
 const readFile = util.promisify(fs.readFile);
 const exists = util.promisify(fs.exists);
 const gunzip = util.promisify(zlib.gunzip);
@@ -324,6 +325,7 @@ const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
 
 module.exports = {
   readFile,
+  readdir,
   exists,
   gunzip,
   parseExtensionIdentifier,

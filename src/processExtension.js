@@ -1,6 +1,6 @@
 // @ts-check
 const path = require('path');
-const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile } = require('./utils');
+const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile, readdir } = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 
@@ -91,14 +91,32 @@ async function getExtensionPackageJsonPath(specifier, host) {
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));
-    await host.decompress(await readFile(absolute), unzipDir);
-    if (await exists(path.join(absolute, 'extension', 'package.json'))) {
-      return path.join(outDir, 'extension', 'package.json');
-    }
-    return path.join(outDir, 'package.json');
+    await host.decompress(await readFile(absolute), outDir);
+    return searchDirectory(outDir);
   }
 
   return absolute;
+
+  async function searchDirectory(/** @type {string} */ dir, stop = false) {
+    if (await exists(path.join(dir, 'extension', 'package.json'))) {
+      return path.join(dir, 'extension', 'package.json');
+    }
+    if (await exists(path.join(dir, 'package.json'))) {
+      return path.join(dir, 'package.json');
+    }
+    if (stop) {
+      return;
+    }
+
+    for (const subdir of await readdir(dir, { withFileTypes: true })) {
+      if (subdir.isDirectory) {
+        const result = await searchDirectory(subdir.name, true);
+        if (result) {
+          return result;
+        }
+      }
+    }
+  }
 }
 
 /**
