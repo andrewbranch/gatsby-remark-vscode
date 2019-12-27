@@ -1,0 +1,64 @@
+<pre class="grvsc-container synthwave-vscode" data-language="js"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk4 mtki">/**</span></span>
+<span class="grvsc-line"><span class="mtk4 mtki"> * </span><span class="mtk9 mtki">@param</span><span class="mtk4 mtki"> </span><span class="mtk7 mtki">{*}</span><span class="mtk4 mtki"> </span><span class="mtk3 mtki">cache</span></span>
+<span class="grvsc-line"><span class="mtk4 mtki"> * </span><span class="mtk9 mtki">@param</span><span class="mtk4 mtki"> </span><span class="mtk7 mtki">{string}</span><span class="mtk4 mtki"> </span><span class="mtk3 mtki">key</span></span>
+<span class="grvsc-line"><span class="mtk4 mtki"> * </span><span class="mtk9 mtki">@param</span><span class="mtk4 mtki"> </span><span class="mtk7 mtki">{object}</span><span class="mtk4 mtki"> </span><span class="mtk3 mtki">value</span></span>
+<span class="grvsc-line"><span class="mtk4 mtki"> */</span></span>
+<span class="grvsc-line"><span class="mtk9">async</span><span class="mtk1"> </span><span class="mtk9">function</span><span class="mtk1"> </span><span class="mtk6">mergeCache</span><span class="mtk1">(</span><span class="mtk3 mtki">cache</span><span class="mtk1">, </span><span class="mtk3 mtki">key</span><span class="mtk1">, </span><span class="mtk3 mtki">value</span><span class="mtk1">) {</span></span>
+<span class="grvsc-line"><span class="mtk1">  </span><span class="mtk9">await</span><span class="mtk1"> </span><span class="mtk3">cache</span><span class="mtk1">.</span><span class="mtk6">set</span><span class="mtk1">(</span><span class="mtk3">key</span><span class="mtk1">, { </span><span class="mtk9">...</span><span class="mtk1">(</span><span class="mtk9">await</span><span class="mtk1"> </span><span class="mtk3">cache</span><span class="mtk1">.</span><span class="mtk6">get</span><span class="mtk1">(</span><span class="mtk3">key</span><span class="mtk1">)), </span><span class="mtk9">...</span><span class="mtk3">value</span><span class="mtk1"> });</span></span>
+<span class="grvsc-line"><span class="mtk1">}</span></span></code></pre>
+<style class="grvsc-styles">
+  :root {
+    --grvsc-padding-v: 1rem;
+    --grvsc-padding-h: 1.5rem;
+    --grvsc-padding-top: var(--grvsc-padding-v);
+    --grvsc-padding-right: var(--grvsc-padding-h);
+    --grvsc-padding-bottom: var(--grvsc-padding-v);
+    --grvsc-padding-left: var(--grvsc-padding-h);
+    --grvsc-border-radius: 8px;
+  
+    --grvsc-line-highlighted-background-color: transparent;
+    --grvsc-line-highlighted-border-width: 4px;
+    --grvsc-line-highlighted-border-color: transparent;
+  }
+  
+  .grvsc-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top);
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom);
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius);
+    font-feature-settings: normal;
+  }
+  
+  .grvsc-code {
+    display: inline-block;
+    min-width: 100%;
+  }
+  
+  .grvsc-line {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left);
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right);
+  }
+  
+  .grvsc-highlighted {
+    background-color: var(--grvsc-line-highlighted-background-color);
+    box-shadow: inset var(--grvsc-line-highlighted-border-width) 0 0 0 var(--grvsc-line-highlighted-border-color);
+  }
+  
+  .synthwave-vscode { background-color: #262335; }
+  .synthwave-vscode .mtki { font-style: italic; }
+  .synthwave-vscode .mtk4 { color: #495495; }
+  .synthwave-vscode .mtk9 { color: #FEDE5D; }
+  .synthwave-vscode .mtk7 { color: #FE4450; }
+  .synthwave-vscode .mtk3 { color: #FF7EDB; }
+  .synthwave-vscode .mtk1 { color: #FFFFFF; }
+  .synthwave-vscode .mtk6 { color: #36F9F6; }
+</style>

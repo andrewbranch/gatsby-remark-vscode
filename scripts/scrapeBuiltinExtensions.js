@@ -3,7 +3,7 @@ const fs = require('fs');
 const util = require('util');
 const glob = require('glob');
 const path = require('path');
-const processExtension = require('../src/processExtension');
+const { processExtension } = require('../src/processExtension');
 const { requirePlistOrJson } = require('../src/utils');
 
 const copyFile = util.promisify(fs.copyFile);

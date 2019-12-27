@@ -1,19 +1,14 @@
 interface RemarkPluginArguments {
   cache: GatsbyCache;
-  markdownAST: any;
-  markdownNode: any;
+  markdownAST: MDASTNode;
+  markdownNode: MarkdownNode;
   actions: any;
   createNodeId: (key: string) => string;
 }
 
-interface ExtensionDemand {
-  identifier: string;
-  version: string;
-}
-
 interface CodeFenceData {
   language: string;
-  markdownNode: any;
+  markdownNode: MarkdownNode;
   codeFenceNode: any;
   parsedOptions: any;
 }
@@ -26,36 +21,43 @@ interface LineData {
   /** The code fence’s language */
   language: string;
   /** The code fence’s options parsed from the language suffix */
-  codeFenceOptions: object;
+  meta: object;
 }
 
-interface ColorThemeSettings {
+interface LegacyThemeSettings {
   defaultTheme: string;
   prefersLightTheme?: string;
   prefersDarkTheme?: string;
 }
 
-interface FetchResponse {
-  body: Buffer | undefined;
-  statusCode: number;
+interface ThemeSettings {
+  default: string;
+  dark?: string;
+  parentSelector?: Record<string, string>;
+  media?: MediaQuerySetting[];
+}
+
+interface MediaQuerySetting {
+  match: string;
+  theme: string;
 }
 
 interface Host {
-  fetch: (url: string, options: import('request').CoreOptions) => Promise<FetchResponse>;
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type ColorThemeOption = string | ColorThemeSettings | ((data: CodeFenceData) => string | ColorThemeSettings);
+type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeFenceData) => string | LegacyThemeSettings);
+type ThemeOption = string | ThemeSettings | ((data: CodeFenceData) => string | ThemeSettings);
 
 interface PluginOptions {
-  colorTheme?: ColorThemeOption;
-  wrapperClassName?: string;
+  theme?: ThemeOption;
+  colorTheme?: LegacyThemeOption;
+  wrapperClassName?: string | ((data: CodeFenceData) => string);
   languageAliases?: Record<string, string>;
-  extensions?: ExtensionDemand[];
+  extensions?: string[];
   getLineClassName?: (line: LineData) => string;
   injectStyles?: boolean;
   replaceColor?: (colorValue: string, theme: string) => string;
-  extensionDataDirectory?: string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
@@ -64,6 +66,72 @@ interface PluginOptions {
 interface GatsbyCache {
   get(key: string): Promise<any>;
   set(key: string, data: any): Promise<void>;
+}
+
+interface BinaryToken {
+  start: number;
+  end: number;
+  metadata: number;
+}
+
+interface TokenizeWithThemeResult {
+  lines: BinaryToken[][] | undefined;
+  theme: ConditionalTheme;
+  colorMap: string[];
+  settings: Record<string, string>;
+}
+
+type DefaultThemeCondition = { condition: 'default' };
+type MatchMediaThemeCondition = { condition: 'matchMedia', value: string };
+type ParentSelectorThemeCondition = { condition: 'parentSelector', value: string };
+type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition | ParentSelectorThemeCondition;
+
+interface ConditionalTheme {
+  identifier: string;
+  path: string;
+  conditions: ThemeCondition[];
+}
+
+interface RegisteredNodeData {
+  meta: object;
+  languageName: string;
+  lines: Line[];
+  possibleThemes: ConditionalTheme[];
+  isTokenized: boolean;
+  tokenizationResults: TokenizeWithThemeResult[];
+}
+
+interface MDASTNode {
+  type: string;
+  value?: string;
+  children?: MDASTNode[];
+}
+
+interface MarkdownNode {
+  id: string;
+  fileAbsolutePath: string;
+  internal: {
+    contentDigest: string;
+  };
+}
+
+type Line = {
+  text: string;
+  attrs: object;
+};
+
+interface NodeRegistry {
+  register: (node: MDASTNode, data: RegisteredNodeData) => void;
+  mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
+  mapTokens: <T>(
+    node: MDASTNode,
+    lineIndex: number,
+    tokenMapper: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => T,
+    plainLineMapper: (text: string) => T
+  ) => T[];
+  forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
+  getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
+  getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }
 
 // Line transformers
@@ -82,7 +150,7 @@ interface LineTransformerResult<T> extends LineTransformerInfo<T> {
 
 interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
   language: string;
-  codeFenceOptions: object;
+  meta: object;
 }
 
 interface LineTransformer<T = any> {
@@ -96,15 +164,48 @@ type HighlightCommentTransfomerState = {
   highlightNextLine?: boolean;
 };
 
-type ElementTemplate = {
-  tagName: string;
-  attributes: Record<string, string>;
-  children: (ElementTemplate | string)[];
-  renderOptions?: RenderOptions;
-};
+// Renderers
 
-// Utils
+declare namespace grvsc {
+  interface Writer {
+    write: (text: string) => void;
+    writeList: <T>(list: T[], writeElement: (element: T) => void, writeSeparator: () => void) => void;
+    writeNewLine: () => void;
+    increaseIndent: () => void;
+    decreaseIndent: () => void;
+    getText: () => string;
+    noop: () => void;
+  }
 
-interface RenderOptions {
-  whitespace?: number;
+  type HTMLElement = {
+    tagName: string;
+    attributes: Record<string, string>;
+    children: (HTMLElement | CSSElement | string)[];
+    renderOptions?: RenderOptions;
+  };
+
+  interface RenderOptions {
+    whitespace?: number;
+  }
+
+  type CSSMediaQuery = {
+    kind: 'MediaQuery';
+    mediaQueryList: string;
+    body: CSSRuleset[];
+    leadingComment?: string;
+  }
+
+  type CSSRuleset = {
+    kind: 'Ruleset';
+    selectors: string[];
+    body: CSSDeclaration[];
+    leadingComment?: string;
+  };
+
+  type CSSDeclaration = {
+    property: string;
+    value: string;
+  };
+
+  type CSSElement = CSSMediaQuery | CSSRuleset;
 }

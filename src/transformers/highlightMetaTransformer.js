@@ -9,13 +9,13 @@ const numberRegExp = /^\d+$/;
  */
 
 /**
- * @param {object} codeFenceOptions
+ * @param {object} meta
  * @returns {number[]}
  */
-function getLinesFromCodeFenceOptions(codeFenceOptions) {
+function getLinesFromMeta(meta) {
   const lines = [];
-  for (const key in codeFenceOptions) {
-    if (codeFenceOptions[key] === true) {
+  for (const key in meta) {
+    if (meta[key] === true) {
       if (numberRegExp.test(key)) lines.push(parseInt(key, 10));
       else if (rangeRegExp.test(key)) {
         const [lower, upper] = key.split(dashRegExp).map(s => parseInt(s, 10));
@@ -27,18 +27,18 @@ function getLinesFromCodeFenceOptions(codeFenceOptions) {
 }
 
 /**
- * @param {object} codeFenceOptions
+ * @param {object} meta
  * @returns {State}
  */
-function getInitialState(codeFenceOptions) {
+function getInitialState(meta) {
   return {
     lineNumber: 1,
-    highlightedLines: getLinesFromCodeFenceOptions(codeFenceOptions)
+    highlightedLines: getLinesFromMeta(meta)
   };
 }
 
 /** @type {LineTransformer<State>} */
-const highlightCodeFenceOptionsTransformer = ({ codeFenceOptions, line, state = getInitialState(codeFenceOptions) }) => {
+const highlightMetaTransformer = ({ meta, line, state = getInitialState(meta) }) => {
   const isHighlighted = state.highlightedLines[0] === state.lineNumber;
   return {
     line: isHighlighted ? highlightLine(line) : line,
@@ -50,11 +50,11 @@ const highlightCodeFenceOptionsTransformer = ({ codeFenceOptions, line, state = 
   };
 }
 
-highlightCodeFenceOptionsTransformer.displayName = 'highlightCodeFenceOptions';
-highlightCodeFenceOptionsTransformer.schemaExtension = `
+highlightMetaTransformer.displayName = 'highlightCodeFenceOptions';
+highlightMetaTransformer.schemaExtension = `
   type VSCodeHighlightLine {
     isHighlighted: Boolean
   }
 `;
 
-module.exports = { highlightCodeFenceOptionsTransformer };
+module.exports = { highlightMetaTransformer };
