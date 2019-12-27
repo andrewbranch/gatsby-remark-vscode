@@ -48,6 +48,7 @@
     "rehype-stringify": "^6.0.0",
     "remark-parse": "^7.0.1",
     "remark-rehype": "^5.0.0",
+    "synthwave-vscode": "github:robb0wen/synthwave-vscode",
     "typescript": "^3.6.4",
     "unified": "^8.4.1"
   },

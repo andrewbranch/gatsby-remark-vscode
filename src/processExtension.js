@@ -55,7 +55,9 @@ async function processExtension(packageJsonPath) {
           id: theme.id || path.basename(theme.path).split('.')[0],
           path: sourcePath,
           label: theme.label,
-          include: themeContents.include
+          include: themeContents.include,
+          packageName: packageJson.name,
+          isOnlyThemeInPackage: packageJson.contributes.themes.length === 1
         };
       })
     );
@@ -85,13 +87,13 @@ async function mergeCache(cache, key, value) {
  * @param {string} specifier
  * @param {Host} host
  */
-async function getExtensionPath(specifier, host) {
-  const absolute = path.isAbsolute(specifier) ? specifier : require.resolve(specifier);
+async function getExtensionPackageJsonPath(specifier, host) {
+  const absolute = path.isAbsolute(specifier) ? specifier : require.resolve(path.join(specifier, 'package.json'));
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));
     await host.decompress(await readFile(absolute), outDir);
-    return path.join(outDir, 'extension');
+    return path.join(outDir, 'extension', 'package.json');
   }
 
   return absolute;
@@ -105,7 +107,7 @@ async function getExtensionPath(specifier, host) {
 function processExtensions(extensions, host, cache) {
   return Promise.all(
     extensions.map(async extension => {
-      const packageJsonPath = path.join(await getExtensionPath(extension, host), 'package.json');
+      const packageJsonPath = await getExtensionPackageJsonPath(extension, host);
       const { grammars, themes } = await processExtension(packageJsonPath);
       Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
       await mergeCache(cache, 'grammars', grammars);

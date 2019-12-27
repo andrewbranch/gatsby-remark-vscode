@@ -48,12 +48,21 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
   const themes = { ...themeManifest, ...themeCache };
   for (const themeId in themes) {
     const theme = themes[themeId];
-    if (themeNameOrId === themeId || themeNameOrId.toLowerCase() === theme.label.toLowerCase()) {
+    if (
+      themeNameOrId === themeId ||
+      themeNameOrId.toLowerCase() === theme.label.toLowerCase() ||
+      (themeNameOrId === theme.packageName && theme.isOnlyThemeInPackage)
+    ) {
       const themePath = path.isAbsolute(theme.path) ? theme.path : path.resolve(__dirname, '../lib/themes', theme.path);
       if (!(await exists(themePath))) {
         throw new Error(`Theme manifest lists '${themeNameOrId}' at '${themePath}, but no such file exists.'`);
       }
       return themePath;
+    }
+    if (themeNameOrId === theme.packageName) {
+      throw new Error(
+        `Cannot identify theme by '${themeNameOrId}' because the extension contains more than one theme.`
+      );
     }
   }
 
