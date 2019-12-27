@@ -1,10 +1,19 @@
 // @ts-check
 const path = require('path');
 const { exists } = require('./utils');
-// @ts-ignore
-const grammarManifest = require('../lib/grammars/manifest.json');
-// @ts-ignore
-const themeManifest = require('../lib/themes/manifest.json');
+
+/** @type {void} */
+let grammarManifest;
+/** @type {void} */
+let themeManifest;
+function getGrammarManifest() {
+  // @ts-ignore
+  return grammarManifest ||  (grammarManifest = require('../lib/grammars/manifest.json'));
+}
+function getThemeManifest() {
+  // @ts-ignore
+  return themeManifest || (themeManifest = require('../lib/themes/manifest.json'));
+}
 
 /**
  * @param {string} language
@@ -21,7 +30,7 @@ function resolveAlias(language, languageAliases) {
  */
 function getScope(language, grammarCache, languageAliases) {
   const resolvedLanguage = resolveAlias(language, languageAliases);
-  const grammars = { ...grammarManifest, ...grammarCache };
+  const grammars = { ...getGrammarManifest(), ...grammarCache };
   for (const scopeName in grammars) {
     const grammar = grammars[scopeName];
     if (grammar.languageNames.includes(resolvedLanguage)) {
@@ -45,7 +54,7 @@ function getGrammarLocation(grammar) {
  * @returns {Promise<string>}
  */
 async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) {
-  const themes = { ...themeManifest, ...themeCache };
+  const themes = { ...getThemeManifest(), ...themeCache };
   for (const themeId in themes) {
     const theme = themes[themeId];
     if (
@@ -75,8 +84,8 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
   return locallyResolved;
 }
 
-const highestBuiltinLanguageId = Object.keys(grammarManifest).reduce(
-  (highest, scopeName) => Math.max(highest, grammarManifest[scopeName].languageId),
+const highestBuiltinLanguageId = Object.keys(getGrammarManifest()).reduce(
+  (highest, scopeName) => Math.max(highest, getGrammarManifest()[scopeName].languageId),
   1
 );
 
@@ -92,7 +101,7 @@ function getGrammar(scopeName, grammarCache) {
  * @param {*} grammarCache
  */
 function getAllGrammars(grammarCache) {
-  return { ...grammarManifest, ...grammarCache };
+  return { ...getGrammarManifest(), ...grammarCache };
 }
 
 module.exports = {
