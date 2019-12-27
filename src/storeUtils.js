@@ -8,7 +8,7 @@ let grammarManifest;
 let themeManifest;
 function getGrammarManifest() {
   // @ts-ignore
-  return grammarManifest ||  (grammarManifest = require('../lib/grammars/manifest.json'));
+  return grammarManifest || (grammarManifest = require('../lib/grammars/manifest.json'));
 }
 function getThemeManifest() {
   // @ts-ignore
