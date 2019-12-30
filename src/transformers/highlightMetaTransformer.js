@@ -52,7 +52,7 @@ const highlightMetaTransformer = ({ meta, line, state = getInitialState(meta) })
 
 highlightMetaTransformer.displayName = 'highlightCodeFenceOptions';
 highlightMetaTransformer.schemaExtension = `
-  type VSCodeHighlightLine {
+  type GRVSCLine {
     isHighlighted: Boolean
   }
 `;

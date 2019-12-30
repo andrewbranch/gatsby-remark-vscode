@@ -139,32 +139,9 @@ function createPlugin() {
         }
 
         const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
-        
-        const nodeData = {
-          id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
-          parent: markdownNode.id,
-          index: nodeIndex,
-          rawContent: text,
-          htmlContent: html,
-          lines: linesData,
-          preClassName,
-          codeClassName,
-          language: languageName
-        };
-
-        const childNode = {
-          ...nodeData,
-          internal: {
-            type: 'VSCodeHighlightCodeBlock',
-            contentDigest: createHash('md5')
-              .update(JSON.stringify(nodeData))
-              .digest('hex')
-          }
-        };
-
-        graphQLNodes.push(childNode);
         nodeRegistry.register(node, {
           lines,
+          text,
           meta,
           languageName,
           possibleThemes,
@@ -177,25 +154,33 @@ function createPlugin() {
       }
     }
 
-    nodeRegistry.forEachNode(({ meta, languageName, possibleThemes }, node) => {
-      const lineElements = nodeRegistry.mapLines(node, (line, lineIndex) => {
+    nodeRegistry.forEachNode(({ text, meta, languageName, possibleThemes }, node) => {
+      /** @type {grvsc.HTMLElement[]} */
+      const lineElements = [];
+      nodeRegistry.forEachLine(node, (line, lineIndex) => {
         /** @type {LineData} */
         const lineData = { meta, index: lineIndex, content: line.text, language: languageName };
         const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
-        return span(
-          mergeAttributes({ class: lineClassName }, line.attrs),
-          nodeRegistry.mapTokens(
-            node,
-            lineIndex,
-            /** @returns {grvsc.HTMLElement | string} */
-            (tokenText, classNamesByTheme) =>
+        /** @type {(grvsc.HTMLElement | string)[]} */
+        const tokenElements = [];
+        nodeRegistry.forEachToken(
+          node,
+          lineIndex,
+          (tokenText, classNamesByTheme) => {
+            tokenElements.push(
               span({ class: flatMap(classNamesByTheme, name => name.value).join(' ') }, [escapeHTML(tokenText)], {
                 whitespace: TriviaRenderFlags.NoWhitespace
-              }),
-            lineText => lineText
-          ),
-          { whitespace: TriviaRenderFlags.NoWhitespace }
+              })
+            );
+          },
+          lineText => tokenElements.push(lineText)
         );
+
+        lineElements.push(span(
+          mergeAttributes({ class: lineClassName }, line.attrs),
+          tokenElements,
+          { whitespace: TriviaRenderFlags.NoWhitespace }
+        ));
       });
 
       const wrapperClassNameValue =
@@ -210,18 +195,46 @@ function createPlugin() {
 
       const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
       const preClassName = joinClassNames('grvsc-container', wrapperClassNameValue, ...themeClassNames);
+      const codeClassName = 'grvsc-code';
       node.type = 'html';
       node.value = renderHTML(
         pre(
           { class: preClassName, 'data-language': languageName },
           [
-            code({ class: 'grvsc-code' }, lineElements, {
+            code({ class: codeClassName }, lineElements, {
               whitespace: TriviaRenderFlags.NewlineBetweenChildren
             })
           ],
           { whitespace: TriviaRenderFlags.NoWhitespace }
         )
       );
+
+      const nodeData = {
+        id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
+        parent: markdownNode.id,
+        index: nodeIndex,
+        rawContent: text,
+        htmlContent: node.value,
+        preClassName,
+        codeClassName,
+        language: languageName,
+        themes: possibleThemes.map(({ identifier, conditions }) => ({
+          identifier,
+          conditions
+        }))
+      };
+
+      const childNode = {
+        ...nodeData,
+        internal: {
+          type: 'VSCodeHighlightCodeBlock',
+          contentDigest: createHash('md5')
+            .update(JSON.stringify(nodeData))
+            .digest('hex')
+        }
+      };
+
+      graphQLNodes.push(childNode);
     });
 
     const themeRules = flatMap(nodeRegistry.getAllPossibleThemes(), ({ theme, settings }) => {

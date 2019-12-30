@@ -76,7 +76,7 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
 
   transformer.displayName = 'highlightCommentDirective';
   transformer.schemaExtension = `
-    type VSCodeHighlightLine {
+    type GRVSCLine {
       isHighlighted: Boolean
     }
   `;

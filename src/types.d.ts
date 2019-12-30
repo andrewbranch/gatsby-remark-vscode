@@ -74,8 +74,14 @@ interface BinaryToken {
   metadata: number;
 }
 
+interface FullToken {
+  start: number;
+  end: number;
+  scopes: string[];
+}
+
 interface TokenizeWithThemeResult {
-  lines: BinaryToken[][] | undefined;
+  lines: { binary: BinaryToken[], full: FullToken[] }[] | undefined;
   theme: ConditionalTheme;
   colorMap: string[];
   settings: Record<string, string>;
@@ -94,6 +100,7 @@ interface ConditionalTheme {
 
 interface RegisteredNodeData {
   meta: object;
+  text: string;
   languageName: string;
   lines: Line[];
   possibleThemes: ConditionalTheme[];
@@ -118,17 +125,18 @@ interface MarkdownNode {
 type Line = {
   text: string;
   attrs: object;
+  data: object;
 };
 
 interface NodeRegistry {
   register: (node: MDASTNode, data: RegisteredNodeData) => void;
-  mapLines: <T>(node: MDASTNode, mapper: (line: Line, index: number, lines: Line[]) => T) => T[];
-  mapTokens: <T>(
+  forEachLine: (node: MDASTNode, action: (line: Line, index: number, lines: Line[]) => void) => void;
+  forEachToken: (
     node: MDASTNode,
     lineIndex: number,
-    tokenMapper: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => T,
-    plainLineMapper: (text: string) => T
-  ) => T[];
+    tokenAction: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => void,
+    plainLineAction: (text: string) => void
+  ) => void;
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];

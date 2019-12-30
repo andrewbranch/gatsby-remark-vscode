@@ -26,18 +26,18 @@ function createNodeRegistry() {
         themeColors.set(theme.identifier, { colorMap, settings })
       );
     },
-    mapLines: (node, mapper) => nodeMap.get(node).lines.map(mapper),
-    mapTokens: (node, lineIndex, tokenMapper, plainLineMapper) => {
+    forEachLine: (node, action) => nodeMap.get(node).lines.forEach(action),
+    forEachToken: (node, lineIndex, tokenAction, plainLineAction) => {
       generateClassNames();
       const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
       const line = lines[lineIndex];
       if (!isTokenized) {
-        return [plainLineMapper(line.text)];
+        return [plainLineAction(line.text)];
       }
 
       const zipped = zippedLines.get(node)[lineIndex];
-      return zipped.map(tokens =>
-        tokenMapper(
+      zipped.forEach(tokens =>
+        tokenAction(
           line.text.slice(tokens[0].start, tokens[0].end),
           tokens.map(({ metadata }, i) => {
             const { theme } = tokenizationResults[i];
@@ -92,7 +92,7 @@ function createNodeRegistry() {
       const zippedLinesForNode = [];
       zippedLines.set(node, zippedLinesForNode);
       lines.forEach((_, lineIndex) => {
-        const zipped = zipLineTokens(tokenizationResults.map(t => t.lines[lineIndex]));
+        const zipped = zipLineTokens(tokenizationResults.map(t => t.lines[lineIndex].binary));
         zippedLinesForNode[lineIndex] = zipped;
         zipped.forEach(tokensAtPosition => {
           tokensAtPosition.forEach((token, themeIndex) => {

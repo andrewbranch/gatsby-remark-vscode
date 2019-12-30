@@ -1,10 +1,10 @@
 // @ts-check
 const logger = require('loglevel');
 const { getDefaultLineTransformers } = require('./transformers');
-const graphql = x => x; // For syntax highlighting the schema
+const graphql = x => x; // Dummy function for syntax highlighting the schema
 
 const rootSchema = graphql`
-  type VSCodeHighlightToken {
+  type GRVSCToken {
     text: String!
     html: String!
     startIndex: Int!
@@ -12,21 +12,36 @@ const rootSchema = graphql`
     scopes: [String!]!
     className: String!
   }
-  type VSCodeHighlightLine {
-    tokens: [VSCodeHighlightToken!]!
+  type GRVSCLine {
+    tokens: [GRVSCToken!]!
     binaryTokens: [Int!]!
     text: String!
     html: String!
     className: String!
+    data: JSON!
   }
-  type VSCodeHighlightCodeBlock implements Node {
-    lines: [VSCodeHighlightLine!]!
+  enum GRVSCThemeConditionKind {
+    default
+    matchMedia
+    parentSelector
+  }
+  type GRVSCThemeCondition {
+    condition: GRVSCThemeConditionKind!
+    value: String
+  }
+  type GRVSCThemeWithTokenization {
+    identifier: String!
+    conditions: [GRVSCThemeCondition!]!
+    lines: [GRVSCLine!]!
+  }
+  type GRVSCCodeBlock implements Node {
     index: Int!
     html: String!
     text: String!
     preClassName: String!
     codeClassName: String!
     language: String
+    themes: [GRVSCCodeBlock!]!
   }
 `;
 

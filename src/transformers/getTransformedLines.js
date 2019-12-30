@@ -17,9 +17,11 @@ function getTransformedLines(transformers, text, languageName, meta) {
   linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
     let line = rawLines[lineIndex];
     const attrs = {};
+    const graphQLData = {};
     for (let i = 0; i < transformers.length; i++) {
       const transformer = transformers[i];
       const state = prevTransformerStates[i];
+      /** @type {LineTransformerResult} */
       const txResult = transformer({
         state,
         line: { text: line, attrs },
@@ -33,8 +35,9 @@ function getTransformedLines(transformers, text, languageName, meta) {
       }
       line = txResult.line.text;
       Object.assign(attrs, txResult.line.attrs);
+      Object.assign(graphQLData, txResult.data);
     }
-    result.push({ text: line, attrs });
+    result.push({ text: line, attrs, data: graphQLData });
   }
 
   return result;
