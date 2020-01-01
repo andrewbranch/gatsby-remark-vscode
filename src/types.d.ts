@@ -68,20 +68,15 @@ interface GatsbyCache {
   set(key: string, data: any): Promise<void>;
 }
 
-interface BinaryToken {
+interface Token {
   start: number;
   end: number;
   metadata: number;
-}
-
-interface FullToken {
-  start: number;
-  end: number;
   scopes: string[];
 }
 
 interface TokenizeWithThemeResult {
-  lines: { binary: BinaryToken[], full: FullToken[] }[] | undefined;
+  lines: Token[][] | undefined;
   theme: ConditionalTheme;
   colorMap: string[];
   settings: Record<string, string>;
@@ -108,18 +103,23 @@ interface RegisteredNodeData {
   tokenizationResults: TokenizeWithThemeResult[];
 }
 
+interface RegisteredToken {
+  text: string;
+  scopes: string[];
+  startIndex: number;
+  endIndex: number;
+  defaultThemeTokenData: grvsc.gql.GRVSCThemeTokenData;
+  additionalThemeTokenData: grvsc.gql.GRVSCThemeTokenData[];
+}
+
 interface MDASTNode {
   type: string;
   value?: string;
   children?: MDASTNode[];
 }
 
-interface MarkdownNode {
-  id: string;
+interface MarkdownNode extends grvsc.gql.Node {
   fileAbsolutePath: string;
-  internal: {
-    contentDigest: string;
-  };
 }
 
 type Line = {
@@ -134,7 +134,7 @@ interface NodeRegistry {
   forEachToken: (
     node: MDASTNode,
     lineIndex: number,
-    tokenAction: (text: string, classNames: { value: string[], theme: ConditionalTheme }[]) => void,
+    tokenAction: (token: RegisteredToken) => void,
     plainLineAction: (text: string) => void
   ) => void;
   forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
@@ -216,4 +216,15 @@ declare namespace grvsc {
   };
 
   type CSSElement = CSSMediaQuery | CSSRuleset;
+
+  // GraphQL (merged with schema.d.ts)
+  namespace gql {
+    interface Node {
+      id: string;
+      parent?: string;
+      internal?: {
+        contentDigest?: string;
+      };
+    }
+  }
 }

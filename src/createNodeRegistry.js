@@ -1,6 +1,6 @@
 // @ts-check
 const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./utils');
-const { getClassNamesFromMetadata } = require('../lib/vscode/modes');
+const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
 /**
@@ -15,7 +15,7 @@ function createNodeRegistry() {
   const themeColors = new Map();
   /** @type {Map<string, Map<string, string>>} */
   let themeTokenClassNameMap;
-  /** @type {Map<MDASTNode, BinaryToken[][][]>} */
+  /** @type {Map<MDASTNode, Token[][][]>} */
   let zippedLines;
 
   return {
@@ -36,20 +36,44 @@ function createNodeRegistry() {
       }
 
       const zipped = zippedLines.get(node)[lineIndex];
-      zipped.forEach(tokens =>
-        tokenAction(
-          line.text.slice(tokens[0].start, tokens[0].end),
-          tokens.map(({ metadata }, i) => {
-            const { theme } = tokenizationResults[i];
-            const themeClassNames = themeTokenClassNameMap.get(theme.identifier);
-            const canonicalClassNames = getClassNamesFromMetadata(metadata);
-            return {
-              value: canonicalClassNames.map(c => themeClassNames.get(c)),
-              theme
-            };
-          })
-        )
-      );
+      
+      zipped.forEach(tokens => {
+        /** @type {grvsc.gql.GRVSCThemeTokenData} */
+        let defaultThemeTokenData;
+        /** @type {grvsc.gql.GRVSCThemeTokenData[]} */
+        const additionalThemeTokenData = [];
+
+        tokens.forEach(({ metadata }, i) => {
+          const { theme } = tokenizationResults[i];
+          const themeClassNames = themeTokenClassNameMap.get(theme.identifier);
+          const tokenData = getTokenDataFromMetadata(metadata);
+          const { colorMap } = themeColors.get(theme.identifier);
+          const isDefaultTheme = theme.conditions.some(c => c.condition === 'default');
+          const data = {
+            themeIdentifier: theme.identifier,
+            className: tokenData.classNames.map(c => themeClassNames.get(c)).join(' '),
+            bold: tokenData.bold,
+            italic: tokenData.italic,
+            underline: tokenData.underline,
+            meta: metadata,
+            color: getColorFromColorMap(colorMap, tokenData.classNames[0])
+          };
+          if (isDefaultTheme) {
+            defaultThemeTokenData = data;
+          } else {
+            additionalThemeTokenData.push(data);
+          }
+        });
+
+        tokenAction({
+          text: line.text.slice(tokens[0].start, tokens[0].end),
+          startIndex: tokens[0].start,
+          endIndex: tokens[0].end,
+          scopes: tokens[0].scopes,
+          defaultThemeTokenData,
+          additionalThemeTokenData,
+        });
+      });
     },
     forEachNode: nodeMap.forEach.bind(nodeMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
@@ -88,15 +112,15 @@ function createNodeRegistry() {
     zippedLines = new Map();
     nodeMap.forEach(({ lines, tokenizationResults, isTokenized }, node) => {
       if (!isTokenized) return;
-      /** @type {BinaryToken[][][]} */
+      /** @type {Token[][][]} */
       const zippedLinesForNode = [];
       zippedLines.set(node, zippedLinesForNode);
       lines.forEach((_, lineIndex) => {
-        const zipped = zipLineTokens(tokenizationResults.map(t => t.lines[lineIndex].binary));
+        const zipped = zipLineTokens(tokenizationResults.map(t => t.lines[lineIndex]));
         zippedLinesForNode[lineIndex] = zipped;
         zipped.forEach(tokensAtPosition => {
           tokensAtPosition.forEach((token, themeIndex) => {
-            const canonicalClassNames = getClassNamesFromMetadata(token.metadata);
+            const canonicalClassNames = getTokenDataFromMetadata(token.metadata).classNames;
             const { theme } = tokenizationResults[themeIndex];
             let themeClassNames = themeTokenClassNameMap.get(theme.identifier);
             if (!themeClassNames) {
@@ -119,8 +143,8 @@ function createNodeRegistry() {
 }
 
 /**
- * @param {BinaryToken[][]} lineTokenSets
- * @returns {BinaryToken[][]}
+ * @param {Token[][]} lineTokenSets
+ * @returns {Token[][]}
  * @example
  *
  * normalizeLineTokens([
@@ -136,21 +160,21 @@ function createNodeRegistry() {
  */
 function zipLineTokens(lineTokenSets) {
   lineTokenSets = lineTokenSets.map(lineTokens => lineTokens.slice());
-  /** @type {BinaryToken[][]} */
+  /** @type {Token[][]} */
   const result = [];
   let start = 0;
   while (true) {
     const end = Math.min(...lineTokenSets.map(lineTokens => (lineTokens[0] ? lineTokens[0].end : 0)));
     if (start >= end) break;
 
-    /** @type {BinaryToken[]} */
+    /** @type {Token[]} */
     const tokensAtPosition = [];
     for (let i = 0; i < lineTokenSets.length; i++) {
       const token = lineTokenSets[i].shift();
       if (token.start === start && token.end === end) {
         tokensAtPosition.push(token);
       } else {
-        tokensAtPosition.push({ start, end, metadata: token.metadata });
+        tokensAtPosition.push({ start, end, metadata: token.metadata, scopes: token.scopes });
         lineTokenSets[i].unshift(token);
       }
     }

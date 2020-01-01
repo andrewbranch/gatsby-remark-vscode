@@ -21,6 +21,7 @@ type GRVSCTokenizedLine {
   tokens: [GRVSCToken!]!
   text: String!
   html: String!
+  attrs: JSON!
   className: String!
   data: JSON!
 }
@@ -34,6 +35,7 @@ type GRVSCThemeCondition {
   value: String
 }
 type GRVSCTheme {
+  path: String!
   identifier: String!
   conditions: [GRVSCThemeCondition!]!
 }

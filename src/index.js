@@ -26,7 +26,8 @@ const {
   flatMap,
   groupConditions,
   convertLegacyThemeOption,
-  createOnce
+  createOnce,
+  partitionOne
 } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
@@ -157,30 +158,51 @@ function createPlugin() {
     nodeRegistry.forEachNode(({ text, meta, languageName, possibleThemes }, node) => {
       /** @type {grvsc.HTMLElement[]} */
       const lineElements = [];
+      /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
+      const gqlLines = [];
       nodeRegistry.forEachLine(node, (line, lineIndex) => {
         /** @type {LineData} */
         const lineData = { meta, index: lineIndex, content: line.text, language: languageName };
         const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
         /** @type {(grvsc.HTMLElement | string)[]} */
         const tokenElements = [];
+        /** @type {grvsc.gql.GRVSCToken[]} */
+        const gqlTokens = [];
         nodeRegistry.forEachToken(
           node,
           lineIndex,
-          (tokenText, classNamesByTheme) => {
-            tokenElements.push(
-              span({ class: flatMap(classNamesByTheme, name => name.value).join(' ') }, [escapeHTML(tokenText)], {
-                whitespace: TriviaRenderFlags.NoWhitespace
-              })
+          token => {
+            const className = joinClassNames(
+              token.defaultThemeTokenData.className,
+              ...token.additionalThemeTokenData.map(t => t.className)
             );
+            const html = span({ class: className }, [escapeHTML(token.text)], {
+              whitespace: TriviaRenderFlags.NoWhitespace
+            });
+            tokenElements.push(html);
+            gqlTokens.push({
+              ...token,
+              className,
+              html: renderHTML(html)
+            });
           },
           lineText => tokenElements.push(lineText)
         );
 
-        lineElements.push(span(
-          mergeAttributes({ class: lineClassName }, line.attrs),
+        const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
+        const html = span(
+          attrs,
           tokenElements,
           { whitespace: TriviaRenderFlags.NoWhitespace }
-        ));
+        );
+
+        lineElements.push(html);
+        gqlLines.push({
+          ...line,
+          className: attrs.class,
+          tokens: gqlTokens,
+          html: renderHTML(html)
+        });
       });
 
       const wrapperClassNameValue =
@@ -209,19 +231,21 @@ function createPlugin() {
         )
       );
 
+      const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t => t.conditions.some(c => c.condition === 'default'));
+
+      /** @type {grvsc.gql.GRVSCCodeBlock} */
       const nodeData = {
         id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
         parent: markdownNode.id,
         index: nodeIndex,
-        rawContent: text,
-        htmlContent: node.value,
+        text,
+        html: node.value,
         preClassName,
         codeClassName,
         language: languageName,
-        themes: possibleThemes.map(({ identifier, conditions }) => ({
-          identifier,
-          conditions
-        }))
+        defaultTheme,
+        additionalThemes,
+        tokenizedLines: gqlLines
       };
 
       const childNode = {

@@ -45,6 +45,7 @@
     "hast-util-raw": "^5.0.1",
     "jest": "^24.9.0",
     "mdast-util-to-hast": "^6.0.2",
+    "open": "^7.0.0",
     "prettier": "^1.18.2",
     "rehype-stringify": "^6.0.0",
     "remark-parse": "^7.0.1",

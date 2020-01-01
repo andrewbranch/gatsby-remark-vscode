@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-const { visit, parse, BREAK } = require('graphql');
+const { visit, parse } = require('graphql');
 
 const schema = parse(fs.readFileSync(path.resolve(__dirname, '../src/schema.graphql'), 'utf8'));
 const declarations = createNamespaceDeclaration(gatherTypeDeclarations(gatherEnums()));
@@ -68,7 +68,7 @@ function gatherTypeDeclarations(enums) {
           undefined,
           node.name.value,
           undefined,
-          undefined,
+          node.interfaces.length ? [transformImplementsToExtends(node.interfaces)] : undefined,
           node.fields.map(transformFieldDefinitionNode)
         ));
 
@@ -81,30 +81,37 @@ function gatherTypeDeclarations(enums) {
   });
   return types;
 
+  /** @param {readonly import('graphql').NamedTypeNode[]} interfaces */
+  function transformImplementsToExtends(interfaces) {
+    return ts.createHeritageClause(
+      ts.SyntaxKind.ExtendsKeyword,
+      interfaces.map(({ name }) => ts.createExpressionWithTypeArguments(undefined, ts.createIdentifier(name.value)))
+    );      
+  }
+
   /** @param {import('graphql').FieldDefinitionNode} field */
   function transformFieldDefinitionNode(field) {
     return ts.createPropertySignature(
       undefined,
       field.name.value,
-      undefined,
+      field.type.kind !== 'NonNullType' ? ts.createToken(ts.SyntaxKind.QuestionToken) : undefined,
       transformTypeNode(field.type),
       undefined
     );
   }
 
   /** @param {import('graphql').TypeNode} typeNode */
-  function transformTypeNode(typeNode, isOptional = true) {
+  function transformTypeNode(typeNode) {
     switch (typeNode.kind) {
       case 'ListType':
         return ts.createArrayTypeNode(transformTypeNode(typeNode.type));
       case 'NonNullType':
-        return transformTypeNode(typeNode.type, false);
+        return transformTypeNode(typeNode.type);
       case 'NamedType':
         const enumType = enums.get(typeNode.name.value);
-        const type = enumType
+        return enumType
           ? ts.createUnionTypeNode(enumType.map(value => ts.createLiteralTypeNode(ts.createStringLiteral(value))))
           : ts.createTypeReferenceNode(mapTypeName(typeNode.name.value), undefined);
-        return isOptional ? ts.createUnionTypeNode([type, ts.createNull() ]) : type;
     }
   }
 
@@ -116,7 +123,6 @@ function gatherTypeDeclarations(enums) {
       case 'Boolean': return 'boolean';
       case 'DateTime': return 'Date';
       case 'JSON': return 'any';
-      case 'Node': return 'any';
       default: return name;
     }
   }

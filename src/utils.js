@@ -344,6 +344,17 @@ function isRelativePath(p) {
   return /^\.\.?[\\/]/.test(p);
 }
 
+/**
+ * @template T
+ * @param {T[]} arr 
+ * @param {(element: T) => boolean} predicate 
+ * @returns {[T, T[]]}
+ */
+function partitionOne(arr, predicate) {
+  const index = arr.findIndex(predicate);
+  return [arr[index], arr.slice().splice(index, 1)];
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -373,5 +384,6 @@ module.exports = {
   convertLegacyThemeOption,
   deprecationNotice,
   isRelativePath,
-  createOnce
+  createOnce,
+  partitionOne
 };

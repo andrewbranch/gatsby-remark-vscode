@@ -23,24 +23,26 @@ declare namespace grvsc {
             tokens: GRVSCToken[];
             text: string;
             html: string;
+            attrs: any;
             className: string;
             data: any;
         }
         interface GRVSCThemeCondition {
             condition: "default" | "matchMedia" | "parentSelector";
-            value: string | null;
+            value?: string;
         }
         interface GRVSCTheme {
+            path: string;
             identifier: string;
             conditions: GRVSCThemeCondition[];
         }
-        interface GRVSCCodeBlock {
+        interface GRVSCCodeBlock extends Node {
             index: number;
             html: string;
             text: string;
             preClassName: string;
             codeClassName: string;
-            language: string | null;
+            language?: string;
             defaultTheme: GRVSCTheme;
             additionalThemes: GRVSCTheme[];
             tokenizedLines: GRVSCTokenizedLine[];
