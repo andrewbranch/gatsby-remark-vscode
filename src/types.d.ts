@@ -2,7 +2,10 @@ interface RemarkPluginArguments {
   cache: GatsbyCache;
   markdownAST: MDASTNode;
   markdownNode: MarkdownNode;
-  actions: any;
+  actions: {
+    createNode: (node: grvsc.gql.Node) => void;
+    createParentChildLink: (parent: grvsc.gql.Node, child: grvsc.gql.Node) => void;
+  };
   createNodeId: (key: string) => string;
 }
 

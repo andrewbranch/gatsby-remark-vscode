@@ -32,7 +32,7 @@ function tryRequire(specifier) {
 }
 
 /** @type {MarkdownNode} */
-const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
+const markdownNode = { id: '1234', fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,
@@ -42,9 +42,14 @@ const defaultOptions = {
   }
 };
 
+/** @returns {any} */
 function createCache() {
-  return new Map();
+  return  new Map();
 }
+
+const noop = () => {};
+const actions = { createNode: noop, createParentChildLink: noop };
+const createNodeId = () => '';
 
 /** @returns {any} */
 function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
@@ -64,7 +69,7 @@ function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
  */
 async function testSnapshot(options, markdownAST = createMarkdownAST(), cache = createCache()) {
   const plugin = createPlugin();
-  await plugin({ markdownAST, markdownNode, cache }, { ...defaultOptions, ...options });
+  await plugin({ markdownAST, markdownNode, cache, actions, createNodeId }, { ...defaultOptions, ...options });
   expect(markdownAST).toMatchSnapshot();
 }
 
@@ -97,7 +102,7 @@ describe('included languages and themes', () => {
     const plugin = createPlugin();
     const markdownAST = { type: 'root', children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
+    await plugin({ markdownAST, markdownNode, cache, createNodeId, actions }, defaultOptions);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
   });
 
@@ -105,7 +110,7 @@ describe('included languages and themes', () => {
     const plugin = createPlugin();
     const markdownAST = { type: 'root', children: [...createMarkdownAST().children, ...createMarkdownAST().children] };
     const cache = createCache();
-    await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
+    await plugin({ markdownAST, markdownNode, cache, createNodeId, actions }, defaultOptions);
     expect(markdownAST.children.filter(node => node.type === 'html')).toHaveLength(3);
   });
 
@@ -126,7 +131,7 @@ it('sets highlighted line class names', async () => {
   const plugin = createPlugin();
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
   const cache = createCache();
-  await plugin({ markdownAST, markdownNode, cache }, defaultOptions);
+  await plugin({ markdownAST, markdownNode, cache, createNodeId, actions }, defaultOptions);
   expect(markdownAST).toMatchSnapshot();
 });
 
@@ -193,7 +198,7 @@ describe('integration tests', () => {
     const options = tryRequire(extensionless);
     const expected = await tryReadFile(extensionless + '.expected.html');
     const markdownAST = processor.parse(md);
-    await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
+    await plugin({ markdownAST, markdownNode, cache: createCache(), createNodeId, actions }, { ...defaultOptions, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
     if (!expected || update) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');

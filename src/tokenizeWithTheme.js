@@ -56,7 +56,7 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
 }
 
 /**
- * @param {Uint32Array} tokens 
+ * @param {Uint32Array} tokens
  * @param {number} position
  */
 function getMetaAtPosition(tokens, position) {
@@ -67,6 +67,5 @@ function getMetaAtPosition(tokens, position) {
     }
   }
 }
-
 
 module.exports = tokenizeWithTheme;

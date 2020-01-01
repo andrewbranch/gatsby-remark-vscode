@@ -42,13 +42,13 @@ const highlightMetaTransformer = ({ meta, line, state = getInitialState(meta) })
   const isHighlighted = state.highlightedLines[0] === state.lineNumber;
   return {
     line: isHighlighted ? highlightLine(line) : line,
-    ...isHighlighted && { data: { isHighlighted } },
+    ...(isHighlighted && { data: { isHighlighted } }),
     state: {
       lineNumber: state.lineNumber + 1,
       highlightedLines: isHighlighted ? state.highlightedLines.slice(1) : state.highlightedLines
     }
   };
-}
+};
 
 highlightMetaTransformer.displayName = 'highlightCodeFenceOptions';
 highlightMetaTransformer.schemaExtension = `

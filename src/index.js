@@ -97,7 +97,7 @@ function createPlugin() {
     });
 
     let nodeIndex = 0;
-    /** @type {object[]} */
+    /** @type {grvsc.gql.GRVSCCodeBlock[]} */
     const graphQLNodes = [];
     const nodeRegistry = createNodeRegistry();
     for (const node of nodes) {
@@ -190,11 +190,7 @@ function createPlugin() {
         );
 
         const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
-        const html = span(
-          attrs,
-          tokenElements,
-          { whitespace: TriviaRenderFlags.NoWhitespace }
-        );
+        const html = span(attrs, tokenElements, { whitespace: TriviaRenderFlags.NoWhitespace });
 
         lineElements.push(html);
         gqlLines.push({
@@ -231,7 +227,9 @@ function createPlugin() {
         )
       );
 
-      const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t => t.conditions.some(c => c.condition === 'default'));
+      const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t =>
+        t.conditions.some(c => c.condition === 'default')
+      );
 
       /** @type {grvsc.gql.GRVSCCodeBlock} */
       const nodeData = {

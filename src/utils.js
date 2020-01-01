@@ -346,8 +346,8 @@ function isRelativePath(p) {
 
 /**
  * @template T
- * @param {T[]} arr 
- * @param {(element: T) => boolean} predicate 
+ * @param {T[]} arr
+ * @param {(element: T) => boolean} predicate
  * @returns {[T, T[]]}
  */
 function partitionOne(arr, predicate) {

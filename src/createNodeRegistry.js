@@ -36,7 +36,7 @@ function createNodeRegistry() {
       }
 
       const zipped = zippedLines.get(node)[lineIndex];
-      
+
       zipped.forEach(tokens => {
         /** @type {grvsc.gql.GRVSCThemeTokenData} */
         let defaultThemeTokenData;
@@ -71,7 +71,7 @@ function createNodeRegistry() {
           endIndex: tokens[0].end,
           scopes: tokens[0].scopes,
           defaultThemeTokenData,
-          additionalThemeTokenData,
+          additionalThemeTokenData
         });
       });
     },
