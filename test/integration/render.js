@@ -47,10 +47,10 @@ function renderInIframe(html) {
     <html>
       <head>
         <style>
-          .vscode-highlight {
-            --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+          .grvsc-container {
+            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
           }
         </style>
       </head>
@@ -68,6 +68,7 @@ function renderDocument(casesHTML) {
       <meta charset="UTF-8">
       <title>gatsby-remark-vscode - Integration tests</title>
       <style>
+        .header { padding: 20px; background-color: #fafafa; }
         .cases { margin: 0 auto; max-width: 1100px; padding: 40px 20px; }
         .test-case { padding: 20px; }
         .test-case:nth-child(:even) { background-color: #fafafa; }
@@ -79,6 +80,11 @@ function renderDocument(casesHTML) {
       </style>
     </head>
     <body>
+      <div class="header">
+        Body class:
+        <button onclick="setBodyClass('')">Clear</button>
+        <button onclick="setBodyClass('dark')">.dark</button>
+      </div>
       <div class="cases">
         ${casesHTML}
       </div>
@@ -90,11 +96,15 @@ function renderDocument(casesHTML) {
         window.addEventListener('DOMContentLoaded', () => {
           setTimeout(() => {
             Array.from(document.querySelectorAll('iframe')).forEach(el => {
-              console.log('helloooo')
               resizeIFrameToFitContent(el);
             });
           }, 100);
         });
+        function setBodyClass(bodyClass) {
+          Array.from(document.querySelectorAll('iframe')).forEach(el => {
+            el.contentWindow.document.body.className = bodyClass;
+          });
+        }
       </script>
     </body>
     </html>

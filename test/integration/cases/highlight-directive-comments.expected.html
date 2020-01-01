@@ -1,89 +1,76 @@
-<pre class="default-dark vscode-highlight" data-language="ts" data-index="0"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">x</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">y</span><span class="mtk1"> = </span><span class="mtk7">1</span><span class="mtk1">; </span></span>
-<span class="vscode-highlight-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">z</span><span class="mtk1"> = </span><span class="mtk7">2</span><span class="mtk1">;</span></span></code></pre>
-<pre class="default-dark vscode-highlight" data-language="shell" data-index="1"><code class="vscode-highlight-code"><span class="vscode-highlight-line">npm install</span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted">npm run build </span>
-<span class="vscode-highlight-line">npm start</span></code></pre>
-<pre class="default-dark vscode-highlight" data-language="js" data-index="2"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk3">// This is where the interesting part is</span></span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">() {</span></span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk4">this</span><span class="mtk1">);</span></span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted"><span class="mtk1">}</span></span>
-<span class="vscode-highlight-line"><span class="mtk1"></span></span>
-<span class="vscode-highlight-line"><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">();</span></span></code></pre>
-<pre class="default-dark vscode-highlight" data-language="swift" data-index="3"><code class="vscode-highlight-code"><span class="vscode-highlight-line"><span class="mtk4">enum</span><span class="mtk1"> </span><span class="mtk10">Thing</span><span class="mtk1"> {</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> one</span></span>
-<span class="vscode-highlight-line vscode-highlight-line-highlighted"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> </span><span class="mtk11">two</span><span class="mtk1">(</span><span class="mtk12">_</span><span class="mtk1"> name: </span><span class="mtk10">String</span><span class="mtk1">)</span></span>
-<span class="vscode-highlight-line"><span class="mtk1">}</span></span></code></pre>
-<style class="vscode-highlight-styles">
+<pre class="grvsc-container default-dark" data-language="ts"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">x</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
+<span class="grvsc-line grvsc-highlighted"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">y</span><span class="mtk1"> = </span><span class="mtk7">1</span><span class="mtk1">; </span></span>
+<span class="grvsc-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">z</span><span class="mtk1"> = </span><span class="mtk7">2</span><span class="mtk1">;</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="shell"><code class="grvsc-code"><span class="grvsc-line">npm install</span>
+<span class="grvsc-line grvsc-highlighted">npm run build </span>
+<span class="grvsc-line">npm start</span></code></pre>
+<pre class="grvsc-container default-dark" data-language="js"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk3">// This is where the interesting part is</span></span>
+<span class="grvsc-line grvsc-highlighted"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">() {</span></span>
+<span class="grvsc-line grvsc-highlighted"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk4">this</span><span class="mtk1">);</span></span>
+<span class="grvsc-line grvsc-highlighted"><span class="mtk1">}</span></span>
+<span class="grvsc-line"></span>
+<span class="grvsc-line"><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">();</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="swift"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk4">enum</span><span class="mtk1"> </span><span class="mtk10">Thing</span><span class="mtk1"> {</span></span>
+<span class="grvsc-line"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> one</span></span>
+<span class="grvsc-line grvsc-highlighted"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> </span><span class="mtk11">two</span><span class="mtk1">(</span><span class="mtk12">_</span><span class="mtk1"> name: </span><span class="mtk10">String</span><span class="mtk1">)</span></span>
+<span class="grvsc-line"><span class="mtk1">}</span></span></code></pre>
+<style class="grvsc-styles">
   :root {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
-
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
-}
-
-.vscode-highlight {
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-top: 1rem;
-  padding-top: var(--vscode-highlight-padding-top);
-  padding-bottom: 1rem;
-  padding-bottom: var(--vscode-highlight-padding-bottom);
-  border-radius: 8px;
-  border-radius: var(--vscode-highlight-border-radius);
-  font-feature-settings: normal;
-}
-
-.vscode-highlight-code {
-  display: inline-block;
-  min-width: 100%;
-}
-
-.vscode-highlight-line {
-  display: inline-block;
-  box-sizing: border-box;
-  width: 100%;
-  padding-left: 1.5rem;
-  padding-left: var(--vscode-highlight-padding-left);
-  padding-right: 1.5rem;
-  padding-right: var(--vscode-highlight-padding-right);
-}
-
-.vscode-highlight-line-highlighted {
-  background-color: var(--vscode-highlight-line-highlighted-background-color);
-  box-shadow: inset var(--vscode-highlight-line-highlighted-border-width) 0 0 0 var(--vscode-highlight-line-highlighted-border-color);
-}
-
+    --grvsc-padding-v: 1rem;
+    --grvsc-padding-h: 1.5rem;
+    --grvsc-padding-top: var(--grvsc-padding-v);
+    --grvsc-padding-right: var(--grvsc-padding-h);
+    --grvsc-padding-bottom: var(--grvsc-padding-v);
+    --grvsc-padding-left: var(--grvsc-padding-h);
+    --grvsc-border-radius: 8px;
+  
+    --grvsc-line-highlighted-background-color: transparent;
+    --grvsc-line-highlighted-border-width: 4px;
+    --grvsc-line-highlighted-border-color: transparent;
+  }
+  
+  .grvsc-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top);
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom);
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius);
+    font-feature-settings: normal;
+  }
+  
+  .grvsc-code {
+    display: inline-block;
+    min-width: 100%;
+  }
+  
+  .grvsc-line {
+    display: inline-block;
+    box-sizing: border-box;
+    width: 100%;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left);
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right);
+  }
+  
+  .grvsc-highlighted {
+    background-color: var(--grvsc-line-highlighted-background-color);
+    box-shadow: inset var(--grvsc-line-highlighted-border-width) 0 0 0 var(--grvsc-line-highlighted-border-color);
+  }
+  
   .default-dark {
-background-color: #1E1E1E;
-color: #D4D4D4;
-}
-
-.default-dark .mtk1 { color: #D4D4D4; }
-.default-dark .mtk2 { color: #1E1E1E; }
-.default-dark .mtk3 { color: #6A9955; }
-.default-dark .mtk4 { color: #569CD6; }
-.default-dark .mtk5 { color: #D16969; }
-.default-dark .mtk6 { color: #D7BA7D; }
-.default-dark .mtk7 { color: #B5CEA8; }
-.default-dark .mtk8 { color: #CE9178; }
-.default-dark .mtk9 { color: #646695; }
-.default-dark .mtk10 { color: #4EC9B0; }
-.default-dark .mtk11 { color: #DCDCAA; }
-.default-dark .mtk12 { color: #9CDCFE; }
-.default-dark .mtk13 { color: #000080; }
-.default-dark .mtk14 { color: #F44747; }
-.default-dark .mtk15 { color: #C586C0; }
-.default-dark .mtk16 { color: #6796E6; }
-.default-dark .mtk17 { color: #808080; }
-.default-dark .mtki { font-style: italic; }
-.default-dark .mtkb { font-weight: bold; }
-.default-dark .mtku { text-decoration: underline; text-underline-position: under; }
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk7 { color: #B5CEA8; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .mtk15 { color: #C586C0; }
 </style>

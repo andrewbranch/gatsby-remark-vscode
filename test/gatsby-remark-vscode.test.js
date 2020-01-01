@@ -1,17 +1,15 @@
 // @ts-check
+const { execSync } = require('child_process');
 const { promisify } = require('util');
 const fs = require('fs');
 const glob = require('glob');
 const path = require('path');
-const open = require('open');
-const rimraf = require('rimraf');
 const unified = require('unified');
 const reparseHast = require('hast-util-raw');
 const mdastToHast = require('mdast-util-to-hast');
 const remark = require('remark-parse');
 const stringify = require('rehype-stringify');
 const createPlugin = require('../src');
-const host = require('../src/host');
 const utils = require('../src/utils');
 const { renderDocument, renderNewCase, renderTestDiff } = require('./integration/render');
 
@@ -33,13 +31,13 @@ function tryRequire(specifier) {
   }
 }
 
+/** @type {MarkdownNode} */
 const markdownNode = { fileAbsolutePath: path.join(__dirname, 'test.md') };
 /** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,
-  extensionDataDirectory: path.join(__dirname, 'extensions'),
+  logLevel: 'error',
   host: {
-    fetch: () => fail('host.fetch should not be called without providing a test host'),
     decompress: () => fail('host.decompress should not be called without providing a test host')
   }
 };
@@ -48,6 +46,7 @@ function createCache() {
   return new Map();
 }
 
+/** @returns {any} */
 function createMarkdownAST(lang = 'js', value = 'const x = 3;\n// Comment') {
   return {
     type: 'root',
@@ -123,78 +122,6 @@ describe('included languages and themes', () => {
   });
 });
 
-describe('extension downloading', () => {
-  const testHost = {
-    ...host,
-    fetch: jest.fn(async url => ({
-      statusCode: 200,
-      body: await readFile(path.join(__dirname, 'fixtures', url.includes('wrong-one')
-        ? 'wrong-extension.zip'
-        : 'extension.zip')),
-    })),
-  };
-
-  beforeEach(() => {
-    rimraf.sync(defaultOptions.extensionDataDirectory);
-    testHost.fetch.mockClear();
-  });
-
-  afterAll(() => {
-    rimraf.sync(defaultOptions.extensionDataDirectory);
-  });
-
-
-  it('can download an extension to resolve a theme', async () => {
-    await testSnapshot({
-      colorTheme: 'Custom Theme',
-      extensions: [{
-        identifier: 'publisher.wrong-one',
-        version: '1.0.0',
-      }, {
-        identifier: 'publisher.custom-theme',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    });
-
-    expect(testHost.fetch).toHaveBeenCalledTimes(2);
-  });
-
-  it('can download an extension to resolve a grammar', async () => {
-    await testSnapshot({
-      extensions: [{
-        identifier: 'publisher.wrong-one',
-        version: '1.0.0',
-      }, {
-        identifier: 'publisher.custom-language',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    }, createMarkdownAST('custom'));
-
-    expect(testHost.fetch).toHaveBeenCalledTimes(2);
-  });
-
-  it('can download an extension to a custom location', async () => {
-    const plugin = createPlugin();
-    const extensionDataDirectory = path.join(__dirname, 'extensions/one/two/three');
-    await plugin({
-      markdownAST: createMarkdownAST('custom'),
-      markdownNode,
-      cache: createCache(),
-    }, {
-      extensionDataDirectory,
-      extensions: [{
-        identifier: 'publisher.custom-language',
-        version: '1.0.0',
-      }],
-      host: testHost,
-    });
-
-    expect(await exists(extensionDataDirectory)).toBeTruthy();
-  });
-});
-
 it('sets highlighted line class names', async () => {
   const plugin = createPlugin();
   const markdownAST = createMarkdownAST('js{1,3-4}', '// 1\n// 2\n// 3\n// 4\n// 5');
@@ -243,7 +170,7 @@ describe('utils', () => {
 });
 
 describe('integration tests', () => {
-  const update = /^|\b(-u|--update|--updateSnapshot|--update-snapshot)\b|$/.test(process.argv.join(' '));
+  const update = /(\s|^)(-u|--update|--updateSnapshot|--update-snapshot)(\s|$)/.test(process.argv.join(' '));
   const defaultOptions = require('./integration/options');
   const processor = unified()
     .use(remark, { commonmark: true })
@@ -259,28 +186,21 @@ describe('integration tests', () => {
   /** @type {string[]} */
   const newCaseHTML = [];
 
-  beforeAll(() => {
-    jest.resetAllMocks();
-    jest.resetModuleRegistry();
-  });
-
   it.each(cases)('%s', async name => {
     const plugin = createPlugin();
     const extensionless = path.resolve(__dirname, 'integration/cases', name);
     const md = await readFile(extensionless + '.md');
     const options = tryRequire(extensionless);
     const expected = await tryReadFile(extensionless + '.expected.html');
-    const markdownAST =  processor.parse(md);
+    const markdownAST = processor.parse(md);
     await plugin({ markdownAST, markdownNode, cache: createCache() }, { ...defaultOptions, ...options });
     const html = processor.stringify(reparseHast(mdastToHast(markdownAST, { allowDangerousHTML: true })));
     if (!expected || update) {
       await writeFile(extensionless + '.expected.html', html, 'utf8');
       newCaseHTML.push(renderNewCase(name, html));
-    } else {
-      if (html !== expected) {
-        failedCaseHTML.push(renderTestDiff(name, html, expected));
-        expect(html).toBe(expected);
-      }
+    } else if (html !== expected) {
+      failedCaseHTML.push(renderTestDiff(name, html, expected));
+      expect(html).toBe(expected);
     }
   });
 
@@ -288,7 +208,7 @@ describe('integration tests', () => {
     if (failedCaseHTML.length || newCaseHTML.length) {
       const fileName = path.resolve(__dirname, 'integration/report.html');
       await writeFile(fileName, renderDocument([...newCaseHTML, ...failedCaseHTML].join('\n')));
-      return open(fileName);
+      execSync(`open ${fileName}`);
     }
   });
 });
