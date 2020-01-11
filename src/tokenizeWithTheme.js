@@ -1,4 +1,5 @@
 // @ts-check
+const { last } = require('./utils');
 const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 
 /**
@@ -31,6 +32,13 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
   const tokens = [];
   let ruleStack = undefined;
   for (const line of lines) {
+    // Empty lines tokenize as a one-length token for some reason.
+    // Seems weird and I don’t think there’s any reason to keep them.
+    if (!line.text) {
+      tokens.push([]);
+      continue;
+    }
+
     const binary = grammar.tokenizeLine2(line.text, ruleStack);
     const full = grammar.tokenizeLine(line.text, ruleStack).tokens;
     /** @type {Token[]} */
@@ -56,16 +64,19 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
 }
 
 /**
+ * There can be fewer binary tokens than full tokens, so you can’t associate by array index
  * @param {Uint32Array} tokens
  * @param {number} position
  */
 function getMetaAtPosition(tokens, position) {
   for (let i = 0; i < tokens.length; i += 2) {
     const start = tokens[i];
-    if (start >= position) {
+    const end = tokens[i + 2];
+    if (start <= position && position < end) {
       return tokens[i + 1];
     }
   }
+  return last(tokens);
 }
 
 module.exports = tokenizeWithTheme;

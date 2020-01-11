@@ -27,7 +27,8 @@ const {
   groupConditions,
   convertLegacyThemeOption,
   createOnce,
-  partitionOne
+  partitionOne,
+  last
 } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
@@ -179,7 +180,7 @@ function createPlugin() {
             const html = span({ class: className }, [escapeHTML(token.text)], {
               whitespace: TriviaRenderFlags.NoWhitespace
             });
-            tokenElements.push(html);
+            addTokenElement(html);
             gqlTokens.push({
               ...token,
               className,
@@ -199,6 +200,20 @@ function createPlugin() {
           tokens: gqlTokens,
           html: renderHTML(html)
         });
+
+        /**
+         * Pushes a token element onto `tokenElements`, or merges the token text if
+         * attributes are identical in order to minimize the number of elements created.
+         * @param {grvsc.HTMLElement} element
+         */
+        function addTokenElement(element) {
+          const prev = last(tokenElements);
+          if (typeof prev === 'object' && element.attributes.class === prev.attributes.class) {
+            prev.children.push(...element.children);
+          } else {
+            tokenElements.push(element);
+          }
+        }
       });
 
       const wrapperClassNameValue =

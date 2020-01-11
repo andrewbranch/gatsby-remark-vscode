@@ -355,6 +355,15 @@ function partitionOne(arr, predicate) {
   return [arr[index], arr.slice().splice(index, 1)];
 }
 
+/**
+ * @template T
+ * @param {ArrayLike<T>} arr
+ * @returns {T}
+ */
+function last(arr) {
+  return arr[arr.length - 1];
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -385,5 +394,6 @@ module.exports = {
   deprecationNotice,
   isRelativePath,
   createOnce,
-  partitionOne
+  partitionOne,
+  last
 };

@@ -4,7 +4,7 @@ interface RemarkPluginArguments {
   markdownNode: MarkdownNode;
   actions: {
     createNode: (node: grvsc.gql.Node) => void;
-    createParentChildLink: (parent: grvsc.gql.Node, child: grvsc.gql.Node) => void;
+    createParentChildLink: (nodes: { parent: grvsc.gql.Node, child: grvsc.gql.Node }) => void;
   };
   createNodeId: (key: string) => string;
 }
@@ -69,6 +69,14 @@ interface PluginOptions {
 interface GatsbyCache {
   get(key: string): Promise<any>;
   set(key: string, data: any): Promise<void>;
+}
+
+interface DecodedTokenMeta {
+  classNames: string[];
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  foreground: number;
 }
 
 interface Token {
