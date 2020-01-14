@@ -10,7 +10,7 @@ function createNodeRegistry() {
   /** @type {Map<MDASTNode, RegisteredNodeData>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
-  let themes;
+  let themes = [];
   /** @type {Map<string, { colorMap: string[], settings: Record<string, string> }>} */
   const themeColors = new Map();
   /** @type {Map<string, Map<string, string>>} */
@@ -52,7 +52,7 @@ function createNodeRegistry() {
       );
     },
     forEachNode: nodeMap.forEach.bind(nodeMap),
-    getAllPossibleThemes: () => (themes || []).map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
+    getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenStylesForTheme: themeIdentifier => {
       /** @type {ReturnType<NodeRegistry['getTokenStylesForTheme']>} */
       const result = [];
