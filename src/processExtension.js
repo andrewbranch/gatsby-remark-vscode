@@ -132,17 +132,15 @@ async function getExtensionPackageJsonPath(specifier, host) {
  * @param {Host} host
  * @param {*} cache
  */
-function processExtensions(extensions, host, cache) {
+async function processExtensions(extensions, host, cache) {
   let languageId = getHighestBuiltinLanguageId() + 1;
-  return Promise.all(
-    extensions.map(async extension => {
-      const packageJsonPath = await getExtensionPackageJsonPath(extension, host);
-      const { grammars, themes } = await processExtension(packageJsonPath);
-      Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
-      await mergeCache(cache, 'grammars', grammars);
-      await mergeCache(cache, 'themes', themes);
-    })
-  );
+  for (const extension of extensions) {
+    const packageJsonPath = await getExtensionPackageJsonPath(extension, host);
+    const { grammars, themes } = await processExtension(packageJsonPath);
+    Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
+    await mergeCache(cache, 'grammars', grammars);
+    await mergeCache(cache, 'themes', themes);
+  }
 }
 
 module.exports = { processExtension, processExtensions };

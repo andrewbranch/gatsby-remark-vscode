@@ -10,7 +10,7 @@ function createNodeRegistry() {
   /** @type {Map<MDASTNode, RegisteredNodeData>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
-  let themes;
+  let themes = [];
   /** @type {Map<string, { colorMap: string[], settings: Record<string, string> }>} */
   const themeColors = new Map();
   /** @type {Map<string, Map<string, string>>} */

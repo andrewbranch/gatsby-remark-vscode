@@ -318,7 +318,7 @@ function convertLegacyThemeSettings(themeSettings) {
 }
 
 function createOnce() {
-  const onceFns = new Set();
+  const onceReturns = new Map();
   /**
    * @template {void | Promise<void>} T
    * @param {() => T} fn
@@ -326,10 +326,12 @@ function createOnce() {
    * @returns {T | undefined}
    */
   return function once(fn, key = fn) {
-    if (!onceFns.has(key)) {
-      onceFns.add(key);
-      return fn();
+    if (!onceReturns.has(key)) {
+      const ret = fn();
+      onceReturns.set(key, ret);
+      return ret;
     }
+    return onceReturns.get(key);
   };
 }
 
