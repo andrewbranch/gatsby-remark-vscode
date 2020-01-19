@@ -8,8 +8,8 @@ exports.createResolvers = ({
 }) => {
   createResolvers({
     MarkdownRemark: {
-      vsCodeHighlightCodeBlocks: {
-        type: ['VSCodeHighlightCodeBlock'],
+      grvscCodeBlocks: {
+        type: ['GRVSCCodeBlock'],
         resolve(source, _, context) {
           return getFromCache();
 
@@ -34,15 +34,15 @@ exports.createResolvers = ({
             }
             if (!childNodes) {
               logger.error(
-                'gatsby-remark-vscode couldn’t retrieve up-to-date VSCodeHighlightCodeBlock GraphQL nodes. ' +
-                'The `vsCodeHighlightCodeBlocks` field may be missing, empty or stale. ' +
+                'gatsby-remark-vscode couldn’t retrieve up-to-date GRVSCCodeBlock GraphQL nodes. ' +
+                'The `GRVSCCodeBlocks` field may be missing, empty or stale. ' +
                 'The Gatsby cache is probably in a weird state. Try running `gatsby clean`, and file an ' +
                 'issue at https://github.com/andrewbranch/gatsby-remark-vscode/issues/new if the problem persists.'
               );
 
               return context.nodeModel.runQuery({
                 query: { parent: { id: { eq: source.id } } },
-                type: 'VSCodeHighlightCodeBlock',
+                type: 'GRVSCCodeBlock',
                 firstOnly: false
               });
             }

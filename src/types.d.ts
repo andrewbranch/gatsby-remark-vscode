@@ -148,7 +148,7 @@ interface NodeRegistry {
     tokenAction: (token: RegisteredToken) => void,
     plainLineAction: (text: string) => void
   ) => void;
-  forEachNode: (action: (data: RegisteredNodeData, node: MDASTNode) => void) => void;
+  forEachNode: (action: (data: RegisteredNodeData & { index: number }, node: MDASTNode) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }

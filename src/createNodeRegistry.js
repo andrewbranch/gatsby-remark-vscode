@@ -7,7 +7,7 @@ const { declaration } = require('./renderers/css');
  * @returns {NodeRegistry}
  */
 function createNodeRegistry() {
-  /** @type {Map<MDASTNode, RegisteredNodeData>} */
+  /** @type {Map<MDASTNode, RegisteredNodeData & { index: number }>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
   let themes = [];
@@ -20,7 +20,7 @@ function createNodeRegistry() {
 
   return {
     register: (node, data) => {
-      nodeMap.set(node, data);
+      nodeMap.set(node, { ...data, index: nodeMap.size });
       themes = concatConditionalThemes(themes, data.possibleThemes);
       data.tokenizationResults.forEach(({ theme, colorMap, settings }) =>
         themeColors.set(theme.identifier, { colorMap, settings })

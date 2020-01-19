@@ -97,7 +97,6 @@ function createPlugin() {
       nodes.push(node);
     });
 
-    let nodeIndex = 0;
     /** @type {grvsc.gql.GRVSCCodeBlock[]} */
     const graphQLNodes = [];
     const nodeRegistry = createNodeRegistry();
@@ -151,12 +150,11 @@ function createPlugin() {
           tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
         });
       } finally {
-        nodeIndex++;
         unlockRegistry();
       }
     }
 
-    nodeRegistry.forEachNode(({ text, meta, languageName, possibleThemes }, node) => {
+    nodeRegistry.forEachNode(({ text, meta, languageName, possibleThemes, index }, node) => {
       /** @type {grvsc.HTMLElement[]} */
       const lineElements = [];
       /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
@@ -232,7 +230,7 @@ function createPlugin() {
       node.type = 'html';
       node.value = renderHTML(
         pre(
-          { class: preClassName, 'data-language': languageName },
+          { class: preClassName, 'data-language': languageName, 'data-index': index },
           [
             code({ class: codeClassName }, lineElements, {
               whitespace: TriviaRenderFlags.NewlineBetweenChildren
@@ -248,9 +246,9 @@ function createPlugin() {
 
       /** @type {grvsc.gql.GRVSCCodeBlock} */
       const nodeData = {
-        id: createNodeId(`VSCodeHighlightCodeBlock-${markdownNode.id}-${nodeIndex}`),
+        id: createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${index}`),
         parent: markdownNode.id,
-        index: nodeIndex,
+        index,
         text,
         html: node.value,
         preClassName,
@@ -264,7 +262,7 @@ function createPlugin() {
       const childNode = {
         ...nodeData,
         internal: {
-          type: 'VSCodeHighlightCodeBlock',
+          type: 'GRVSCCodeBlock',
           contentDigest: createHash('md5')
             .update(JSON.stringify(nodeData))
             .digest('hex')

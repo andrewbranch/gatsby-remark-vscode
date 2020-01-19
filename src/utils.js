@@ -366,6 +366,14 @@ function last(arr) {
   return arr[arr.length - 1];
 }
 
+/**
+ * @param {string} path
+ */
+function createRequire(path) {
+  const module = require('module');
+  return /** @type {NodeRequire} */((module.createRequire || module.createRequireFromPath)(path));
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -397,5 +405,6 @@ module.exports = {
   isRelativePath,
   createOnce,
   partitionOne,
-  last
+  last,
+  createRequire
 };

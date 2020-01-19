@@ -14,7 +14,7 @@ function CoolCodeBlock(props) {
   return codeBlock ? (
     <pre className={codeBlock.preClassName}>
       <code className={codeBlock.codeClassName}>
-        {codeBlock.lines.map(({ tokens, className }, i) => (
+        {codeBlock.tokenizedLines.map(({ tokens, className }, i) => (
           <div key={i} className={className} style={{ display: 'block' }}>
             {tokens.map(({ startIndex, text, className }) => (
               <span
@@ -49,6 +49,7 @@ const renderAst = new RehypeReact({
 
 class BlogPostTemplate extends React.Component {
   render() {
+    window.props = this.props;
     const post = this.props.data.markdownRemark
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
@@ -89,7 +90,7 @@ class BlogPostTemplate extends React.Component {
               {post.frontmatter.date}
             </p>
           </header>
-          <CodeBlockContext.Provider value={post.vsCodeHighlightCodeBlocks}>
+          <CodeBlockContext.Provider value={post.grvscCodeBlocks}>
             {renderAst(post.htmlAst)}
           </CodeBlockContext.Provider>
           <hr
@@ -152,10 +153,10 @@ export const pageQuery = graphql`
         date(formatString: "MMMM DD, YYYY")
         description
       },
-      vsCodeHighlightCodeBlocks {
+      grvscCodeBlocks {
         preClassName
         codeClassName
-        lines {
+        tokenizedLines {
           className
           tokens {
             startIndex
