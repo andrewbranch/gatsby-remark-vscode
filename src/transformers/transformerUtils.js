@@ -16,7 +16,7 @@ function addClassName(attrs, className) {
  */
 function highlightLine(line, newText) {
   return {
-    attrs: addClassName(line.attrs, 'grvsc-highlighted'),
+    attrs: addClassName(line.attrs, 'grvsc-line-highlighted'),
     text: typeof newText === 'string' ? newText : line.text
   };
 }
