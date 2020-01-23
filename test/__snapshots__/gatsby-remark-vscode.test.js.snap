@@ -435,10 +435,10 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
 <span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// 2</span></span>
-<span class=\\"grvsc-line grvsc-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
-<span class=\\"grvsc-line grvsc-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
 <span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// 5</span></span></code></pre>",
     },
     Object {
