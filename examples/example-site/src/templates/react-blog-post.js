@@ -9,26 +9,28 @@ import { rhythm, scale } from "../utils/typography"
 const CodeBlockContext = createContext([])
 
 function CoolCodeBlock(props) {
-  const [isRotating, setIsRotating] = useState({});
-  const codeBlock = (useContext(CodeBlockContext) || [])[+props["data-index"]];
+  const [isRotating, setIsRotating] = useState({})
+  const codeBlock = (useContext(CodeBlockContext) || [])[+props["data-index"]]
   return codeBlock ? (
     <pre className={codeBlock.preClassName}>
       <code className={codeBlock.codeClassName}>
         {codeBlock.tokenizedLines.map(({ tokens, className }, i) => (
-          <div key={i} className={className} style={{ display: 'block' }}>
+          <div key={i} className={className} style={{ display: "block" }}>
             {tokens.map(({ startIndex, text, className }) => (
               <span
                 className={[
                   className,
-                  isRotating[`${i}/${startIndex}`] ? 'rotating' : ''
-                ].join(' ')}
+                  isRotating[`${i}/${startIndex}`] ? "rotating" : "",
+                ].join(" ")}
                 key={startIndex}
-                onClick={() => setIsRotating({
-                  ...isRotating,
-                  [`${i}/${startIndex}`]: !isRotating[`${i}/${startIndex}`],
-                })}
+                onClick={() =>
+                  setIsRotating({
+                    ...isRotating,
+                    [`${i}/${startIndex}`]: !isRotating[`${i}/${startIndex}`],
+                  })
+                }
                 style={{
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   animationDuration: `${text.length * 80}ms`,
                 }}
               >
@@ -39,17 +41,17 @@ function CoolCodeBlock(props) {
         ))}
       </code>
     </pre>
-  ) : null;
+  ) : null
 }
 
 const renderAst = new RehypeReact({
   createElement: React.createElement,
   components: { pre: CoolCodeBlock },
-}).Compiler;
+}).Compiler
 
 class BlogPostTemplate extends React.Component {
   render() {
-    window.props = this.props;
+    window.props = this.props
     const post = this.props.data.markdownRemark
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
@@ -152,7 +154,7 @@ export const pageQuery = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         description
-      },
+      }
       grvscCodeBlocks {
         preClassName
         codeClassName

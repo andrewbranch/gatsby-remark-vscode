@@ -319,13 +319,14 @@ function convertLegacyThemeSettings(themeSettings) {
 
 function createOnce() {
   const onceReturns = new Map();
+  return once;
   /**
-   * @template {void | Promise<void>} T
+   * @template T
    * @param {() => T} fn
    * @param {any=} key
-   * @returns {T | undefined}
+   * @returns {T}
    */
-  return function once(fn, key = fn) {
+  function once(fn, key = fn) {
     if (!onceReturns.has(key)) {
       const ret = fn();
       onceReturns.set(key, ret);

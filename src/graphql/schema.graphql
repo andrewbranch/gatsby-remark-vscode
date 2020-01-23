@@ -50,3 +50,9 @@ type GRVSCCodeBlock implements Node {
   additionalThemes: [GRVSCTheme!]!
   tokenizedLines: [GRVSCTokenizedLine!]!
 }
+
+# Query arguments
+input GRVSCThemeArgument {
+  identifier: String!
+  conditions: [String!]!
+}

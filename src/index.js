@@ -2,20 +2,18 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('loglevel');
-const defaultHost = require('./host');
 const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
-const validateOptions = require('./validateOptions');
+const setup = require('./setup');
 const createGetRegistry = require('./createGetRegistry');
 const tokenizeWithTheme = require('./tokenizeWithTheme');
 const getPossibleThemes = require('./getPossibleThemes');
 const createNodeRegistry = require('./createNodeRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const createSchemaCustomization = require('./createSchemaCustomization');
+const createSchemaCustomization = require('./graphql/createSchemaCustomization');
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
-const { getDefaultLineTransformers, getTransformedLines } = require('./transformers');
-const { processExtensions } = require('./processExtension');
+const { getTransformedLines } = require('./transformers');
 const { getGrammar, getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
 const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
@@ -25,7 +23,6 @@ const {
   getStylesFromThemeSettings,
   flatMap,
   groupConditions,
-  convertLegacyThemeOption,
   createOnce,
   partitionOne,
   last
@@ -42,43 +39,20 @@ function createPlugin() {
    */
   async function textmateHighlight(
     { markdownAST, markdownNode, cache, actions, createNodeId },
-    {
-      theme = 'Default Dark+',
-      colorTheme: legacyTheme,
-      wrapperClassName = '',
-      languageAliases = {},
-      extensions = [],
-      getLineClassName = () => '',
-      injectStyles = true,
-      replaceColor = x => x,
-      logLevel = 'warn',
-      host = defaultHost,
-      getLineTransformers = getDefaultLineTransformers,
-      ...rest
-    } = {}
+    options = {}
   ) {
-    await once(async () => {
-      logger.setLevel(logLevel);
-      if (legacyTheme) {
-        theme = convertLegacyThemeOption(legacyTheme);
-      }
-
-      validateOptions({
-        theme,
-        colorTheme: legacyTheme,
-        wrapperClassName,
-        languageAliases,
-        extensions,
-        getLineClassName,
-        injectStyles,
-        replaceColor,
-        logLevel,
-        host,
-        getLineTransformers
-      });
-
-      await processExtensions(extensions, host, cache);
-    }, 'setup');
+    const {
+      theme,
+      wrapperClassName,
+      languageAliases,
+      extensions,
+      getLineClassName,
+      injectStyles,
+      replaceColor,
+      logLevel,
+      getLineTransformers,
+      ...rest
+    } = await once(() => setup(options, cache), 'setup');
 
     const lineTransformers = getLineTransformers({
       theme,
@@ -92,6 +66,7 @@ function createPlugin() {
       ...rest
     });
 
+    /** @type {MDASTNode[]} */
     const nodes = [];
     visit(markdownAST, 'code', node => {
       nodes.push(node);
@@ -336,6 +311,7 @@ function createPlugin() {
   }
 
   textmateHighlight.createSchemaCustomization = createSchemaCustomization;
+  textmateHighlight.once = once;
   return textmateHighlight;
 }
 

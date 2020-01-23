@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('loglevel');
-const { getDefaultLineTransformers } = require('./transformers');
+const { getDefaultLineTransformers } = require('../transformers');
 const rootSchema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'), 'utf8');
 
 /**

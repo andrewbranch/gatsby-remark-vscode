@@ -18,7 +18,7 @@ const Wrapper = styled.section`
 
 // highlight-start
 export default function MyComponent({ children }) {
-  return <Wrapper>{children}</Wrapper>;
+  return <Wrapper>{children}</Wrapper>
 }
 // highlight-end
 ```
@@ -38,6 +38,6 @@ const Wrapper = styled.section`
 `
 
 export default function MyComponent({ children }) {
-  return <Wrapper>{children}</Wrapper>;
+  return <Wrapper>{children}</Wrapper>
 }
 ```

@@ -125,6 +125,8 @@ interface RegisteredToken {
 
 interface MDASTNode {
   type: string;
+  lang?: string;
+  meta?: string;
   value?: string;
   children?: MDASTNode[];
 }
@@ -237,5 +239,42 @@ declare namespace grvsc {
         contentDigest?: string;
       };
     }
+
+    interface HighlightArgs {
+      source: string;
+      language?: string;
+      defaultTheme?: GRVSCThemeArgument;
+      additionalThemes?: GRVSCThemeArgument[];
+    }
+  }
+
+  namespace conditionParsing {
+    type SyntaxKind =
+      | 'Unknown'
+      | 'OpenParen'
+      | 'CloseParen'
+      | 'StringLiteral'
+      | 'Identifier'
+      | 'Call'
+      | 'EOF';
+
+    interface Node {
+      kind: SyntaxKind;
+      pos: number;
+    }
+    interface Identifier extends Node {
+      kind: 'Identifier';
+      text: string;
+    }
+    interface StringLiteral extends Node {
+      kind: 'StringLiteral';
+      text: string;
+    }
+    interface Call extends Node {
+      kind: 'Call';
+      target: Identifier;
+      argument: StringLiteral;
+    }
+    type Expression = Identifier | StringLiteral | Call;
   }
 }

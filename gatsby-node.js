@@ -1,11 +1,10 @@
-// @ts-check
 const logger = require('loglevel');
 const { getChildNodes } = require('./src/cacheUtils');
 
 exports.createResolvers = ({
   createResolvers,
   cache,
-}) => {
+}, /** @type {PluginOptions} */ pluginOptions) => {
   createResolvers({
     MarkdownRemark: {
       grvscCodeBlocks: {
@@ -51,5 +50,39 @@ exports.createResolvers = ({
         },
       },
     },
+
+    Query: {
+      grvscHighlight: {
+        type: 'GRVSCCodeBlock',
+        args: {
+          source: 'String!',
+          language: 'String',
+          defaultTheme: 'String',
+          additionlThemes: ['GRVSCThemeArgument!']
+        },
+        resolve(_, args) {
+          return {
+            id: '',
+            internal: {
+              type: 'GRVSCCodeBlock',
+              contentDigest: '',
+            },
+            index: 0,
+            html: args.source,
+            text: args.source,
+            preClassName: '',
+            codeClassName: '',
+            language: args.language,
+            defaultTheme: {
+              path: '',
+              identifier: '',
+              conditions: []
+            },
+            additionlThemes: [],
+            tokenizedLines: []
+          }
+        }
+      }
+    }
   });
 };

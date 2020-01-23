@@ -11,26 +11,28 @@ The example React component looks like this. Click a token to interact with it:
 
 ```jsx
 function CoolCodeBlock(props) {
-  const [isRotating, setIsRotating] = useState({});
-  const codeBlock = (useContext(CodeBlockContext) || [])[+props["data-index"]];
+  const [isRotating, setIsRotating] = useState({})
+  const codeBlock = (useContext(CodeBlockContext) || [])[+props["data-index"]]
   return codeBlock ? (
     <pre className={codeBlock.preClassName}>
       <code className={codeBlock.codeClassName}>
         {codeBlock.lines.map(({ tokens, className }, i) => (
-          <div key={i} className={className} style={{ display: 'block' }}>
+          <div key={i} className={className} style={{ display: "block" }}>
             {tokens.map(({ startIndex, text, className }) => (
               <span
                 className={[
                   className,
-                  isRotating[`${i}/${startIndex}`] ? 'rotating' : ''
-                ].join(' ')}
+                  isRotating[`${i}/${startIndex}`] ? "rotating" : "",
+                ].join(" ")}
                 key={startIndex}
-                onClick={() => setIsRotating({
-                  ...isRotating,
-                  [`${i}/${startIndex}`]: !isRotating[`${i}/${startIndex}`],
-                })}
+                onClick={() =>
+                  setIsRotating({
+                    ...isRotating,
+                    [`${i}/${startIndex}`]: !isRotating[`${i}/${startIndex}`],
+                  })
+                }
                 style={{
-                  cursor: 'pointer',
+                  cursor: "pointer",
                   animationDuration: `${text.length * 80}ms`,
                 }}
               >
@@ -41,6 +43,6 @@ function CoolCodeBlock(props) {
         ))}
       </code>
     </pre>
-  ) : null;
+  ) : null
 }
 ```

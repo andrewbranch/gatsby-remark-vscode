@@ -4,7 +4,7 @@ const path = require('path');
 const ts = require('typescript');
 const { visit, parse } = require('graphql');
 
-const schema = parse(fs.readFileSync(path.resolve(__dirname, '../src/schema.graphql'), 'utf8'));
+const schema = parse(fs.readFileSync(path.resolve(__dirname, '../src/graphql/schema.graphql'), 'utf8'));
 const declarations = createNamespaceDeclaration(gatherTypeDeclarations(gatherEnums()));
 
 const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
@@ -16,7 +16,7 @@ const out = printer.printNode(
 
 // Validate generated code
 const { diagnostics } = ts.transpileModule(out, { reportDiagnostics: true });
-fs.writeFileSync(path.resolve(__dirname, '../src/schema.d.ts'), out);
+fs.writeFileSync(path.resolve(__dirname, '../src/graphql/schema.d.ts'), out);
 if (diagnostics.length) {
   console.error('schema.d.ts was generated with errors');
   process.exit(1);
@@ -75,6 +75,20 @@ function gatherTypeDeclarations(enums) {
         return false;
       }
     },
+    InputObjectTypeDefinition: {
+      enter: node => {
+        types.push(ts.createInterfaceDeclaration(
+          undefined,
+          undefined,
+          node.name.value,
+          undefined,
+          undefined,
+          node.fields.map(transformFieldDefinitionNode)
+        ));
+
+        return false;
+      }
+    },
     enter: node => {
       throw new Error(`Unknown node kind '${node.kind}'`);
     }
@@ -89,7 +103,7 @@ function gatherTypeDeclarations(enums) {
     );      
   }
 
-  /** @param {import('graphql').FieldDefinitionNode} field */
+  /** @param {import('graphql').FieldDefinitionNode | import('graphql').InputValueDefinitionNode} field */
   function transformFieldDefinitionNode(field) {
     return ts.createPropertySignature(
       undefined,
