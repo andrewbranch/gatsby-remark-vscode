@@ -1,18 +1,18 @@
 <pre class="grvsc-container default-dark" data-language="ts"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">x</span><span class="mtk1"> = </span><span class="mtk7">0</span><span class="mtk1">;</span></span>
-<span class="grvsc-line grvsc-highlighted"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">y</span><span class="mtk1"> = </span><span class="mtk7">1</span><span class="mtk1">; </span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">y</span><span class="mtk1"> = </span><span class="mtk7">1</span><span class="mtk1">; </span></span>
 <span class="grvsc-line"><span class="mtk4">const</span><span class="mtk1"> </span><span class="mtk12">z</span><span class="mtk1"> = </span><span class="mtk7">2</span><span class="mtk1">;</span></span></code></pre>
 <pre class="grvsc-container default-dark" data-language="shell"><code class="grvsc-code"><span class="grvsc-line">npm install</span>
-<span class="grvsc-line grvsc-highlighted">npm run build </span>
+<span class="grvsc-line grvsc-line-highlighted">npm run build </span>
 <span class="grvsc-line">npm start</span></code></pre>
 <pre class="grvsc-container default-dark" data-language="js"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk3">// This is where the interesting part is</span></span>
-<span class="grvsc-line grvsc-highlighted"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">() {</span></span>
-<span class="grvsc-line grvsc-highlighted"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk4">this</span><span class="mtk1">);</span></span>
-<span class="grvsc-line grvsc-highlighted"><span class="mtk1">}</span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">() {</span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="mtk1">  </span><span class="mtk10">console</span><span class="mtk1">.</span><span class="mtk11">log</span><span class="mtk1">(</span><span class="mtk4">this</span><span class="mtk1">);</span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="mtk1">}</span></span>
 <span class="grvsc-line"></span>
 <span class="grvsc-line"><span class="mtk11">somethingSuperInteresting</span><span class="mtk1">();</span></span></code></pre>
 <pre class="grvsc-container default-dark" data-language="swift"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk4">enum</span><span class="mtk1"> </span><span class="mtk10">Thing</span><span class="mtk1"> {</span></span>
 <span class="grvsc-line"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> one</span></span>
-<span class="grvsc-line grvsc-highlighted"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> </span><span class="mtk11">two</span><span class="mtk1">(</span><span class="mtk12">_</span><span class="mtk1"> name: </span><span class="mtk10">String</span><span class="mtk1">)</span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="mtk1">  </span><span class="mtk15">case</span><span class="mtk1"> </span><span class="mtk11">two</span><span class="mtk1">(</span><span class="mtk12">_</span><span class="mtk1"> name: </span><span class="mtk10">String</span><span class="mtk1">)</span></span>
 <span class="grvsc-line"><span class="mtk1">}</span></span></code></pre>
 <style class="grvsc-styles">
   :root {
@@ -56,7 +56,7 @@
     padding-right: var(--grvsc-padding-right);
   }
   
-  .grvsc-highlighted {
+  .grvsc-line-highlighted {
     background-color: var(--grvsc-line-highlighted-background-color);
     box-shadow: inset var(--grvsc-line-highlighted-border-width) 0 0 0 var(--grvsc-line-highlighted-border-color);
   }
