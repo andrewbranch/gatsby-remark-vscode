@@ -19,7 +19,7 @@ function createScanner(condition) {
     next,
     peek,
     getTokenText,
-    getPos,
+    getPos
   };
 
   /** @returns {grvsc.conditionParsing.SyntaxKind} */
@@ -132,7 +132,7 @@ function parseThemeCondition(condition) {
     switch (scanner.next()) {
       case 'Identifier':
         return scanner.peek() === 'OpenParen' ? parseCall() : parseIdentifier();
-      case 'StringLiteral': 
+      case 'StringLiteral':
         return parseStringLiteral();
       default:
         return fail(`Unexpected input '${scanner.getTokenText()}'`);

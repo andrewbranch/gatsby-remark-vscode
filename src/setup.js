@@ -10,20 +10,23 @@ const { processExtensions } = require('./processExtension');
  * @param {GatsbyCache} cache
  * @returns {Promise<PluginOptions>}
  */
-async function setup({
-  theme = 'Default Dark+',
-  colorTheme: legacyTheme,
-  wrapperClassName = '',
-  languageAliases = {},
-  extensions = [],
-  getLineClassName = () => '',
-  injectStyles = true,
-  replaceColor = x => x,
-  logLevel = 'warn',
-  host = defaultHost,
-  getLineTransformers = getDefaultLineTransformers,
-  ...rest
-}, cache) {
+async function setup(
+  {
+    theme = 'Default Dark+',
+    colorTheme: legacyTheme,
+    wrapperClassName = '',
+    languageAliases = {},
+    extensions = [],
+    getLineClassName = () => '',
+    injectStyles = true,
+    replaceColor = x => x,
+    logLevel = 'warn',
+    host = defaultHost,
+    getLineTransformers = getDefaultLineTransformers,
+    ...rest
+  },
+  cache
+) {
   logger.setLevel(logLevel);
   if (legacyTheme) {
     theme = convertLegacyThemeOption(legacyTheme);

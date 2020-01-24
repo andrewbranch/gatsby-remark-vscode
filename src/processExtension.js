@@ -1,7 +1,15 @@
 // @ts-check
 const path = require('path');
 const logger = require('loglevel');
-const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile, readdir, createRequire } = require('./utils');
+const {
+  getLanguageNames,
+  requireJson,
+  requirePlistOrJson,
+  exists,
+  readFile,
+  readdir,
+  createRequire
+} = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 const requireMain = createRequire(require.main.filename);

@@ -104,7 +104,7 @@ interface ConditionalTheme {
   conditions: ThemeCondition[];
 }
 
-interface RegisteredNodeData {
+interface RegisteredCodeBlockData {
   meta: object;
   text: string;
   languageName: string;
@@ -141,16 +141,16 @@ type Line = {
   data: object;
 };
 
-interface NodeRegistry {
-  register: (node: MDASTNode, data: RegisteredNodeData) => void;
-  forEachLine: (node: MDASTNode, action: (line: Line, index: number, lines: Line[]) => void) => void;
+interface CodeBlockRegistry<TKey> {
+  register: (key: TKey, data: RegisteredCodeBlockData) => void;
+  forEachLine: (codeBlockKey: TKey, action: (line: Line, index: number, lines: Line[]) => void) => void;
   forEachToken: (
-    node: MDASTNode,
+    key: TKey,
     lineIndex: number,
     tokenAction: (token: RegisteredToken) => void,
     plainLineAction: (text: string) => void
   ) => void;
-  forEachNode: (action: (data: RegisteredNodeData & { index: number }, node: MDASTNode) => void) => void;
+  forEachCodeBlock: (action: (data: RegisteredCodeBlockData & { index: number }, codeBlockKey: TKey) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }
@@ -243,8 +243,9 @@ declare namespace grvsc {
     interface HighlightArgs {
       source: string;
       language?: string;
-      defaultTheme?: GRVSCThemeArgument;
+      defaultTheme?: string;
       additionalThemes?: GRVSCThemeArgument[];
+      meta?: any;
     }
   }
 

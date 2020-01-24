@@ -6,27 +6,18 @@ const visit = require('unist-util-visit');
 const escapeHTML = require('lodash.escape');
 const setup = require('./setup');
 const createGetRegistry = require('./createGetRegistry');
-const tokenizeWithTheme = require('./tokenizeWithTheme');
+const registerCodeBlock = require('./registerCodeBlock');
 const getPossibleThemes = require('./getPossibleThemes');
-const createNodeRegistry = require('./createNodeRegistry');
+const createCodeBlockRegistry = require('./createCodeBlockRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const createSchemaCustomization = require('./graphql/createSchemaCustomization');
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
-const { getTransformedLines } = require('./transformers');
-const { getGrammar, getScope } = require('./storeUtils');
+const { getScope } = require('./storeUtils');
 const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
 const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
-const {
-  getThemeClassName,
-  getThemeClassNames,
-  getStylesFromThemeSettings,
-  flatMap,
-  groupConditions,
-  createOnce,
-  partitionOne,
-  last
-} = require('./utils');
+const { getThemeClassName, getThemeClassNames, getStylesFromThemeSettings, groupConditions } = require('./themeUtils');
+const { flatMap, createOnce, partitionOne, last } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
@@ -37,10 +28,7 @@ function createPlugin() {
    * @param {RemarkPluginArguments} _
    * @param {PluginOptions=} options
    */
-  async function textmateHighlight(
-    { markdownAST, markdownNode, cache, actions, createNodeId },
-    options = {}
-  ) {
+  async function textmateHighlight({ markdownAST, markdownNode, cache, actions, createNodeId }, options = {}) {
     const {
       theme,
       wrapperClassName,
@@ -74,7 +62,8 @@ function createPlugin() {
 
     /** @type {grvsc.gql.GRVSCCodeBlock[]} */
     const graphQLNodes = [];
-    const nodeRegistry = createNodeRegistry();
+    /** @type {CodeBlockRegistry<MDASTNode>} */
+    const codeBlockRegistry = createCodeBlockRegistry();
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
@@ -93,48 +82,33 @@ function createPlugin() {
       const possibleThemes = await getPossibleThemes(
         theme,
         await cache.get('themes'),
+        path.dirname(markdownNode.fileAbsolutePath),
         markdownNode,
         node,
         languageName,
         meta
       );
 
-      const [registry, unlockRegistry] = await getRegistry(cache, scope);
-
-      try {
-        const lines = getTransformedLines(lineTransformers, text, languageName, meta);
-        /** @type {import('vscode-textmate').ITokenTypeMap} */
-        let tokenTypes = {};
-        /** @type {number} */
-        let languageId;
-
-        if (scope) {
-          const grammarData = getGrammar(scope, grammarCache);
-          languageId = grammarData.languageId;
-          tokenTypes = grammarData.tokenTypes;
-        }
-
-        const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
-        nodeRegistry.register(node, {
-          lines,
-          text,
-          meta,
-          languageName,
-          possibleThemes,
-          isTokenized: !!grammar,
-          tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
-        });
-      } finally {
-        unlockRegistry();
-      }
+      await registerCodeBlock(
+        codeBlockRegistry,
+        node,
+        possibleThemes,
+        () => getRegistry(cache, scope),
+        lineTransformers,
+        scope,
+        text,
+        languageName,
+        meta,
+        cache
+      );
     }
 
-    nodeRegistry.forEachNode(({ text, meta, languageName, possibleThemes, index }, node) => {
+    codeBlockRegistry.forEachCodeBlock(({ text, meta, languageName, possibleThemes, index }, node) => {
       /** @type {grvsc.HTMLElement[]} */
       const lineElements = [];
       /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
       const gqlLines = [];
-      nodeRegistry.forEachLine(node, (line, lineIndex) => {
+      codeBlockRegistry.forEachLine(node, (line, lineIndex) => {
         /** @type {LineData} */
         const lineData = { meta, index: lineIndex, content: line.text, language: languageName };
         const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
@@ -142,7 +116,7 @@ function createPlugin() {
         const tokenElements = [];
         /** @type {grvsc.gql.GRVSCToken[]} */
         const gqlTokens = [];
-        nodeRegistry.forEachToken(
+        codeBlockRegistry.forEachToken(
           node,
           lineIndex,
           token => {
@@ -247,11 +221,11 @@ function createPlugin() {
       graphQLNodes.push(childNode);
     });
 
-    const themeRules = flatMap(nodeRegistry.getAllPossibleThemes(), ({ theme, settings }) => {
+    const themeRules = flatMap(codeBlockRegistry.getAllPossibleThemes(), ({ theme, settings }) => {
       const conditions = groupConditions(theme.conditions);
       /** @type {grvsc.CSSElement[]} */
       const elements = [];
-      const tokenClassNames = nodeRegistry.getTokenStylesForTheme(theme.identifier);
+      const tokenClassNames = codeBlockRegistry.getTokenStylesForTheme(theme.identifier);
       const containerStyles = getStylesFromThemeSettings(settings);
       if (conditions.default) {
         pushColorRules(elements, '.' + getThemeClassName(theme.identifier, 'default'));
@@ -310,6 +284,7 @@ function createPlugin() {
     await setChildNodes(cache, markdownNode.id, markdownNode.internal.contentDigest, graphQLNodes);
   }
 
+  textmateHighlight.getRegistry = getRegistry;
   textmateHighlight.createSchemaCustomization = createSchemaCustomization;
   textmateHighlight.once = once;
   return textmateHighlight;
