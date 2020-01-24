@@ -48,7 +48,7 @@ type GRVSCCodeBlock implements Node {
   language: String
   defaultTheme: GRVSCTheme!
   additionalThemes: [GRVSCTheme!]!
-  tokenizedLines: [GRVSCTokenizedLine!]!
+  tokenizedLines: [GRVSCTokenizedLine!]
 }
 
 # Query arguments

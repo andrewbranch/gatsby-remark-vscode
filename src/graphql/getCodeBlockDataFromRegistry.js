@@ -1,0 +1,70 @@
+const { renderHTML } = require('../renderers/html');
+const { joinClassNames } = require('../renderers/css');
+const { flatMap, partitionOne } = require('../utils');
+const { getThemeClassNames } = require('../themeUtils');
+const { createTokenElement, createLineElement, createCodeBlockElement } = require('../htmlFactory');
+
+/**
+ * @template TKey
+ * @param {CodeBlockRegistry<TKey>} registry
+ * @param {TKey} key
+ * @param {RegisteredCodeBlockData} codeBlock
+ * @param {() => string} getWrapperClassName
+ * @param {(line: LineData) => string} getLineClassName
+ * @param {() => string} getNodeId
+ * @returns {grvsc.gql.GRVSCCodeBlock}
+ */
+function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassName, getLineClassName, getNodeId) {
+  const { meta, index, languageName, text, possibleThemes, isTokenized } = codeBlock;
+  /** @type {grvsc.HTMLElement[]} */
+  const lineElements = [];
+  /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
+  const gqlLines = [];
+  registry.forEachLine(key, (line, lineIndex) => {
+    /** @type {grvsc.HTMLElement[]} */
+    const tokenElements = [];
+    /** @type {grvsc.gql.GRVSCToken[]} */
+    const gqlTokens = [];
+    registry.forEachToken(key, lineIndex, token => {
+      const html = createTokenElement(token);
+      tokenElements.push(html);
+      gqlTokens.push({
+        ...token,
+        className: html.attributes.class,
+        html: renderHTML(html)
+      });
+    });
+
+    const html = createLineElement(line, meta, index, languageName, getLineClassName, tokenElements);
+    lineElements.push(html);
+    gqlLines.push({
+      ...line,
+      className: html.attributes.class,
+      tokens: gqlTokens,
+      html: renderHTML(html)
+    });
+  });
+
+  const wrapperClassNameValue = getWrapperClassName();
+  const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
+  const preClassName = joinClassNames('grvsc-container', wrapperClassNameValue, ...themeClassNames);
+  const codeClassName = 'grvsc-code';
+  const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t =>
+    t.conditions.some(c => c.condition === 'default')
+  );
+
+  return {
+    id: getNodeId(),
+    index,
+    text,
+    html: renderHTML(createCodeBlockElement(preClassName, codeClassName, languageName, index, lineElements)),
+    preClassName,
+    codeClassName,
+    language: languageName,
+    defaultTheme,
+    additionalThemes,
+    tokenizedLines: isTokenized ? gqlLines : undefined
+  };
+}
+
+module.exports = getCodeBlockDataFromRegistry;

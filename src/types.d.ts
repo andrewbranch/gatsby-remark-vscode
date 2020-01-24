@@ -105,6 +105,7 @@ interface ConditionalTheme {
 }
 
 interface RegisteredCodeBlockData {
+  index: number;
   meta: object;
   text: string;
   languageName: string;
@@ -142,13 +143,12 @@ type Line = {
 };
 
 interface CodeBlockRegistry<TKey> {
-  register: (key: TKey, data: RegisteredCodeBlockData) => void;
+  register: (key: TKey, data: Omit<RegisteredCodeBlockData, 'index'>) => void;
   forEachLine: (codeBlockKey: TKey, action: (line: Line, index: number, lines: Line[]) => void) => void;
   forEachToken: (
     key: TKey,
     lineIndex: number,
-    tokenAction: (token: RegisteredToken) => void,
-    plainLineAction: (text: string) => void
+    tokenAction: (token: RegisteredToken) => void
   ) => void;
   forEachCodeBlock: (action: (data: RegisteredCodeBlockData & { index: number }, codeBlockKey: TKey) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
@@ -236,6 +236,7 @@ declare namespace grvsc {
       id: string;
       parent?: string;
       internal?: {
+        type: string;
         contentDigest?: string;
       };
     }
@@ -245,7 +246,7 @@ declare namespace grvsc {
       language?: string;
       defaultTheme?: string;
       additionalThemes?: GRVSCThemeArgument[];
-      meta?: any;
+      meta?: string;
     }
   }
 

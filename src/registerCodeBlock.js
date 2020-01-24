@@ -4,16 +4,16 @@ const { getGrammar } = require('./storeUtils');
 
 /**
  * @template TKey
- * @param {CodeBlockRegistry<TKey>} codeBlockRegistry 
+ * @param {CodeBlockRegistry<TKey>} codeBlockRegistry
  * @param {TKey} registryKey
- * @param {ConditionalTheme[]} possibleThemes 
+ * @param {ConditionalTheme[]} possibleThemes
  * @param {() => Promise<[import('vscode-textmate').Registry, () => void]>} getTextMateRegistry
  * @param {LineTransformer[]} lineTransformers
- * @param {string} scope 
- * @param {string} text 
- * @param {string | undefined} languageName 
- * @param {any} meta 
- * @param {GatsbyCache} cache 
+ * @param {string} scope
+ * @param {string} text
+ * @param {string | undefined} languageName
+ * @param {any} meta
+ * @param {GatsbyCache} cache
  */
 async function registerCodeBlock(
   codeBlockRegistry,

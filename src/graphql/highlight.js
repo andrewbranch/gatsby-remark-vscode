@@ -2,7 +2,9 @@ const setup = require('../setup');
 const plugin = require('../../index');
 const getPossibleThemes = require('../getPossibleThemes');
 const registerCodeBlock = require('../registerCodeBlock');
+const parseCodeFenceHeader = require('../parseCodeFenceHeader');
 const createCodeBlockRegistry = require('../createCodeBlockRegistry');
+const getCodeBlockDataFromRegistry = require('./getCodeBlockDataFromRegistry');
 const { ensureThemeLocation, getScope } = require('../storeUtils');
 const { createDefaultTheme, concatConditionalThemes } = require('../themeUtils');
 const parseThemeCondition = require('./parseThemeCondition');
@@ -50,14 +52,23 @@ async function getThemes(themeOption, args, themeCache) {
 /**
  * @param {grvsc.gql.HighlightArgs} args
  * @param {PluginOptions} pluginOptions
- * @param {GatsbyCache} cache
+ * @param {{ cache: GatsbyCache, createNodeId: (key: string) => string}} pluginArguments
  */
-async function highlight(args, pluginOptions, cache) {
-  const { theme, languageAliases, getLineTransformers, ...rest } = await plugin.once(() => setup(pluginOptions, cache));
+async function highlight(args, pluginOptions, { cache, createNodeId }) {
+  const {
+    theme,
+    languageAliases,
+    getLineTransformers,
+    getLineClassName,
+    wrapperClassName,
+    ...rest
+  } = await plugin.once(() => setup(pluginOptions, cache));
 
   const lineTransformers = getLineTransformers({
     theme,
     languageAliases,
+    getLineClassName,
+    wrapperClassName,
     ...rest
   });
 
@@ -67,6 +78,8 @@ async function highlight(args, pluginOptions, cache) {
   const scope = getScope(args.language, grammarCache, languageAliases);
   /** @type {CodeBlockRegistry<typeof registryKey>} */
   const codeBlockRegistry = createCodeBlockRegistry();
+  const meta = parseCodeFenceHeader(args.language, args.meta);
+
   await registerCodeBlock(
     codeBlockRegistry,
     registryKey,
@@ -76,9 +89,35 @@ async function highlight(args, pluginOptions, cache) {
     scope,
     args.source,
     args.language,
-    args.meta || {},
+    meta,
     cache
   );
+
+  /** @type {grvsc.gql.GRVSCCodeBlock} */
+  let result;
+  codeBlockRegistry.forEachCodeBlock(codeBlock => {
+    result = getCodeBlockDataFromRegistry(
+      codeBlockRegistry,
+      registryKey,
+      codeBlock,
+      getWrapperClassName,
+      getLineClassName,
+      () => createNodeId(`GRVSCCodeBlock-Highlight`)
+    );
+
+    function getWrapperClassName() {
+      return typeof wrapperClassName === 'function'
+        ? wrapperClassName({
+            language: codeBlock.languageName,
+            markdownNode: undefined,
+            codeFenceNode: undefined,
+            parsedOptions: codeBlock.meta
+          })
+        : wrapperClassName;
+    }
+  });
+
+  return result;
 }
 
 module.exports = highlight;

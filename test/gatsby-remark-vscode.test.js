@@ -32,7 +32,7 @@ function tryRequire(specifier) {
 }
 
 /** @type {MarkdownNode} */
-const markdownNode = { id: '1234', fileAbsolutePath: path.join(__dirname, 'test.md'), internal: { contentDigest: '' } };
+const markdownNode = { id: '1234', fileAbsolutePath: path.join(__dirname, 'test.md'), internal: { type: 'Markdown', contentDigest: '' } };
 /** @type {PluginOptions} */
 const defaultOptions = {
   injectStyles: false,

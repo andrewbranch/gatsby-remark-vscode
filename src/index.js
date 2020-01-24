@@ -3,7 +3,6 @@ const fs = require('fs');
 const path = require('path');
 const logger = require('loglevel');
 const visit = require('unist-util-visit');
-const escapeHTML = require('lodash.escape');
 const setup = require('./setup');
 const createGetRegistry = require('./createGetRegistry');
 const registerCodeBlock = require('./registerCodeBlock');
@@ -11,13 +10,13 @@ const getPossibleThemes = require('./getPossibleThemes');
 const createCodeBlockRegistry = require('./createCodeBlockRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
 const createSchemaCustomization = require('./graphql/createSchemaCustomization');
+const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataFromRegistry');
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
 const { getScope } = require('./storeUtils');
-const { renderHTML, span, code, pre, style, mergeAttributes, TriviaRenderFlags } = require('./renderers/html');
-const { joinClassNames, ruleset, media, declaration } = require('./renderers/css');
-const { getThemeClassName, getThemeClassNames, getStylesFromThemeSettings, groupConditions } = require('./themeUtils');
-const { flatMap, createOnce, partitionOne, last } = require('./utils');
+const { createStyleElement } = require('./htmlFactory');
+const { renderHTML } = require('./renderers/html');
+const { createOnce } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
@@ -54,11 +53,17 @@ function createPlugin() {
       ...rest
     });
 
+    // 1. Gather all code fence nodes from Markdown AST.
+
     /** @type {MDASTNode[]} */
     const nodes = [];
     visit(markdownAST, 'code', node => {
       nodes.push(node);
     });
+
+    // 2. For each code fence found, parse its header, determine what themes it will use,
+    //    and register its contents with a central code block registry, performing tokenization
+    //    along the way.
 
     /** @type {grvsc.gql.GRVSCCodeBlock[]} */
     const graphQLNodes = [];
@@ -103,175 +108,67 @@ function createPlugin() {
       );
     }
 
-    codeBlockRegistry.forEachCodeBlock(({ text, meta, languageName, possibleThemes, index }, node) => {
-      /** @type {grvsc.HTMLElement[]} */
-      const lineElements = [];
-      /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
-      const gqlLines = [];
-      codeBlockRegistry.forEachLine(node, (line, lineIndex) => {
-        /** @type {LineData} */
-        const lineData = { meta, index: lineIndex, content: line.text, language: languageName };
-        const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
-        /** @type {(grvsc.HTMLElement | string)[]} */
-        const tokenElements = [];
-        /** @type {grvsc.gql.GRVSCToken[]} */
-        const gqlTokens = [];
-        codeBlockRegistry.forEachToken(
-          node,
-          lineIndex,
-          token => {
-            const className = joinClassNames(
-              token.defaultThemeTokenData.className,
-              ...token.additionalThemeTokenData.map(t => t.className)
-            );
-            const html = span({ class: className }, [escapeHTML(token.text)], {
-              whitespace: TriviaRenderFlags.NoWhitespace
-            });
-            addTokenElement(html);
-            gqlTokens.push({
-              ...token,
-              className,
-              html: renderHTML(html)
-            });
-          },
-          lineText => tokenElements.push(lineText)
-        );
+    // 3. For each code block registered, convert its tokenization and theme data
+    //    to a GraphQL-compatible representation, including HTML renderings. At the same
+    //    time, change the original code fence Markdown node to an HTML node and set
+    //    its value to the HTML rendering contained in the GraphQL node.
 
-        const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
-        const html = span(attrs, tokenElements, { whitespace: TriviaRenderFlags.NoWhitespace });
+    codeBlockRegistry.forEachCodeBlock((codeBlock, node) => {
+      const graphQLNode = getCodeBlockGraphQLDataFromRegistry(
+        codeBlockRegistry,
+        node,
+        codeBlock,
+        getWrapperClassName,
+        getLineClassName,
+        () => createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${codeBlock.index}`)
+      );
 
-        lineElements.push(html);
-        gqlLines.push({
-          ...line,
-          className: attrs.class,
-          tokens: gqlTokens,
-          html: renderHTML(html)
-        });
-
-        /**
-         * Pushes a token element onto `tokenElements`, or merges the token text if
-         * attributes are identical in order to minimize the number of elements created.
-         * @param {grvsc.HTMLElement} element
-         */
-        function addTokenElement(element) {
-          const prev = last(tokenElements);
-          if (typeof prev === 'object' && element.attributes.class === prev.attributes.class) {
-            prev.children.push(...element.children);
-          } else {
-            tokenElements.push(element);
-          }
-        }
-      });
-
-      const wrapperClassNameValue =
-        typeof wrapperClassName === 'function'
-          ? wrapperClassName({
-              language: languageName,
-              markdownNode,
-              codeFenceNode: node,
-              parsedOptions: meta
-            })
-          : wrapperClassName;
-
-      const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
-      const preClassName = joinClassNames('grvsc-container', wrapperClassNameValue, ...themeClassNames);
-      const codeClassName = 'grvsc-code';
+      // Update Markdown node
       node.type = 'html';
-      node.value = renderHTML(
-        pre(
-          { class: preClassName, 'data-language': languageName, 'data-index': index },
-          [
-            code({ class: codeClassName }, lineElements, {
-              whitespace: TriviaRenderFlags.NewlineBetweenChildren
-            })
-          ],
-          { whitespace: TriviaRenderFlags.NoWhitespace }
-        )
-      );
+      node.value = graphQLNode.html;
 
-      const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t =>
-        t.conditions.some(c => c.condition === 'default')
-      );
-
-      /** @type {grvsc.gql.GRVSCCodeBlock} */
-      const nodeData = {
-        id: createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${index}`),
+      // Push GraphQL node
+      graphQLNodes.push({
+        ...graphQLNode,
         parent: markdownNode.id,
-        index,
-        text,
-        html: node.value,
-        preClassName,
-        codeClassName,
-        language: languageName,
-        defaultTheme,
-        additionalThemes,
-        tokenizedLines: gqlLines
-      };
-
-      const childNode = {
-        ...nodeData,
         internal: {
           type: 'GRVSCCodeBlock',
           contentDigest: createHash('md5')
-            .update(JSON.stringify(nodeData))
+            .update(JSON.stringify(graphQLNode))
             .digest('hex')
         }
-      };
+      });
 
-      graphQLNodes.push(childNode);
-    });
-
-    const themeRules = flatMap(codeBlockRegistry.getAllPossibleThemes(), ({ theme, settings }) => {
-      const conditions = groupConditions(theme.conditions);
-      /** @type {grvsc.CSSElement[]} */
-      const elements = [];
-      const tokenClassNames = codeBlockRegistry.getTokenStylesForTheme(theme.identifier);
-      const containerStyles = getStylesFromThemeSettings(settings);
-      if (conditions.default) {
-        pushColorRules(elements, '.' + getThemeClassName(theme.identifier, 'default'));
-      }
-      for (const condition of conditions.parentSelector) {
-        pushColorRules(elements, `${condition.value} .${getThemeClassName(theme.identifier, 'parentSelector')}`);
-      }
-      for (const condition of conditions.matchMedia) {
-        /** @type {grvsc.CSSRuleset[]} */
-        const ruleset = [];
-        pushColorRules(ruleset, '.' + getThemeClassName(theme.identifier, 'matchMedia'));
-        elements.push(media(condition.value, ruleset, theme.identifier));
-      }
-      return elements;
-
-      /**
-       * @param {grvsc.CSSElement[]} container
-       * @param {string} selector
-       * @param {string=} leadingComment
-       */
-      function pushColorRules(container, selector, leadingComment) {
-        if (containerStyles.length) {
-          container.push(ruleset(selector, containerStyles, leadingComment));
-          leadingComment = undefined;
-        }
-        for (const { className, css } of tokenClassNames) {
-          container.push(
-            ruleset(
-              `${selector} .${className}`,
-              css.map(decl =>
-                decl.property === 'color' ? declaration('color', replaceColor(decl.value, theme.identifier)) : decl
-              ),
-              leadingComment
-            )
-          );
-          leadingComment = undefined;
-        }
+      function getWrapperClassName() {
+        return typeof wrapperClassName === 'function'
+          ? wrapperClassName({
+              language: codeBlock.languageName,
+              markdownNode,
+              codeFenceNode: node,
+              parsedOptions: codeBlock.meta
+            })
+          : wrapperClassName;
       }
     });
 
-    if (themeRules.length) {
+    // 4. Generate CSS rules for each theme used by one or more code blocks in the registry,
+    //    then append that CSS to the Markdown AST in an HTML node.
+
+    const styleElement = createStyleElement(
+      codeBlockRegistry.getAllPossibleThemes(),
+      codeBlockRegistry.getTokenStylesForTheme,
+      replaceColor,
+      injectStyles ? styles : undefined
+    );
+
+    if (styleElement) {
       markdownAST.children.push({
         type: 'html',
-        value: renderHTML(style({ class: 'grvsc-styles' }, [injectStyles ? styles : '', ...themeRules]))
+        value: renderHTML(styleElement)
       });
     }
+
+    // 5. Create all GraphQL nodes with Gatsby so code blocks can be queried.
 
     for (const childNode of graphQLNodes) {
       await actions.createNode(childNode);

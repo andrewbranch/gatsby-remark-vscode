@@ -1,9 +1,11 @@
 const logger = require('loglevel');
 const { getChildNodes } = require('./src/cacheUtils');
+const highlight = require('./src/graphql/highlight');
 
 exports.createResolvers = ({
   createResolvers,
   cache,
+  createNodeId
 }, /** @type {PluginOptions} */ pluginOptions) => {
   createResolvers({
     MarkdownRemark: {
@@ -57,30 +59,12 @@ exports.createResolvers = ({
         args: {
           source: 'String!',
           language: 'String',
+          meta: 'String',
           defaultTheme: 'String',
-          additionlThemes: ['GRVSCThemeArgument!']
+          additionlThemes: ['GRVSCThemeArgument!'],
         },
         resolve(_, args) {
-          return {
-            id: '',
-            internal: {
-              type: 'GRVSCCodeBlock',
-              contentDigest: '',
-            },
-            index: 0,
-            html: args.source,
-            text: args.source,
-            preClassName: '',
-            codeClassName: '',
-            language: args.language,
-            defaultTheme: {
-              path: '',
-              identifier: '',
-              conditions: []
-            },
-            additionlThemes: [],
-            tokenizedLines: []
-          }
+          return highlight(args, pluginOptions, { cache, createNodeId });
         }
       }
     }

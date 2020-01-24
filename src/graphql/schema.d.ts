@@ -45,7 +45,7 @@ declare namespace grvsc {
             language?: string;
             defaultTheme: GRVSCTheme;
             additionalThemes: GRVSCTheme[];
-            tokenizedLines: GRVSCTokenizedLine[];
+            tokenizedLines?: GRVSCTokenizedLine[];
         }
         interface GRVSCThemeArgument {
             identifier: string;

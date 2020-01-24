@@ -28,14 +28,14 @@ function createCodeBlockRegistry() {
       );
     },
     forEachLine: (node, action) => nodeMap.get(node).lines.forEach(action),
-    forEachToken: (node, lineIndex, tokenAction, plainLineAction) => {
+    forEachToken: (node, lineIndex, tokenAction) => {
       generateClassNames();
       const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
-      const line = lines[lineIndex];
       if (!isTokenized) {
-        return [plainLineAction(line.text)];
+        return;
       }
 
+      const line = lines[lineIndex];
       const zipped = zippedLines.get(node)[lineIndex];
 
       zipped.forEach(tokens => {

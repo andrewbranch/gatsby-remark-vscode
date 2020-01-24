@@ -203,8 +203,6 @@ module.exports = {
   getMetadataForToken,
   mergeCache,
   flatMap,
-  getStylesFromThemeSettings,
-  convertLegacyThemeOption,
   deprecationNotice,
   isRelativePath,
   createOnce,
