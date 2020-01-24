@@ -1,3 +1,4 @@
+const escapeHTML = require('lodash.escape');
 const { renderHTML } = require('../renderers/html');
 const { joinClassNames } = require('../renderers/css');
 const { flatMap, partitionOne } = require('../utils');
@@ -21,21 +22,27 @@ function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassN
   /** @type {grvsc.gql.GRVSCTokenizedLine[]} */
   const gqlLines = [];
   registry.forEachLine(key, (line, lineIndex) => {
-    /** @type {grvsc.HTMLElement[]} */
-    const tokenElements = [];
+    /** @type {grvsc.HTMLElement[] | string} */
+    let tokenElements;
     /** @type {grvsc.gql.GRVSCToken[]} */
     const gqlTokens = [];
-    registry.forEachToken(key, lineIndex, token => {
-      const html = createTokenElement(token);
-      tokenElements.push(html);
-      gqlTokens.push({
-        ...token,
-        className: html.attributes.class,
-        html: renderHTML(html)
-      });
-    });
 
-    const html = createLineElement(line, meta, index, languageName, getLineClassName, tokenElements);
+    if (isTokenized) {
+      registry.forEachToken(key, lineIndex, token => {
+        const html = createTokenElement(token);
+        // @ts-ignore - could be fixed with noImplicitAny
+        (tokenElements || (tokenElements = [])).push(html);
+        gqlTokens.push({
+          ...token,
+          className: html.attributes.class,
+          html: renderHTML(html)
+        });
+      });
+    } else {
+      tokenElements = escapeHTML(line.text);
+    }
+
+    const html = createLineElement(line, meta, index, languageName, getLineClassName, tokenElements || '');
     lineElements.push(html);
     gqlLines.push({
       ...line,

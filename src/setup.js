@@ -2,7 +2,7 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const validateOptions = require('./validateOptions');
 const { getDefaultLineTransformers } = require('./transformers');
-const { convertLegacyThemeOption } = require('./utils');
+const { convertLegacyThemeOption } = require('./themeUtils');
 const { processExtensions } = require('./processExtension');
 
 /**

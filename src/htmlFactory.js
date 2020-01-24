@@ -23,14 +23,15 @@ function createTokenElement(token) {
  * @param {number} index
  * @param {string | undefined} language
  * @param {(lineData: LineData) => string} getLineClassName
- * @param {grvsc.HTMLElement[]} tokens
+ * @param {grvsc.HTMLElement[] | string} tokens
  */
 function createLineElement(line, meta, index, language, getLineClassName, tokens) {
   /** @type {LineData} */
   const lineData = { meta, index, content: line.text, language };
   const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
   const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
-  return span(attrs, mergeSimilarTokens(tokens), { whitespace: TriviaRenderFlags.NoWhitespace });
+  const children = typeof tokens === 'string' ? [tokens] : mergeSimilarTokens(tokens);
+  return span(attrs, children, { whitespace: TriviaRenderFlags.NoWhitespace });
 }
 
 /**

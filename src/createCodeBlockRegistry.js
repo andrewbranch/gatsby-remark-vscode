@@ -1,5 +1,5 @@
 // @ts-check
-const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./utils');
+const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./themeUtils');
 const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
@@ -82,7 +82,7 @@ function createCodeBlockRegistry() {
       /** @type {ReturnType<CodeBlockRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
-      const classNameMap = themeTokenClassNameMap.get(themeIdentifier);
+      const classNameMap = themeTokenClassNameMap && themeTokenClassNameMap.get(themeIdentifier);
       if (classNameMap) {
         classNameMap.forEach((className, canonicalClassName) => {
           if (canonicalClassName === 'mtkb') {
