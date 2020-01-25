@@ -61,7 +61,7 @@ exports.createResolvers = ({
           language: 'String',
           meta: 'String',
           defaultTheme: 'String',
-          additionlThemes: ['GRVSCThemeArgument!'],
+          additionalThemes: ['GRVSCThemeArgument!'],
         },
         resolve(_, args) {
           return highlight(args, pluginOptions, { cache, createNodeId });

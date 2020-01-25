@@ -58,11 +58,16 @@ function createScanner(condition) {
     return token;
   }
 
-  /** @returns {'StringLiteral'} */
+  /**
+   * @param {string} quote
+   * @returns {'StringLiteral'}
+   */
   function scanStringLiteral(quote) {
-    while (condition[end] !== quote) {
+    end++;
+    while (condition[end] !== quote && end < condition.length) {
       end++;
     }
+    end++;
     return 'StringLiteral';
   }
 
