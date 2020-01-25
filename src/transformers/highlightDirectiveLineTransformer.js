@@ -31,10 +31,10 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
 
 /**
  * @param {object} languageCommentMap user-defined object mapping language keys to commenting functions
- * @returns {LineTransformer<HighlightCommentTransfomerState>}
  */
 function createHighlightDirectiveLineTransformer(languageCommentMap) {
-  return ({ line, language, state }) => {
+  /** @type {LineTransformer<HighlightCommentTransfomerState>} */
+  const transformer = ({ line, language, state }) => {
     const commentWrapper = getCommentForLanguage(language, languageCommentMap);
     const isDirective = textIsHighlightDirective(line.text, commentWrapper);
     if (isDirective('highlight-start')) {
@@ -57,7 +57,8 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
           line,
           line.text.replace(commentWrapper('highlight-line'), '').replace('// highlight-line', '')
         ),
-        state
+        state,
+        data: { isHighlighted: true }
       };
     }
     if (state && state.highlightNextLine) {
@@ -66,11 +67,21 @@ function createHighlightDirectiveLineTransformer(languageCommentMap) {
       // doesn't disrupt a highlight range
       return {
         line: highlightLine(line),
-        state: { ...state, highlightNextLine: false }
+        state: { ...state, highlightNextLine: false },
+        data: { isHighlighted: true }
       };
     }
     return { line, state }; // default: don’t change anything, propagate state to next call
   };
+
+  transformer.displayName = 'highlightCommentDirective';
+  transformer.schemaExtension = `
+    type GRVSCLine {
+      isHighlighted: Boolean
+    }
+  `;
+
+  return transformer;
 }
 
 module.exports = { createHighlightDirectiveLineTransformer };

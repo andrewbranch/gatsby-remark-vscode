@@ -50,7 +50,7 @@ function createGetRegistry() {
   let registry;
 
   /**
-   * @param {*} cache
+   * @param {GatsbyCache} cache
    * @param {string} rootScopeName
    * @returns {Promise<[Registry, () => void]>}
    */

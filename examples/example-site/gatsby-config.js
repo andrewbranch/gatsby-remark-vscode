@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path")
 
 module.exports = {
   siteMetadata: {
@@ -30,15 +30,10 @@ module.exports = {
       options: {
         plugins: [
           {
-            resolve: path.resolve(__dirname, '../..'),
+            resolve: path.resolve(__dirname, "../.."),
             options: {
               injectStyles: true,
-              extensions: [
-                {
-                  identifier: 'jpoissonnier.vscode-styled-components',
-                  version: '0.0.26',
-                },
-              ],
+              extensions: ["vscode-styled-components"],
             },
           },
           {

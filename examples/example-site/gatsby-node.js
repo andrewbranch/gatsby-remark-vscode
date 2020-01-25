@@ -5,6 +5,7 @@ exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
   const blogPost = path.resolve(`./src/templates/blog-post.js`)
+  const reactBlogPost = path.resolve(`./src/templates/react-blog-post.js`)
   const result = await graphql(
     `
       {
@@ -19,6 +20,7 @@ exports.createPages = async ({ graphql, actions }) => {
               }
               frontmatter {
                 title
+                useReact
               }
             }
           }
@@ -40,7 +42,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
     createPage({
       path: post.node.fields.slug,
-      component: blogPost,
+      component: post.node.frontmatter.useReact ? reactBlogPost : blogPost,
       context: {
         slug: post.node.fields.slug,
         previous,

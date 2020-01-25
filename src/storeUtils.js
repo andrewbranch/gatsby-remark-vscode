@@ -50,10 +50,10 @@ function getGrammarLocation(grammar) {
  *
  * @param {string} themeNameOrId
  * @param {object} themeCache
- * @param {string} markdownFilePath
+ * @param {string=} contextDirectory
  * @returns {Promise<string>}
  */
-async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) {
+async function ensureThemeLocation(themeNameOrId, themeCache, contextDirectory) {
   const themes = { ...getThemeManifest(), ...themeCache };
   for (const themeId in themes) {
     const theme = themes[themeId];
@@ -75,11 +75,9 @@ async function ensureThemeLocation(themeNameOrId, themeCache, markdownFilePath) 
     }
   }
 
-  const locallyResolved = path.resolve(path.dirname(markdownFilePath), themeNameOrId);
-  if (!(await exists(locallyResolved))) {
-    throw new Error(
-      `Theme manifest does not contain theme '${themeNameOrId}', and no theme file exists at '${locallyResolved}'.`
-    );
+  const locallyResolved = contextDirectory && path.resolve(contextDirectory, themeNameOrId);
+  if (!locallyResolved || !(await exists(locallyResolved))) {
+    throw new Error(`Theme manifest does not contain theme '${themeNameOrId}'.`);
   }
   return locallyResolved;
 }

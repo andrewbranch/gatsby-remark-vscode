@@ -38,15 +38,23 @@ function getInitialState(meta) {
 }
 
 /** @type {LineTransformer<State>} */
-function highlightMetaTransformer({ meta, line, state = getInitialState(meta) }) {
-  const isHighlightedLine = state.highlightedLines[0] === state.lineNumber;
+const highlightMetaTransformer = ({ meta, line, state = getInitialState(meta) }) => {
+  const isHighlighted = state.highlightedLines[0] === state.lineNumber;
   return {
-    line: isHighlightedLine ? highlightLine(line) : line,
+    line: isHighlighted ? highlightLine(line) : line,
+    ...(isHighlighted && { data: { isHighlighted } }),
     state: {
       lineNumber: state.lineNumber + 1,
-      highlightedLines: isHighlightedLine ? state.highlightedLines.slice(1) : state.highlightedLines
+      highlightedLines: isHighlighted ? state.highlightedLines.slice(1) : state.highlightedLines
     }
   };
-}
+};
+
+highlightMetaTransformer.displayName = 'highlightCodeFenceOptions';
+highlightMetaTransformer.schemaExtension = `
+  type GRVSCLine {
+    isHighlighted: Boolean
+  }
+`;
 
 module.exports = { highlightMetaTransformer };

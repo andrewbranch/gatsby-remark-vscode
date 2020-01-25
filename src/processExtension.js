@@ -1,9 +1,18 @@
 // @ts-check
 const path = require('path');
 const logger = require('loglevel');
-const { getLanguageNames, requireJson, requirePlistOrJson, exists, readFile, readdir } = require('./utils');
+const {
+  getLanguageNames,
+  requireJson,
+  requirePlistOrJson,
+  exists,
+  readFile,
+  readdir,
+  createRequire
+} = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
+const requireMain = createRequire(require.main.filename);
 
 /**
  * @param {string} packageJsonPath
@@ -95,7 +104,7 @@ async function mergeCache(cache, key, value) {
  * @param {Host} host
  */
 async function getExtensionPackageJsonPath(specifier, host) {
-  const absolute = path.isAbsolute(specifier) ? specifier : require.resolve(path.join(specifier, 'package.json'));
+  const absolute = path.isAbsolute(specifier) ? specifier : requireMain.resolve(path.join(specifier, 'package.json'));
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));

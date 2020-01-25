@@ -9,6 +9,7 @@
     "noUnusedParameters": true
   },
   "include": [
+    "gatsby-node.js",
     "src",
     "test",
     "lib/vscode",

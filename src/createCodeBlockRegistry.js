@@ -1,13 +1,16 @@
 // @ts-check
-const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./utils');
-const { getClassNamesFromMetadata } = require('../lib/vscode/modes');
+const { boldDeclarations, italicDeclarations, underlineDeclarations } = require('./factory/css');
+const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./themeUtils');
+const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
 /**
- * @returns {NodeRegistry}
+ * @template TKey
+ * @param {CodeBlockRegistryOptions=} options
+ * @returns {CodeBlockRegistry<TKey>}
  */
-function createNodeRegistry() {
-  /** @type {Map<MDASTNode, RegisteredNodeData>} */
+function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
+  /** @type {Map<TKey, RegisteredCodeBlockData & { index: number }>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
   let themes = [];
@@ -15,59 +18,83 @@ function createNodeRegistry() {
   const themeColors = new Map();
   /** @type {Map<string, Map<string, string>>} */
   let themeTokenClassNameMap;
-  /** @type {Map<MDASTNode, BinaryToken[][][]>} */
+  /** @type {Map<TKey, Token[][][]>} */
   let zippedLines;
 
   return {
-    register: (node, data) => {
-      nodeMap.set(node, data);
+    register: (key, data) => {
+      nodeMap.set(key, { ...data, index: nodeMap.size });
       themes = concatConditionalThemes(themes, data.possibleThemes);
       data.tokenizationResults.forEach(({ theme, colorMap, settings }) =>
         themeColors.set(theme.identifier, { colorMap, settings })
       );
     },
-    mapLines: (node, mapper) => nodeMap.get(node).lines.map(mapper),
-    mapTokens: (node, lineIndex, tokenMapper, plainLineMapper) => {
+    forEachLine: (node, action) => nodeMap.get(node).lines.forEach(action),
+    forEachToken: (node, lineIndex, tokenAction) => {
       generateClassNames();
       const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
-      const line = lines[lineIndex];
       if (!isTokenized) {
-        return [plainLineMapper(line.text)];
+        return;
       }
 
+      const line = lines[lineIndex];
       const zipped = zippedLines.get(node)[lineIndex];
-      return zipped.map(tokens =>
-        tokenMapper(
-          line.text.slice(tokens[0].start, tokens[0].end),
-          tokens.map(({ metadata }, i) => {
-            const { theme } = tokenizationResults[i];
-            const themeClassNames = themeTokenClassNameMap.get(theme.identifier);
-            const canonicalClassNames = getClassNamesFromMetadata(metadata);
-            return {
-              value: canonicalClassNames.map(c => themeClassNames.get(c)),
-              theme
-            };
-          })
-        )
-      );
+
+      zipped.forEach(tokens => {
+        /** @type {grvsc.gql.GRVSCThemeTokenData} */
+        let defaultThemeTokenData;
+        /** @type {grvsc.gql.GRVSCThemeTokenData[]} */
+        const additionalThemeTokenData = [];
+
+        tokens.forEach(({ metadata }, i) => {
+          const { theme } = tokenizationResults[i];
+          const themeClassNames = themeTokenClassNameMap.get(theme.identifier);
+          const tokenData = getTokenDataFromMetadata(metadata);
+          const { colorMap } = themeColors.get(theme.identifier);
+          const isDefaultTheme = theme.conditions.some(c => c.condition === 'default');
+          const data = {
+            themeIdentifier: theme.identifier,
+            className: tokenData.classNames.map(c => themeClassNames.get(c)).join(' '),
+            bold: tokenData.bold,
+            italic: tokenData.italic,
+            underline: tokenData.underline,
+            meta: metadata,
+            color: getColorFromColorMap(colorMap, tokenData.classNames[0])
+          };
+          if (isDefaultTheme) {
+            defaultThemeTokenData = data;
+          } else {
+            additionalThemeTokenData.push(data);
+          }
+        });
+
+        tokenAction({
+          text: line.text.slice(tokens[0].start, tokens[0].end),
+          startIndex: tokens[0].start,
+          endIndex: tokens[0].end,
+          scopes: tokens[0].scopes,
+          defaultThemeTokenData,
+          additionalThemeTokenData
+        });
+      });
     },
-    forEachNode: nodeMap.forEach.bind(nodeMap),
+    forEachCodeBlock: nodeMap.forEach.bind(nodeMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenStylesForTheme: themeIdentifier => {
-      /** @type {ReturnType<NodeRegistry['getTokenStylesForTheme']>} */
+      /** @type {ReturnType<CodeBlockRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
-      const classNameMap = themeTokenClassNameMap.get(themeIdentifier);
+      const classNameMap = themeTokenClassNameMap && themeTokenClassNameMap.get(themeIdentifier);
       if (classNameMap) {
         classNameMap.forEach((className, canonicalClassName) => {
           if (canonicalClassName === 'mtkb') {
-            result.unshift({ className, css: [declaration('font-weight', 'bold')] });
+            result.unshift({ className, css: boldDeclarations });
           } else if (canonicalClassName === 'mtki') {
-            result.unshift({ className, css: [declaration('font-style', 'italic')] });
+            result.unshift({ className, css: italicDeclarations });
           } else if (canonicalClassName === 'mtku') {
             result.unshift({
               className,
-              css: [declaration('text-decoration', 'underline'), declaration('text-underline-position', 'under')]
+              css: underlineDeclarations
             });
           } else {
             result.push({
@@ -88,7 +115,7 @@ function createNodeRegistry() {
     zippedLines = new Map();
     nodeMap.forEach(({ lines, tokenizationResults, isTokenized }, node) => {
       if (!isTokenized) return;
-      /** @type {BinaryToken[][][]} */
+      /** @type {Token[][][]} */
       const zippedLinesForNode = [];
       zippedLines.set(node, zippedLinesForNode);
       lines.forEach((_, lineIndex) => {
@@ -96,7 +123,7 @@ function createNodeRegistry() {
         zippedLinesForNode[lineIndex] = zipped;
         zipped.forEach(tokensAtPosition => {
           tokensAtPosition.forEach((token, themeIndex) => {
-            const canonicalClassNames = getClassNamesFromMetadata(token.metadata);
+            const canonicalClassNames = getTokenDataFromMetadata(token.metadata).classNames;
             const { theme } = tokenizationResults[themeIndex];
             let themeClassNames = themeTokenClassNameMap.get(theme.identifier);
             if (!themeClassNames) {
@@ -106,7 +133,7 @@ function createNodeRegistry() {
             canonicalClassNames.forEach(canonicalClassName => {
               themeClassNames.set(
                 canonicalClassName,
-                tokensAtPosition.length > 1
+                prefixAllClassNames || tokensAtPosition.length > 1
                   ? getThemePrefixedTokenClassName(canonicalClassName, theme.identifier)
                   : canonicalClassName
               );
@@ -119,8 +146,8 @@ function createNodeRegistry() {
 }
 
 /**
- * @param {BinaryToken[][]} lineTokenSets
- * @returns {BinaryToken[][]}
+ * @param {Token[][]} lineTokenSets
+ * @returns {Token[][]}
  * @example
  *
  * normalizeLineTokens([
@@ -136,21 +163,21 @@ function createNodeRegistry() {
  */
 function zipLineTokens(lineTokenSets) {
   lineTokenSets = lineTokenSets.map(lineTokens => lineTokens.slice());
-  /** @type {BinaryToken[][]} */
+  /** @type {Token[][]} */
   const result = [];
   let start = 0;
   while (true) {
     const end = Math.min(...lineTokenSets.map(lineTokens => (lineTokens[0] ? lineTokens[0].end : 0)));
     if (start >= end) break;
 
-    /** @type {BinaryToken[]} */
+    /** @type {Token[]} */
     const tokensAtPosition = [];
     for (let i = 0; i < lineTokenSets.length; i++) {
       const token = lineTokenSets[i].shift();
       if (token.start === start && token.end === end) {
         tokensAtPosition.push(token);
       } else {
-        tokensAtPosition.push({ start, end, metadata: token.metadata });
+        tokensAtPosition.push({ start, end, metadata: token.metadata, scopes: token.scopes });
         lineTokenSets[i].unshift(token);
       }
     }
@@ -167,10 +194,12 @@ function zipLineTokens(lineTokenSets) {
  */
 function getColorFromColorMap(colorMap, canonicalClassName) {
   const index = +canonicalClassName.slice('mtk'.length);
-  if (!Number.isInteger(index) || index < 0) {
-    throw new Error(`Canonical class name must be in form 'mtk{positive integer}'. Received '${canonicalClassName}'.`);
+  if (!Number.isInteger(index) || index < 1) {
+    throw new Error(
+      `Canonical class name must be in form 'mtk{Integer greater than 0}'. Received '${canonicalClassName}'.`
+    );
   }
   return colorMap[index];
 }
 
-module.exports = createNodeRegistry;
+module.exports = createCodeBlockRegistry;

@@ -1,17 +1,30 @@
 // @ts-check
-const { concatConditionalThemes } = require('./utils');
-const { ensureThemeLocation } = require('./storeUtils');
+const {
+  createDefaultTheme,
+  createMatchMediaTheme,
+  createParentSelectorTheme,
+  concatConditionalThemes
+} = require('./themeUtils');
 
 /**
  * @param {ThemeOption} themeOption
  * @param {object} themeCache
+ * @param {string | undefined} contextDirectory
  * @param {MarkdownNode} markdownNode
  * @param {object} codeFenceNode
  * @param {string} languageName
  * @param {object} meta
  * @returns {Promise<ConditionalTheme[]>}
  */
-async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenceNode, languageName, meta) {
+async function getPossibleThemes(
+  themeOption,
+  themeCache,
+  contextDirectory,
+  markdownNode,
+  codeFenceNode,
+  languageName,
+  meta
+) {
   if (typeof themeOption === 'function') {
     return getPossibleThemes(
       themeOption({
@@ -21,6 +34,7 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
         parsedOptions: meta
       }),
       themeCache,
+      contextDirectory,
       markdownNode,
       codeFenceNode,
       languageName,
@@ -29,39 +43,34 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
   }
 
   if (typeof themeOption === 'string') {
-    const path = await ensureThemeLocation(themeOption, themeCache, markdownNode.fileAbsolutePath);
-    return [
-      {
-        identifier: themeOption,
-        path,
-        conditions: [{ condition: 'default' }]
-      }
-    ];
+    return [await createDefaultTheme(themeOption, themeCache, contextDirectory)];
   }
 
   /** @type {ConditionalTheme[]} */
   let themes;
   if (themeOption.default) {
-    themes = await getPossibleThemes(themeOption.default, themeCache, markdownNode, codeFenceNode, languageName, meta);
+    themes = await getPossibleThemes(
+      themeOption.default,
+      themeCache,
+      contextDirectory,
+      markdownNode,
+      codeFenceNode,
+      languageName,
+      meta
+    );
   }
   if (themeOption.dark) {
     themes = concatConditionalThemes(themes, [
-      {
-        identifier: themeOption.dark,
-        path: await ensureThemeLocation(themeOption.dark, themeCache, markdownNode.fileAbsolutePath),
-        conditions: [{ condition: 'matchMedia', value: '(prefers-color-scheme: dark)' }]
-      }
+      await createMatchMediaTheme(themeOption.dark, '(prefers-color-scheme: dark)', themeCache, contextDirectory)
     ]);
   }
   if (themeOption.media) {
     themes = concatConditionalThemes(
       themes,
       await Promise.all(
-        themeOption.media.map(async setting => ({
-          identifier: setting.theme,
-          path: await ensureThemeLocation(setting.theme, themeCache, markdownNode.fileAbsolutePath),
-          conditions: [{ condition: /** @type {'matchMedia'} */ ('matchMedia'), value: setting.match }]
-        }))
+        themeOption.media.map(
+          async setting => await createMatchMediaTheme(setting.theme, setting.match, themeCache, contextDirectory)
+        )
       )
     );
   }
@@ -69,11 +78,10 @@ async function getPossibleThemes(themeOption, themeCache, markdownNode, codeFenc
     themes = concatConditionalThemes(
       themes,
       await Promise.all(
-        Object.keys(themeOption.parentSelector).map(async key => ({
-          identifier: themeOption.parentSelector[key],
-          path: await ensureThemeLocation(themeOption.parentSelector[key], themeCache, markdownNode.fileAbsolutePath),
-          conditions: [{ condition: /** @type {'parentSelector'} */ ('parentSelector'), value: key }]
-        }))
+        Object.keys(themeOption.parentSelector).map(
+          async key =>
+            await createParentSelectorTheme(themeOption.parentSelector[key], key, themeCache, contextDirectory)
+        )
       )
     );
   }
