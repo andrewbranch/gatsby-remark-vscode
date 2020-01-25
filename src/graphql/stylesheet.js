@@ -7,7 +7,7 @@ const { createHash } = require('crypto');
 const { declaration, renderCSS } = require('../renderers/css');
 const { loadTheme, getThemePrefixedTokenClassName } = require('../themeUtils');
 const { createThemeCSSRules, boldDeclarations, italicDeclarations, underlineDeclarations } = require('../factory/css');
-const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
+const styles = fs.readFileSync(path.resolve(__dirname, '../../styles.css'), 'utf8');
 
 /**
  * @param {grvsc.gql.CSSArgs} args
