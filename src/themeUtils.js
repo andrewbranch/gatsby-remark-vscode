@@ -2,6 +2,7 @@ const { createHash } = require('crypto');
 const { declaration } = require('./renderers/css');
 const { sanitizeForClassName } = require('./utils');
 const { ensureThemeLocation } = require('./storeUtils');
+const { loadColorTheme } = require('../lib/vscode/colorThemeData');
 
 /**
  * @param {string} themeIdentifier
@@ -237,6 +238,21 @@ function convertLegacyThemeSettings(themeSettings) {
   };
 }
 
+/**
+ * @param {string} themePath
+ * @returns {RawTheme}
+ */
+function loadTheme(themePath) {
+  const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(themePath);
+  const defaultTokenColors = {
+    settings: {
+      foreground: settings['editor.foreground'] || settings.foreground,
+      background: settings['editor.background'] || settings.background
+    }
+  };
+  return { settings: [defaultTokenColors, ...tokenColors], resultColors: settings };
+}
+
 module.exports = {
   getThemePrefixedTokenClassName,
   getThemeClassName,
@@ -247,5 +263,6 @@ module.exports = {
   convertLegacyThemeOption,
   createDefaultTheme,
   createMatchMediaTheme,
-  createParentSelectorTheme
+  createParentSelectorTheme,
+  loadTheme
 };

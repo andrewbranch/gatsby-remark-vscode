@@ -47,6 +47,9 @@ declare namespace grvsc {
             additionalThemes: GRVSCTheme[];
             tokenizedLines?: GRVSCTokenizedLine[];
         }
+        interface GRVSCStylesheet extends Node {
+            css: string;
+        }
         interface GRVSCThemeArgument {
             identifier: string;
             conditions: string[];

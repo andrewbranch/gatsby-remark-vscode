@@ -104,6 +104,8 @@ interface ConditionalTheme {
   conditions: ThemeCondition[];
 }
 
+type RawTheme = import('vscode-textmate').IRawTheme & { resultColors: Record<string, string> };
+
 interface RegisteredCodeBlockData {
   index: number;
   meta: object;
@@ -153,6 +155,10 @@ interface CodeBlockRegistry<TKey> {
   forEachCodeBlock: (action: (data: RegisteredCodeBlockData & { index: number }, codeBlockKey: TKey) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
+}
+
+interface CodeBlockRegistryOptions {
+  prefixAllClassNames?: boolean;
 }
 
 // Line transformers
@@ -241,7 +247,16 @@ declare namespace grvsc {
       };
     }
 
-    interface HighlightArgs {
+    interface ThemedArgs {
+      defaultTheme?: string;
+      additionalThemes?: GRVSCThemeArgument[];
+    }
+
+    interface CSSArgs extends ThemedArgs {
+      injectStyles?: boolean;
+    }
+
+    interface HighlightArgs extends ThemedArgs {
       source: string;
       language?: string;
       defaultTheme?: string;

@@ -1,13 +1,15 @@
 // @ts-check
+const { boldDeclarations, italicDeclarations, underlineDeclarations } = require('./factory/css');
 const { getThemePrefixedTokenClassName, concatConditionalThemes } = require('./themeUtils');
 const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
 /**
  * @template TKey
+ * @param {CodeBlockRegistryOptions=} options
  * @returns {CodeBlockRegistry<TKey>}
  */
-function createCodeBlockRegistry() {
+function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
   /** @type {Map<TKey, RegisteredCodeBlockData & { index: number }>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
@@ -86,13 +88,13 @@ function createCodeBlockRegistry() {
       if (classNameMap) {
         classNameMap.forEach((className, canonicalClassName) => {
           if (canonicalClassName === 'mtkb') {
-            result.unshift({ className, css: [declaration('font-weight', 'bold')] });
+            result.unshift({ className, css: boldDeclarations });
           } else if (canonicalClassName === 'mtki') {
-            result.unshift({ className, css: [declaration('font-style', 'italic')] });
+            result.unshift({ className, css: italicDeclarations });
           } else if (canonicalClassName === 'mtku') {
             result.unshift({
               className,
-              css: [declaration('text-decoration', 'underline'), declaration('text-underline-position', 'under')]
+              css: underlineDeclarations
             });
           } else {
             result.push({
@@ -131,7 +133,7 @@ function createCodeBlockRegistry() {
             canonicalClassNames.forEach(canonicalClassName => {
               themeClassNames.set(
                 canonicalClassName,
-                tokensAtPosition.length > 1
+                prefixAllClassNames || tokensAtPosition.length > 1
                   ? getThemePrefixedTokenClassName(canonicalClassName, theme.identifier)
                   : canonicalClassName
               );
@@ -192,8 +194,10 @@ function zipLineTokens(lineTokenSets) {
  */
 function getColorFromColorMap(colorMap, canonicalClassName) {
   const index = +canonicalClassName.slice('mtk'.length);
-  if (!Number.isInteger(index) || index < 0) {
-    throw new Error(`Canonical class name must be in form 'mtk{positive integer}'. Received '${canonicalClassName}'.`);
+  if (!Number.isInteger(index) || index < 1) {
+    throw new Error(
+      `Canonical class name must be in form 'mtk{Integer greater than 0}'. Received '${canonicalClassName}'.`
+    );
   }
   return colorMap[index];
 }

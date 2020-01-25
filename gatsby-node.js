@@ -1,6 +1,7 @@
 const logger = require('loglevel');
 const { getChildNodes } = require('./src/cacheUtils');
 const highlight = require('./src/graphql/highlight');
+const stylesheet = require('./src/graphql/stylesheet');
 
 exports.createResolvers = ({
   createResolvers,
@@ -66,6 +67,18 @@ exports.createResolvers = ({
         resolve(_, args) {
           return highlight(args, pluginOptions, { cache, createNodeId });
         }
+      }
+    },
+
+    grvscStylesheet: {
+      type: 'GRVSCStylesheet',
+      args: {
+        defaultTheme: 'String',
+        additionalThemes: ['GRVSCThemeArgument!'],
+        injectStyles: 'Boolean'
+      },
+      resolve(_, args) {
+        return stylesheet(args, pluginOptions, { cache, createNodeId });
       }
     }
   });

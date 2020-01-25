@@ -3,7 +3,7 @@ const { renderHTML } = require('../renderers/html');
 const { joinClassNames } = require('../renderers/css');
 const { flatMap, partitionOne } = require('../utils');
 const { getThemeClassNames } = require('../themeUtils');
-const { createTokenElement, createLineElement, createCodeBlockElement } = require('../htmlFactory');
+const { createTokenElement, createLineElement, createCodeBlockElement } = require('../factory/html');
 
 /**
  * @template TKey
@@ -12,10 +12,9 @@ const { createTokenElement, createLineElement, createCodeBlockElement } = requir
  * @param {RegisteredCodeBlockData} codeBlock
  * @param {() => string} getWrapperClassName
  * @param {(line: LineData) => string} getLineClassName
- * @param {() => string} getNodeId
- * @returns {grvsc.gql.GRVSCCodeBlock}
+ * @returns {Omit<grvsc.gql.GRVSCCodeBlock, 'id'>}
  */
-function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassName, getLineClassName, getNodeId) {
+function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassName, getLineClassName) {
   const { meta, index, languageName, text, possibleThemes, isTokenized } = codeBlock;
   /** @type {grvsc.HTMLElement[]} */
   const lineElements = [];
@@ -61,7 +60,6 @@ function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassN
   );
 
   return {
-    id: getNodeId(),
     index,
     text,
     html: renderHTML(createCodeBlockElement(preClassName, codeClassName, languageName, index, lineElements)),

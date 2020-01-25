@@ -1,6 +1,6 @@
 // @ts-check
 const { last } = require('./utils');
-const { loadColorTheme } = require('../lib/vscode/colorThemeData');
+const { loadTheme } = require('./themeUtils');
 
 /**
  * @param {Line[]} lines
@@ -10,21 +10,14 @@ const { loadColorTheme } = require('../lib/vscode/colorThemeData');
  * @returns {TokenizeWithThemeResult}
  */
 function tokenizeWithTheme(lines, theme, grammar, registry) {
-  const { resultRules: tokenColors, resultColors: settings } = loadColorTheme(theme.path);
-  const defaultTokenColors = {
-    settings: {
-      foreground: settings['editor.foreground'] || settings.foreground,
-      background: settings['editor.background'] || settings.background
-    }
-  };
-
-  registry.setTheme({ settings: [defaultTokenColors, ...tokenColors] });
+  const rawTheme = loadTheme(theme.path);
+  registry.setTheme(rawTheme);
   if (!grammar) {
     return {
       theme,
       lines: undefined,
       colorMap: registry.getColorMap(),
-      settings
+      settings: rawTheme.resultColors
     };
   }
 
@@ -59,7 +52,7 @@ function tokenizeWithTheme(lines, theme, grammar, registry) {
     theme,
     lines: tokens,
     colorMap: registry.getColorMap(),
-    settings
+    settings: rawTheme.resultColors
   };
 }
 

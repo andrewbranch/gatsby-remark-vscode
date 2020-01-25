@@ -1,58 +1,19 @@
 const setup = require('../setup');
 const plugin = require('../../index');
-const getPossibleThemes = require('../getPossibleThemes');
 const registerCodeBlock = require('../registerCodeBlock');
 const parseCodeFenceHeader = require('../parseCodeFenceHeader');
 const createCodeBlockRegistry = require('../createCodeBlockRegistry');
 const getCodeBlockDataFromRegistry = require('./getCodeBlockDataFromRegistry');
-const { ensureThemeLocation, getScope } = require('../storeUtils');
-const { createDefaultTheme, concatConditionalThemes } = require('../themeUtils');
-const parseThemeCondition = require('./parseThemeCondition');
+const getThemes = require('./getThemes');
+const { createHash } = require('crypto');
+const { getScope } = require('../storeUtils');
 const registryKey = 0;
-
-/**
- * @param {grvsc.gql.GRVSCThemeArgument} theme
- * @param {any} themeCache
- * @returns {Promise<ConditionalTheme>}
- */
-async function convertThemeArgument(theme, themeCache) {
-  return {
-    identifier: theme.identifier,
-    path: await ensureThemeLocation(theme.identifier, themeCache, undefined),
-    conditions: theme.conditions.map(parseThemeCondition)
-  };
-}
-
-/**
- * @param {ThemeOption} themeOption
- * @param {grvsc.gql.HighlightArgs} args
- * @param {any} themeCache
- * @returns {Promise<ConditionalTheme[]>}
- */
-async function getThemes(themeOption, args, themeCache) {
-  if (args.defaultTheme) {
-    const defaultTheme = await createDefaultTheme(args.defaultTheme, themeCache);
-    const additionalThemes = args.additionalThemes
-      ? await Promise.all(args.additionalThemes.map(t => convertThemeArgument(t, themeCache)))
-      : [];
-    return concatConditionalThemes([defaultTheme], additionalThemes);
-  }
-  if (args.additionalThemes) {
-    throw new Error(`Must provide a 'defaultTheme' if 'additionalThemes' are provided.`);
-  }
-  if (typeof themeOption === 'function') {
-    throw new Error(
-      `When plugin option 'theme' is a function, GraphQL resolver 'grvscHighlight' must supply a 'defaultTheme' argument. ` +
-        `The 'theme' function will not be called while evaluating 'grvscHighlight'.`
-    );
-  }
-  return getPossibleThemes(themeOption, themeCache, undefined, undefined, undefined, undefined, undefined);
-}
 
 /**
  * @param {grvsc.gql.HighlightArgs} args
  * @param {PluginOptions} pluginOptions
  * @param {{ cache: GatsbyCache, createNodeId: (key: string) => string}} pluginArguments
+ * @returns {Promise<grvsc.gql.GRVSCCodeBlock>}
  */
 async function highlight(args, pluginOptions, { cache, createNodeId }) {
   const {
@@ -77,7 +38,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
   const possibleThemes = await getThemes(theme, args, themeCache);
   const scope = getScope(args.language, grammarCache, languageAliases);
   /** @type {CodeBlockRegistry<typeof registryKey>} */
-  const codeBlockRegistry = createCodeBlockRegistry();
+  const codeBlockRegistry = createCodeBlockRegistry({ prefixAllClassNames: true });
   const meta = parseCodeFenceHeader(args.language, args.meta);
 
   await registerCodeBlock(
@@ -93,7 +54,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
     cache
   );
 
-  /** @type {grvsc.gql.GRVSCCodeBlock} */
+  /** @type {Omit<grvsc.gql.GRVSCCodeBlock, 'id'>} */
   let result;
   codeBlockRegistry.forEachCodeBlock(codeBlock => {
     result = getCodeBlockDataFromRegistry(
@@ -101,8 +62,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
       registryKey,
       codeBlock,
       getWrapperClassName,
-      getLineClassName,
-      () => createNodeId(`GRVSCCodeBlock-Highlight`)
+      getLineClassName
     );
 
     function getWrapperClassName() {
@@ -117,7 +77,16 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
     }
   });
 
-  return result;
+  return {
+    ...result,
+    id: createNodeId('GRVSCCodeBlock-Highlight'),
+    internal: {
+      type: 'GRVSCCodeBlock',
+      contentDigest: createHash('md5')
+        .update(JSON.stringify(result))
+        .digest('hex')
+    }
+  };
 }
 
 module.exports = highlight;

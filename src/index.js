@@ -14,7 +14,7 @@ const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataF
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
 const { getScope } = require('./storeUtils');
-const { createStyleElement } = require('./htmlFactory');
+const { createStyleElement } = require('./factory/html');
 const { renderHTML } = require('./renderers/html');
 const { createOnce } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
@@ -119,8 +119,7 @@ function createPlugin() {
         node,
         codeBlock,
         getWrapperClassName,
-        getLineClassName,
-        () => createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${codeBlock.index}`)
+        getLineClassName
       );
 
       // Update Markdown node
@@ -130,6 +129,7 @@ function createPlugin() {
       // Push GraphQL node
       graphQLNodes.push({
         ...graphQLNode,
+        id: createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${codeBlock.index}`),
         parent: markdownNode.id,
         internal: {
           type: 'GRVSCCodeBlock',
