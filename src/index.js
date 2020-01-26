@@ -41,17 +41,20 @@ function createPlugin() {
       ...rest
     } = await once(() => setup(options, cache), 'setup');
 
-    const lineTransformers = getLineTransformers({
-      theme,
-      wrapperClassName,
-      languageAliases,
-      extensions,
-      getLineClassName,
-      injectStyles,
-      replaceColor,
-      logLevel,
-      ...rest
-    });
+    const lineTransformers = await getLineTransformers(
+      {
+        theme,
+        wrapperClassName,
+        languageAliases,
+        extensions,
+        getLineClassName,
+        injectStyles,
+        replaceColor,
+        logLevel,
+        ...rest
+      },
+      cache
+    );
 
     // 1. Gather all code fence nodes from Markdown AST.
 

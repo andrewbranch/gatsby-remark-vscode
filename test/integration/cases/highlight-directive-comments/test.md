@@ -4,7 +4,7 @@ const y = 1; // highlight-line
 const z = 2;
 ```
 
-```shell
+```sh
 npm install
 npm run build # highlight-line
 npm start

@@ -4,17 +4,30 @@ const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiv
 const getTransformedLines = require('./getTransformedLines');
 
 /**
- * @returns {LineTransformer[]}
+ * @param {PluginOptions} pluginOptions
+ * @param {GatsbyCache} cache
+ * @returns {Promise<LineTransformer[]>}
  */
-function getDefaultLineTransformers() {
-  return [createHighlightDirectiveLineTransformer({}), highlightMetaTransformer];
+async function getDefaultLineTransformers(pluginOptions, cache) {
+  return [
+    createHighlightDirectiveLineTransformer({}, pluginOptions.languageAliases, await cache.get('grammars')),
+    highlightMetaTransformer
+  ];
 }
 
 /**
  * @param {...LineTransformer} transformers
  */
 function addLineTransformers(...transformers) {
-  return () => [...transformers, ...getDefaultLineTransformers()];
+  return getLineTransformers;
+
+  /**
+   * @param {PluginOptions} pluginOptions
+   * @param {GatsbyCache} cache
+   */
+  async function getLineTransformers(pluginOptions, cache) {
+    return [...transformers, ...(await getDefaultLineTransformers(pluginOptions, cache))];
+  }
 }
 
 module.exports = { getDefaultLineTransformers, addLineTransformers, getTransformedLines };

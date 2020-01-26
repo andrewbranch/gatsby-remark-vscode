@@ -25,13 +25,16 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
     ...rest
   } = await plugin.once(() => setup(pluginOptions, cache));
 
-  const lineTransformers = getLineTransformers({
-    theme,
-    languageAliases,
-    getLineClassName,
-    wrapperClassName,
-    ...rest
-  });
+  const lineTransformers = await getLineTransformers(
+    {
+      theme,
+      languageAliases,
+      getLineClassName,
+      wrapperClassName,
+      ...rest
+    },
+    cache
+  );
 
   const themeCache = await cache.get('themes');
   const grammarCache = await cache.get('grammars');

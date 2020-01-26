@@ -1,23 +1,45 @@
 // @ts-check
 const { highlightLine } = require('./transformerUtils');
+const { getScope } = require('../storeUtils');
 
 /**
  * @param {string} language
- * @param {object} languageCommentMap
+ * @param {string} scope
+ * @param {Record<string, (message: string) => string>} languageCommentMap
  * @return {(commentMessage: string) => string} curried function taking a string argument and
  *   prefixing/wrapping that with a language's comment syntax
  */
-const getCommentForLanguage = (language, languageCommentMap) => message => {
+const getCommentForLanguage = (language, scope, languageCommentMap) => message => {
   // example: languageCommentMap = {js: str => `// ${str}`}
-  if (languageCommentMap[language]) return languageCommentMap[language](message);
-  if (['js', 'ts', 'php', 'swift', 'c#', 'go', 'java', 'jsonc'].includes(language)) return `// ${message}`;
-  if (['python', 'ruby', 'shell', 'perl', 'coffee', 'yaml'].includes(language)) return `# ${message}`;
-  if (['css', 'c', 'cpp', 'objc', 'less'].includes(language)) return `/* ${message} */`;
-  if (['html', 'xml', 'markdown'].includes(language)) return `<!-- ${message} -->`;
-  if (['clojure'].includes(language)) return `; ${message}`;
-  if (['sql'].includes(language)) return `-- ${message}`;
-  if (['fortran'].includes(language)) return `! ${message}`;
-  return `// ${message}`;
+  if (languageCommentMap[language]) {
+    return languageCommentMap[language](message);
+  }
+
+  switch (scope) {
+    case 'source.python':
+    case 'source.ruby':
+    case 'source.shell':
+    case 'source.perl':
+    case 'source.coffee':
+    case 'source.yaml':
+      return `# ${message}`;
+    case 'source.css':
+    case 'source.c':
+    case 'source.cpp':
+    case 'source.objc':
+    case 'source.css.less':
+      return `/* ${message} */`;
+    case 'text.html.derivative':
+    case 'text.xml':
+    case 'text.html.markdown':
+      return `<!-- ${message} -->`;
+    case 'source.clojure':
+      return `; ${message}`;
+    case 'source.sql':
+      return `-- ${message}`;
+    default:
+      return `// ${message}`;
+  }
 };
 
 /**
@@ -30,12 +52,15 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
   ['// ' + directive, commentWrapper(directive)].includes(text.trim());
 
 /**
- * @param {object} languageCommentMap user-defined object mapping language keys to commenting functions
+ * @param {Record<string, (message: string) => string>} languageCommentMap user-defined object mapping language keys to commenting functions
+ * @param {Record<string, string>} languageAliases
+ * @param {*} grammarCache
  */
-function createHighlightDirectiveLineTransformer(languageCommentMap) {
+function createHighlightDirectiveLineTransformer(languageCommentMap, languageAliases, grammarCache) {
   /** @type {LineTransformer<HighlightCommentTransfomerState>} */
   const transformer = ({ line, language, state }) => {
-    const commentWrapper = getCommentForLanguage(language, languageCommentMap);
+    const scope = getScope(language, grammarCache, languageAliases);
+    const commentWrapper = getCommentForLanguage(language, scope, languageCommentMap);
     const isDirective = textIsHighlightDirective(line.text, commentWrapper);
     if (isDirective('highlight-start')) {
       return { state: { inHighlightRange: true } }; // no `line` - drop this line from output
