@@ -28,6 +28,7 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
   - [Line highlighting](#line-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
+- [Contributing](#contributing)
 
 ## Why gatsby-remark-vscode?
 
@@ -399,6 +400,12 @@ Line numbers and ranges aren’t the only things you can pass as options on your
   wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
 }
 ```
+
+## Contributing
+
+Please note that this project is released with a Contributor [Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 
 [embedded-others]: https://user-images.githubusercontent.com/3277153/56853797-5debe780-68c8-11e9-91b2-aa651e87a675.png
 [embedded-own]: https://user-images.githubusercontent.com/3277153/56853798-5e847e00-68c8-11e9-9eb6-061aa16756ec.png

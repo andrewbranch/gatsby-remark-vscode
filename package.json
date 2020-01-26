@@ -4,12 +4,13 @@
   "description": "Gatsby plugin to provide VS Code’s syntax highlighting to Markdown code fences",
   "main": "index.js",
   "scripts": {
+    "prepare": "npm run build",
     "build": "node scripts/index.js",
     "prebuild": "git submodule update --init",
     "check": "tsc -p .",
     "test": "jest",
-    "test:update": "jest --runInBand -u",
-    "pretest": "npm run check && npm run build && prettier --check 'src/**/*.js'",
+    "test:update": "jest -u",
+    "posttest": "prettier --check 'src/**/*.js' && npm run check",
     "prepublishOnly": "npm test",
     "format": "prettier --write 'src/**/*.js'"
   },
@@ -67,6 +68,7 @@
     "vscode-textmate": "4.2.2"
   },
   "jest": {
+    "globalSetup": "<rootDir>/test/setup.js",
     "coveragePathIgnorePatterns": [
       "lib"
     ],
