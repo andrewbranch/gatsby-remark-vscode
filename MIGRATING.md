@@ -14,7 +14,7 @@
     - Alternatively, you can copy the full extension source or clone as a submodule into your project.
   - Replace the `extensions` array with an array of strings specifying where to find each extension:
     - If you installed the extension into `node_modules`, use just the package name, e.g. `extensions: ['oceanic-next']`
-    - If you copied the extension source or `.vsix` into your project, use a relative or absolute path, e.g. `extensions: ['./vendor/oceanic-next.vsix', './vendor/atom-one-dark']`
+    - If you copied the extension source or `.vsix` into your project, use an absolute path, e.g. ``extensions: [`${__dirname}/vendor/oceanic-next.vsix`, `${__dirname}/vendor/atom-one-dark`]``
 - If you used the `extensionDataDirectory` option, it should be unnecessary now, since all extensions are read from disk. You can specify a specific location for each extension by providing paths to the `extensions` array.
 
 ### The `colorTheme` plugin option has been deprecated and replaced by the `theme` option.
