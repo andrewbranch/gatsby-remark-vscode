@@ -1,5 +1,5 @@
 // @ts-check
-const escape = require('lodash.escape');
+const { escapeHTML } = require('../../../src/utils');
 
 /**
  * @param {string} title
@@ -34,7 +34,7 @@ function renderNewCase(title, content) {
     <h2>${title} (new)</h2>
     <div class="row">
       <div class="output">${renderInIframe(content)}</div>
-      <pre class="html"><code>${escape(content)}</code></div>
+      <pre class="html"><code>${escapeHTML(content)}</code></div>
     </div>
   </div>
 `;
@@ -43,7 +43,7 @@ function renderNewCase(title, content) {
 /** @param {string} html */
 function renderInIframe(html) {
   return `
-  <iframe srcdoc="${escape(`
+  <iframe srcdoc="${escapeHTML(`
     <html>
       <head>
         <style>

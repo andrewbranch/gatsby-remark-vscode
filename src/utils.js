@@ -5,7 +5,6 @@ const zlib = require('zlib');
 const path = require('path');
 const JSON5 = require('json5');
 const plist = require('plist');
-const uniq = require('lodash.uniq');
 const logger = require('loglevel');
 
 const readdir = util.promisify(fs.readdir);
@@ -104,6 +103,15 @@ async function mergeCache(cache, key, value) {
 
 /**
  * @template T
+ * @param {T[]} arr
+ * @returns {T[]}
+ */
+function uniq(arr) {
+  return Array.from(new Set(arr));
+}
+
+/**
+ * @template T
  * @template U
  * @param {T[]} arr
  * @param {(element: T) => U | U[]} mapper
@@ -183,6 +191,21 @@ function createRequire(path) {
   return /** @type {NodeRequire} */ ((module.createRequire || module.createRequireFromPath)(path));
 }
 
+const htmlCharRegExp = /[<>&'"]/g;
+/** @param {string} html */
+function escapeHTML(html) {
+  return String(html).replace(
+    htmlCharRegExp,
+    char =>
+      ({
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char] || char)
+  );
+}
+
 const requireJson = /** @param {string} pathName */ pathName => JSON5.parse(fs.readFileSync(pathName, 'utf8'));
 const requirePlistOrJson = /** @param {string} pathName */ async pathName =>
   path.extname(pathName) === '.json' ? requireJson(pathName) : plist.parse(await readFile(pathName, 'utf8'));
@@ -203,10 +226,12 @@ module.exports = {
   getMetadataForToken,
   mergeCache,
   flatMap,
+  uniq,
   deprecationNotice,
   isRelativePath,
   createOnce,
   partitionOne,
   last,
-  createRequire
+  createRequire,
+  escapeHTML
 };

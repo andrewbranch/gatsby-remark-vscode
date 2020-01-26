@@ -1,5 +1,4 @@
-const escapeHTML = require('lodash.escape');
-const { last, flatMap } = require('../utils');
+const { last, flatMap, escapeHTML } = require('../utils');
 const { createThemeCSSRules } = require('./css');
 const { joinClassNames } = require('../renderers/css');
 const { pre, code, span, style, TriviaRenderFlags, mergeAttributes } = require('../renderers/html');

@@ -1,8 +1,7 @@
-const escapeHTML = require('lodash.escape');
 const { renderHTML } = require('../renderers/html');
 const { joinClassNames } = require('../renderers/css');
-const { flatMap, partitionOne } = require('../utils');
 const { getThemeClassNames } = require('../themeUtils');
+const { flatMap, partitionOne, escapeHTML } = require('../utils');
 const { createTokenElement, createLineElement, createCodeBlockElement } = require('../factory/html');
 
 /**

@@ -1,6 +1,6 @@
 // @ts-check
-const escape = require('lodash.escape');
 const createWriter = require('./createWriter');
+const { escapeHTML } = require('../utils');
 const { joinClassNames, renderCSS } = require('./css');
 
 /**
@@ -64,7 +64,7 @@ function renderHTML(element) {
 
     const { tagName, attributes, children } = element;
     const attrs = Object.keys(attributes)
-      .map(attr => ` ${attr}="${escape(attributes[attr])}"`)
+      .map(attr => ` ${attr}="${escapeHTML(attributes[attr])}"`)
       .join('');
 
     writer.write(`<${tagName}${attrs}>`);

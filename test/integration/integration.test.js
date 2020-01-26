@@ -1,12 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const open = require('open');
 const glob = require('glob');
 const unified = require('unified');
 const reparseHast = require('hast-util-raw');
 const mdastToHast = require('mdast-util-to-hast');
 const remark = require('remark-parse');
 const stringify = require('rehype-stringify');
-const { execSync } = require('child_process');
 const { promisify } = require('util');
 const { renderDocument, renderNewCase, renderTestDiff } = require('./viewer/render');
 const { markdownNode, createCache, createNodeId, actions } = require('../utils');
@@ -73,7 +73,7 @@ describe('integration tests', () => {
     if (failedCaseHTML.length || newCaseHTML.length) {
       const fileName = path.resolve(__dirname, 'viewer/report.html');
       await writeFile(fileName, renderDocument([...newCaseHTML, ...failedCaseHTML].join('\n')));
-      execSync(`open ${fileName}`);
+      return open(fileName);
     }
   });
 });
