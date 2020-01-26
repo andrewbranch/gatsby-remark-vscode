@@ -6,6 +6,10 @@ A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses V
 
 Includes OS dark mode support 🌙
 
+## Migrating to v2
+
+If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
+
 ## Table of contents
 
 - [Why gatsby-remark-vscode?](#why-gatsby-remark-vscode)
