@@ -44,7 +44,7 @@
     "glob": "^7.1.5",
     "graphql": "^14.5.8",
     "hast-util-raw": "^5.0.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "mdast-util-to-hast": "^6.0.2",
     "open": "^7.0.0",
     "prettier": "^1.18.2",
@@ -68,13 +68,10 @@
     "vscode-textmate": "4.2.2"
   },
   "jest": {
+    "testMatch": ["<rootDir>/test/index.js"],
     "globalSetup": "<rootDir>/test/setup.js",
     "coveragePathIgnorePatterns": [
       "lib"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/vscode",
-      "<rootDir>/examples"
     ]
   }
 }
