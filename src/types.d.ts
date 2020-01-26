@@ -63,7 +63,7 @@ interface PluginOptions {
   replaceColor?: (colorValue: string, theme: string) => string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
-  getLineTransformers?: (pluginOptions: PluginOptions, cache: GatsbyCache) => LineTransformer[] | Promise<LineTransformer[]>;
+  getLineTransformers?: (pluginOptions: PluginOptions, cache: GatsbyCache) => LineTransformer[];
 }
 
 interface GatsbyCache {
@@ -181,7 +181,7 @@ interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
 }
 
 interface LineTransformer<T = any> {
-  (args: LineTransformerArgs<T>): LineTransformerResult<T>;
+  (args: LineTransformerArgs<T>): LineTransformerResult<T> | Promise<LineTransformerResult<T>>;
   displayName: string;
   schemaExtension?: string;
 }

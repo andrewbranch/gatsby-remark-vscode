@@ -6,9 +6,9 @@
  * @param {string} text
  * @param {string} languageName
  * @param {object} meta
- * @returns {Line[]}
+ * @returns {Promise<Line[]>}
  */
-function getTransformedLines(transformers, text, languageName, meta) {
+async function getTransformedLines(transformers, text, languageName, meta) {
   /** @type {Line[]} */
   const result = [];
   const rawLines = text.split(/\r?\n/);
@@ -22,7 +22,7 @@ function getTransformedLines(transformers, text, languageName, meta) {
       const transformer = transformers[i];
       const state = prevTransformerStates[i];
       /** @type {LineTransformerResult} */
-      const txResult = transformer({
+      const txResult = await transformer({
         state,
         line: { text: line, attrs },
         meta,

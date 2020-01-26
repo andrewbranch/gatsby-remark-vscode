@@ -41,7 +41,7 @@ function createPlugin() {
       ...rest
     } = await once(() => setup(options, cache), 'setup');
 
-    const lineTransformers = await getLineTransformers(
+    const lineTransformers = getLineTransformers(
       {
         theme,
         wrapperClassName,
@@ -185,8 +185,8 @@ function createPlugin() {
   }
 
   textmateHighlight.getRegistry = getRegistry;
-  textmateHighlight.createSchemaCustomization = createSchemaCustomization;
   textmateHighlight.once = once;
+  textmateHighlight.createSchemaCustomization = createSchemaCustomization;
   return textmateHighlight;
 }
 

@@ -6,13 +6,10 @@ const getTransformedLines = require('./getTransformedLines');
 /**
  * @param {PluginOptions} pluginOptions
  * @param {GatsbyCache} cache
- * @returns {Promise<LineTransformer[]>}
+ * @returns {LineTransformer[]}
  */
-async function getDefaultLineTransformers(pluginOptions, cache) {
-  return [
-    createHighlightDirectiveLineTransformer({}, pluginOptions.languageAliases, await cache.get('grammars')),
-    highlightMetaTransformer
-  ];
+function getDefaultLineTransformers(pluginOptions, cache) {
+  return [createHighlightDirectiveLineTransformer({}, pluginOptions.languageAliases, cache), highlightMetaTransformer];
 }
 
 /**
@@ -25,8 +22,8 @@ function addLineTransformers(...transformers) {
    * @param {PluginOptions} pluginOptions
    * @param {GatsbyCache} cache
    */
-  async function getLineTransformers(pluginOptions, cache) {
-    return [...transformers, ...(await getDefaultLineTransformers(pluginOptions, cache))];
+  function getLineTransformers(pluginOptions, cache) {
+    return [...transformers, ...getDefaultLineTransformers(pluginOptions, cache)];
   }
 }
 

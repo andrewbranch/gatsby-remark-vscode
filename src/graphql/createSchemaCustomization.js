@@ -9,13 +9,13 @@ const rootSchema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'), 'u
  * @param {*} nodeApiOptions
  * @param {PluginOptions} options
  */
-function createSchemaCustomization({ actions }, options) {
+function createSchemaCustomization({ actions, cache }, options) {
   const { createTypes } = actions;
   logger.setLevel(options.logLevel || 'error');
   createTypes(rootSchema);
   const lineTransformers = options.getLineTransformers
-    ? options.getLineTransformers(options)
-    : getDefaultLineTransformers();
+    ? options.getLineTransformers(options, cache)
+    : getDefaultLineTransformers(options, cache);
 
   for (const transformer of lineTransformers) {
     if (transformer.schemaExtension) {

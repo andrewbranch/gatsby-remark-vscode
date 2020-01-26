@@ -54,11 +54,16 @@ const textIsHighlightDirective = (text, commentWrapper) => directive =>
 /**
  * @param {Record<string, (message: string) => string>} languageCommentMap user-defined object mapping language keys to commenting functions
  * @param {Record<string, string>} languageAliases
- * @param {*} grammarCache
+ * @param {GatsbyCache} cache
  */
-function createHighlightDirectiveLineTransformer(languageCommentMap, languageAliases, grammarCache) {
+function createHighlightDirectiveLineTransformer(languageCommentMap, languageAliases, cache) {
+  let grammarCache;
   /** @type {LineTransformer<HighlightCommentTransfomerState>} */
-  const transformer = ({ line, language, state }) => {
+  const transformer = async ({ line, language, state }) => {
+    if (!grammarCache) {
+      grammarCache = await cache.get('grammars');
+    }
+
     const scope = getScope(language, grammarCache, languageAliases);
     const commentWrapper = getCommentForLanguage(language, scope, languageCommentMap);
     const isDirective = textIsHighlightDirective(line.text, commentWrapper);
@@ -101,7 +106,7 @@ function createHighlightDirectiveLineTransformer(languageCommentMap, languageAli
 
   transformer.displayName = 'highlightCommentDirective';
   transformer.schemaExtension = `
-    type GRVSCLine {
+    type GRVSCTokenizedLine {
       isHighlighted: Boolean
     }
   `;

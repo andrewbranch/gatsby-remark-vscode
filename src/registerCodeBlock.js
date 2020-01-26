@@ -30,7 +30,7 @@ async function registerCodeBlock(
   const grammarCache = await cache.get('grammars');
   const [registry, unlockRegistry] = await getTextMateRegistry();
   try {
-    const lines = getTransformedLines(lineTransformers, text, languageName, meta);
+    const lines = await getTransformedLines(lineTransformers, text, languageName, meta);
     /** @type {import('vscode-textmate').ITokenTypeMap} */
     let tokenTypes = {};
     /** @type {number} */

@@ -25,7 +25,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
     ...rest
   } = await plugin.once(() => setup(pluginOptions, cache));
 
-  const lineTransformers = await getLineTransformers(
+  const lineTransformers = getLineTransformers(
     {
       theme,
       languageAliases,
