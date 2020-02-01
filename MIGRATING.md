@@ -6,8 +6,8 @@
 
 - If you did not use themes or languages beyond the default included set, no change is necessary.
 - If you relied on the `extensions` plugin option to download extensions:
-  - Find the extension source on GitHub, npm, or elsewhere.
-  - Ensure the license allows you to use the code on your site, and follow all requirements.
+  - Find the extension source on GitHub, npm, or elsewhere. (Extensions listed on the Visual Studio Marketplace typically link to their GitHub repos.)
+  - Ensure the license allows you to use the code on your site, and follow all license requirements.
   - Install or copy the extension into your project:
     - You can install from GitHub by running `npm install owner-name/repo-name`.
     - If you clone the source and build a `.vsix`, you can copy that file into your project.
@@ -38,9 +38,15 @@
 }
 ```
 
+The new `theme` option also supports some options that `colorTheme` did not; you can read about the full API in the [README](README.md#multi-theme-support).
+
 ### CSS variables and class names have changed
 
 - If you wrote custom CSS targeting the class `.vscode-highlight`, replace that selector with `.grvsc-container`.
 - If you wrote custom CSS targeting any other class beginning with `.vscode-highlight`, replace the `.vscode-highlight` prefix with `.grvsc`. For example, `.vscode-highlight-line` is now `.grvsc-line`.
 - If you set any CSS variables, replace the `--vscode-highlight` prefix with `--grvsc`. For example, `--vscode-highlight-border-radius` is now `--grvsc-border-radius`.
 - If you wrote custom CSS targeting a token class name beginning with `.mtk`, that was never intended to be supported! Consider using `replaceColor` instead, or [file an issue](https://github.com/andrewbranch/gatsby-remark-vscode/issues/new) if you think you have a compelling use case for writing custom token CSS.
+
+### Known issues
+
+- Usage with [gatsby-plugin-mdx](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-mdx) requires gatsby-plugin-mdx@1.0.68 or later.
