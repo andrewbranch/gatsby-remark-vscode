@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
 
-A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
+A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a third-party extension, can be rendered on your Gatsby site.
 
 Includes OS dark mode support 🌙
 
