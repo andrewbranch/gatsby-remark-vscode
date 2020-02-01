@@ -1,20 +1,14 @@
 # gatsby-remark-vscode
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/andrewbranch/gatsby-remark-vscode.svg)](https://greenkeeper.io/) [![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
+[![npm](https://img.shields.io/npm/v/gatsby-remark-vscode.svg)](https://www.npmjs.com/package/gatsby-remark-vscode)
 
 A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses VS Code’s extensions, themes, and highlighting engine. Any language and theme VS Code supports, whether built-in or via a [Marketplace extension](https://marketplace.visualstudio.com/vscode), can be rendered on your Gatsby site.
 
 Includes OS dark mode support 🌙
 
-## v2 is underway! 🎉
+## Migrating to v2
 
-Feedback on the WIP v2 is greatly appreciated. You can try it out with
-
-```bash
-npm install gatsby-remark-vscode@alpha
-```
-
-and leave feedback at [#64](https://github.com/andrewbranch/gatsby-remark-vscode/issues/64).
+If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
 
 ## Table of contents
 
@@ -34,6 +28,7 @@ and leave feedback at [#64](https://github.com/andrewbranch/gatsby-remark-vscode
   - [Line highlighting](#line-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
+- [Contributing](#contributing)
 
 ## Why gatsby-remark-vscode?
 
@@ -66,7 +61,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
         resolve: `gatsby-remark-vscode`,
         // All options are optional. Defaults shown here.
         options: {
-          colorTheme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
+          theme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
           wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
           extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
@@ -78,13 +73,14 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
             content,              //   - the string content of the line
             index,                //   - the zero-based index of the line within the code fence
             language,             //   - the language specified for the code fence
-            codeFenceOptions      //   - any options set on the code fence alongside the language (more on this later)
+            meta                  //   - any options set on the code fence alongside the language (more on this later)
           }) => '',
-          logLevel: 'error'       // Set to 'warn' to debug if something looks wrong
+          logLevel: 'warn'       // Set to 'info' to debug if something looks wrong
         }
       }]
     }
-  }
+  }]
+}
 ```
 
 Write code examples in your markdown file as usual:
@@ -95,25 +91,60 @@ this.willBe(highlighted);
 ```
 ````
 
-## Dark mode support via `prefers-color-scheme`
+## Multi-theme support
 
-Instead of passing a string for `colorTheme`, you can pass an object specifying which theme to use for different values of a user’s operating system color scheme preference.
+You can select different themes to be activated by media query or by parent selector (e.g. a class or data attribute on the `html` or `body` element).
+
+### Reacting to OS dark mode with `prefers-color-scheme`
 
 ```js
-// Note: you probably don’t actually want to provide all three options,
-// this example just aims to show all possible options.
 {
-  colorTheme: {
-    defaultTheme: 'Solarized Light',    // Required
-    prefersDarkTheme: 'Monokai Dimmed', // Optional: used with `prefers-color-scheme: dark`
-    prefersLightTheme: 'Quiet Light'    // Optional: used with `prefers-color-scheme: light`
+  theme: {
+    default: 'Solarized Light',
+    dark: 'Monokai Dimmed'
   }
 }
 ```
 
-This places CSS for each theme inside a corresponding [`prefers-color-scheme`](https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-color-scheme) media query. [See browser support.](https://caniuse.com/#feat=prefers-color-scheme)
+### Reacting to a parent selector
 
-Generally, you probably don’t need or want to set all three `colorTheme` options—typical usage would be to set `defaultTheme` to a light theme and `prefersDarkTheme` to a dark theme.
+```js
+{
+  theme: {
+    default: 'Solarized Light',
+    parentSelector: {
+      // Any CSS selector will work!
+      'html[data-theme=dark]': 'Monokai Dimed',
+      'html[data-theme=hc]': 'My Cool Custom High Contrast Theme'
+    }
+  }
+}
+```
+
+### Reacting to other media queries
+
+The `dark` option is shorthand for a general-purpose `media` option that can be used to match any media query:
+
+```js
+{
+  theme: {
+    default: 'Solarized Light',
+    media: [{
+      // Longhand for `dark` option.
+      // Don’t forget the parentheses!
+      match: '(prefers-color-scheme: dark)',
+      theme: 'Monokai Dimmed'
+    }, {
+      // Proposed in Media Queries Level 5 Draft
+      match: '(prefers-contrast: high)',
+      theme: 'My Cool Custom High Contrast Theme'
+    }, {
+      match: 'print',
+      theme: 'My Printer Friendly Theme???'
+    }]
+  }
+}
+```
 
 ## Built-in languages and themes
 
@@ -205,38 +236,32 @@ Pro tip: a good way to preview themes is by flipping through them in VS Code. He
 
 ## Using languages and themes from an extension
 
-If you want to use a language or theme not included by default, you can use an extension from the [Visual Studio Marketplace](https://marketplace.visualstudio.com/vscode) that provides that language or theme. `gatsby-remark-vscode` will download it for you; you just need to provide the unique identifier and version of the extension:
+If you want to use a language or theme not included by default, the recommended approach is to `npm install` it from GitHub, provided its license permits doing so. For example, you can use [robb0wen/synthwave-vscode](https://github.com/robb0wen/synthwave-vscode) by running
 
-![The version and unique identifier can be found in the bottom right corner of the extension’s page on the Visual Studio Marketplace](https://user-images.githubusercontent.com/3277153/56478345-80fb3f00-6463-11e9-84dc-3082d0e6b8f9.png)
+```bash
+npm install robb0wen/synthwave-vscode
+```
 
-Add those strings to the `extensions` option in your plugin configuration in `gatsby-config.js`:
+Then, in gatsby-config.js, use the options
 
 ```js
 {
-  // ...
-  plugins: [{
-    resolve: `gatsby-transformer-remark`,
-    options: {
-      plugins: [{
-        resolve: `gatsby-remark-vscode`,
-        options: {
-          extensions: [{
-            identifier: 'daltonjorge.scala',
-            version: '0.0.5'
-          }]
-        }
-      ]}
-    }
-  }]
+  theme: `SynthWave '84`, // From package.json: contributes.themes[0].label
+  extensions: ['synthwave-vscode'] // From package.json: name
+}
 ```
 
-Next time you `gatsby develop` or `gatsby build`, the extension will be downloaded and Scala code fences will be highlighted. Extensions are downloaded to `node_modules/gatsby-remark-vscode/lib/extensions` by default (but can go elsewhere by setting the `extensionDataDirectory` option), so they remain cached on disk as long as `gastsby-remark-vscode` does.
+You can also clone an extension into your project, or build a .vsix file from its source, and specify its path in `extensions`:
 
-### Dealing with rate limiting in CI
-
-Anonymous requests to the Visual Studio Marketplace are rate limited, so if you’re downloading a lot of extensions or running builds in quick succession in an environment where the extensions aren’t already cached on disk (like on a build server), you might see failed requests.
-
-As a workaround, you can set the `extensionDataDirectory` plugin option to an absolute path pointing to a folder that you check into source control. After running a build locally, any extensions you’ve requested will appear in that directory. Then, in CI, gatsby-remark-vscode will check that directory and determine if anything needs to be downloaded. By including the extensions alongside your own source code, you can avoid making requests to the Visual Studio Marketplace in CI entirely.
+```js
+{
+  theme: {
+    default: 'My Custom Theme',
+    dark: 'My Custom Dark Theme'
+  },
+  extensions: ['./vendor/my-custom-theme', './vendor/my-custom-dark-theme.vsix']
+}
+```
 
 ## Styles
 
@@ -255,23 +280,23 @@ The generated HTML has ample stable class names, and you can add your own with t
 The styles also include a few CSS variables you can override. The defaults are:
 
 ```css
-.vscode-highlight {
-  --vscode-highlight-padding-v: 1rem;
-  --vscode-highlight-padding-h: 1.5rem;
-  --vscode-highlight-padding-top: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-right: var(--vscode-highlight-padding-h);
-  --vscode-highlight-padding-bottom: var(--vscode-highlight-padding-v);
-  --vscode-highlight-padding-left: var(--vscode-highlight-padding-h);
-  --vscode-highlight-border-radius: 8px;
+.grvsc-container {
+  --grvsc-padding-v: 1rem;
+  --grvsc-padding-h: 1.5rem;
+  --grvsc-padding-top: var(--grvsc-padding-v);
+  --grvsc-padding-right: var(--grvsc-padding-h);
+  --grvsc-padding-bottom: var(--grvsc-padding-v);
+  --grvsc-padding-left: var(--grvsc-padding-h);
+  --grvsc-border-radius: 8px;
 
   /* Line highlighting: see next section */
-  --vscode-highlight-line-highlighted-background-color: transparent;
-  --vscode-highlight-line-highlighted-border-width: 4px;
-  --vscode-highlight-line-highlighted-border-color: transparent;
+  --grvsc-line-highlighted-background-color: transparent;
+  --grvsc-line-highlighted-border-width: 4px;
+  --grvsc-line-highlighted-border-color: transparent;
 }
 ```
 
-The default values are set on `:root`, so you can set them on `.vscode-highlight`, `pre`, your own `wrapperClassName`, the class name matching the theme, or generally any selector more specific than `:root`.
+The default values are set on `:root`, so you can set them on `.grvsc-container`, `pre`, your own `wrapperClassName`, the class name matching the theme, or generally any selector more specific than `:root`.
 
 ### Tweaking or replacing theme colors
 
@@ -326,17 +351,17 @@ const zero = [0, 1, 2, 3, 4, 5]
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 
 ```css
-.vscode-highlight {
-  --vscode-highlight-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-  --vscode-highlight-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-  --vscode-highlight-line-highlighted-border-width: 2px; /* default: 2px */
+.grvsc-container {
+  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
+  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+  --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
 }
 ```
 
 or by setting custom styles on the lines:
 
 ```css
-.vscode-highlight .vscode-highlight-line-highlighted {
+.grvsc-container .grvsc-line-highlighted {
   background-color: rgba(255, 255, 255, 0.2);
   box-shadow: inset 2px 0 0 0 rgba(255, 255, 255, 0.5);
 }
@@ -344,7 +369,7 @@ or by setting custom styles on the lines:
 
 ### Using different themes for different code fences
 
-The `colorTheme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
+The `theme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
 
 ### Arbitrary code fence options
 
@@ -356,11 +381,11 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 ```
 ````
 
-`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `colorTheme`, `wrapperClassName` and `getLineClassName` functions:
+`gatsby-remark-vscode` doesn’t inherently understand these things, but it parses the input and allows you to access it in the `theme`, `wrapperClassName` and `getLineClassName` functions:
 
 ```js
 {
-  colorTheme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
+  theme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
     // 'language' is 'jsx', in this case
     // 'markdownNode' is the gatsby-transformer-remark GraphQL node
     // 'codeFenceNode' is the Markdown AST node of the current code fence
@@ -375,6 +400,12 @@ Line numbers and ranges aren’t the only things you can pass as options on your
   wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
 }
 ```
+
+## Contributing
+
+Please note that this project is released with a Contributor [Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 
 [embedded-others]: https://user-images.githubusercontent.com/3277153/56853797-5debe780-68c8-11e9-91b2-aa651e87a675.png
 [embedded-own]: https://user-images.githubusercontent.com/3277153/56853798-5e847e00-68c8-11e9-9eb6-061aa16756ec.png

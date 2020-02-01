@@ -15,13 +15,13 @@ function test(input, pattern) {
 
 /**
  * @param {string} lang
- * @param {string | undefined} meta
+ * @param {string=} metaString
  */
-function parseCodeFenceHeader(lang, meta) {
+function parseCodeFenceHeader(lang, metaString) {
   let pos = 0;
-  let options = {};
+  let meta = {};
   let languageName = '';
-  const input = lang + (meta || '');
+  const input = lang + (metaString || '');
   skipTrivia();
   if (!isEnd() && current() !== '{') {
     languageName = parseIdentifier();
@@ -29,7 +29,7 @@ function parseCodeFenceHeader(lang, meta) {
   const languageNameEnd = pos;
   skipTrivia();
   if (!isEnd() && current() === '{') {
-    options = parseObject();
+    meta = parseObject();
   }
 
   if (!isEnd()) {
@@ -39,7 +39,7 @@ function parseCodeFenceHeader(lang, meta) {
     return fail(`Unrecognized input: '${current()}'`);
   }
 
-  return { languageName, options };
+  return { languageName, meta };
 
   function current() {
     if (isEnd()) {

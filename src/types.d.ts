@@ -1,11 +1,17 @@
-interface ExtensionDemand {
-  identifier: string;
-  version: string;
+interface RemarkPluginArguments {
+  cache: GatsbyCache;
+  markdownAST: MDASTNode;
+  markdownNode: MarkdownNode;
+  actions: {
+    createNode: (node: grvsc.gql.Node) => void;
+    createParentChildLink: (nodes: { parent: grvsc.gql.Node, child: grvsc.gql.Node }) => void;
+  };
+  createNodeId: (key: string) => string;
 }
 
 interface CodeFenceData {
   language: string;
-  markdownNode: any;
+  markdownNode: MarkdownNode;
   codeFenceNode: any;
   parsedOptions: any;
 }
@@ -18,44 +24,146 @@ interface LineData {
   /** The code fence’s language */
   language: string;
   /** The code fence’s options parsed from the language suffix */
-  codeFenceOptions: object;
+  meta: object;
 }
 
-interface ColorThemeSettings {
+interface LegacyThemeSettings {
   defaultTheme: string;
   prefersLightTheme?: string;
   prefersDarkTheme?: string;
 }
 
-interface FetchResponse {
-  body: Buffer | undefined;
-  statusCode: number;
+interface ThemeSettings {
+  default: string;
+  dark?: string;
+  parentSelector?: Record<string, string>;
+  media?: MediaQuerySetting[];
+}
+
+interface MediaQuerySetting {
+  match: string;
+  theme: string;
 }
 
 interface Host {
-  fetch: (url: string, options: import('request').CoreOptions) => Promise<FetchResponse>;
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type ColorThemeOption = string | ColorThemeSettings | ((data: CodeFenceData) => string | ColorThemeSettings);
+type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeFenceData) => string | LegacyThemeSettings);
+type ThemeOption = string | ThemeSettings | ((data: CodeFenceData) => string | ThemeSettings);
 
 interface PluginOptions {
-  colorTheme?: ColorThemeOption;
+  theme?: ThemeOption;
+  colorTheme?: LegacyThemeOption;
   wrapperClassName?: string | ((data: CodeFenceData) => string);
   languageAliases?: Record<string, string>;
-  extensions?: ExtensionDemand[];
+  extensions?: string[];
   getLineClassName?: (line: LineData) => string;
   injectStyles?: boolean;
   replaceColor?: (colorValue: string, theme: string) => string;
-  extensionDataDirectory?: string;
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
-  getLineTransformers?: (pluginOptions: PluginOptions) => LineTransformer[];
+  getLineTransformers?: (pluginOptions: PluginOptions, cache: GatsbyCache) => LineTransformer[];
+}
+
+interface GatsbyCache {
+  get(key: string): Promise<any>;
+  set(key: string, data: any): Promise<void>;
+}
+
+interface DecodedTokenMeta {
+  classNames: string[];
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  foreground: number;
+}
+
+interface Token {
+  start: number;
+  end: number;
+  metadata: number;
+  scopes: string[];
+}
+
+interface TokenizeWithThemeResult {
+  lines: Token[][] | undefined;
+  theme: ConditionalTheme;
+  colorMap: string[];
+  settings: Record<string, string>;
+}
+
+type DefaultThemeCondition = { condition: 'default' };
+type MatchMediaThemeCondition = { condition: 'matchMedia', value: string };
+type ParentSelectorThemeCondition = { condition: 'parentSelector', value: string };
+type ThemeCondition = DefaultThemeCondition | MatchMediaThemeCondition | ParentSelectorThemeCondition;
+
+interface ConditionalTheme {
+  identifier: string;
+  path: string;
+  conditions: ThemeCondition[];
+}
+
+type RawTheme = import('vscode-textmate').IRawTheme & { resultColors: Record<string, string> };
+
+interface RegisteredCodeBlockData {
+  index: number;
+  meta: object;
+  text: string;
+  languageName: string;
+  lines: Line[];
+  possibleThemes: ConditionalTheme[];
+  isTokenized: boolean;
+  tokenizationResults: TokenizeWithThemeResult[];
+}
+
+interface RegisteredToken {
+  text: string;
+  scopes: string[];
+  startIndex: number;
+  endIndex: number;
+  defaultThemeTokenData: grvsc.gql.GRVSCThemeTokenData;
+  additionalThemeTokenData: grvsc.gql.GRVSCThemeTokenData[];
+}
+
+interface MDASTNode {
+  type: string;
+  lang?: string;
+  meta?: string;
+  value?: string;
+  children?: MDASTNode[];
+}
+
+interface MarkdownNode extends grvsc.gql.Node {
+  fileAbsolutePath: string;
+}
+
+type Line = {
+  text: string;
+  attrs: object;
+  data: object;
+};
+
+interface CodeBlockRegistry<TKey> {
+  register: (key: TKey, data: Omit<RegisteredCodeBlockData, 'index'>) => void;
+  forEachLine: (codeBlockKey: TKey, action: (line: Line, index: number, lines: Line[]) => void) => void;
+  forEachToken: (
+    key: TKey,
+    lineIndex: number,
+    tokenAction: (token: RegisteredToken) => void
+  ) => void;
+  forEachCodeBlock: (action: (data: RegisteredCodeBlockData & { index: number }, codeBlockKey: TKey) => void) => void;
+  getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
+  getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
+}
+
+interface CodeBlockRegistryOptions {
+  prefixAllClassNames?: boolean;
 }
 
 // Line transformers
 
-interface LineTransformerResult<T> {
+interface LineTransformerInfo<T> {
   line?: {
     text: string;
     attrs: object;
@@ -63,27 +171,127 @@ interface LineTransformerResult<T> {
   state: T | undefined;
 }
 
-interface LineTransformerArgs<T> extends LineTransformerResult<T> {
-  language: string;
-  codeFenceOptions: object;
+interface LineTransformerResult<T> extends LineTransformerInfo<T> {
+  data?: object;
 }
 
-type LineTransformer<T = any> = (args: LineTransformerArgs<T>) => LineTransformerResult<T> | undefined;
+interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
+  language: string;
+  meta: object;
+}
+
+interface LineTransformer<T = any> {
+  (args: LineTransformerArgs<T>): LineTransformerResult<T> | Promise<LineTransformerResult<T>>;
+  displayName: string;
+  schemaExtension?: string;
+}
 
 type HighlightCommentTransfomerState = {
   inHighlightRange?: boolean;
   highlightNextLine?: boolean;
 };
 
-type ElementTemplate = {
-  tagName: string;
-  attributes: Record<string, string>;
-  children: (ElementTemplate | string)[];
-  renderOptions?: RenderOptions;
-};
+// Renderers
 
-// Utils
+declare namespace grvsc {
+  interface Writer {
+    write: (text: string) => void;
+    writeList: <T>(list: T[], writeElement: (element: T) => void, writeSeparator: () => void) => void;
+    writeNewLine: () => void;
+    increaseIndent: () => void;
+    decreaseIndent: () => void;
+    getText: () => string;
+    noop: () => void;
+  }
 
-interface RenderOptions {
-  whitespace?: number;
+  type HTMLElement = {
+    tagName: string;
+    attributes: Record<string, string>;
+    children: (HTMLElement | CSSElement | string)[];
+    renderOptions?: RenderOptions;
+  };
+
+  interface RenderOptions {
+    whitespace?: number;
+  }
+
+  type CSSMediaQuery = {
+    kind: 'MediaQuery';
+    mediaQueryList: string;
+    body: CSSRuleset[];
+    leadingComment?: string;
+  }
+
+  type CSSRuleset = {
+    kind: 'Ruleset';
+    selectors: string[];
+    body: CSSDeclaration[];
+    leadingComment?: string;
+  };
+
+  type CSSDeclaration = {
+    property: string;
+    value: string;
+  };
+
+  type CSSElement = CSSMediaQuery | CSSRuleset;
+
+  // GraphQL (merged with schema.d.ts)
+  namespace gql {
+    interface Node {
+      id: string;
+      parent?: string;
+      internal?: {
+        type: string;
+        contentDigest?: string;
+      };
+    }
+
+    interface ThemedArgs {
+      defaultTheme?: string;
+      additionalThemes?: GRVSCThemeArgument[];
+    }
+
+    interface CSSArgs extends ThemedArgs {
+      injectStyles?: boolean;
+    }
+
+    interface HighlightArgs extends ThemedArgs {
+      source: string;
+      language?: string;
+      defaultTheme?: string;
+      additionalThemes?: GRVSCThemeArgument[];
+      meta?: string;
+    }
+  }
+
+  namespace conditionParsing {
+    type SyntaxKind =
+      | 'Unknown'
+      | 'OpenParen'
+      | 'CloseParen'
+      | 'StringLiteral'
+      | 'Identifier'
+      | 'Call'
+      | 'EOF';
+
+    interface Node {
+      kind: SyntaxKind;
+      pos: number;
+    }
+    interface Identifier extends Node {
+      kind: 'Identifier';
+      text: string;
+    }
+    interface StringLiteral extends Node {
+      kind: 'StringLiteral';
+      text: string;
+    }
+    interface Call extends Node {
+      kind: 'Call';
+      target: Identifier;
+      argument: StringLiteral;
+    }
+    type Expression = Identifier | StringLiteral | Call;
+  }
 }

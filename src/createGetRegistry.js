@@ -42,7 +42,7 @@ const getLock = (() => {
  * @param {string} rootScopeName
  */
 function warnMissingLanguageFile(missingScopeName, rootScopeName) {
-  logger.warn(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
+  logger.info(`No language file was loaded for scope '${missingScopeName}' (requested by '${rootScopeName}').`);
 }
 
 function createGetRegistry() {
@@ -50,7 +50,7 @@ function createGetRegistry() {
   let registry;
 
   /**
-   * @param {*} cache
+   * @param {GatsbyCache} cache
    * @param {string} rootScopeName
    * @returns {Promise<[Registry, () => void]>}
    */

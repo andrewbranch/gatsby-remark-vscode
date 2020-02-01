@@ -4,11 +4,13 @@
   "description": "Gatsby plugin to provide VS Code’s syntax highlighting to Markdown code fences",
   "main": "index.js",
   "scripts": {
-    "build": "node scripts/scrapeBuiltinExtensions.js",
+    "prepare": "npm run build",
+    "build": "node scripts/index.js",
     "prebuild": "git submodule update --init",
     "check": "tsc -p .",
     "test": "jest",
-    "pretest": "npm run check && npm run build && prettier --check src/**/*.js",
+    "test:update": "jest -u",
+    "posttest": "prettier --check 'src/**/*.js' && npm run check",
     "prepublishOnly": "npm test",
     "format": "prettier --write 'src/**/*.js'"
   },
@@ -35,41 +37,38 @@
     "@types/glob": "^7.1.1",
     "@types/jest": "^24.0.21",
     "@types/json5": "0.0.30",
-    "@types/lodash.escape": "^4.0.6",
-    "@types/lodash.uniq": "^4.5.6",
     "@types/node": "^12.12.5",
     "@types/plist": "^3.0.2",
-    "@types/request": "^2.48.3",
     "glob": "^7.1.5",
+    "graphql": "^14.5.8",
     "hast-util-raw": "^5.0.1",
-    "jest": "^24.9.0",
+    "jest": "^25.1.0",
     "mdast-util-to-hast": "^6.0.2",
+    "open": "^7.0.0",
     "prettier": "^1.18.2",
     "rehype-stringify": "^6.0.0",
     "remark-parse": "^7.0.1",
     "remark-rehype": "^5.0.0",
+    "synthwave-vscode": "github:robb0wen/synthwave-vscode",
     "typescript": "^3.6.4",
     "unified": "^8.4.1"
   },
   "dependencies": {
     "decompress": "^4.2.0",
     "json5": "^2.1.1",
-    "lodash.escape": "^4.0.1",
-    "lodash.uniq": "^4.5.0",
     "loglevel": "^1.6.4",
     "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
-    "rimraf": "^3.0.0",
     "unist-util-visit": "^1.4.1",
     "vscode-textmate": "4.2.2"
   },
   "jest": {
+    "testMatch": [
+      "<rootDir>/test/index.js"
+    ],
+    "globalSetup": "<rootDir>/test/setup.js",
     "coveragePathIgnorePatterns": [
       "lib"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/vscode",
-      "<rootDir>/examples"
     ]
   }
 }

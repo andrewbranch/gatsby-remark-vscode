@@ -2,85 +2,81 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('loglevel');
-const defaultHost = require('./host');
 const visit = require('unist-util-visit');
-const escapeHTML = require('lodash.escape');
-const createThemeStyles = require('./createThemeStyles');
+const setup = require('./setup');
 const createGetRegistry = require('./createGetRegistry');
+const registerCodeBlock = require('./registerCodeBlock');
+const getPossibleThemes = require('./getPossibleThemes');
+const createCodeBlockRegistry = require('./createCodeBlockRegistry');
 const parseCodeFenceHeader = require('./parseCodeFenceHeader');
-const { getClassNameFromMetadata } = require('../lib/vscode/modes');
-const { downloadExtensionIfNeeded: downloadExtensionsIfNeeded } = require('./downloadExtension');
-const { getGrammar, getScope } = require('./storeUtils');
-const {
-  joinClassNames,
-  renderHTML,
-  span,
-  code,
-  pre,
-  style,
-  mergeAttributes,
-  TriviaRenderFlags
-} = require('./renderUtils');
+const createSchemaCustomization = require('./graphql/createSchemaCustomization');
+const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataFromRegistry');
+const { createHash } = require('crypto');
+const { setChildNodes } = require('./cacheUtils');
+const { getScope } = require('./storeUtils');
+const { createStyleElement } = require('./factory/html');
+const { renderHTML } = require('./renderers/html');
+const { createOnce } = require('./utils');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
-const { getDefaultLineTransformers } = require('./transformers');
 
 function createPlugin() {
   const getRegistry = createGetRegistry();
+  const once = createOnce();
 
   /**
-   * @param {*} _
+   * @param {RemarkPluginArguments} _
    * @param {PluginOptions=} options
    */
-  async function textmateHighlight(
-    { markdownAST, markdownNode, cache },
-    {
-      colorTheme = 'Default Dark+',
-      wrapperClassName = '',
-      languageAliases = {},
-      extensions = [],
-      getLineClassName = () => '',
-      injectStyles = true,
-      replaceColor = x => x,
-      extensionDataDirectory = path.resolve(__dirname, '../lib/extensions'),
-      logLevel = 'error',
-      host = defaultHost,
-      getLineTransformers = getDefaultLineTransformers,
-      ...rest
-    } = {}
-  ) {
-    logger.setLevel(logLevel);
-    const lineTransformers = getLineTransformers({
-      colorTheme,
+  async function textmateHighlight({ markdownAST, markdownNode, cache, actions, createNodeId }, options = {}) {
+    const {
+      theme,
       wrapperClassName,
       languageAliases,
       extensions,
       getLineClassName,
       injectStyles,
       replaceColor,
-      extensionDataDirectory,
       logLevel,
+      getLineTransformers,
       ...rest
-    });
+    } = await once(() => setup(options, cache), 'setup');
 
-    /** @type {Record<string, string>} */
-    const stylesheets = {};
+    const lineTransformers = getLineTransformers(
+      {
+        theme,
+        wrapperClassName,
+        languageAliases,
+        extensions,
+        getLineClassName,
+        injectStyles,
+        replaceColor,
+        logLevel,
+        ...rest
+      },
+      cache
+    );
+
+    // 1. Gather all code fence nodes from Markdown AST.
+
+    /** @type {MDASTNode[]} */
     const nodes = [];
     visit(markdownAST, 'code', node => {
       nodes.push(node);
     });
 
+    // 2. For each code fence found, parse its header, determine what themes it will use,
+    //    and register its contents with a central code block registry, performing tokenization
+    //    along the way.
+
+    /** @type {grvsc.gql.GRVSCCodeBlock[]} */
+    const graphQLNodes = [];
+    /** @type {CodeBlockRegistry<MDASTNode>} */
+    const codeBlockRegistry = createCodeBlockRegistry();
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
-      const { languageName, options } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '', node.meta);
-      await downloadExtensionsIfNeeded({
-        extensions,
-        cache,
-        extensionDir: extensionDataDirectory,
-        host
-      });
-
+      const { languageName, meta } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '', node.meta);
       const grammarCache = await cache.get('grammars');
       const scope = getScope(languageName, grammarCache, languageAliases);
       if (!scope && languageName) {
@@ -91,133 +87,106 @@ function createPlugin() {
         );
       }
 
-      const [registry, unlockRegistry] = await getRegistry(cache, scope);
+      const possibleThemes = await getPossibleThemes(
+        theme,
+        await cache.get('themes'),
+        path.dirname(markdownNode.fileAbsolutePath),
+        markdownNode,
+        node,
+        languageName,
+        meta
+      );
 
-      try {
-        // Generate stylesheets and class names for theme selections.
-        // Adds stylesheet content to `stylesheets` if necessary and returns
-        // corresponding class name to add to code fence.
-        const themeClassNames = await createThemeStyles({
-          cache,
-          markdownNode,
-          codeFenceOptions: options,
-          codeFenceNode: node,
-          colorTheme,
-          languageName,
-          scopeName: scope,
-          registry,
-          replaceColor,
-          stylesheets
-        });
-
-        const rawLines = text.split(/\r?\n/);
-        /** @type {ElementTemplate[]} */
-        const htmlLines = [];
-        /** @type {import('vscode-textmate').ITokenTypeMap} */
-        let tokenTypes = {};
-        /** @type {number} */
-        let languageId;
-
-        if (scope) {
-          const grammarData = getGrammar(scope, grammarCache);
-          languageId = grammarData.languageId;
-          tokenTypes = grammarData.tokenTypes;
-        }
-
-        const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
-        let ruleStack = undefined;
-        const prevTransformerStates = [];
-        linesLoop: for (let lineIndex = 0; lineIndex < rawLines.length; lineIndex++) {
-          let line = rawLines[lineIndex];
-          /** @type {(ElementTemplate | string)[]} */
-          const htmlLine = [];
-          let attrs = {};
-          for (let i = 0; i < lineTransformers.length; i++) {
-            const transformer = lineTransformers[i];
-            const state = prevTransformerStates[i];
-            const txResult = transformer({
-              state,
-              line: { text: line, attrs },
-              codeFenceOptions: options,
-              language: languageName
-            });
-
-            prevTransformerStates[i] = txResult.state;
-            if (!txResult.line) {
-              continue linesLoop;
-            }
-
-            Object.assign(attrs, txResult.line.attrs);
-            line = txResult.line.text;
-          }
-          if (grammar) {
-            const result = grammar.tokenizeLine2(line, ruleStack);
-            ruleStack = result.ruleStack;
-            for (let i = 0; i < result.tokens.length; i += 2) {
-              const startIndex = result.tokens[i];
-              const metadata = result.tokens[i + 1];
-              const endIndex = result.tokens[i + 2] || line.length;
-              /** @type {LineData} */
-              htmlLine.push(
-                span({ class: getClassNameFromMetadata(metadata) }, [escapeHTML(line.slice(startIndex, endIndex))], {
-                  whitespace: TriviaRenderFlags.NoWhitespace
-                })
-              );
-            }
-          } else {
-            htmlLine.push(escapeHTML(line));
-          }
-
-          /** @type {LineData} */
-          const lineData = { codeFenceOptions: options, index: lineIndex, content: line, language: languageName };
-          const className = joinClassNames(getLineClassName(lineData), 'vscode-highlight-line');
-
-          htmlLines.push(
-            span(mergeAttributes({ class: className }, attrs), htmlLine, { whitespace: TriviaRenderFlags.NoWhitespace })
-          );
-        }
-
-        const wrapperClassNameValue =
-          typeof wrapperClassName === 'function'
-            ? wrapperClassName({
-                language: languageName,
-                markdownNode,
-                codeFenceNode: node,
-                parsedOptions: options
-              })
-            : wrapperClassName;
-
-        const className = joinClassNames(wrapperClassNameValue, themeClassNames, 'vscode-highlight');
-        node.type = 'html';
-        node.value = renderHTML(
-          pre(
-            { class: className, 'data-language': languageName },
-            [
-              code({ class: 'vscode-highlight-code' }, htmlLines, {
-                whitespace: TriviaRenderFlags.NewlineBetweenChildren
-              })
-            ],
-            { whitespace: TriviaRenderFlags.NoWhitespace }
-          )
-        );
-      } finally {
-        unlockRegistry();
-      }
+      await registerCodeBlock(
+        codeBlockRegistry,
+        node,
+        possibleThemes,
+        () => getRegistry(cache, scope),
+        lineTransformers,
+        scope,
+        text,
+        languageName,
+        meta,
+        cache
+      );
     }
 
-    const themeNames = Object.keys(stylesheets);
-    if (themeNames.length) {
+    // 3. For each code block registered, convert its tokenization and theme data
+    //    to a GraphQL-compatible representation, including HTML renderings. At the same
+    //    time, change the original code fence Markdown node to an HTML node and set
+    //    its value to the HTML rendering contained in the GraphQL node.
+
+    codeBlockRegistry.forEachCodeBlock((codeBlock, node) => {
+      const graphQLNode = getCodeBlockGraphQLDataFromRegistry(
+        codeBlockRegistry,
+        node,
+        codeBlock,
+        getWrapperClassName,
+        getLineClassName
+      );
+
+      // Update Markdown node
+      node.type = 'html';
+      node.value = graphQLNode.html;
+
+      // Push GraphQL node
+      graphQLNodes.push({
+        ...graphQLNode,
+        id: createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${codeBlock.index}`),
+        parent: markdownNode.id,
+        internal: {
+          type: 'GRVSCCodeBlock',
+          contentDigest: createHash('md5')
+            .update(JSON.stringify(graphQLNode))
+            .digest('hex')
+        }
+      });
+
+      function getWrapperClassName() {
+        return typeof wrapperClassName === 'function'
+          ? wrapperClassName({
+              language: codeBlock.languageName,
+              markdownNode,
+              codeFenceNode: node,
+              parsedOptions: codeBlock.meta
+            })
+          : wrapperClassName;
+      }
+    });
+
+    // 4. Generate CSS rules for each theme used by one or more code blocks in the registry,
+    //    then append that CSS to the Markdown AST in an HTML node.
+
+    const styleElement = createStyleElement(
+      codeBlockRegistry.getAllPossibleThemes(),
+      codeBlockRegistry.getTokenStylesForTheme,
+      replaceColor,
+      injectStyles ? styles : undefined
+    );
+
+    if (styleElement) {
       markdownAST.children.push({
         type: 'html',
-        value: renderHTML(
-          style({ class: 'vscode-highlight-styles' }, [
-            injectStyles ? styles : '',
-            ...themeNames.map(theme => stylesheets[theme])
-          ])
-        )
+        value: renderHTML(styleElement)
       });
     }
+
+    // 5. Create all GraphQL nodes with Gatsby so code blocks can be queried.
+
+    for (const childNode of graphQLNodes) {
+      await actions.createNode(childNode);
+      await actions.createParentChildLink({
+        parent: markdownNode,
+        child: childNode
+      });
+    }
+
+    await setChildNodes(cache, markdownNode.id, markdownNode.internal.contentDigest, graphQLNodes);
   }
+
+  textmateHighlight.getRegistry = getRegistry;
+  textmateHighlight.once = once;
+  textmateHighlight.createSchemaCustomization = createSchemaCustomization;
   return textmateHighlight;
 }
 

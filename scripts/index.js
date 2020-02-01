@@ -1,0 +1,2 @@
+require('./codegen');
+require('./scrapeBuiltinExtensions');
