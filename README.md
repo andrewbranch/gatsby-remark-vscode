@@ -14,12 +14,11 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
 
 - [Why gatsby-remark-vscode?](#why-gatsby-remark-vscode)
 - [Getting started](#getting-started)
-- [Dark mode support via `prefers-color-scheme`](#dark-mode-support-via-prefers-color-scheme)
+- [Multi-theme support](#multi-theme-support)
 - [Built-in languages and themes](#built-in-languages-and-themes)
   - [Languages](#languages)
   - [Themes](#themes)
 - [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension)
-  - [Dealing with rate limiting in CI](#dealing-with-rate-limiting-in-ci)
 - [Styles](#styles)
   - [Class names](#class-names)
   - [Variables](#variables)
