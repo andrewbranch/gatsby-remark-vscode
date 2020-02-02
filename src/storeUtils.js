@@ -6,10 +6,14 @@ const { exists } = require('./utils');
 let grammarManifest;
 /** @type {void} */
 let themeManifest;
+
+/** @returns {GrammarCache} */
 function getGrammarManifest() {
   // @ts-ignore
   return grammarManifest || (grammarManifest = require('../lib/grammars/manifest.json'));
 }
+
+/** @returns {ThemeCache} */
 function getThemeManifest() {
   // @ts-ignore
   return themeManifest || (themeManifest = require('../lib/themes/manifest.json'));
@@ -25,7 +29,7 @@ function resolveAlias(language, languageAliases) {
 
 /**
  * @param {string} language
- * @param {*} grammarCache
+ * @param {GrammarCache} grammarCache
  * @param {Record<string, string>} languageAliases
  */
 function getScope(language, grammarCache, languageAliases) {
@@ -40,7 +44,7 @@ function getScope(language, grammarCache, languageAliases) {
 }
 
 /**
- * @param {*} grammar
+ * @param {GrammarData} grammar
  */
 function getGrammarLocation(grammar) {
   return path.isAbsolute(grammar.path) ? grammar.path : path.resolve(__dirname, '../lib/grammars', grammar.path);
@@ -49,7 +53,7 @@ function getGrammarLocation(grammar) {
 /**
  *
  * @param {string} themeNameOrId
- * @param {object} themeCache
+ * @param {ThemeCache} themeCache
  * @param {string=} contextDirectory
  * @returns {Promise<string>}
  */
@@ -91,14 +95,15 @@ function getHighestBuiltinLanguageId() {
 
 /**
  * @param {string} scopeName
- * @param {*} grammarCache
+ * @param {GrammarCache} grammarCache
  */
 function getGrammar(scopeName, grammarCache) {
   return getAllGrammars(grammarCache)[scopeName];
 }
 
 /**
- * @param {*} grammarCache
+ * @param {GrammarCache} grammarCache
+ * @returns {GrammarCache}
  */
 function getAllGrammars(grammarCache) {
   return { ...getGrammarManifest(), ...grammarCache };

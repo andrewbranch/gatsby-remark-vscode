@@ -73,7 +73,7 @@ function concatConditionalThemes(arr1, arr2) {
 
 /**
  * @param {string} identifier
- * @param {any} themeCache
+ * @param {ThemeCache} themeCache
  * @param {string=} contextDirectory
  * @returns {Promise<ConditionalTheme>}
  */
@@ -88,7 +88,7 @@ async function createDefaultTheme(identifier, themeCache, contextDirectory) {
 /**
  * @param {string} identifier
  * @param {string} match
- * @param {any} themeCache
+ * @param {ThemeCache} themeCache
  * @param {string=} contextDirectory
  * @returns {Promise<ConditionalTheme>}
  */
@@ -103,7 +103,7 @@ async function createMatchMediaTheme(identifier, match, themeCache, contextDirec
 /**
  * @param {string} identifier
  * @param {string} parentSelector
- * @param {any} themeCache
+ * @param {ThemeCache} themeCache
  * @param {string=} contextDirectory
  * @returns {Promise<ConditionalTheme>}
  */
