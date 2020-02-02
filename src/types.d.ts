@@ -66,7 +66,31 @@ interface PluginOptions {
   getLineTransformers?: (pluginOptions: PluginOptions, cache: GatsbyCache) => LineTransformer[];
 }
 
+interface GrammarData {
+  scopeName: string;
+  languageId: number;
+  path: string;
+  tokenTypes: import('vscode-textmate').ITokenTypeMap | undefined;
+  embeddedLanguages: Record<string, string> | undefined;
+  injectTo: string[] | undefined;
+  languageNames: string[];
+}
+
+interface ThemeData {
+  id: string;
+  path: string;
+  label: string;
+  include: string | undefined;
+  packageName: string;
+  isOnlyThemeInPackage: boolean;
+}
+
+type GrammarCache = Record<string, GrammarData>;
+type ThemeCache = Record<string, ThemeData>;
+
 interface GatsbyCache {
+  get(key: 'grammars'): Promise<GrammarCache>;
+  get(key: 'themes'): Promise<ThemeCache>;
   get(key: string): Promise<any>;
   set(key: string, data: any): Promise<void>;
 }

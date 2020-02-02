@@ -8,10 +8,10 @@ const {
 
 /**
  * @param {ThemeOption} themeOption
- * @param {object} themeCache
+ * @param {ThemeCache} themeCache
  * @param {string | undefined} contextDirectory
  * @param {MarkdownNode} markdownNode
- * @param {object} codeFenceNode
+ * @param {MDASTNode} codeFenceNode
  * @param {string} languageName
  * @param {object} meta
  * @returns {Promise<ConditionalTheme[]>}

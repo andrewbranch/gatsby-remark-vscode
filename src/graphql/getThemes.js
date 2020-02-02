@@ -5,7 +5,7 @@ const parseThemeCondition = require('./parseThemeCondition');
 
 /**
  * @param {grvsc.gql.GRVSCThemeArgument} theme
- * @param {any} themeCache
+ * @param {ThemeCache} themeCache
  * @returns {Promise<ConditionalTheme>}
  */
 async function convertThemeArgument(theme, themeCache) {
@@ -19,7 +19,7 @@ async function convertThemeArgument(theme, themeCache) {
 /**
  * @param {ThemeOption} themeOption
  * @param {grvsc.gql.CSSArgs} args
- * @param {any} themeCache
+ * @param {ThemeCache} themeCache
  * @returns {Promise<ConditionalTheme[]>}
  */
 async function getThemes(themeOption, args, themeCache) {

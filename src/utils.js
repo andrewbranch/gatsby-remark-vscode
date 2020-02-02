@@ -93,9 +93,9 @@ function getMetadataForToken(token, binaryTokens) {
 }
 
 /**
- * @param {*} cache
+ * @param {GatsbyCache} cache
  * @param {string} key
- * @param {object} value
+ * @param {Record<string, any>} value
  */
 async function mergeCache(cache, key, value) {
   await cache.set(key, { ...(await cache.get(key)), ...value });

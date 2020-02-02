@@ -19,41 +19,40 @@ const requireMain = createRequire(require.main.filename);
  */
 async function processExtension(packageJsonPath) {
   const packageJson = requireJson(packageJsonPath);
+  /** @type {Record<string, GrammarData>} */
   let grammars = {};
+  /** @type {Record<string, ThemeData>} */
   let themes = {};
   if (packageJson.contributes && packageJson.contributes.grammars) {
     const manifest = await Promise.all(
-      packageJson.contributes.grammars.map(async grammar => {
-        const sourcePath = path.resolve(path.dirname(packageJsonPath), grammar.path);
-        const content = await requirePlistOrJson(sourcePath);
-        const { scopeName } = content;
-        const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
-        const languageNames = languageRegistration ? getLanguageNames(languageRegistration) : [];
-        logger.info(
-          `Registering grammar '${scopeName}' from package ${packageJson.name} with language names: ${languageNames}`
-        );
+      packageJson.contributes.grammars.map(
+        /** @returns {Promise<GrammarData>} */ async grammar => {
+          const sourcePath = path.resolve(path.dirname(packageJsonPath), grammar.path);
+          const content = await requirePlistOrJson(sourcePath);
+          const { scopeName } = content;
+          const languageRegistration = packageJson.contributes.languages.find(l => l.id === grammar.language);
+          const languageNames = languageRegistration ? getLanguageNames(languageRegistration) : [];
+          logger.info(
+            `Registering grammar '${scopeName}' from package ${packageJson.name} with language names: ${languageNames}`
+          );
 
-        return {
-          scopeName,
-          path: sourcePath,
-          tokenTypes: grammar.tokenTypes,
-          embeddedLanguages: grammar.embeddedLanguages,
-          injectTo: grammar.injectTo,
-          languageNames
-        };
-      })
+          return {
+            languageId: 0, // Overwritten elsewhere
+            scopeName,
+            path: sourcePath,
+            tokenTypes: toStandardTokenTypes(grammar.tokenTypes),
+            embeddedLanguages: grammar.embeddedLanguages,
+            injectTo: grammar.injectTo,
+            languageNames
+          };
+        }
+      )
     );
 
     grammars = manifest.reduce(
       (hash, grammar) => ({
         ...hash,
-        [grammar.scopeName]: {
-          path: grammar.path,
-          tokenTypes: grammar.tokenTypes,
-          embeddedLanguages: grammar.embeddedLanguages,
-          injectTo: grammar.injectTo,
-          languageNames: grammar.languageNames
-        }
+        [grammar.scopeName]: grammar
       }),
       {}
     );
@@ -61,21 +60,23 @@ async function processExtension(packageJsonPath) {
 
   if (packageJson.contributes && packageJson.contributes.themes) {
     const manifest = await Promise.all(
-      packageJson.contributes.themes.map(async theme => {
-        const sourcePath = path.resolve(path.dirname(packageJsonPath), theme.path);
-        const themeContents = await requirePlistOrJson(sourcePath);
-        const id = theme.id || path.basename(theme.path).split('.')[0];
-        logger.info(`Registering theme '${theme.label || id}' from package ${packageJson.name}`);
+      packageJson.contributes.themes.map(
+        /** @returns {Promise<ThemeData>} */ async theme => {
+          const sourcePath = path.resolve(path.dirname(packageJsonPath), theme.path);
+          const themeContents = await requirePlistOrJson(sourcePath);
+          const id = theme.id || path.basename(theme.path).split('.')[0];
+          logger.info(`Registering theme '${theme.label || id}' from package ${packageJson.name}`);
 
-        return {
-          id,
-          path: sourcePath,
-          label: theme.label,
-          include: themeContents.include,
-          packageName: packageJson.name,
-          isOnlyThemeInPackage: packageJson.contributes.themes.length === 1
-        };
-      })
+          return {
+            id,
+            path: sourcePath,
+            label: theme.label,
+            include: themeContents.include,
+            packageName: packageJson.name,
+            isOnlyThemeInPackage: packageJson.contributes.themes.length === 1
+          };
+        }
+      )
     );
 
     themes = manifest.reduce(
@@ -91,7 +92,7 @@ async function processExtension(packageJsonPath) {
 }
 
 /**
- * @param {*} cache
+ * @param {GatsbyCache} cache
  * @param {string} key
  * @param {object} value
  */
@@ -139,7 +140,7 @@ async function getExtensionPackageJsonPath(specifier, host) {
 /**
  * @param {string[]} extensions
  * @param {Host} host
- * @param {*} cache
+ * @param {GatsbyCache} cache
  */
 async function processExtensions(extensions, host, cache) {
   let languageId = getHighestBuiltinLanguageId() + 1;
@@ -149,6 +150,40 @@ async function processExtensions(extensions, host, cache) {
     Object.keys(grammars).forEach(scopeName => (grammars[scopeName].languageId = languageId++));
     await mergeCache(cache, 'grammars', grammars);
     await mergeCache(cache, 'themes', themes);
+  }
+}
+
+/**
+ * @param {Record<string, string> | undefined} tokenTypes
+ * @returns {import('vscode-textmate').ITokenTypeMap}
+ */
+function toStandardTokenTypes(tokenTypes) {
+  return (
+    tokenTypes &&
+    Object.keys(tokenTypes).reduce(
+      (map, selector) => ({
+        ...map,
+        [selector]: toStandardTokenType(tokenTypes[selector])
+      }),
+      {}
+    )
+  );
+}
+
+/**
+ * @param {string} tokenType
+ * @returns {import('vscode-textmate').StandardTokenType}
+ */
+function toStandardTokenType(tokenType) {
+  switch (tokenType.toLowerCase()) {
+    case 'comment':
+      return 1;
+    case 'string':
+      return 2;
+    case 'regex':
+      return 4;
+    default:
+      return 0;
   }
 }
 
