@@ -61,6 +61,7 @@ function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassN
   return {
     index,
     text,
+    meta,
     html: renderHTML(createCodeBlockElement(preClassName, codeClassName, languageName, index, lineElements)),
     preClassName,
     codeClassName,

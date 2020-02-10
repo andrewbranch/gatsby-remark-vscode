@@ -43,6 +43,7 @@ declare namespace grvsc {
             preClassName: string;
             codeClassName: string;
             language?: string;
+            meta?: any;
             defaultTheme: GRVSCTheme;
             additionalThemes: GRVSCTheme[];
             tokenizedLines?: GRVSCTokenizedLine[];

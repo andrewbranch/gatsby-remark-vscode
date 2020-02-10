@@ -46,6 +46,7 @@ type GRVSCCodeBlock implements Node {
   preClassName: String!
   codeClassName: String!
   language: String
+  meta: JSON
   defaultTheme: GRVSCTheme!
   additionalThemes: [GRVSCTheme!]!
   tokenizedLines: [GRVSCTokenizedLine!]

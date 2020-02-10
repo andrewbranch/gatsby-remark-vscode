@@ -44,12 +44,35 @@ function CoolCodeBlock(props) {
   ) : null
 }
 
-const renderAst = new RehypeReact({
-  createElement: React.createElement,
-  components: { pre: CoolCodeBlock },
-}).Compiler
+function CodeBlockWithLineNumbers(props) {
+  const codeBlock = (useContext(CodeBlockContext) || [])[+props["data-index"]]
+  return codeBlock ? (
+    <div className={codeBlock.preClassName}>
+      <code className={codeBlock.codeClassName}>
+        {codeBlock.tokenizedLines.map(({ html }, i) => (
+          <div className="line-wrapper">
+            <div className="line-number">{(codeBlock.meta ? codeBlock.meta.startLine : 1) + i}</div>
+            <div className="line-contents" dangerouslySetInnerHTML={{ __html: html }} />
+          </div>
+        ))}
+      </code>
+    </div>
+  ) : null
+}
+
+const codeComponents = {
+  CoolCodeBlock,
+  CodeBlockWithLineNumbers
+};
 
 class BlogPostTemplate extends React.Component {
+  renderAst = new RehypeReact({
+    createElement: React.createElement,
+    components: {
+      pre: codeComponents[this.props.data.markdownRemark.frontmatter.codeComponent] || CoolCodeBlock
+    },
+  }).Compiler;
+
   render() {
     window.props = this.props
     const post = this.props.data.markdownRemark
@@ -72,6 +95,17 @@ class BlogPostTemplate extends React.Component {
               display: inline-block;
               animation: rotating 500ms linear infinite;
             }
+            .line-wrapper { display: flex; }
+            .line-number {
+              background: rgba(255, 255, 255, 0.1);
+              flex: 0 0 40px;
+              text-align: right;
+              padding: 0 20px;
+            }
+            .line-contents {
+              flex: 1 0 auto;
+              white-space: pre;
+            }
           `}</style>
           <header>
             <h1
@@ -93,7 +127,7 @@ class BlogPostTemplate extends React.Component {
             </p>
           </header>
           <CodeBlockContext.Provider value={post.grvscCodeBlocks}>
-            {renderAst(post.htmlAst)}
+            {this.renderAst(post.htmlAst)}
           </CodeBlockContext.Provider>
           <hr
             style={{
@@ -151,14 +185,17 @@ export const pageQuery = graphql`
       excerpt(pruneLength: 160)
       htmlAst
       frontmatter {
+        codeComponent
         title
         date(formatString: "MMMM DD, YYYY")
         description
       }
       grvscCodeBlocks {
+        meta
         preClassName
         codeClassName
         tokenizedLines {
+          html
           className
           tokens {
             startIndex
