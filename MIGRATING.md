@@ -49,4 +49,4 @@ The new `theme` option also supports some options that `colorTheme` did not; you
 
 ### Known issues
 
-- Usage with [gatsby-plugin-mdx](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-mdx) requires gatsby-plugin-mdx@1.0.68 or later.
+- Usage with [gatsby-plugin-mdx](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-mdx) requires gatsby-plugin-mdx@1.0.71 or later.
