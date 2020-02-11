@@ -63,9 +63,7 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
           theme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
           wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
           injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
-          extensions: [],         // Extensions to download from the marketplace to provide more languages and themes
-          extensionDataDirectory: // Absolute path to the directory where extensions will be downloaded. Defaults to inside node_modules.
-            path.resolve('extensions'),
+          extensions: [],         // Third-party extensions providing additional themes and languages
           languageAliases: {},    // Map of custom/unknown language codes to standard/known language codes
           replaceColor: x => x,   // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
           getLineClassName: ({    // Function allowing dynamic setting of additional class names on individual lines
@@ -147,7 +145,7 @@ The `dark` option is shorthand for a general-purpose `media` option that can be 
 
 ## Built-in languages and themes
 
-The following can be used without specifying an extension to download from the marketplace:
+The following languages and themes can be used without [installing third-party extensions](#using-languages-and-themes-from-an-extension):
 
 ### Languages
 
