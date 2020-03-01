@@ -1,29 +1,15 @@
 <pre class="grvsc-container test-wrapper default-dark" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line grvsc-line-highlighted"><span class="mtk3">// should be highlighted</span></span></code></pre>
 <pre class="grvsc-container test-wrapper js-test default-dark" data-language="js" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk3">// should not be highlighted</span></span></code></pre>
 <style class="grvsc-styles">
-  :root {
-    --grvsc-padding-v: 1rem;
-    --grvsc-padding-h: 1.5rem;
-    --grvsc-padding-top: var(--grvsc-padding-v);
-    --grvsc-padding-right: var(--grvsc-padding-h);
-    --grvsc-padding-bottom: var(--grvsc-padding-v);
-    --grvsc-padding-left: var(--grvsc-padding-h);
-    --grvsc-border-radius: 8px;
-  
-    --grvsc-line-highlighted-background-color: transparent;
-    --grvsc-line-highlighted-border-width: 4px;
-    --grvsc-line-highlighted-border-color: transparent;
-  }
-  
   .grvsc-container {
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     padding-top: 1rem;
-    padding-top: var(--grvsc-padding-top);
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
     padding-bottom: 1rem;
-    padding-bottom: var(--grvsc-padding-bottom);
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
     border-radius: 8px;
-    border-radius: var(--grvsc-border-radius);
+    border-radius: var(--grvsc-border-radius, 8px);
     font-feature-settings: normal;
   }
   
@@ -37,14 +23,14 @@
     box-sizing: border-box;
     width: 100%;
     padding-left: 1.5rem;
-    padding-left: var(--grvsc-padding-left);
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
     padding-right: 1.5rem;
-    padding-right: var(--grvsc-padding-right);
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
   }
   
   .grvsc-line-highlighted {
-    background-color: var(--grvsc-line-highlighted-background-color);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width) 0 0 0 var(--grvsc-line-highlighted-border-color);
+    background-color: var(--grvsc-line-highlighted-background-color, transparent);
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
   }
   
   .default-dark {

@@ -274,26 +274,44 @@ The generated HTML has ample stable class names, and you can add your own with t
 
 ### Variables
 
-The styles also include a few CSS variables you can override. The defaults are:
+The styles also include a few CSS variables you can define to override defaults. The included CSS is written as:
 
 ```css
 .grvsc-container {
-  --grvsc-padding-v: 1rem;
-  --grvsc-padding-h: 1.5rem;
-  --grvsc-padding-top: var(--grvsc-padding-v);
-  --grvsc-padding-right: var(--grvsc-padding-h);
-  --grvsc-padding-bottom: var(--grvsc-padding-v);
-  --grvsc-padding-left: var(--grvsc-padding-h);
-  --grvsc-border-radius: 8px;
+  padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+  padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+  border-radius: var(--grvsc-border-radius, 8px);
+}
 
-  /* Line highlighting: see next section */
-  --grvsc-line-highlighted-background-color: transparent;
-  --grvsc-line-highlighted-border-width: 4px;
-  --grvsc-line-highlighted-border-color: transparent;
+.grvsc-line {
+  padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+  padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+}
+
+/* See “Line Highlighting” section for details */
+.grvsc-line-highlighted {
+  background-color: var(--grvsc-line-highlighted-background-color, transparent);
+  box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
 }
 ```
 
-The default values are set on `:root`, so you can set them on `.grvsc-container`, `pre`, your own `wrapperClassName`, the class name matching the theme, or generally any selector more specific than `:root`.
+The padding values are written with cascading fallbacks. As an example, let’s consider the top and bottom padding of `.grvsc-container`. Each is set to its own CSS variable, `--grvsc-padding-top` and `--grvsc-padding-bottom`, respectively. Neither of these is defined by default, so it uses the value of its fallback, which is another CSS variable, `--grvsc-padding-v`, with another fallback, `1rem`. Since `--grvsc-padding-v` is also not defined by default, both padding properties will evaluate to the final fallback, `1rem`.
+
+So, if you want to adjust the vertical padding, you could add the following to your own CSS:
+
+```css
+:root {
+  --grvsc-padding-v: 20px; /* Adjust padding-top and padding-bottom */
+}
+```
+
+If you want to adjust the padding-top or padding-bottom independently, you can use those variables:
+
+```css
+:root {
+  --grvsc-padding-top: 24px; /* Adjust padding-top by itself */
+}
+```
 
 ### Tweaking or replacing theme colors
 
@@ -348,10 +366,10 @@ const zero = [0, 1, 2, 3, 4, 5]
 You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
 
 ```css
-.grvsc-container {
+:root {
   --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
   --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-  --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
+  --grvsc-line-highlighted-border-width: 2px; /* default: 4px */
 }
 ```
 
