@@ -90,7 +90,8 @@ function createPlugin() {
       const possibleThemes = await getPossibleThemes(
         theme,
         await cache.get('themes'),
-        markdownNode.fileAbsolutePath ? path.dirname(markdownNode.fileAbsolutePath) : null,
+        // Node could be sourced from something other than a File node
+        markdownNode.fileAbsolutePath ? path.dirname(markdownNode.fileAbsolutePath) : undefined,
         markdownNode,
         node,
         languageName,
