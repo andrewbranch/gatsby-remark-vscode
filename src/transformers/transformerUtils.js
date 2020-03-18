@@ -74,4 +74,16 @@ function getCommentRegExp(scope) {
   }
 }
 
-module.exports = { highlightLine, addClassName, getCommentContent, getCommentRegExp };
+/**
+ * @param {LineTransformerArgs['line']} line
+ * @param {('add'|'del')} postfix
+ * @returns {LineTransformerArgs['line']}
+ */
+function highlightDiffLine(line, postfix) {
+  return {
+    attrs: addClassName(line.attrs, `grvsc-line-diff grvsc-line-diff-${postfix}`),
+    text: line.text
+  };
+}
+
+module.exports = { highlightLine, addClassName, getCommentContent, getCommentRegExp, highlightDiffLine };

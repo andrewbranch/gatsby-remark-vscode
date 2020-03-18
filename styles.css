@@ -66,7 +66,16 @@
 
 .grvsc-line-highlighted::before {
   background-color: var(--grvsc-line-highlighted-background-color, transparent);
-  box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
+  box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0
+    var(--grvsc-line-highlighted-border-color, transparent);
+}
+
+.grvsc-line-diff-add {
+  background-color: var(--grvsc-line-diff-add-background-color, transparent);
+}
+
+.grvsc-line-diff-del {
+  background-color: var(--grvsc-line-diff-del-background-color, transparent);
 }
 
 .grvsc-line-number {
