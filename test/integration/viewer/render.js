@@ -51,6 +51,8 @@ function renderInIframe(html) {
             --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
             --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
             --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
+            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
+            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
           }
         </style>
       </head>
