@@ -51,6 +51,16 @@ type GRVSCCodeBlock implements Node {
   additionalThemes: [GRVSCTheme!]!
   tokenizedLines: [GRVSCTokenizedLine!]
 }
+type GRVSCCodeSpan implements Node {
+  index: Int!
+  html: String!
+  text: String!
+  className: String!
+  language: String
+  defaultTheme: GRVSCTheme!
+  additionalThemes: [GRVSCTheme!]!
+  tokens: [GRVSCToken!]!
+}
 type GRVSCStylesheet implements Node {
   css: String!
 }

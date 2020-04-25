@@ -7,38 +7,25 @@ const {
 } = require('./themeUtils');
 
 /**
- * @param {ThemeOption} themeOption
+ * @template {CodeBlockData | CodeSpanData} T
+ * @param {ThemeOption<T>} themeOption
  * @param {ThemeCache} themeCache
  * @param {string | undefined} contextDirectory
- * @param {MarkdownNode} markdownNode
- * @param {MDASTNode} codeFenceNode
- * @param {string} languageName
- * @param {object} meta
+ * @param {T} codeNodeData
  * @returns {Promise<ConditionalTheme[]>}
  */
 async function getPossibleThemes(
   themeOption,
   themeCache,
   contextDirectory,
-  markdownNode,
-  codeFenceNode,
-  languageName,
-  meta
+  codeNodeData
 ) {
   if (typeof themeOption === 'function') {
     return getPossibleThemes(
-      themeOption({
-        markdownNode,
-        codeFenceNode,
-        language: languageName,
-        parsedOptions: meta
-      }),
+      themeOption(codeNodeData),
       themeCache,
       contextDirectory,
-      markdownNode,
-      codeFenceNode,
-      languageName,
-      meta
+      codeNodeData
     );
   }
 
@@ -53,10 +40,7 @@ async function getPossibleThemes(
       themeOption.default,
       themeCache,
       contextDirectory,
-      markdownNode,
-      codeFenceNode,
-      languageName,
-      meta
+      codeNodeData
     );
   }
   if (themeOption.dark) {

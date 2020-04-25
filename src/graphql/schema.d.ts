@@ -48,6 +48,16 @@ declare namespace grvsc {
             additionalThemes: GRVSCTheme[];
             tokenizedLines?: GRVSCTokenizedLine[];
         }
+        interface GRVSCCodeSpan extends Node {
+            index: number;
+            html: string;
+            text: string;
+            className: string;
+            language?: string;
+            defaultTheme: GRVSCTheme;
+            additionalThemes: GRVSCTheme[];
+            tokens: GRVSCToken[];
+        }
         interface GRVSCStylesheet extends Node {
             css: string;
         }

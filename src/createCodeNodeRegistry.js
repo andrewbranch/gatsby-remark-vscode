@@ -6,10 +6,10 @@ const { declaration } = require('./renderers/css');
 
 /**
  * @template TKey
- * @param {CodeBlockRegistryOptions=} options
- * @returns {CodeBlockRegistry<TKey>}
+ * @param {CodeNodeRegistryOptions=} options
+ * @returns {CodeNodeRegistry<TKey>}
  */
-function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
+function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
   /** @type {Map<TKey, RegisteredCodeBlockData & { index: number }>} */
   const nodeMap = new Map();
   /** @type {ConditionalTheme[]} */
@@ -81,7 +81,7 @@ function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
     forEachCodeBlock: nodeMap.forEach.bind(nodeMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenStylesForTheme: themeIdentifier => {
-      /** @type {ReturnType<CodeBlockRegistry['getTokenStylesForTheme']>} */
+      /** @type {ReturnType<CodeNodeRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
       const classNameMap = themeTokenClassNameMap && themeTokenClassNameMap.get(themeIdentifier);
@@ -202,4 +202,4 @@ function getColorFromColorMap(colorMap, canonicalClassName) {
   return colorMap[index];
 }
 
-module.exports = createCodeBlockRegistry;
+module.exports = createCodeNodeRegistry;

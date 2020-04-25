@@ -4,7 +4,7 @@ const { getGrammar } = require('./storeUtils');
 
 /**
  * @template TKey
- * @param {CodeBlockRegistry<TKey>} codeBlockRegistry
+ * @param {CodeNodeRegistry<TKey>} codeBlockRegistry
  * @param {TKey} registryKey
  * @param {ConditionalTheme[]} possibleThemes
  * @param {() => Promise<[import('vscode-textmate').Registry, () => void]>} getTextMateRegistry
@@ -57,4 +57,46 @@ async function registerCodeBlock(
   }
 }
 
-module.exports = registerCodeBlock;
+/**
+ * @template TKey
+ * @param {CodeNodeRegistry<TKey>} codeBlockRegistry
+ * @param {TKey} registryKey
+ * @param {ConditionalTheme[]} possibleThemes
+ * @param {() => Promise<[import('vscode-textmate').Registry, () => void]>} getTextMateRegistry
+ * @param {string} scope
+ * @param {string} text
+ * @param {string | undefined} languageName
+ * @param {GatsbyCache} cache
+ */
+async function registerCodeSpan(
+  codeBlockRegistry,
+  registryKey,
+  possibleThemes,
+  getTextMateRegistry,
+  scope,
+  text,
+  languageName,
+  cache
+) {
+  const grammarCache = await cache.get('grammars');
+  const [registry, unlockRegistry] = await getTextMateRegistry();
+  try {
+    /** @type {Line[]} */
+    const lines = [{ text, data: {}, attrs: {} }];
+    const { tokenTypes, languageId } = getGrammar(scope, grammarCache);
+    const grammar = await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
+    codeBlockRegistry.register(registryKey, {
+      lines,
+      text,
+      meta: {},
+      languageName,
+      possibleThemes,
+      isTokenized: true,
+      tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
+    });
+  } finally {
+    unlockRegistry();
+  }
+}
+
+module.exports = { registerCodeBlock, registerCodeSpan };

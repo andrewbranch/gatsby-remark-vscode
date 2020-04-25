@@ -40,7 +40,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
   const grammarCache = await cache.get('grammars');
   const possibleThemes = await getThemes(theme, args, themeCache);
   const scope = getScope(args.language, grammarCache, languageAliases);
-  /** @type {CodeBlockRegistry<typeof registryKey>} */
+  /** @type {CodeNodeRegistry<typeof registryKey>} */
   const codeBlockRegistry = createCodeBlockRegistry({ prefixAllClassNames: true });
   const meta = parseCodeFenceHeader(args.language, args.meta);
 

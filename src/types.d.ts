@@ -9,11 +9,19 @@ interface RemarkPluginArguments {
   createNodeId: (key: string) => string;
 }
 
-interface CodeFenceData {
-  language: string;
+interface CodeBlockData {
+  language?: string;
   markdownNode: MarkdownNode;
-  codeFenceNode: any;
+  /** @deprecated Use `node` instead. */
+  codeFenceNode: MDASTNode<'code'>;
+  node: MDASTNode<'code'>;
   parsedOptions: any;
+}
+
+interface CodeSpanData {
+  language?: string;
+  markdownNode: MarkdownNode;
+  node: MDASTNode<'inlineCode'>;
 }
 
 interface LineData {
@@ -49,13 +57,13 @@ interface Host {
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeFenceData) => string | LegacyThemeSettings);
-type ThemeOption = string | ThemeSettings | ((data: CodeFenceData) => string | ThemeSettings);
+type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeBlockData) => string | LegacyThemeSettings);
+type ThemeOption<T extends CodeBlockData | CodeSpanData> = string | ThemeSettings | ((data: T) => string | ThemeSettings);
 
 interface PluginOptions {
-  theme?: ThemeOption;
+  theme?: ThemeOption<CodeBlockData>;
   colorTheme?: LegacyThemeOption;
-  wrapperClassName?: string | ((data: CodeFenceData) => string);
+  wrapperClassName?: string | ((data: CodeBlockData) => string);
   languageAliases?: Record<string, string>;
   extensions?: string[];
   getLineClassName?: (line: LineData) => string;
@@ -64,6 +72,11 @@ interface PluginOptions {
   logLevel?: 'trace' | 'debug' | 'info' | 'warn' | 'error';
   host?: Host;
   getLineTransformers?: (pluginOptions: PluginOptions, cache: GatsbyCache) => LineTransformer[];
+  inlineCode?: {
+    theme?: ThemeOption<CodeSpanData>;
+    marker: string;
+    className?: string | ((data: CodeSpanData) => string | undefined);
+  }
 }
 
 interface GrammarData {
@@ -150,8 +163,8 @@ interface RegisteredToken {
   additionalThemeTokenData: grvsc.gql.GRVSCThemeTokenData[];
 }
 
-interface MDASTNode {
-  type: string;
+interface MDASTNode<T = string> {
+  type: T;
   lang?: string;
   meta?: string;
   value?: string;
@@ -168,7 +181,7 @@ type Line = {
   data: object;
 };
 
-interface CodeBlockRegistry<TKey> {
+interface CodeNodeRegistry<TKey> {
   register: (key: TKey, data: Omit<RegisteredCodeBlockData, 'index'>) => void;
   forEachLine: (codeBlockKey: TKey, action: (line: Line, index: number, lines: Line[]) => void) => void;
   forEachToken: (
@@ -181,7 +194,7 @@ interface CodeBlockRegistry<TKey> {
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }
 
-interface CodeBlockRegistryOptions {
+interface CodeNodeRegistryOptions {
   prefixAllClassNames?: boolean;
 }
 

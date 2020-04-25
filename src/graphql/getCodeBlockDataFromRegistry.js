@@ -6,7 +6,7 @@ const { createTokenElement, createLineElement, createCodeBlockElement } = requir
 
 /**
  * @template TKey
- * @param {CodeBlockRegistry<TKey>} registry
+ * @param {CodeNodeRegistry<TKey>} registry
  * @param {TKey} key
  * @param {RegisteredCodeBlockData} codeBlock
  * @param {() => string} getWrapperClassName

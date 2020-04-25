@@ -1,6 +1,8 @@
 const { EOL } = require('os');
 const { deprecationNotice, isRelativePath } = require('./utils');
 
+const validMarkerRegExp = /^[^\sa-zA-Z0-9.-_`\\<]+$/;
+
 /**
  * @param {PluginOptions} options
  */
@@ -30,6 +32,14 @@ function validateOptions(options) {
         addError('extensions', `Extension paths must be absolute. Received '${extension}'.`);
       }
     });
+  }
+
+  if (options.inlineCode) {
+    if (!('marker' in options.inlineCode)) {
+      addError('inlineCode', `Key 'marker' is required.`);
+    } else if (typeof options.inlineCode.marker !== 'string' || !validMarkerRegExp.test(options.inlineCode.marker)) {
+      addError('inlineCode.marker', `Marker must be a string without whitespace, ASCII letters or numerals, or character: .-_\`\\<`);
+    }
   }
 
   if (errors.length) {
