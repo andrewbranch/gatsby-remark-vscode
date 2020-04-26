@@ -3,7 +3,7 @@ const { getTransformedLines } = require('./transformers');
 const { getGrammar } = require('./storeUtils');
 
 /**
- * @template TKey
+ * @template {Keyable} TKey
  * @param {CodeNodeRegistry<TKey>} codeBlockRegistry
  * @param {TKey} registryKey
  * @param {ConditionalTheme[]} possibleThemes
@@ -58,7 +58,7 @@ async function registerCodeBlock(
 }
 
 /**
- * @template TKey
+ * @template {Keyable} TKey
  * @param {CodeNodeRegistry<TKey>} codeBlockRegistry
  * @param {TKey} registryKey
  * @param {ConditionalTheme[]} possibleThemes

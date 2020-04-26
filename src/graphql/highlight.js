@@ -1,13 +1,14 @@
 const setup = require('../setup');
 const plugin = require('../../index');
-const registerCodeBlock = require('../registerCodeBlock');
-const parseCodeFenceHeader = require('../parseCodeFenceHeader');
-const createCodeBlockRegistry = require('../createCodeBlockRegistry');
+const { registerCodeBlock } = require('../registerCodeNode');
+const parseCodeFenceHeader = require('../parseCodeFenceInfo');
+const createCodeNodeRegistry = require('../createCodeNodeRegistry');
 const getCodeBlockDataFromRegistry = require('./getCodeBlockDataFromRegistry');
 const getThemes = require('./getThemes');
 const { createHash } = require('crypto');
 const { getScope } = require('../storeUtils');
-const registryKey = 0;
+/** @type {{ type: 'code' }} */
+const registryKey = { type: 'code' };
 
 /**
  * @param {grvsc.gql.HighlightArgs} args
@@ -41,11 +42,11 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
   const possibleThemes = await getThemes(theme, args, themeCache);
   const scope = getScope(args.language, grammarCache, languageAliases);
   /** @type {CodeNodeRegistry<typeof registryKey>} */
-  const codeBlockRegistry = createCodeBlockRegistry({ prefixAllClassNames: true });
+  const codeNodeRegistry = createCodeNodeRegistry({ prefixAllClassNames: true });
   const meta = parseCodeFenceHeader(args.language, args.meta);
 
   await registerCodeBlock(
-    codeBlockRegistry,
+    codeNodeRegistry,
     registryKey,
     possibleThemes,
     () => plugin.getRegistry(cache, scope),
@@ -59,9 +60,9 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
 
   /** @type {Omit<grvsc.gql.GRVSCCodeBlock, 'id'>} */
   let result;
-  codeBlockRegistry.forEachCodeBlock(codeBlock => {
+  codeNodeRegistry.forEachCodeBlock(codeBlock => {
     result = getCodeBlockDataFromRegistry(
-      codeBlockRegistry,
+      codeNodeRegistry,
       registryKey,
       codeBlock,
       getWrapperClassName,
@@ -72,6 +73,7 @@ async function highlight(args, pluginOptions, { cache, createNodeId }) {
       return typeof wrapperClassName === 'function'
         ? wrapperClassName({
             language: codeBlock.languageName,
+            node: undefined,
             markdownNode: undefined,
             codeFenceNode: undefined,
             parsedOptions: codeBlock.meta

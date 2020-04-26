@@ -1,7 +1,7 @@
 // @ts-check
-const parse = require('../src/parseCodeFenceHeader');
+const parse = require('../src/parseCodeFenceInfo');
 
-describe('parseCodeFenceHeader', () => {
+describe('parseCodeFenceInfo', () => {
   it('parses language name without meta', () => {
     expect(parse('jsx')).toEqual({ languageName: 'jsx', meta: {} });
     expect(parse('c++')).toEqual({ languageName: 'c++', meta: {} });

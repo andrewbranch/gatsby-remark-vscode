@@ -5,10 +5,10 @@ const { flatMap, partitionOne, escapeHTML } = require('../utils');
 const { createTokenElement, createLineElement, createCodeBlockElement } = require('../factory/html');
 
 /**
- * @template TKey
+ * @template {Keyable} TKey
  * @param {CodeNodeRegistry<TKey>} registry
  * @param {TKey} key
- * @param {RegisteredCodeBlockData} codeBlock
+ * @param {RegisteredCodeNodeData} codeBlock
  * @param {() => string} getWrapperClassName
  * @param {(line: LineData) => string} getLineClassName
  * @returns {Omit<grvsc.gql.GRVSCCodeBlock, 'id'>}

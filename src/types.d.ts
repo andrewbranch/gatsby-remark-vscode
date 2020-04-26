@@ -143,7 +143,7 @@ interface ConditionalTheme {
 
 type RawTheme = import('vscode-textmate').IRawTheme & { resultColors: Record<string, string> };
 
-interface RegisteredCodeBlockData {
+interface RegisteredCodeNodeData {
   index: number;
   meta: object;
   text: string;
@@ -161,6 +161,10 @@ interface RegisteredToken {
   endIndex: number;
   defaultThemeTokenData: grvsc.gql.GRVSCThemeTokenData;
   additionalThemeTokenData: grvsc.gql.GRVSCThemeTokenData[];
+}
+
+interface Keyable {
+  type: 'code' | 'inlineCode';
 }
 
 interface MDASTNode<T = string> {
@@ -181,15 +185,16 @@ type Line = {
   data: object;
 };
 
-interface CodeNodeRegistry<TKey> {
-  register: (key: TKey, data: Omit<RegisteredCodeBlockData, 'index'>) => void;
+interface CodeNodeRegistry<TKey extends Keyable> {
+  register: (key: TKey, data: Omit<RegisteredCodeNodeData, 'index'>) => void;
   forEachLine: (codeBlockKey: TKey, action: (line: Line, index: number, lines: Line[]) => void) => void;
   forEachToken: (
     key: TKey,
     lineIndex: number,
     tokenAction: (token: RegisteredToken) => void
   ) => void;
-  forEachCodeBlock: (action: (data: RegisteredCodeBlockData & { index: number }, codeBlockKey: TKey) => void) => void;
+  forEachCodeBlock: (action: (data: RegisteredCodeNodeData, codeBlockKey: TKey & { type: 'code' }) => void) => void;
+  forEachCodeSpan: (action: (data: RegisteredCodeNodeData, codeSpanKey: TKey & { type: 'inlineCode' }) => void) => void;
   getAllPossibleThemes: () => { theme: ConditionalTheme, settings: Record<string, string> }[];
   getTokenStylesForTheme: (themeIdentifier: string) => { className: string, css: grvsc.CSSDeclaration[] }[];
 }

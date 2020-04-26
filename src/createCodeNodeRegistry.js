@@ -5,13 +5,15 @@ const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
 /**
- * @template TKey
+ * @template {Keyable} TKey
  * @param {CodeNodeRegistryOptions=} options
  * @returns {CodeNodeRegistry<TKey>}
  */
 function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
-  /** @type {Map<TKey, RegisteredCodeBlockData & { index: number }>} */
-  const nodeMap = new Map();
+  /** @type {Map<TKey, RegisteredCodeNodeData>} */
+  const blockMap = new Map();
+  /** @type {Map<TKey, RegisteredCodeNodeData>} */
+  const spanMap = new Map();
   /** @type {ConditionalTheme[]} */
   let themes = [];
   /** @type {Map<string, { colorMap: string[], settings: Record<string, string> }>} */
@@ -23,16 +25,17 @@ function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
 
   return {
     register: (key, data) => {
-      nodeMap.set(key, { ...data, index: nodeMap.size });
+      const map = key.type === 'code' ? blockMap : spanMap;
+      map.set(key, { ...data, index: map.size });
       themes = concatConditionalThemes(themes, data.possibleThemes);
       data.tokenizationResults.forEach(({ theme, colorMap, settings }) =>
         themeColors.set(theme.identifier, { colorMap, settings })
       );
     },
-    forEachLine: (node, action) => nodeMap.get(node).lines.forEach(action),
+    forEachLine: (node, action) => blockMap.get(node).lines.forEach(action),
     forEachToken: (node, lineIndex, tokenAction) => {
       generateClassNames();
-      const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
+      const { tokenizationResults, isTokenized, lines } = blockMap.get(node);
       if (!isTokenized) {
         return;
       }
@@ -78,7 +81,8 @@ function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
         });
       });
     },
-    forEachCodeBlock: nodeMap.forEach.bind(nodeMap),
+    forEachCodeBlock: blockMap.forEach.bind(blockMap),
+    forEachCodeSpan: spanMap.forEach.bind(spanMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenStylesForTheme: themeIdentifier => {
       /** @type {ReturnType<CodeNodeRegistry['getTokenStylesForTheme']>} */
@@ -113,7 +117,14 @@ function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
     if (themeTokenClassNameMap) return;
     themeTokenClassNameMap = new Map();
     zippedLines = new Map();
-    nodeMap.forEach(({ lines, tokenizationResults, isTokenized }, node) => {
+    blockMap.forEach(generate);
+    spanMap.forEach(generate);
+
+    /**
+     * @param {RegisteredCodeNodeData} data
+     * @param {TKey} node
+     */
+    function generate({ lines, tokenizationResults, isTokenized }, node) {
       if (!isTokenized) return;
       /** @type {Token[][][]} */
       const zippedLinesForNode = [];
@@ -141,7 +152,7 @@ function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
           });
         });
       });
-    });
+    }
   }
 }
 

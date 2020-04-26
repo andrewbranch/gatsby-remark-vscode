@@ -11,6 +11,7 @@ const parseCodeFenceInfo = require('./parseCodeFenceInfo');
 const parseCodeSpanInfo = require('./parseCodeSpanInfo');
 const createSchemaCustomization = require('./graphql/createSchemaCustomization');
 const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataFromRegistry');
+const getCodeSpanGraphQLDataFromRegistry = require('./graphql/getCodeSpanDataFromRegistry');
 const { registerCodeBlock, registerCodeSpan } = require('./registerCodeNode');
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
@@ -63,25 +64,30 @@ function createPlugin() {
 
     /** @type {(MDASTNode<'code'> | MDASTNode<'inlineCode'>)[]} */
     const nodes = [];
-    visit(markdownAST, ({ type }) => type === 'code' || type === 'inlineCode', node => {
-      nodes.push(node);
-    });
+    visit(
+      markdownAST,
+      ({ type }) => type === 'code' || type === 'inlineCode',
+      node => {
+        nodes.push(node);
+      }
+    );
 
     // 2. For each code fence found, parse its header, determine what themes it will use,
     //    and register its contents with a central code block registry, performing tokenization
     //    along the way.
 
-    /** @type {grvsc.gql.GRVSCCodeBlock[]} */
+    /** @type {(grvsc.gql.GRVSCCodeBlock | grvsc.gql.GRVSCCodeSpan)[]} */
     const graphQLNodes = [];
-    /** @type {CodeNodeRegistry<MDASTNode>} */
+    /** @type {CodeNodeRegistry<MDASTNode<'code' | 'inlineCode'>>} */
     const codeNodeRegistry = createCodeNodeRegistry();
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
-      const { languageName, meta, text: parsedText = text } = node.type === 'code'
-        ? parseCodeFenceInfo(node.lang ? node.lang.toLowerCase() : '', node.meta)
-        : parseCodeSpanInfo(text, inlineCode.marker);
+      const { languageName, meta, text: parsedText = text } =
+        node.type === 'code'
+          ? parseCodeFenceInfo(node.lang ? node.lang.toLowerCase() : '', node.meta)
+          : parseCodeSpanInfo(text, inlineCode.marker);
 
       if (node.type === 'inlineCode' && !languageName) {
         continue;
@@ -138,7 +144,7 @@ function createPlugin() {
       }
     }
 
-    // 3. For each code block registered, convert its tokenization and theme data
+    // 3. For each code block/span registered, convert its tokenization and theme data
     //    to a GraphQL-compatible representation, including HTML renderings. At the same
     //    time, change the original code fence Markdown node to an HTML node and set
     //    its value to the HTML rendering contained in the GraphQL node.
@@ -153,7 +159,8 @@ function createPlugin() {
       );
 
       // Update Markdown node
-      node.type = 'html';
+      /** @type {MDASTNode} */
+      (node).type = 'html';
       node.value = graphQLNode.html;
 
       // Push GraphQL node
@@ -179,6 +186,38 @@ function createPlugin() {
               parsedOptions: codeBlock.meta
             })
           : wrapperClassName;
+      }
+    });
+
+    codeNodeRegistry.forEachCodeSpan((codeSpan, node) => {
+      const graphQLNode = getCodeSpanGraphQLDataFromRegistry(codeNodeRegistry, node, codeSpan, getClassName);
+
+      // Update Markdown node
+      /** @type {MDASTNode} */
+      (node).type = 'html';
+      node.value = graphQLNode.html;
+
+      // Push GraphQL node
+      graphQLNodes.push({
+        ...graphQLNode,
+        id: createNodeId(`GRVSCCodeSpan-${markdownNode.id}-${codeSpan.index}`),
+        parent: markdownNode.id,
+        internal: {
+          type: 'GRVSCCodeSpan',
+          contentDigest: createHash('md5')
+            .update(JSON.stringify(graphQLNode))
+            .digest('hex')
+        }
+      });
+
+      function getClassName() {
+        return typeof inlineCode.className === 'function'
+          ? inlineCode.className({
+              language: codeSpan.languageName,
+              markdownNode,
+              node
+            })
+          : inlineCode.className;
       }
     });
 
