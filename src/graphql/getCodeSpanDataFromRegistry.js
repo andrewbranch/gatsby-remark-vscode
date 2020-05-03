@@ -1,6 +1,8 @@
 const { renderHTML } = require('../renderers/html');
-const { partitionOne } = require('../utils');
+const { partitionOne, flatMap } = require('../utils');
 const { createTokenElement, createCodeSpanElement } = require('../factory/html');
+const { getThemeClassNames } = require('../themeUtils');
+const { joinClassNames } = require('../renderers/css');
 
 /**
  * @template {Keyable} TKey
@@ -27,7 +29,9 @@ function getCodeSpanDataFromRegistry(registry, key, codeSpan, getClassName) {
     });
   });
 
-  const className = getClassName();
+  const customClassName = getClassName();
+  const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
+  const className = joinClassNames(customClassName, ...themeClassNames);
   const html = createCodeSpanElement(index, languageName, className, tokenElements);
   const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t =>
     t.conditions.some(c => c.condition === 'default')

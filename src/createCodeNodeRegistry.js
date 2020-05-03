@@ -35,7 +35,8 @@ function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
     forEachLine: (node, action) => blockMap.get(node).lines.forEach(action),
     forEachToken: (node, lineIndex, tokenAction) => {
       generateClassNames();
-      const { tokenizationResults, isTokenized, lines } = blockMap.get(node);
+      const map = node.type === 'code' ? blockMap : spanMap;
+      const { tokenizationResults, isTokenized, lines } = map.get(node);
       if (!isTokenized) {
         return;
       }
