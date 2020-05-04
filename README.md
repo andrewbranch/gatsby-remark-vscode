@@ -447,6 +447,7 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 The syntax theme used for code blocks.
 
 - **Default:** `'Default Dark+'`
+
 - **Accepted types**:
   - **`string`:** The name or id of a theme. (See [Built-in themes](#themes) and [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension).)
   - **`ThemeSettings`:** An object that selects different themes to use in different contexts. (See [Multi-theme support](#multi-theme-support).)
@@ -467,28 +468,31 @@ A custom class name to be set on the `pre` tag.
 
 ### `languageAliases`
 
-An object that allows additional language names to be mapped to recognized languages so they can be used on opening code fences:
-
-```js
-{
-  languageAliases: {
-    fish: 'sh'
-  }
-}
-```
-
-````md
-Then you can use code fences like this:
-
-```fish
-ls -la
-```
-
-And they’ll be parsed as shell script (`sh`).
-````
+An object that allows additional language names to be mapped to recognized languages so they can be used on opening code fences.
 
 - **Default:** None, but many built-in languages are already recognized by a variety of names.
+
 - **Accepted type:** `Record<string, string>`; that is, an object with string keys and string values.
+
+- **Example:**
+  
+  ```js
+  {
+    languageAliases: {
+      fish: 'sh'
+    }
+  }
+  ```
+  
+  ````md
+  Then you can use code fences like this:
+  
+  ```fish
+  ls -la
+  ```
+
+  And they’ll be parsed as shell script (`sh`).
+  ````
 
 ### `extensions`
 
