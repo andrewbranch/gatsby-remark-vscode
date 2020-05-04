@@ -24,9 +24,11 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
   - [Variables](#variables)
   - [Tweaking or replacing theme colors](#tweaking-or-replacing-theme-colors)
 - [Extra stuff](#extra-stuff)
+  - [Inline code highlighting](#inline-code-highlighting)
   - [Line highlighting](#line-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
+- [Options reference](#options-reference)
 - [Contributing](#contributing)
 
 ## Why gatsby-remark-vscode?
@@ -48,7 +50,7 @@ Install the package:
 npm install --save gatsby-remark-vscode
 ```
 
-Add to your `gatsby-config.js` (all options are optional; defaults shown here):
+Add to your `gatsby-config.js`:
 
 ```js
 {
@@ -58,21 +60,8 @@ Add to your `gatsby-config.js` (all options are optional; defaults shown here):
     options: {
       plugins: [{
         resolve: `gatsby-remark-vscode`,
-        // All options are optional. Defaults shown here.
         options: {
-          theme: 'Dark+ (default dark)', // Read on for list of included themes. Also accepts object and function forms.
-          wrapperClassName: '',   // Additional class put on 'pre' tag. Also accepts function to set the class dynamically.
-          injectStyles: true,     // Injects (minimal) additional CSS for layout and scrolling
-          extensions: [],         // Third-party extensions providing additional themes and languages
-          languageAliases: {},    // Map of custom/unknown language codes to standard/known language codes
-          replaceColor: x => x,   // Function allowing replacement of a theme color with another. Useful for replacing hex colors with CSS variables.
-          getLineClassName: ({    // Function allowing dynamic setting of additional class names on individual lines
-            content,              //   - the string content of the line
-            index,                //   - the zero-based index of the line within the code fence
-            language,             //   - the language specified for the code fence
-            meta                  //   - any options set on the code fence alongside the language (more on this later)
-          }) => '',
-          logLevel: 'warn'       // Set to 'info' to debug if something looks wrong
+          theme: 'Abyss' // Or install your favorite theme from GitHub
         }
       }]
     }
@@ -329,6 +318,41 @@ Since the CSS for token colors is auto-generated, it’s fragile and inconvenien
 
 ## Extra stuff
 
+### Inline code highlighting
+
+To highlight inline code spans, add an `inlineCode` key to the plugin options and choose a `marker` string:
+
+```js
+{
+  inlineCode: {
+    marker: '•'
+  }
+}
+```
+
+Then, in your Markdown, you can prefix code spans by the language name followed by the `marker` string to opt into highlighting that span:
+
+```md
+Now you can highlight inline code: `js•Array.prototype.concat.apply([], array)`.
+```
+
+The syntax theme defaults to the one selected for code blocks, but you can control the inline code theme independently:
+
+```js
+{
+  theme: 'Default Dark+',
+  inlineCode: {
+    marker: '•',
+    theme: {
+      default: 'Default Light+',
+      dark: 'Default Dark+'
+    }
+  }
+}
+```
+
+See [`inlineCode`](#inlinecode) in the options reference for more API details.
+
 ### Line highlighting
 
 `gatsby-remark-vscode` offers the same line-range-after-language-name strategy of highlighting or emphasizing lines as [gatsby-remark-prismjs](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-remark-prismjs):
@@ -415,6 +439,98 @@ Line numbers and ranges aren’t the only things you can pass as options on your
   wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
 }
 ```
+
+## Options reference
+
+### `theme`
+
+The syntax theme used for code blocks.
+
+- **Default:** `'Default Dark+'`
+- **Accepted types**:
+  - **`string`:** The name or id of a theme. (See [Built-in themes](#themes) and [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension).)
+  - **`ThemeSettings`:** An object that selects different themes to use in different contexts. (See [Multi-theme support](#multi-theme-support).)
+  - **`(data: CodeBlockData) => string | ThemeSettings`:** A function returning the theme selection for a given code block. `CodeBlockData` is an object with properties:
+    - **`language`:** The language of the code block, if one was specified.
+    - **`markdownNode`:** The MarkdownRemark GraphQL node.
+    - **`node`:** The Remark AST node of the code block.
+    - **`parsedOptions`:** The object form of of any code fence info supplied. (See [Arbitrary code fence options](#arbitrary-code-fence-options).)
+
+### `wrapperClassName`
+
+A custom class name to be set on the `pre` tag.
+
+- **Default:** None, but the class `grvsc-container` will always be on the tag.
+- **Accepted types:**
+  - **`string`:** The class name to add.
+  - **`(data: CodeBlockData) => string`:** A function returning the class name to add for a given code block. (See the [`theme`](#theme) option above for the details of `CodeBlockData`.)
+
+### `languageAliases`
+
+An object that allows additional language names to be mapped to recognized languages so they can be used on opening code fences:
+
+```js
+{
+  languageAliases: {
+    fish: 'sh'
+  }
+}
+```
+
+````md
+Then you can use code fences like this:
+
+```fish
+ls -la
+```
+
+And they’ll be parsed as shell script (`sh`).
+````
+
+- **Default:** None, but many built-in languages are already recognized by a variety of names.
+- **Accepted type:** `Record<string, string>`; that is, an object with string keys and string values.
+
+### `extensions`
+
+A list of third party extensions to search for additional langauges and themes. (See [Using languages and themes from an extension](#using-languages-and-themes-from-an-extension).)
+
+- **Default:** None
+- **Accepted type:** `string[]`; that is, an array of strings, where the strings are the package names of the extensions.
+
+### `inlineCode`
+
+Enables syntax highlighting for inline code spans. (See [Inline code highlighting](#inline-code-highlighting).)
+
+- **Default:** None
+- **Accepted type:** An object with properties:
+  - **`theme`:** A string or `ThemeSettings` object selecting the theme, or a function returning a string or `ThemeSettings` object for a given code span. The type is the same as the one documented in the top-level [theme option](#theme). Defaults to the value of the top-level [theme option](#theme).
+  - **`marker`:** A string used as a separator between the language name and the content of a code span. For example, with a `marker` of value `'•'`, you can highlight a code span as JavaScript by writing the Markdown code span as `` `js•Code.to.highlight("inline")` ``.
+  - **`className`:** A string, or function returning a string for a given code span, that sets a custom class name on the wrapper `code` HTML tag. If the function form is used, it is passed an object parameter describing the code span with properties:
+    - **`language`:** The language of the code span (the bit before the `marker` character).
+    - **`markdownNode`:** The MarkdownRemark GraphQL node.
+    - **`node`:** The Remark AST node of the code span.
+
+### `injectStyles`
+
+Whether to add supporting CSS to the end of the Markdown document. (See [Styles](#styles).)
+
+- **Default:** `true`
+- **Accepted type:** `boolean`
+
+### `replaceColor`
+
+A function allowing individual color values to be replaced in the generated CSS. (See [Tweaking or replacing theme colors](#tweaking-or-replacing-theme-colors).)
+
+- **Default:** None
+- **Accepted type:** `(colorValue: string, theme: string) => string`; that is, a function that takes the original color and the identifier of the theme it came from and returns a new color value.
+
+### `logLevel`
+
+The verbosity of logging. Useful for diagnosing unexpected behavior.
+
+- **Default**: `'warn'`
+- **Accepted values:** From most verbose to least verbose, `'trace'`, `'debug'`, `'info'`, `'warn'`, or `'error'`.
+
 
 ## Contributing
 
