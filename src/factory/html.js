@@ -71,7 +71,7 @@ function mergeSimilarTokens(tokenElements) {
  */
 function createCodeBlockElement(preClassName, codeClassName, languageName, index, lineElements) {
   return pre(
-    { class: preClassName, 'data-language': languageName, 'data-index': index },
+    { class: preClassName, 'data-language': languageName, 'data-index': index, tabindex: 0 },
     [
       code({ class: codeClassName }, lineElements, {
         whitespace: TriviaRenderFlags.NewlineBetweenChildren
