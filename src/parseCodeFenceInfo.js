@@ -17,7 +17,7 @@ function test(input, pattern) {
  * @param {string} lang
  * @param {string=} metaString
  */
-function parseCodeFenceHeader(lang, metaString) {
+function parseCodeFenceInfo(lang, metaString) {
   let pos = 0;
   let meta = {};
   let languageName = '';
@@ -170,4 +170,4 @@ function parseCodeFenceHeader(lang, metaString) {
   }
 }
 
-module.exports = parseCodeFenceHeader;
+module.exports = parseCodeFenceInfo;

@@ -5,12 +5,14 @@ const logger = require('loglevel');
 const visit = require('unist-util-visit');
 const setup = require('./setup');
 const createGetRegistry = require('./createGetRegistry');
-const registerCodeBlock = require('./registerCodeBlock');
 const getPossibleThemes = require('./getPossibleThemes');
-const createCodeBlockRegistry = require('./createCodeBlockRegistry');
-const parseCodeFenceHeader = require('./parseCodeFenceHeader');
+const createCodeNodeRegistry = require('./createCodeNodeRegistry');
+const parseCodeFenceInfo = require('./parseCodeFenceInfo');
+const parseCodeSpanInfo = require('./parseCodeSpanInfo');
 const createSchemaCustomization = require('./graphql/createSchemaCustomization');
 const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataFromRegistry');
+const getCodeSpanGraphQLDataFromRegistry = require('./graphql/getCodeSpanDataFromRegistry');
+const { registerCodeBlock, registerCodeSpan } = require('./registerCodeNode');
 const { createHash } = require('crypto');
 const { setChildNodes } = require('./cacheUtils');
 const { getScope } = require('./storeUtils');
@@ -38,6 +40,7 @@ function createPlugin() {
       replaceColor,
       logLevel,
       getLineTransformers,
+      inlineCode,
       ...rest
     } = await once(() => setup(options, cache), 'setup');
 
@@ -51,6 +54,7 @@ function createPlugin() {
         injectStyles,
         replaceColor,
         logLevel,
+        inlineCode,
         ...rest
       },
       cache
@@ -58,25 +62,37 @@ function createPlugin() {
 
     // 1. Gather all code fence nodes from Markdown AST.
 
-    /** @type {MDASTNode[]} */
+    /** @type {(MDASTNode<'code'> | MDASTNode<'inlineCode'>)[]} */
     const nodes = [];
-    visit(markdownAST, 'code', node => {
-      nodes.push(node);
-    });
+    visit(
+      markdownAST,
+      ({ type }) => type === 'code' || type === 'inlineCode',
+      node => {
+        nodes.push(node);
+      }
+    );
 
     // 2. For each code fence found, parse its header, determine what themes it will use,
     //    and register its contents with a central code block registry, performing tokenization
     //    along the way.
 
-    /** @type {grvsc.gql.GRVSCCodeBlock[]} */
+    /** @type {(grvsc.gql.GRVSCCodeBlock | grvsc.gql.GRVSCCodeSpan)[]} */
     const graphQLNodes = [];
-    /** @type {CodeBlockRegistry<MDASTNode>} */
-    const codeBlockRegistry = createCodeBlockRegistry();
+    /** @type {CodeNodeRegistry<MDASTNode<'code' | 'inlineCode'>>} */
+    const codeNodeRegistry = createCodeNodeRegistry();
     for (const node of nodes) {
       /** @type {string} */
       const text = node.value || (node.children && node.children[0] && node.children[0].value);
       if (!text) continue;
-      const { languageName, meta } = parseCodeFenceHeader(node.lang ? node.lang.toLowerCase() : '', node.meta);
+      const { languageName, meta, text: parsedText = text } =
+        node.type === 'code'
+          ? parseCodeFenceInfo(node.lang ? node.lang.toLowerCase() : '', node.meta)
+          : parseCodeSpanInfo(text, inlineCode.marker);
+
+      if (node.type === 'inlineCode' && !languageName) {
+        continue;
+      }
+
       const grammarCache = await cache.get('grammars');
       const scope = getScope(languageName, grammarCache, languageAliases);
       if (!scope && languageName) {
@@ -87,39 +103,55 @@ function createPlugin() {
         );
       }
 
+      const nodeData = /** @type {CodeBlockData | CodeSpanData} */ ({
+        node,
+        markdownNode,
+        language: languageName
+      });
+
       const possibleThemes = await getPossibleThemes(
-        theme,
+        node.type === 'inlineCode' ? inlineCode.theme || theme : theme,
         await cache.get('themes'),
         // Node could be sourced from something other than a File node
         markdownNode.fileAbsolutePath ? path.dirname(markdownNode.fileAbsolutePath) : undefined,
-        markdownNode,
-        node,
-        languageName,
-        meta
+        nodeData
       );
 
-      await registerCodeBlock(
-        codeBlockRegistry,
-        node,
-        possibleThemes,
-        () => getRegistry(cache, scope),
-        lineTransformers,
-        scope,
-        text,
-        languageName,
-        meta,
-        cache
-      );
+      if (node.type === 'inlineCode') {
+        await registerCodeSpan(
+          codeNodeRegistry,
+          node,
+          possibleThemes,
+          () => getRegistry(cache, scope),
+          scope,
+          parsedText,
+          languageName,
+          cache
+        );
+      } else {
+        await registerCodeBlock(
+          codeNodeRegistry,
+          node,
+          possibleThemes,
+          () => getRegistry(cache, scope),
+          lineTransformers,
+          scope,
+          parsedText,
+          languageName,
+          meta,
+          cache
+        );
+      }
     }
 
-    // 3. For each code block registered, convert its tokenization and theme data
+    // 3. For each code block/span registered, convert its tokenization and theme data
     //    to a GraphQL-compatible representation, including HTML renderings. At the same
     //    time, change the original code fence Markdown node to an HTML node and set
     //    its value to the HTML rendering contained in the GraphQL node.
 
-    codeBlockRegistry.forEachCodeBlock((codeBlock, node) => {
+    codeNodeRegistry.forEachCodeBlock((codeBlock, node) => {
       const graphQLNode = getCodeBlockGraphQLDataFromRegistry(
-        codeBlockRegistry,
+        codeNodeRegistry,
         node,
         codeBlock,
         getWrapperClassName,
@@ -127,7 +159,8 @@ function createPlugin() {
       );
 
       // Update Markdown node
-      node.type = 'html';
+      /** @type {MDASTNode} */
+      (node).type = 'html';
       node.value = graphQLNode.html;
 
       // Push GraphQL node
@@ -148,6 +181,7 @@ function createPlugin() {
           ? wrapperClassName({
               language: codeBlock.languageName,
               markdownNode,
+              node,
               codeFenceNode: node,
               parsedOptions: codeBlock.meta
             })
@@ -155,12 +189,44 @@ function createPlugin() {
       }
     });
 
+    codeNodeRegistry.forEachCodeSpan((codeSpan, node) => {
+      const graphQLNode = getCodeSpanGraphQLDataFromRegistry(codeNodeRegistry, node, codeSpan, getClassName);
+
+      // Update Markdown node
+      /** @type {MDASTNode} */
+      (node).type = 'html';
+      node.value = graphQLNode.html;
+
+      // Push GraphQL node
+      graphQLNodes.push({
+        ...graphQLNode,
+        id: createNodeId(`GRVSCCodeSpan-${markdownNode.id}-${codeSpan.index}`),
+        parent: markdownNode.id,
+        internal: {
+          type: 'GRVSCCodeSpan',
+          contentDigest: createHash('md5')
+            .update(JSON.stringify(graphQLNode))
+            .digest('hex')
+        }
+      });
+
+      function getClassName() {
+        return typeof inlineCode.className === 'function'
+          ? inlineCode.className({
+              language: codeSpan.languageName,
+              markdownNode,
+              node
+            })
+          : inlineCode.className;
+      }
+    });
+
     // 4. Generate CSS rules for each theme used by one or more code blocks in the registry,
     //    then append that CSS to the Markdown AST in an HTML node.
 
     const styleElement = createStyleElement(
-      codeBlockRegistry.getAllPossibleThemes(),
-      codeBlockRegistry.getTokenStylesForTheme,
+      codeNodeRegistry.getAllPossibleThemes(),
+      codeNodeRegistry.getTokenStylesForTheme,
       replaceColor,
       injectStyles ? styles : undefined
     );

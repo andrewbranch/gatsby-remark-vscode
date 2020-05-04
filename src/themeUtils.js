@@ -205,7 +205,7 @@ function getStylesFromThemeSettings(settings) {
 
 /**
  * @param {LegacyThemeOption} themeOption
- * @returns {ThemeOption}
+ * @returns {ThemeOption<CodeBlockData>}
  */
 function convertLegacyThemeOption(themeOption) {
   if (typeof themeOption === 'function') {

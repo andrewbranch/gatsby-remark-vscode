@@ -7,39 +7,16 @@ const {
 } = require('./themeUtils');
 
 /**
- * @param {ThemeOption} themeOption
+ * @template {CodeBlockData | CodeSpanData} T
+ * @param {ThemeOption<T>} themeOption
  * @param {ThemeCache} themeCache
  * @param {string | undefined} contextDirectory
- * @param {MarkdownNode} markdownNode
- * @param {MDASTNode} codeFenceNode
- * @param {string} languageName
- * @param {object} meta
+ * @param {T} codeNodeData
  * @returns {Promise<ConditionalTheme[]>}
  */
-async function getPossibleThemes(
-  themeOption,
-  themeCache,
-  contextDirectory,
-  markdownNode,
-  codeFenceNode,
-  languageName,
-  meta
-) {
+async function getPossibleThemes(themeOption, themeCache, contextDirectory, codeNodeData) {
   if (typeof themeOption === 'function') {
-    return getPossibleThemes(
-      themeOption({
-        markdownNode,
-        codeFenceNode,
-        language: languageName,
-        parsedOptions: meta
-      }),
-      themeCache,
-      contextDirectory,
-      markdownNode,
-      codeFenceNode,
-      languageName,
-      meta
-    );
+    return getPossibleThemes(themeOption(codeNodeData), themeCache, contextDirectory, codeNodeData);
   }
 
   if (typeof themeOption === 'string') {
@@ -49,15 +26,7 @@ async function getPossibleThemes(
   /** @type {ConditionalTheme[]} */
   let themes;
   if (themeOption.default) {
-    themes = await getPossibleThemes(
-      themeOption.default,
-      themeCache,
-      contextDirectory,
-      markdownNode,
-      codeFenceNode,
-      languageName,
-      meta
-    );
+    themes = await getPossibleThemes(themeOption.default, themeCache, contextDirectory, codeNodeData);
   }
   if (themeOption.dark) {
     themes = concatConditionalThemes(themes, [

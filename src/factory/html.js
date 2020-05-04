@@ -34,6 +34,18 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
 }
 
 /**
+ * @param {number} index
+ * @param {string} language
+ * @param {string | undefined} className
+ * @param {grvsc.HTMLElement[]} tokens
+ */
+function createCodeSpanElement(index, language, className, tokens) {
+  return code({ class: className, 'data-language': language, 'data-index': index }, tokens, {
+    whitespace: TriviaRenderFlags.NoWhitespace
+  });
+}
+
+/**
  * Returns the token element array with contiguous spans having the same class name
  * merged into a single span to minimize the number of elements returned.
  * @param {grvsc.HTMLElement[]} tokenElements
@@ -90,5 +102,6 @@ module.exports = {
   createTokenElement,
   createLineElement,
   createCodeBlockElement,
-  createStyleElement
+  createStyleElement,
+  createCodeSpanElement
 };

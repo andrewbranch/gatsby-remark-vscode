@@ -17,7 +17,7 @@ async function convertThemeArgument(theme, themeCache) {
 }
 
 /**
- * @param {ThemeOption} themeOption
+ * @param {ThemeOption<CodeBlockData | CodeSpanData>} themeOption
  * @param {grvsc.gql.CSSArgs} args
  * @param {ThemeCache} themeCache
  * @returns {Promise<ConditionalTheme[]>}
@@ -40,7 +40,7 @@ async function getThemes(themeOption, args, themeCache) {
         `evaluating 'grvscHighlight'.`
     );
   }
-  return getPossibleThemes(themeOption, themeCache, undefined, undefined, undefined, undefined, undefined);
+  return getPossibleThemes(themeOption, themeCache, undefined, undefined);
 }
 
 module.exports = getThemes;

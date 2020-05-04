@@ -5,13 +5,15 @@ const { getTokenDataFromMetadata } = require('../lib/vscode/modes');
 const { declaration } = require('./renderers/css');
 
 /**
- * @template TKey
- * @param {CodeBlockRegistryOptions=} options
- * @returns {CodeBlockRegistry<TKey>}
+ * @template {Keyable} TKey
+ * @param {CodeNodeRegistryOptions=} options
+ * @returns {CodeNodeRegistry<TKey>}
  */
-function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
-  /** @type {Map<TKey, RegisteredCodeBlockData & { index: number }>} */
-  const nodeMap = new Map();
+function createCodeNodeRegistry({ prefixAllClassNames } = {}) {
+  /** @type {Map<TKey, RegisteredCodeNodeData>} */
+  const blockMap = new Map();
+  /** @type {Map<TKey, RegisteredCodeNodeData>} */
+  const spanMap = new Map();
   /** @type {ConditionalTheme[]} */
   let themes = [];
   /** @type {Map<string, { colorMap: string[], settings: Record<string, string> }>} */
@@ -23,16 +25,18 @@ function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
 
   return {
     register: (key, data) => {
-      nodeMap.set(key, { ...data, index: nodeMap.size });
+      const map = key.type === 'code' ? blockMap : spanMap;
+      map.set(key, { ...data, index: map.size });
       themes = concatConditionalThemes(themes, data.possibleThemes);
       data.tokenizationResults.forEach(({ theme, colorMap, settings }) =>
         themeColors.set(theme.identifier, { colorMap, settings })
       );
     },
-    forEachLine: (node, action) => nodeMap.get(node).lines.forEach(action),
+    forEachLine: (node, action) => blockMap.get(node).lines.forEach(action),
     forEachToken: (node, lineIndex, tokenAction) => {
       generateClassNames();
-      const { tokenizationResults, isTokenized, lines } = nodeMap.get(node);
+      const map = node.type === 'code' ? blockMap : spanMap;
+      const { tokenizationResults, isTokenized, lines } = map.get(node);
       if (!isTokenized) {
         return;
       }
@@ -78,10 +82,11 @@ function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
         });
       });
     },
-    forEachCodeBlock: nodeMap.forEach.bind(nodeMap),
+    forEachCodeBlock: blockMap.forEach.bind(blockMap),
+    forEachCodeSpan: spanMap.forEach.bind(spanMap),
     getAllPossibleThemes: () => themes.map(theme => ({ theme, settings: themeColors.get(theme.identifier).settings })),
     getTokenStylesForTheme: themeIdentifier => {
-      /** @type {ReturnType<CodeBlockRegistry['getTokenStylesForTheme']>} */
+      /** @type {ReturnType<CodeNodeRegistry['getTokenStylesForTheme']>} */
       const result = [];
       const colors = themeColors.get(themeIdentifier);
       const classNameMap = themeTokenClassNameMap && themeTokenClassNameMap.get(themeIdentifier);
@@ -113,7 +118,14 @@ function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
     if (themeTokenClassNameMap) return;
     themeTokenClassNameMap = new Map();
     zippedLines = new Map();
-    nodeMap.forEach(({ lines, tokenizationResults, isTokenized }, node) => {
+    blockMap.forEach(generate);
+    spanMap.forEach(generate);
+
+    /**
+     * @param {RegisteredCodeNodeData} data
+     * @param {TKey} node
+     */
+    function generate({ lines, tokenizationResults, isTokenized }, node) {
       if (!isTokenized) return;
       /** @type {Token[][][]} */
       const zippedLinesForNode = [];
@@ -141,7 +153,7 @@ function createCodeBlockRegistry({ prefixAllClassNames } = {}) {
           });
         });
       });
-    });
+    }
   }
 }
 
@@ -202,4 +214,4 @@ function getColorFromColorMap(colorMap, canonicalClassName) {
   return colorMap[index];
 }
 
-module.exports = createCodeBlockRegistry;
+module.exports = createCodeNodeRegistry;
