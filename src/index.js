@@ -66,7 +66,7 @@ function createPlugin() {
     const nodes = [];
     visit(
       markdownAST,
-      ({ type }) => type === 'code' || type === 'inlineCode',
+      ({ type }) => type === 'code' || inlineCode && type === 'inlineCode',
       node => {
         nodes.push(node);
       }
