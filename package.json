@@ -1,6 +1,6 @@
 {
   "name": "gatsby-remark-vscode",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Gatsby plugin to provide VS Code’s syntax highlighting to Markdown code fences",
   "main": "index.js",
   "scripts": {
