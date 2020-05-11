@@ -30,7 +30,26 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
   const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
   const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
   const children = typeof tokens === 'string' ? [tokens] : mergeSimilarTokens(tokens);
-  return span(attrs, children, { whitespace: TriviaRenderFlags.NoWhitespace });
+  const gutterCells = line.gutterCells.map((cell, i) =>
+    createGutterCellElement(cell, i === line.gutterCells.length - 1)
+  );
+  return span(
+    attrs,
+    [...gutterCells, span({ class: 'grvsc-source' }, children, { whitespace: TriviaRenderFlags.NoWhitespace })],
+    { whitespace: TriviaRenderFlags.NoWhitespace }
+  );
+}
+
+/**
+ * @param {GutterCell} cell
+ * @param {boolean} isLast
+ */
+function createGutterCellElement(cell, isLast) {
+  return span(
+    { class: joinClassNames('grvsc-gutter', cell.className, isLast && 'grvsc-gutter-last') },
+    [escapeHTML(cell.text || '')],
+    { whitespace: TriviaRenderFlags.NoWhitespace }
+  );
 }
 
 /**

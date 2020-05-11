@@ -180,6 +180,7 @@ interface MarkdownNode extends grvsc.gql.Node {
 }
 
 type Line = {
+  gutterCells: (GutterCell | undefined)[];
   text: string;
   attrs: object;
   data: object;
@@ -213,8 +214,14 @@ interface LineTransformerInfo<T> {
   state: T | undefined;
 }
 
+interface GutterCell {
+  className?: string;
+  text?: string;
+}
+
 interface LineTransformerResult<T> extends LineTransformerInfo<T> {
   data?: object;
+  gutterCells?: (GutterCell | undefined)[];
 }
 
 interface LineTransformerArgs<T> extends LineTransformerInfo<T> {

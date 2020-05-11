@@ -82,7 +82,7 @@ async function registerCodeSpan(
   const [registry, unlockRegistry] = await getTextMateRegistry();
   try {
     /** @type {Line[]} */
-    const lines = [{ text, data: {}, attrs: {} }];
+    const lines = [{ text, data: {}, attrs: {}, gutterCells: [] }];
     const { tokenTypes, languageId } = getGrammar(scope, grammarCache);
     const grammar = await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes });
     codeBlockRegistry.register(registryKey, {
