@@ -1,11 +1,11 @@
-<pre class="grvsc-container one-dark-pro" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk5 mtki">/**</span></span>
-<span class="grvsc-line"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{*}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">cache</span></span>
-<span class="grvsc-line"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{string}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">key</span></span>
-<span class="grvsc-line"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{object}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">value</span></span>
-<span class="grvsc-line"><span class="mtk5 mtki"> */</span></span>
-<span class="grvsc-line"><span class="mtk10">async</span><span class="mtk1"> </span><span class="mtk10">function</span><span class="mtk1"> </span><span class="mtk3">mergeCache</span><span class="mtk1">(</span><span class="mtk4 mtki">cache</span><span class="mtk1">, </span><span class="mtk4 mtki">key</span><span class="mtk1">, </span><span class="mtk4 mtki">value</span><span class="mtk1">) {</span></span>
-<span class="grvsc-line"><span class="mtk1">  </span><span class="mtk10">await</span><span class="mtk1"> </span><span class="mtk4">cache</span><span class="mtk1">.</span><span class="mtk3">set</span><span class="mtk1">(</span><span class="mtk4">key</span><span class="mtk1">, { ...(</span><span class="mtk10">await</span><span class="mtk1"> </span><span class="mtk4">cache</span><span class="mtk1">.</span><span class="mtk3">get</span><span class="mtk1">(</span><span class="mtk4">key</span><span class="mtk1">)), ...</span><span class="mtk4">value</span><span class="mtk1"> });</span></span>
-<span class="grvsc-line"><span class="mtk1">}</span></span></code></pre>
+<pre class="grvsc-container one-dark-pro" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk5 mtki">/**</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{*}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">cache</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{string}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">key</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk5 mtki"> * </span><span class="mtk10 mtki">@param</span><span class="mtk5 mtki"> </span><span class="mtk11 mtki">{object}</span><span class="mtk5 mtki"> </span><span class="mtk4 mtki">value</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk5 mtki"> */</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk10">async</span><span class="mtk1"> </span><span class="mtk10">function</span><span class="mtk1"> </span><span class="mtk3">mergeCache</span><span class="mtk1">(</span><span class="mtk4 mtki">cache</span><span class="mtk1">, </span><span class="mtk4 mtki">key</span><span class="mtk1">, </span><span class="mtk4 mtki">value</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk10">await</span><span class="mtk1"> </span><span class="mtk4">cache</span><span class="mtk1">.</span><span class="mtk3">set</span><span class="mtk1">(</span><span class="mtk4">key</span><span class="mtk1">, { ...(</span><span class="mtk10">await</span><span class="mtk1"> </span><span class="mtk4">cache</span><span class="mtk1">.</span><span class="mtk3">get</span><span class="mtk1">(</span><span class="mtk4">key</span><span class="mtk1">)), ...</span><span class="mtk4">value</span><span class="mtk1"> });</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
 <style class="grvsc-styles">
   .grvsc-container {
     overflow: auto;
@@ -20,18 +20,37 @@
   }
   
   .grvsc-code {
-    display: inline-block;
+    display: inline-table;
     min-width: 100%;
   }
   
   .grvsc-line {
-    display: inline-block;
+    display: table-row;
     box-sizing: border-box;
     width: 100%;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+  }
+  
+  .grvsc-source {
+    display: table-cell;
     padding-left: 1.5rem;
     padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
     padding-right: 1.5rem;
     padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
   }
   
   .grvsc-line-highlighted {

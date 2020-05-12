@@ -201,7 +201,8 @@ function escapeHTML(html) {
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
-        "'": '&#39;'
+        "'": '&#39;',
+        '&': '&amp;',
       }[char] || char)
   );
 }

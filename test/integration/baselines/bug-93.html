@@ -1,13 +1,13 @@
 <h1>TypeError: Cannot read property 'marker' of undefined</h1>
 <p>After updating to <code>v2.1.0</code> I am now getting this error.</p>
 <p>My gatsby-config.js file looks like this:</p>
-<pre class="grvsc-container default-dark" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="mtk1">{</span></span>
-<span class="grvsc-line"><span class="mtk1">    resolve: </span><span class="mtk8">"gatsby-remark-vscode"</span><span class="mtk1">,</span></span>
-<span class="grvsc-line"><span class="mtk1">    options: {</span></span>
-<span class="grvsc-line"><span class="mtk1">        theme: </span><span class="mtk8">"Shades of Purple"</span><span class="mtk1">,</span></span>
-<span class="grvsc-line"><span class="mtk1">        extensions: [</span><span class="mtk8">"shades-of-purple"</span><span class="mtk1">],</span></span>
-<span class="grvsc-line"><span class="mtk1">    },</span></span>
-<span class="grvsc-line"><span class="mtk1">},</span></span></code></pre>
+<pre class="grvsc-container default-dark" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">{</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    resolve: </span><span class="mtk8">"gatsby-remark-vscode"</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    options: {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        theme: </span><span class="mtk8">"Shades of Purple"</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">        extensions: [</span><span class="mtk8">"shades-of-purple"</span><span class="mtk1">],</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">    },</span></span></span>
+<span class="grvsc-line"><span class="grvsc-source"><span class="mtk1">},</span></span></span></code></pre>
 <style class="grvsc-styles">
   .grvsc-container {
     overflow: auto;
@@ -22,18 +22,37 @@
   }
   
   .grvsc-code {
-    display: inline-block;
+    display: inline-table;
     min-width: 100%;
   }
   
   .grvsc-line {
-    display: inline-block;
+    display: table-row;
     box-sizing: border-box;
     width: 100%;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+  }
+  
+  .grvsc-source {
+    display: table-cell;
     padding-left: 1.5rem;
     padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
     padding-right: 1.5rem;
     padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
   }
   
   .grvsc-line-highlighted {

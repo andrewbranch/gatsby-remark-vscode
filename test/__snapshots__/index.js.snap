@@ -10,8 +10,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -47,8 +47,8 @@ Object {
     Object {
       "lang": "java-scripty",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"java-scripty\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"java-scripty\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -84,8 +84,8 @@ Object {
     Object {
       "lang": "JavaScript",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"javascript\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"javascript\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -121,8 +121,8 @@ Object {
     Object {
       "lang": "c++",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"c++\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"c++\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> x = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -157,8 +157,8 @@ Object {
     Object {
       "lang": "embedded",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"embedded\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
-<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"embedded\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">const x = 3;</span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -189,8 +189,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -226,8 +226,8 @@ Object {
     Object {
       "lang": "",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
-<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">const x = 3;</span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -258,8 +258,8 @@ Object {
     Object {
       "lang": "none",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"none\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\">const x = 3;</span>
-<span class=\\"grvsc-line\\">// Comment</span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"none\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">const x = 3;</span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">// Comment</span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -290,8 +290,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tuw09S grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tuw09S-11 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tuw09S-3 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tuw09S-15 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tuw09S-3 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-6\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tuw09S-4 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tuw09S grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tuw09S-11 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tuw09S-3 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tuw09S-15 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tuw09S-3 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tuw09S-1 grvsc-tZ0ymb-6\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tuw09S-4 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -351,8 +351,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tlfloc grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tlfloc-4 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tlfloc-12 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tlfloc-1 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tlfloc-7 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-6\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tlfloc-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tlfloc grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tlfloc-4 grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tlfloc-12 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tlfloc-1 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tlfloc-7 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tlfloc-1 grvsc-tZ0ymb-6\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tlfloc-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -365,8 +365,8 @@ Object {
     Object {
       "lang": "js",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tsSx3w grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"1\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tsSx3w-9 grvsc-tsSx3w-i grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tsSx3w-1 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tsSx3w-7 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tsSx3w-4 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-6\\">;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tsSx3w-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container solarized-light grvsc-mm-tsSx3w grvsc-mm-tZ0ymb\\" data-language=\\"js\\" data-index=\\"1\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-13 grvsc-tiaGIi-b grvsc-tsSx3w-9 grvsc-tsSx3w-i grvsc-tZ0ymb-7\\">const</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-7 grvsc-tsSx3w-1 grvsc-tZ0ymb-7\\">x</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-8 grvsc-tsSx3w-7 grvsc-tZ0ymb-6\\">=</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-1\\"> </span><span class=\\"grvsc-tiaGIi-6 grvsc-tsSx3w-4 grvsc-tZ0ymb-5\\">3</span><span class=\\"grvsc-tiaGIi-1 grvsc-tsSx3w-1 grvsc-tZ0ymb-6\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"grvsc-tiaGIi-3 grvsc-tiaGIi-i grvsc-tsSx3w-3 grvsc-tZ0ymb-3 grvsc-tZ0ymb-i\\">// Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -440,11 +440,11 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 1</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// 2</span></span>
-<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 3</span></span>
-<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"mtk3\\">// 4</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"mtk3\\">// 5</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 1</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 2</span></span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 3</span></span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 4</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 5</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],

@@ -11,18 +11,37 @@
 }
 
 .grvsc-code {
-  display: inline-block;
+  display: inline-table;
   min-width: 100%;
 }
 
 .grvsc-line {
-  display: inline-block;
+  display: table-row;
   box-sizing: border-box;
   width: 100%;
+}
+
+.grvsc-gutter-pad {
+  display: table-cell;
+  padding-left: 0.75rem;
+  padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+}
+
+.grvsc-gutter {
+  display: table-cell;
+}
+
+.grvsc-source {
+  display: table-cell;
   padding-left: 1.5rem;
   padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
   padding-right: 1.5rem;
   padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+}
+
+.grvsc-gutter + .grvsc-source {
+  padding-left: 0.75rem;
+  padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
 }
 
 .grvsc-line-highlighted {

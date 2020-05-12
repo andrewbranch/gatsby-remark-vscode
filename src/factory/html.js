@@ -30,9 +30,10 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
   const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
   const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
   const children = typeof tokens === 'string' ? [tokens] : mergeSimilarTokens(tokens);
-  const gutterCells = line.gutterCells.map((cell, i) =>
-    createGutterCellElement(cell, i === line.gutterCells.length - 1)
-  );
+  const gutterCells = line.gutterCells.map(createGutterCellElement);
+  if (gutterCells.length) {
+    gutterCells.unshift(span({ class: 'grvsc-gutter-pad' }, undefined, { whitespace: TriviaRenderFlags.NoWhitespace }));
+  }
   return span(
     attrs,
     [...gutterCells, span({ class: 'grvsc-source' }, children, { whitespace: TriviaRenderFlags.NoWhitespace })],
@@ -40,16 +41,11 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
   );
 }
 
-/**
- * @param {GutterCell} cell
- * @param {boolean} isLast
- */
-function createGutterCellElement(cell, isLast) {
-  return span(
-    { class: joinClassNames('grvsc-gutter', cell.className, isLast && 'grvsc-gutter-last') },
-    [escapeHTML(cell.text || '')],
-    { whitespace: TriviaRenderFlags.NoWhitespace }
-  );
+/** @param {GutterCell} cell */
+function createGutterCellElement(cell) {
+  return span({ class: joinClassNames('grvsc-gutter', cell.className) }, [escapeHTML(cell.text || '')], {
+    whitespace: TriviaRenderFlags.NoWhitespace
+  });
 }
 
 /**
