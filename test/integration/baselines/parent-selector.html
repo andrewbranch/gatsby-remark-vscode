@@ -10,17 +10,22 @@
     border-radius: 8px;
     border-radius: var(--grvsc-border-radius, 8px);
     font-feature-settings: normal;
+    line-height: 1.4;
   }
   
   .grvsc-code {
     display: inline-table;
-    min-width: 100%;
   }
   
   .grvsc-line {
     display: table-row;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
   }
   
   .grvsc-gutter-pad {
@@ -31,6 +36,9 @@
   
   .grvsc-gutter {
     display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
   }
   
   .grvsc-source {
@@ -46,11 +54,24 @@
     padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
   }
   
-  .grvsc-line-highlighted {
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-highlighted::before {
     background-color: var(--grvsc-line-highlighted-background-color, transparent);
     box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
   }
   
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
   .default-light {
     background-color: #FFFFFF;
     color: #000000;

@@ -1,6 +1,8 @@
 const tokenizeWithTheme = require('./tokenizeWithTheme');
 const { getTransformedLines } = require('./transformers');
 const { getGrammar } = require('./storeUtils');
+const { joinClassNames } = require('./renderers/css');
+const { uniq } = require('./utils');
 
 /**
  * @template {Keyable} TKey
@@ -42,6 +44,7 @@ async function registerCodeBlock(
       tokenTypes = grammarData.tokenTypes;
     }
 
+    const addedClassNames = joinClassNames(...uniq(lines.map(l => l.setContainerClassName)));
     const grammar = languageId && (await registry.loadGrammarWithConfiguration(scope, languageId, { tokenTypes }));
     codeBlockRegistry.register(registryKey, {
       lines,
@@ -50,7 +53,8 @@ async function registerCodeBlock(
       languageName,
       possibleThemes,
       isTokenized: !!grammar,
-      tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry))
+      tokenizationResults: possibleThemes.map(theme => tokenizeWithTheme(lines, theme, grammar, registry)),
+      className: addedClassNames || undefined
     });
   } finally {
     unlockRegistry();

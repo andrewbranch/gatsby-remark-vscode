@@ -41,11 +41,15 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
   );
 }
 
-/** @param {GutterCell} cell */
+/** @param {GutterCell | undefined} cell */
 function createGutterCellElement(cell) {
-  return span({ class: joinClassNames('grvsc-gutter', cell.className) }, [escapeHTML(cell.text || '')], {
-    whitespace: TriviaRenderFlags.NoWhitespace
-  });
+  return span(
+    { class: joinClassNames('grvsc-gutter', cell && cell.className) },
+    [escapeHTML((cell && cell.text) || '')],
+    {
+      whitespace: TriviaRenderFlags.NoWhitespace
+    }
+  );
 }
 
 /**

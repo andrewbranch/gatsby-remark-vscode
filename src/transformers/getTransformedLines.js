@@ -1,5 +1,7 @@
 // @ts-check
 
+const { joinClassNames } = require('../renderers/css');
+
 /**
  *
  * @param {LineTransformer[]} transformers
@@ -23,6 +25,8 @@ async function getTransformedLines(transformers, text, languageName, meta) {
     const lineGutterCells = [];
     const attrs = {};
     const graphQLData = {};
+    /** @type {string[]} */
+    const addedContainerClassNames = [];
     for (let i = 0; i < transformers.length; i++) {
       const transformer = transformers[i];
       const state = prevTransformerStates[i];
@@ -35,19 +39,30 @@ async function getTransformedLines(transformers, text, languageName, meta) {
       });
 
       prevTransformerStates[i] = txResult.state;
+      if (txResult.setContainerClassName) {
+        addedContainerClassNames.push(txResult.setContainerClassName);
+      }
       if (!txResult.line) {
         continue linesLoop;
       }
       if (txResult.gutterCells) {
         gutterCellsPerTransformer[i] = Math.max(txResult.gutterCells.length, gutterCellsPerTransformer[i] || 0);
         lineGutterCells[i] = txResult.gutterCells;
+      } else {
+        gutterCellsPerTransformer[i] = Math.max(0, gutterCellsPerTransformer[i] || 0);
       }
+
       line = txResult.line.text;
       Object.assign(attrs, txResult.line.attrs);
       Object.assign(graphQLData, txResult.data);
     }
     gutterCells.push(lineGutterCells);
-    result.push({ text: line, attrs, data: graphQLData });
+    result.push({
+      text: line,
+      attrs,
+      data: graphQLData,
+      setContainerClassName: joinClassNames(...addedContainerClassNames) || undefined
+    });
   }
 
   const flattenedGutterCells = flattenGutterCells(gutterCells, gutterCellsPerTransformer);
@@ -94,17 +109,17 @@ async function getTransformedLines(transformers, text, languageName, meta) {
  * @returns {GutterCell[][]}
  */
 function flattenGutterCells(gutterCells, gutterCellsPerTransformer) {
+  const totalGutterCells = gutterCellsPerTransformer.reduce((a, b) => a + b, 0);
   return gutterCells.map(transformerResults => {
     /** @type {GutterCell[]} */
-    const result = [];
+    const result = Array(totalGutterCells).fill(undefined);
     for (let i = 0; i < transformerResults.length; i++) {
       const currentTransformerCells = transformerResults[i];
-      const length = currentTransformerCells ? currentTransformerCells.length : 0;
-      const padding = gutterCellsPerTransformer[i] - length;
       if (currentTransformerCells) {
-        result.push(...currentTransformerCells);
+        for (let j = 0; j < currentTransformerCells.length; j++) {
+          result[(gutterCellsPerTransformer[i - 1] || 0) + j] = currentTransformerCells[j];
+        }
       }
-      result.fill(undefined, result.length, result.length + padding);
     }
     return result;
   });

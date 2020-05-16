@@ -202,7 +202,7 @@ function escapeHTML(html) {
         '>': '&gt;',
         '"': '&quot;',
         "'": '&#39;',
-        '&': '&amp;',
+        '&': '&amp;'
       }[char] || char)
   );
 }

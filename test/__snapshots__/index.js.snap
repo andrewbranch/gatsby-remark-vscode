@@ -440,7 +440,7 @@ Object {
     Object {
       "lang": "js{1,3-4}",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 1</span></span></span>
+      "value": "<pre class=\\"grvsc-container grvsc-has-line-highlighting default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 1</span></span></span>
 <span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 2</span></span></span>
 <span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 3</span></span></span>
 <span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// 4</span></span></span>
