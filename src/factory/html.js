@@ -44,11 +44,13 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
 /** @param {GutterCell | undefined} cell */
 function createGutterCellElement(cell) {
   return span(
-    { class: joinClassNames('grvsc-gutter', cell && cell.className) },
-    [escapeHTML((cell && cell.text) || '')],
     {
-      whitespace: TriviaRenderFlags.NoWhitespace
-    }
+      class: joinClassNames('grvsc-gutter', cell && cell.className),
+      'aria-hidden': 'true',
+      'data-content': cell && cell.text
+    },
+    [],
+    { whitespace: TriviaRenderFlags.NoWhitespace }
   );
 }
 

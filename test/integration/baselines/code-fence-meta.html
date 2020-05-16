@@ -15,7 +15,7 @@
   }
   
   .grvsc-code {
-    display: inline-table;
+    display: table;
   }
   
   .grvsc-line {
@@ -40,6 +40,10 @@
     -webkit-user-select: none;
     -moz-user-select: none;
     user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
   }
   
   .grvsc-source {
