@@ -1,0 +1,121 @@
+<h1>Line numbers</h1>
+<p>With code fence info:</p>
+<pre class="grvsc-container default-dark" data-language="js" data-index="0"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="1"></span><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk1"> </span><span class="mtk15">as</span><span class="mtk1"> </span><span class="mtk12">React</span><span class="mtk1"> </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">'react'</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="2"></span><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="3"></span><span class="grvsc-source"><span class="mtk12">React</span><span class="mtk1">.</span><span class="mtk11">createElement</span><span class="mtk1">(</span><span class="mtk8">'span'</span><span class="mtk1">, {});</span></span></span></code></pre>
+<p>With code fence info specifying a starting line:</p>
+<pre class="grvsc-container default-dark" data-language="js" data-index="1"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="21"></span><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> </span><span class="mtk8">'blah'</span><span class="mtk1">;</span></span></span></code></pre>
+<p>With a comment:</p>
+<pre class="grvsc-container default-dark" data-language="ts" data-index="2"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter" aria-hidden="true"></span><span class="grvsc-source"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">getDefaultLineTransformers</span><span class="mtk1">(</span><span class="mtk12">pluginOptions</span><span class="mtk1">, </span><span class="mtk12">cache</span><span class="mtk1">) {</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter" aria-hidden="true"></span><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> [</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="4"></span><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">createHighlightDirectiveLineTransformer</span><span class="mtk1">(</span><span class="mtk12">pluginOptions</span><span class="mtk1">.</span><span class="mtk12">languageAliases</span><span class="mtk1">, </span><span class="mtk12">cache</span><span class="mtk1">), </span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="5"></span><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk12">highlightMetaTransformer</span><span class="mtk1">,</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="6"></span><span class="grvsc-source"><span class="mtk1">    </span><span class="mtk11">createLineNumberLineTransformer</span><span class="mtk1">(</span><span class="mtk12">pluginOptions</span><span class="mtk1">.</span><span class="mtk12">languageAliases</span><span class="mtk1">, </span><span class="mtk12">cache</span><span class="mtk1">)</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="7"></span><span class="grvsc-source"><span class="mtk1">  ];</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="8"></span><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
+<p>With both:</p>
+<pre class="grvsc-container default-dark" data-language="ts" data-index="3"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="1"></span><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk1"> </span><span class="mtk15">as</span><span class="mtk1"> </span><span class="mtk12">React</span><span class="mtk1"> </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">'react'</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="2"></span><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="3"></span><span class="grvsc-source"><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="4"></span><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="29"></span><span class="grvsc-source"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">SomeComponent</span><span class="mtk1">(</span><span class="mtk12">props</span><span class="mtk1">) { </span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="30"></span><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> &#x3C;</span><span class="mtk10">div</span><span class="mtk1"> />;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="31"></span><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
+<p>With line highlighting:</p>
+<pre class="grvsc-container grvsc-has-line-highlighting default-dark" data-language="ts" data-index="4"><code class="grvsc-code"><span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="1"></span><span class="grvsc-source"><span class="mtk15">import</span><span class="mtk1"> </span><span class="mtk4">*</span><span class="mtk1"> </span><span class="mtk15">as</span><span class="mtk1"> </span><span class="mtk12">React</span><span class="mtk1"> </span><span class="mtk15">from</span><span class="mtk1"> </span><span class="mtk8">'react'</span><span class="mtk1">;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="2"></span><span class="grvsc-source"></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="3"></span><span class="grvsc-source"><span class="mtk3">// ...</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="4"></span><span class="grvsc-source"></span></span>
+<span class="grvsc-line grvsc-line-highlighted"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="29"></span><span class="grvsc-source"><span class="mtk4">function</span><span class="mtk1"> </span><span class="mtk11">SomeComponent</span><span class="mtk1">(</span><span class="mtk12">props</span><span class="mtk1">) { </span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="30"></span><span class="grvsc-source"><span class="mtk1">  </span><span class="mtk15">return</span><span class="mtk1"> &#x3C;</span><span class="mtk10">div</span><span class="mtk1"> />;</span></span></span>
+<span class="grvsc-line"><span class="grvsc-gutter-pad"></span><span class="grvsc-gutter grvsc-line-number" aria-hidden="true" data-content="31"></span><span class="grvsc-source"><span class="mtk1">}</span></span></span></code></pre>
+<style class="grvsc-styles">
+  .grvsc-container {
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-top: 1rem;
+    padding-top: var(--grvsc-padding-top, var(--grvsc-padding-v, 1rem));
+    padding-bottom: 1rem;
+    padding-bottom: var(--grvsc-padding-bottom, var(--grvsc-padding-v, 1rem));
+    border-radius: 8px;
+    border-radius: var(--grvsc-border-radius, 8px);
+    font-feature-settings: normal;
+    line-height: 1.4;
+  }
+  
+  .grvsc-code {
+    display: table;
+  }
+  
+  .grvsc-line {
+    display: table-row;
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
+    padding-left: 1.5rem;
+    padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
+    padding-right: 1.5rem;
+    padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
+  }
+  
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, transparent);
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
+  }
+  
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
+  .default-dark {
+    background-color: #1E1E1E;
+    color: #D4D4D4;
+  }
+  .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .mtk11 { color: #DCDCAA; }
+  .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .mtk10 { color: #4EC9B0; }
+</style>

@@ -152,6 +152,7 @@ interface RegisteredCodeNodeData {
   possibleThemes: ConditionalTheme[];
   isTokenized: boolean;
   tokenizationResults: TokenizeWithThemeResult[];
+  className?: string;
 }
 
 interface RegisteredToken {
@@ -180,9 +181,11 @@ interface MarkdownNode extends grvsc.gql.Node {
 }
 
 type Line = {
+  gutterCells: (GutterCell | undefined)[];
   text: string;
   attrs: object;
   data: object;
+  setContainerClassName?: string;
 };
 
 interface CodeNodeRegistry<TKey extends Keyable> {
@@ -213,17 +216,24 @@ interface LineTransformerInfo<T> {
   state: T | undefined;
 }
 
+interface GutterCell {
+  className?: string;
+  text?: string;
+}
+
 interface LineTransformerResult<T> extends LineTransformerInfo<T> {
   data?: object;
+  gutterCells?: (GutterCell | undefined)[];
+  setContainerClassName?: string;
 }
 
 interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
   language: string;
-  meta: object;
+  meta: any;
 }
 
-interface LineTransformer<T = any> {
-  (args: LineTransformerArgs<T>): LineTransformerResult<T> | Promise<LineTransformerResult<T>>;
+interface LineTransformer<TState = any> {
+  (args: LineTransformerArgs<TState>): LineTransformerResult<TState> | Promise<LineTransformerResult<TState>>;
   displayName: string;
   schemaExtension?: string;
 }

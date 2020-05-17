@@ -14,28 +14,72 @@
     border-radius: 8px;
     border-radius: var(--grvsc-border-radius, 8px);
     font-feature-settings: normal;
+    line-height: 1.4;
   }
   
   .grvsc-code {
-    display: inline-block;
-    min-width: 100%;
+    display: table;
   }
   
   .grvsc-line {
-    display: inline-block;
+    display: table-row;
     box-sizing: border-box;
     width: 100%;
+    position: relative;
+  }
+  
+  .grvsc-line > * {
+    position: relative;
+  }
+  
+  .grvsc-gutter-pad {
+    display: table-cell;
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  .grvsc-gutter {
+    display: table-cell;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+  }
+  
+  .grvsc-gutter::before {
+    content: attr(data-content);
+  }
+  
+  .grvsc-source {
+    display: table-cell;
     padding-left: 1.5rem;
     padding-left: var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem));
     padding-right: 1.5rem;
     padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
   }
   
-  .grvsc-line-highlighted {
+  .grvsc-gutter + .grvsc-source {
+    padding-left: 0.75rem;
+    padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
+  }
+  
+  /* Line transformer styles */
+  
+  .grvsc-has-line-highlighting > .grvsc-code > .grvsc-line::before {
+    content: ' ';
+    position: absolute;
+    width: 100%;
+  }
+  
+  .grvsc-line-highlighted::before {
     background-color: var(--grvsc-line-highlighted-background-color, transparent);
     box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
   }
   
+  .grvsc-line-number {
+    padding: 0 2px;
+    text-align: right;
+    opacity: 0.7;
+  }
   .abyss { background-color: #000c18; }
   .abyss .mtki { font-style: italic; }
   .abyss .mtk6 { color: #DDBB88; }

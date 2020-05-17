@@ -64,6 +64,7 @@ function renderHTML(element) {
 
     const { tagName, attributes, children } = element;
     const attrs = Object.keys(attributes)
+      .filter(attr => attributes[attr] !== undefined)
       .map(attr => ` ${attr}="${escapeHTML(attributes[attr])}"`)
       .join('');
 

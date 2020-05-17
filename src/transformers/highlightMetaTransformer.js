@@ -46,7 +46,8 @@ const highlightMetaTransformer = ({ meta, line, state = getInitialState(meta) })
     state: {
       lineNumber: state.lineNumber + 1,
       highlightedLines: isHighlighted ? state.highlightedLines.slice(1) : state.highlightedLines
-    }
+    },
+    setContainerClassName: isHighlighted ? 'grvsc-has-line-highlighting' : undefined
   };
 };
 
