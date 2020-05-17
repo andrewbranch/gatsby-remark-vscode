@@ -69,7 +69,7 @@ jobs:
       run: npm run build
     - name: publish alpha
       run: |
-        version=`node .github/workflows/getVersion.js 2.0.0`
+        version=`node .github/workflows/getVersion.js 3.0.0`
         npm --no-git-tag-version version $version
         npm publish --tag alpha
       env:
