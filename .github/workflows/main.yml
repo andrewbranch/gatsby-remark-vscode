@@ -4,7 +4,7 @@ on:
   push:
     branches:
     - master
-    - v2
+    - v3
     paths:
     - '**.js'
     - '**.ts'
