@@ -6,10 +6,11 @@ function createDiffLineTransformer() {
   /** @type {LineTransformer<any>} */
   const diffLineTransformer = ({ line, meta: { diff } }) => {
     if (diff && line.text.startsWith('+ ')) {
-      line.text = line.text.replace(/^\+ /, '');
+      const text = line.text.replace(/^\+ /, '');
       return {
-        line: highlightDiffLine(line, 'add'),
-        data: { isDiffAdd: true },
+        line: highlightDiffLine({ ...line, text }, 'add'),
+        data: { diff: 'ADD' },
+        setContainerClassName: 'grvsc-has-line-highlighting',
         gutterCells: [
           {
             className: 'grvsc-diff-add',
@@ -19,10 +20,11 @@ function createDiffLineTransformer() {
       };
     }
     if (diff && line.text.startsWith('- ')) {
-      line.text = line.text.replace(/^\- /, '');
+      const text = line.text.replace(/^\- /, '');
       return {
-        line: highlightDiffLine(line, 'del'),
-        data: { isDiffDel: true },
+        line: highlightDiffLine({ ...line, text }, 'del'),
+        data: { diff: 'DEL' },
+        setContainerClassName: 'grvsc-has-line-highlighting',
         gutterCells: [
           {
             className: 'grvsc-diff-del',
@@ -36,8 +38,13 @@ function createDiffLineTransformer() {
 
   diffLineTransformer.displayName = 'diff';
   diffLineTransformer.schemaExtension = `
+    enum GRVSCDiff {
+      ADD
+      DEL
+    }
+
     type GRVSCTokenizedLine {
-      isDiff: Boolean
+      diff: GRVSCDiff
     }
   `;
 
