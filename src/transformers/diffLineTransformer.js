@@ -5,8 +5,8 @@ function createDiffLineTransformer() {
   // How do I get the parsed code fence options here?
   /** @type {LineTransformer<any>} */
   const diffLineTransformer = ({ line, meta: { diff } }) => {
-    if (diff && line.text.startsWith('+ ')) {
-      const text = line.text.replace(/^\+ /, '');
+    if (diff && line.text.startsWith('+')) {
+      const text = line.text.replace(/^\+ ?/, '');
       return {
         line: highlightDiffLine({ ...line, text }, 'add'),
         data: { diff: 'ADD' },
@@ -19,8 +19,8 @@ function createDiffLineTransformer() {
         ]
       };
     }
-    if (diff && line.text.startsWith('- ')) {
-      const text = line.text.replace(/^\- /, '');
+    if (diff && line.text.startsWith('-')) {
+      const text = line.text.replace(/^- ?/, '');
       return {
         line: highlightDiffLine({ ...line, text }, 'del'),
         data: { diff: 'DEL' },
