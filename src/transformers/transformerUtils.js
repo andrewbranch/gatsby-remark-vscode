@@ -76,7 +76,7 @@ function getCommentRegExp(scope) {
 
 /**
  * @param {LineTransformerArgs['line']} line
- * @param {('add'|'del')} postfix
+ * @param {'add' | 'del'} postfix
  * @returns {LineTransformerArgs['line']}
  */
 function highlightDiffLine(line, postfix) {
