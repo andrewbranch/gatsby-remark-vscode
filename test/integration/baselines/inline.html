@@ -75,11 +75,20 @@
     box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
   }
   
+  .grvsc-line-diff-add::before {
+    background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
+  }
+  
+  .grvsc-line-diff-del::before {
+    background-color: var(--grvsc-line-diff-del-background-color, rgba(255, 0, 20, 0.4));
+  }
+  
   .grvsc-line-number {
     padding: 0 2px;
     text-align: right;
     opacity: 0.7;
   }
+  
   .default-light {
     background-color: #FFFFFF;
     color: #000000;

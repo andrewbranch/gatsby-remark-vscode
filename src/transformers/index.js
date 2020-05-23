@@ -2,6 +2,7 @@
 const { highlightMetaTransformer } = require('./highlightMetaTransformer');
 const { createHighlightDirectiveLineTransformer } = require('./highlightDirectiveLineTransformer');
 const { createLineNumberLineTransformer } = require('./lineNumberTransformer');
+const { createDiffLineTransformer } = require('./diffLineTransformer');
 const getTransformedLines = require('./getTransformedLines');
 
 /**
@@ -13,7 +14,8 @@ function getDefaultLineTransformers(pluginOptions, cache) {
   return [
     createHighlightDirectiveLineTransformer(pluginOptions.languageAliases, cache),
     highlightMetaTransformer,
-    createLineNumberLineTransformer(pluginOptions.languageAliases, cache)
+    createLineNumberLineTransformer(pluginOptions.languageAliases, cache),
+    createDiffLineTransformer()
   ];
 }
 

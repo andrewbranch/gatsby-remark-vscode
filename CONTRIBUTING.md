@@ -15,7 +15,7 @@ Prerequisites: development is supported on the current [Node LTS](https://nodejs
 1. Fork and clone the repo.
 2. Run `npm install`
 
-Running `npm install` should automatically initialize or update the [vscode](./vscode) submodule, generate `src/graphql/schema.d.ts`, and populate [`lib/grammars`](lib/grammars) and [`lib/themes`](lib/themes). If any of these things are missing, you’ll errors when you try to run things later. You can rerun these steps with `npm run build`.
+Running `npm install` should automatically initialize or update the [vscode](./vscode) submodule, generate `src/graphql/schema.d.ts`, and populate [`lib/grammars`](lib/grammars) and [`lib/themes`](lib/themes). If any of these things are missing, you’ll get errors when you try to run things later. You can rerun these steps with `npm run build`.
 
 ## Tests
 
