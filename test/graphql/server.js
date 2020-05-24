@@ -40,6 +40,10 @@ function createServer({
       proc.stderr.once('data', chunk => {
         const msg = Buffer.from(chunk, 'utf-8').toString();
         console.error(msg);
+        if (msg.includes(`can't open terminal /dev/tty`)) {
+          return;
+        }
+
         if (!settled) {
           settled = true;
           proc.kill();
