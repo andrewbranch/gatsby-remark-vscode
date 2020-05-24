@@ -55,7 +55,7 @@ type GRVSCCodeSpan implements Node {
   index: Int!
   html: String!
   text: String!
-  className: String!
+  className: String
   language: String
   defaultTheme: GRVSCTheme!
   additionalThemes: [GRVSCTheme!]!

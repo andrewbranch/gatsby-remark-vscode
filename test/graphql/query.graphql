@@ -1,0 +1,103 @@
+query MyQuery($fileAbsolutePath: String) {
+  markdownRemark(fileAbsolutePath: { eq: $fileAbsolutePath }) {
+    grvscCodeBlocks {
+      html
+      codeClassName
+      defaultTheme {
+        identifier
+        conditions {
+          condition
+          value
+        }
+      }
+      index
+      language
+      meta
+      preClassName
+      text
+      tokenizedLines {
+        attrs
+        className
+        data
+        diff
+        html
+        isHighlighted
+        lineNumber
+        text
+        tokens {
+          additionalThemeTokenData {
+            bold
+            className
+            color
+            italic
+            meta
+            themeIdentifier
+            underline
+          }
+          className
+          defaultThemeTokenData {
+            bold
+            className
+            color
+            italic
+            meta
+            themeIdentifier
+            underline
+          }
+          endIndex
+          html
+          scopes
+          startIndex
+          text
+        }
+      }
+    }
+    grvscCodeSpans {
+      additionalThemes {
+        conditions {
+          condition
+          value
+        }
+        identifier
+      }
+      className
+      defaultTheme {
+        conditions {
+          condition
+          value
+        }
+        identifier
+      }
+      html
+      index
+      language
+      text
+      tokens {
+        additionalThemeTokenData {
+          bold
+          className
+          color
+          italic
+          meta
+          themeIdentifier
+          underline
+        }
+        className
+        defaultThemeTokenData {
+          bold
+          className
+          color
+          italic
+          meta
+          themeIdentifier
+          underline
+        }
+        endIndex
+        html
+        scopes
+        startIndex
+        text
+      }
+    }
+  }
+}

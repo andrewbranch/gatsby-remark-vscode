@@ -52,7 +52,7 @@ declare namespace grvsc {
             index: number;
             html: string;
             text: string;
-            className: string;
+            className?: string;
             language?: string;
             defaultTheme: GRVSCTheme;
             additionalThemes: GRVSCTheme[];

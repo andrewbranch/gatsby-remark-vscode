@@ -7,10 +7,25 @@ const { processExtensions } = require('./processExtension');
 
 /**
  * @param {PluginOptions} options
+ * @param {string} markdownAbsolutePath
+ * @param {GatsbyCache} cache
+ * @param {(fn: () => Promise<PluginOptions>, key?: any) => Promise<PluginOptions>} once
+ * @returns {Promise<PluginOptions>}
+ */
+async function setup(options, markdownAbsolutePath, cache, once) {
+  if (options['__getOptions__']) {
+    return setupOptions(options['__getOptions__'](markdownAbsolutePath), cache);
+  } else {
+    return once(() => setupOptions(options, cache), 'setup');
+  }
+}
+
+/**
+ * @param {PluginOptions} options
  * @param {GatsbyCache} cache
  * @returns {Promise<PluginOptions>}
  */
-async function setup(
+async function setupOptions(
   {
     theme = 'Default Dark+',
     colorTheme: legacyTheme,
@@ -24,7 +39,7 @@ async function setup(
     host = defaultHost,
     getLineTransformers = getDefaultLineTransformers,
     ...rest
-  },
+  } = {},
   cache
 ) {
   logger.setLevel(logLevel);
