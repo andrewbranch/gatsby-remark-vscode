@@ -37,11 +37,12 @@ function createServer({
         }
       });
 
-      proc.stderr.on('data', chunk => {
+      proc.stderr.once('data', chunk => {
         const msg = Buffer.from(chunk, 'utf-8').toString();
         console.error(msg);
         if (!settled) {
           settled = true;
+          proc.kill();
           reject(new Error(msg));
         }
       });
