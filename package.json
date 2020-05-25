@@ -6,7 +6,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "node scripts/index.js",
-    "prebuild": "git submodule update --init",
+    "prebuild": "git submodule update --init --depth 1",
     "check": "tsc -p .",
     "test": "jest",
     "test:update": "jest -u",
