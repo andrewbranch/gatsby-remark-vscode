@@ -30,7 +30,6 @@ query MyQuery($fileAbsolutePath: String) {
             className
             color
             italic
-            meta
             themeIdentifier
             underline
           }
@@ -40,7 +39,6 @@ query MyQuery($fileAbsolutePath: String) {
             className
             color
             italic
-            meta
             themeIdentifier
             underline
           }
@@ -78,7 +76,6 @@ query MyQuery($fileAbsolutePath: String) {
           className
           color
           italic
-          meta
           themeIdentifier
           underline
         }
@@ -88,7 +85,6 @@ query MyQuery($fileAbsolutePath: String) {
           className
           color
           italic
-          meta
           themeIdentifier
           underline
         }
