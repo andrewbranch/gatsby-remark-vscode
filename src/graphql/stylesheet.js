@@ -16,7 +16,7 @@ const styles = fs.readFileSync(path.resolve(__dirname, '../../styles.css'), 'utf
  * @returns {Promise<grvsc.gql.GRVSCStylesheet>}
  */
 async function stylesheet(args, pluginOptions, { cache, createNodeId }) {
-  const { theme, injectStyles, replaceColor } = await plugin.once(() => setup(pluginOptions, cache));
+  const { theme, injectStyles, replaceColor } = await setup(pluginOptions, '', cache, plugin.once);
   const themeCache = await cache.get('themes');
   const possibleThemes = await getThemes(theme, args, themeCache);
   // Scope doesn’t matter

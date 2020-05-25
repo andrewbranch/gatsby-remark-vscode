@@ -1,5 +1,5 @@
 // @ts-check
-const parse = require('../src/parseCodeFenceInfo');
+const parse = require('../../src/parseCodeFenceInfo');
 
 describe('parseCodeFenceInfo', () => {
   it('parses language name without meta', () => {

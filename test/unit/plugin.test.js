@@ -1,7 +1,7 @@
 const path = require('path');
-const createPlugin = require('../src');
-const utils = require('../src/utils');
-const { createCache, createNodeId, markdownNode, defaultOptions, actions, createMarkdownAST } = require('./utils');
+const createPlugin = require('../../src');
+const utils = require('../../src/utils');
+const { createCache, createNodeId, markdownNode, defaultOptions, actions, createMarkdownAST } = require('../utils');
 
 /**
  * @param {PluginOptions=} options
@@ -30,7 +30,7 @@ describe('included languages and themes', () => {
     const cache = createCache();
     cache.set('grammars', {
       'source.embedded': {
-        path: path.resolve(__dirname, 'fixtures', 'embedded.tmLanguage.json'),
+        path: path.resolve(__dirname, '../data', 'embedded.tmLanguage.json'),
         languageNames: ['embedded'],
         languageId: 100,
       },
@@ -109,7 +109,7 @@ describe('prefers-color-scheme', () => {
 describe('utils', () => {
   describe('requireJson', () => {
     it('works with json5', () => {
-      expect(() => utils.requireJson(path.resolve(__dirname, 'fixtures/json5.tmTheme.json'))).not.toThrow();
+      expect(() => utils.requireJson(path.resolve(__dirname, '../data/json5.tmTheme.json'))).not.toThrow();
     });
   });
 });

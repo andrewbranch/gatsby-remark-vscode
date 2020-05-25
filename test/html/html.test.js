@@ -31,13 +31,13 @@ function tryRequire(specifier) {
   }
 }
 
-describe('integration tests', () => {
+describe('HTML baselines', () => {
   const processor = unified()
     .use(remark, { commonmark: true })
     // @ts-ignore
     .use(stringify, { sanitize: false });
 
-  const cases = glob.sync('cases/**/test.md', { cwd: __dirname }).map(name => {
+  const cases = glob.sync('cases/**/test.md', { cwd: path.resolve(__dirname, '..') }).map(name => {
     return name.slice('cases/'.length, name.length - '/test.md'.length);
   });
 
@@ -52,7 +52,7 @@ describe('integration tests', () => {
     const createNewSnapshot = config.updateSnapshot === 'new';
 
     const plugin = createPlugin();
-    const directory = path.resolve(__dirname, 'cases', name);
+    const directory = path.resolve(__dirname, '../cases', name);
     const md = await readFile(`${directory}/test.md`);
     const options = tryRequire(`${directory}/options.js`);
     const baselinePath = path.resolve(__dirname, 'baselines', `${name}.html`);

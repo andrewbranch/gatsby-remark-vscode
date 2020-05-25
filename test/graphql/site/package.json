@@ -1,0 +1,6 @@
+{
+  "name": "graphql-test",
+  "dependencies": {
+    "gatsby": "*"
+  }
+}
