@@ -39,11 +39,12 @@ function createServer({
 
       proc.stderr.once('data', chunk => {
         const msg = Buffer.from(chunk, 'utf-8').toString();
-        console.error(msg);
+        // CI logs this error but it doesn’t matter
         if (msg.includes(`can't open terminal /dev/tty`)) {
           return;
         }
-
+        
+        console.error(msg);
         if (!settled) {
           settled = true;
           proc.kill();
