@@ -30,17 +30,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container default-dark&quot; data-language=&quot;&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;()&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&quot;grvsc-container default-dark&quot; data-language=&quot;xml&quot; data-index=&quot;1&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk17&quot;&gt;&amp;#x3C;&lt;/span&gt;&lt;span class=&quot;mtk4&quot;&gt;x:xmpmeta&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;xmlns:x&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;&quot;adobe:ns:meta/&quot;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;x:xmptk&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;&quot;XMP Core 5.4.0&quot;&lt;/span&gt;&lt;span class=&quot;mtk17&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk1&quot;&gt;   &lt;/span&gt;&lt;span class=&quot;mtk17&quot;&gt;&amp;#x3C;&lt;/span&gt;&lt;span class=&quot;mtk4&quot;&gt;rdf:RDF&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;xmlns:rdf&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;&quot;http://www.w3.org/1999/02/22-rdf-syntax-ns#&quot;&lt;/span&gt;&lt;span class=&quot;mtk17&quot;&gt;&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -119,11 +109,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -148,6 +133,10 @@
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk8 { color: #CE9178; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -229,11 +218,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -258,6 +242,10 @@
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk8 { color: #CE9178; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -269,17 +257,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;h1&gt;TypeError: Cannot read property &#39;marker&#39; of undefined&lt;/h1&gt;
 &lt;p&gt;After updating to &lt;code&gt;v2.1.0&lt;/code&gt; I am now getting this error.&lt;/p&gt;
 &lt;p&gt;My gatsby-config.js file looks like this:&lt;/p&gt;
@@ -357,11 +335,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -382,6 +355,10 @@
   }
   .default-dark .mtk1 { color: #D4D4D4; }
   .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -462,11 +439,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -487,6 +459,10 @@
   }
   .default-dark .mtk1 { color: #D4D4D4; }
   .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -498,17 +474,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container test-wrapper grvsc-has-line-highlighting default-dark&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line grvsc-line-highlighted&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk3&quot;&gt;// should be highlighted&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;pre class=&quot;grvsc-container test-wrapper js-test default-dark&quot; data-language=&quot;js&quot; data-index=&quot;1&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk3&quot;&gt;// should not be highlighted&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;style class=&quot;grvsc-styles&quot;&gt;
@@ -578,11 +544,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -602,6 +563,10 @@
     color: #D4D4D4;
   }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -674,11 +639,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -698,6 +658,10 @@
     color: #D4D4D4;
   }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -709,17 +673,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container grvsc-has-line-highlighting default-dark&quot; data-language=&quot;ts&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line grvsc-line-diff grvsc-line-diff-add&quot;&gt;&lt;span class=&quot;grvsc-gutter-pad&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-gutter grvsc-diff-add&quot; aria-hidden=&quot;true&quot; data-content=&quot;+&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line grvsc-line-diff grvsc-line-diff-del&quot;&gt;&lt;span class=&quot;grvsc-gutter-pad&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-gutter grvsc-diff-del&quot; aria-hidden=&quot;true&quot; data-content=&quot;-&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line grvsc-line-diff grvsc-line-diff-add&quot;&gt;&lt;span class=&quot;grvsc-gutter-pad&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-gutter grvsc-diff-add&quot; aria-hidden=&quot;true&quot; data-content=&quot;+&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;&#39;a&#39;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -791,11 +745,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -819,6 +768,10 @@
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -893,11 +846,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -921,6 +869,10 @@
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk8 { color: #CE9178; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -932,17 +884,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container oceanic-plus&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt;/**&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;mtk13 mtki&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk20 mtki&quot;&gt;cache&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;mtk13 mtki&quot;&gt;param&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;mtk6 mtki&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk20 mtki&quot;&gt;key&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -1018,11 +960,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1049,6 +986,10 @@
   .oceanic-plus .mtk1 { color: #CDD3DEFF; }
   .oceanic-plus .mtk9 { color: #6699CC; }
   .oceanic-plus .mtk4 { color: #F99157; }
+  .oceanic-plus .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -1127,11 +1068,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1158,6 +1094,10 @@
   .oceanic-plus .mtk1 { color: #CDD3DEFF; }
   .oceanic-plus .mtk9 { color: #6699CC; }
   .oceanic-plus .mtk4 { color: #F99157; }
+  .oceanic-plus .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -1169,17 +1109,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container grvsc-has-line-highlighting default-dark&quot; data-language=&quot;ts&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line grvsc-line-highlighted&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;; &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4&quot;&gt;const&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;z&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; = &lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
@@ -1263,11 +1193,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1294,6 +1219,10 @@
   .default-dark .mtk11 { color: #DCDCAA; }
   .default-dark .mtk10 { color: #4EC9B0; }
   .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -1380,11 +1309,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1411,6 +1335,10 @@
   .default-dark .mtk11 { color: #DCDCAA; }
   .default-dark .mtk10 { color: #4EC9B0; }
   .default-dark .mtk15 { color: #C586C0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -1422,17 +1350,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;h1&gt;Inline Code&lt;/h1&gt;
 &lt;p&gt;Lorem &lt;code&gt;ipsum&lt;/code&gt;, and &lt;code class=&quot;my-inline-code default-light&quot; data-language=&quot;css&quot; data-index=&quot;0&quot;&gt;&lt;span class=&quot;mtk11&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mtk11&quot;&gt;grvsc-container&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk6&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;my-inline-code default-light&quot; data-language=&quot;ts&quot; data-index=&quot;1&quot;&gt;&lt;span class=&quot;mtk1&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk9&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk9&quot;&gt;boolean&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk4&quot;&gt;=&gt;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/p&gt;
@@ -1505,11 +1423,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1536,6 +1449,10 @@
   .default-light .mtk9 { color: #267F99; }
   .default-light .mtk4 { color: #0000FF; }
   .default-light .mtk17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -1611,11 +1528,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1642,6 +1554,10 @@
   .default-light .mtk9 { color: #267F99; }
   .default-light .mtk4 { color: #0000FF; }
   .default-light .mtk17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -1653,17 +1569,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;h1&gt;Inline Code&lt;/h1&gt;
 &lt;p&gt;Lorem &lt;code&gt;ipsum&lt;/code&gt;, and &lt;code class=&quot;my-inline-code abyss&quot; data-language=&quot;css&quot; data-index=&quot;0&quot;&gt;&lt;span class=&quot;mtk6&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mtk6&quot;&gt;grvsc-container&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15 mtki&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;my-inline-code abyss&quot; data-language=&quot;ts&quot; data-index=&quot;1&quot;&gt;&lt;span class=&quot;mtk1&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mtk19 mtki&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15 mtki&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk19 mtki&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mtk7&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15 mtki&quot;&gt;boolean&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15 mtki&quot;&gt;=&gt;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/p&gt;
@@ -1736,11 +1642,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1762,6 +1663,10 @@
   .abyss .mtk15 { color: #9966B8; }
   .abyss .mtk19 { color: #2277FF; }
   .abyss .mtk7 { color: #225588; }
+  .abyss .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
   .default-light {
     background-color: #FFFFFF;
     color: #000000;
@@ -1769,6 +1674,10 @@
   .default-light .grvsc-t7UkM5-17 { color: #A31515; }
   .default-light .grvsc-t7UkM5-4 { color: #0000FF; }
   .default-light .grvsc-t7UkM5-12 { color: #001080; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
   
   /* Default Dark+ */
   @media (prefers-color-scheme: dark) {
@@ -1779,6 +1688,10 @@
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-8 { color: #CE9178; }
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-4 { color: #569CD6; }
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-12 { color: #9CDCFE; }
+    .grvsc-mm-tYvMB2 .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+    }
   }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
@@ -1855,11 +1768,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -1881,6 +1789,10 @@
   .abyss .mtk15 { color: #9966B8; }
   .abyss .mtk19 { color: #2277FF; }
   .abyss .mtk7 { color: #225588; }
+  .abyss .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
   .default-light {
     background-color: #FFFFFF;
     color: #000000;
@@ -1888,6 +1800,10 @@
   .default-light .grvsc-t7UkM5-17 { color: #A31515; }
   .default-light .grvsc-t7UkM5-4 { color: #0000FF; }
   .default-light .grvsc-t7UkM5-12 { color: #001080; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
   
   /* Default Dark+ */
   @media (prefers-color-scheme: dark) {
@@ -1898,6 +1814,10 @@
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-8 { color: #CE9178; }
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-4 { color: #569CD6; }
     .grvsc-mm-tYvMB2 .grvsc-tYvMB2-12 { color: #9CDCFE; }
+    .grvsc-mm-tYvMB2 .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+    }
   }
 &lt;/style&gt;</code></div>
     </div>
@@ -1910,17 +1830,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;h1&gt;Inline Code&lt;/h1&gt;
 &lt;p&gt;Lorem &lt;code&gt;ipsum&lt;/code&gt;, and &lt;code class=&quot;default-light&quot; data-language=&quot;css&quot; data-index=&quot;0&quot;&gt;&lt;span class=&quot;mtk11&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mtk11&quot;&gt;grvsc-container&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk6&quot;&gt;display&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;block&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;&lt;code class=&quot;default-light&quot; data-language=&quot;ts&quot; data-index=&quot;1&quot;&gt;&lt;span class=&quot;mtk1&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk9&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk9&quot;&gt;boolean&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk4&quot;&gt;=&gt;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/p&gt;
@@ -1993,11 +1903,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2024,6 +1929,10 @@
   .default-light .mtk9 { color: #267F99; }
   .default-light .mtk4 { color: #0000FF; }
   .default-light .mtk17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -2099,11 +2008,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2130,6 +2034,10 @@
   .default-light .mtk9 { color: #267F99; }
   .default-light .mtk4 { color: #0000FF; }
   .default-light .mtk17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -2141,17 +2049,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;h1&gt;Line numbers&lt;/h1&gt;
 &lt;p&gt;With code fence info:&lt;/p&gt;
 &lt;pre class=&quot;grvsc-container default-dark&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-gutter-pad&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-gutter grvsc-line-number&quot; aria-hidden=&quot;true&quot; data-content=&quot;1&quot;&gt;&lt;/span&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk15&quot;&gt;import&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk4&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15&quot;&gt;as&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk12&quot;&gt;React&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk15&quot;&gt;from&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk8&quot;&gt;&#39;react&#39;&lt;/span&gt;&lt;span class=&quot;mtk1&quot;&gt;;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -2250,11 +2148,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2281,6 +2174,10 @@
   .default-dark .mtk11 { color: #DCDCAA; }
   .default-dark .mtk3 { color: #6A9955; }
   .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -2382,11 +2279,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2413,6 +2305,10 @@
   .default-dark .mtk11 { color: #DCDCAA; }
   .default-dark .mtk3 { color: #6A9955; }
   .default-dark .mtk10 { color: #4EC9B0; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -2424,17 +2320,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container synthwave-vscode&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt;/**&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk9 mtki&quot;&gt;@param&lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk8 mtki&quot;&gt;{*}&lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt;cache&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk9 mtki&quot;&gt;@param&lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk8 mtki&quot;&gt;{string}&lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk3 mtki&quot;&gt;key&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -2510,11 +2396,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2537,6 +2418,10 @@
   .synthwave-vscode .mtk3 { color: #FF7EDB; }
   .synthwave-vscode .mtk1 { color: #FFFFFF; }
   .synthwave-vscode .mtk6 { color: #36F9F6; }
+  .synthwave-vscode .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -2615,11 +2500,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2642,6 +2522,10 @@
   .synthwave-vscode .mtk3 { color: #FF7EDB; }
   .synthwave-vscode .mtk1 { color: #FFFFFF; }
   .synthwave-vscode .mtk6 { color: #36F9F6; }
+  .synthwave-vscode .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -2653,17 +2537,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container default-light grvsc-ps-tYvMB2&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;grvsc-t7UkM5-9 grvsc-tYvMB2-10&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;grvsc-t7UkM5-1 grvsc-tYvMB2-1&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;grvsc-t7UkM5-10 grvsc-tYvMB2-11&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;grvsc-t7UkM5-1 grvsc-tYvMB2-1&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;grvsc-t7UkM5-17 grvsc-tYvMB2-8&quot;&gt;&quot;Hello, world!&quot;&lt;/span&gt;&lt;span class=&quot;grvsc-t7UkM5-1 grvsc-tYvMB2-1&quot;&gt;);&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;style class=&quot;grvsc-styles&quot;&gt;
   .grvsc-container {
@@ -2732,11 +2606,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2759,6 +2628,10 @@
   .default-light .grvsc-t7UkM5-1 { color: #000000; }
   .default-light .grvsc-t7UkM5-10 { color: #795E26; }
   .default-light .grvsc-t7UkM5-17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
   .dark .grvsc-ps-tYvMB2 {
     background-color: #1E1E1E;
     color: #D4D4D4;
@@ -2767,6 +2640,10 @@
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-1 { color: #D4D4D4; }
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-11 { color: #DCDCAA; }
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-8 { color: #CE9178; }
+  .dark .grvsc-ps-tYvMB2 .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -2838,11 +2715,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -2865,6 +2737,10 @@
   .default-light .grvsc-t7UkM5-1 { color: #000000; }
   .default-light .grvsc-t7UkM5-10 { color: #795E26; }
   .default-light .grvsc-t7UkM5-17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.5));
+  }
   .dark .grvsc-ps-tYvMB2 {
     background-color: #1E1E1E;
     color: #D4D4D4;
@@ -2873,6 +2749,10 @@
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-1 { color: #D4D4D4; }
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-11 { color: #DCDCAA; }
   .dark .grvsc-ps-tYvMB2 .grvsc-tYvMB2-8 { color: #CE9178; }
+  .dark .grvsc-ps-tYvMB2 .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>
@@ -2884,17 +2764,7 @@
       <div class="output">
   <iframe srcdoc="
     &lt;html&gt;
-      &lt;head&gt;
-        &lt;style&gt;
-          .grvsc-container {
-            --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-            --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-            --grvsc-line-highlighted-border-width: 2px; /* default: 2px */
-            --grvsc-line-diff-add-background-color: rgba(0, 255, 0, 0.2); /* default: transparent */
-            --grvsc-line-diff-del-background-color: rgba(255, 0, 0, 0.2); /* default: transparent */
-          }
-        &lt;/style&gt;
-      &lt;/head&gt;
+      &lt;head&gt;&lt;/head&gt;
       &lt;body style=&quot;padding: 0; margin: 0&quot;&gt;&lt;pre class=&quot;grvsc-container one-dark-pro&quot; data-language=&quot;js&quot; data-index=&quot;0&quot;&gt;&lt;code class=&quot;grvsc-code&quot;&gt;&lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt;/**&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk10 mtki&quot;&gt;@param&lt;/span&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk11 mtki&quot;&gt;{*}&lt;/span&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt;cache&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
 &lt;span class=&quot;grvsc-line&quot;&gt;&lt;span class=&quot;grvsc-source&quot;&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; * &lt;/span&gt;&lt;span class=&quot;mtk10 mtki&quot;&gt;@param&lt;/span&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk11 mtki&quot;&gt;{string}&lt;/span&gt;&lt;span class=&quot;mtk5 mtki&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mtk4 mtki&quot;&gt;key&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;
@@ -2970,11 +2840,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -3000,6 +2865,10 @@
   .one-dark-pro .mtk4 { color: #E06C75; }
   .one-dark-pro .mtk1 { color: #ABB2BF; }
   .one-dark-pro .mtk3 { color: #61AFEF; }
+  .one-dark-pro .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;&lt;/body&gt;
     &lt;/html&gt;
   "></iframe></div>
@@ -3078,11 +2947,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -3108,6 +2972,10 @@
   .one-dark-pro .mtk4 { color: #E06C75; }
   .one-dark-pro .mtk1 { color: #ABB2BF; }
   .one-dark-pro .mtk3 { color: #61AFEF; }
+  .one-dark-pro .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 &lt;/style&gt;</code></div>
     </div>
   </div>

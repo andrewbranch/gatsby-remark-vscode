@@ -76,11 +76,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -105,4 +100,8 @@
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk8 { color: #CE9178; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>
