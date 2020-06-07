@@ -77,7 +77,7 @@ async function getFromCache(type, cache, source, context, stop) {
       type: 'MarkdownRemark',
       firstOnly: true,
     });
-    return getFromCache(cache, source, context, true);
+    return getFromCache(type, cache, source, context, true);
   }
   if (!childNodes) {
     logger.error(
