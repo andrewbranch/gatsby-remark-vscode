@@ -60,9 +60,11 @@ function getExtensionPackageJson(identifier, extensionDir) {
  */
 function getLanguageNames(languageRegistration) {
   return uniq(
-    [languageRegistration.id, ...(languageRegistration.aliases || []), ...(languageRegistration.extensions || [])].map(
-      name => name.toLowerCase().replace(/[^a-z0-9_+#-]/g, '')
-    )
+    [
+      languageRegistration.id,
+      ...(languageRegistration.aliases || []),
+      ...(languageRegistration.extensions || [])
+    ].map(name => name.toLowerCase().replace(/[^a-z0-9_+#-]/g, ''))
   );
 }
 

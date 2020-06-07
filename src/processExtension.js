@@ -149,10 +149,12 @@ async function getExtensionPackageJsonPath(specifier, host) {
  * @param {string} specifier
  */
 function requireResolveExtension(specifier) {
-  return tryResolve(require)
-    || tryResolve(requireMain)
-    || tryResolve(requireCwd)
-    || require.resolve(path.join(specifier, 'package.json')); // If none work, throw the best error stack
+  return (
+    tryResolve(require) ||
+    tryResolve(requireMain) ||
+    tryResolve(requireCwd) ||
+    require.resolve(path.join(specifier, 'package.json'))
+  ); // If none work, throw the best error stack
 
   /** @param {NodeRequire} req */
   function tryResolve(req) {
