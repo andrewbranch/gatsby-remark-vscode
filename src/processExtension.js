@@ -1,5 +1,6 @@
 // @ts-check
 const path = require('path');
+const process = require('process');
 const logger = require('loglevel');
 const {
   getLanguageNames,
@@ -13,6 +14,7 @@ const {
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 const requireMain = createRequire(require.main.filename);
+const requireCwd = createRequire(path.join(process.cwd(), 'index.js'));
 
 /**
  * @param {string} packageJsonPath
@@ -105,7 +107,7 @@ async function mergeCache(cache, key, value) {
  * @param {Host} host
  */
 async function getExtensionPackageJsonPath(specifier, host) {
-  const absolute = path.isAbsolute(specifier) ? specifier : requireMain.resolve(path.join(specifier, 'package.json'));
+  const absolute = path.isAbsolute(specifier) ? specifier : requireResolveExtension(specifier);
   const ext = path.extname(absolute);
   if (ext.toLowerCase() === '.vsix' || ext.toLowerCase() === '.zip') {
     const outDir = path.join(unzipDir, path.basename(absolute, ext));
@@ -133,6 +135,33 @@ async function getExtensionPackageJsonPath(specifier, host) {
           return result;
         }
       }
+    }
+  }
+}
+
+/**
+ * We want to resolve the extension from the context of the user’s gatsby-config,
+ * but this turns out to be difficult. Ideally, gatsby and this plugin are installed
+ * in the same node_modules directory as the extension, but gatsby could be invoked
+ * globally, and this plugin could be npm linked. If both of those things happen, we
+ * can also try resolving from the current working directory. One of these will
+ * probably always work.
+ * @param {string} specifier
+ */
+function requireResolveExtension(specifier) {
+  return (
+    tryResolve(require) ||
+    tryResolve(requireMain) ||
+    tryResolve(requireCwd) ||
+    require.resolve(path.join(specifier, 'package.json'))
+  ); // If none work, throw the best error stack
+
+  /** @param {NodeRequire} req */
+  function tryResolve(req) {
+    try {
+      return req.resolve(path.join(specifier, 'package.json'));
+    } catch (_) {
+      return undefined;
     }
   }
 }

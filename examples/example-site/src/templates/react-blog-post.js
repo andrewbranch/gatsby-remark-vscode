@@ -74,7 +74,6 @@ class BlogPostTemplate extends React.Component {
   }).Compiler;
 
   render() {
-    window.props = this.props
     const post = this.props.data.markdownRemark
     const siteTitle = this.props.data.site.siteMetadata.title
     const { previous, next } = this.props.pageContext
