@@ -17,8 +17,8 @@ const underlineDeclarations = [
 function createThemeCSSRules(theme, settings, tokenClassNames, replaceColor) {
   const conditions = groupConditions(theme.conditions);
   const isDark = isDarkTheme(settings);
-  const lineHighlightBackgroundDefault = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
-  const lineHighlightBorderDefault = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)';
+  const lineHighlightBackgroundDefault = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+  const lineHighlightBorderDefault = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.2)';
   /** @type {grvsc.CSSElement[]} */
   const elements = [];
   const containerStyles = getStylesFromThemeSettings(settings);
