@@ -357,6 +357,12 @@ See [`inlineCode`](#inlinecode) in the options reference for more API details.
 
 `gatsby-remark-vscode` offers the same line-range-after-language-name strategy of highlighting or emphasizing lines as [gatsby-remark-prismjs](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-remark-prismjs):
 
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
+
 ````md
 ```js{1,3-5}
 this.isLine(1); // highlighted
@@ -367,7 +373,23 @@ this.isLine(5); // highlighted
 ```
 ````
 
+</td>
+<td>
+
+![][line-highlighting-meta]
+
+</td>
+</tr>
+</tbody>
+</table>
+
 Comment directives are also supported:
+
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
 
 ````md
 ```js
@@ -387,22 +409,23 @@ const zero = [0, 1, 2, 3, 4, 5]
 ```
 ````
 
-You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
+</td>
+<td>
+
+![][line-highlighting-comment]
+
+</td>
+</tr>
+</tbody>
+</table>
+
+You can customize the default background color and left border width and color for the highlighted lines by setting CSS variables:
 
 ```css
 :root {
-  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-  --grvsc-line-highlighted-border-width: 2px; /* default: 4px */
-}
-```
-
-or by setting custom styles on the lines:
-
-```css
-.grvsc-container .grvsc-line-highlighted {
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 2px 0 0 0 rgba(255, 255, 255, 0.5);
+  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2);
+  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5);
+  --grvsc-line-highlighted-border-width: 2px;
 }
 ```
 
@@ -550,3 +573,5 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 [templates-own]: https://user-images.githubusercontent.com/3277153/56853802-5e847e00-68c8-11e9-8468-dedcd8bcab78.png
 [solidity-others]: https://user-images.githubusercontent.com/3277153/56853799-5e847e00-68c8-11e9-8895-535d9e0d555c.png
 [solidity-own]: https://user-images.githubusercontent.com/3277153/56853800-5e847e00-68c8-11e9-9c83-5e76146d5e46.png
+[line-highlighting-meta]: https://user-images.githubusercontent.com/3277153/86545712-6fc21500-bee5-11ea-8a83-71d04f595ef4.png
+[line-highlighting-comment]: https://user-images.githubusercontent.com/3277153/86545710-6e90e800-bee5-11ea-9f4d-33278d9312d7.png
