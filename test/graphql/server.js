@@ -1,6 +1,7 @@
 // @ts-check
 const path = require('path');
 const { fork } = require('child_process');
+const rimraf = require('rimraf');
 
 /** @returns {Promise<import('child_process').ChildProcess>} */
 function createServer({
@@ -9,6 +10,7 @@ function createServer({
   return new Promise((resolve, reject) => {
     try {
       let settled = false;
+      rimraf.sync(path.resolve(__dirname, 'site/.cache'));
       const proc = fork(require.resolve('gatsby-cli'), ['develop', '-p', port.toString()], {
         cwd: path.resolve(__dirname, 'site'),
         stdio: 'pipe',
