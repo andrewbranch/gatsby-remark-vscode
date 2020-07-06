@@ -70,11 +70,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -101,4 +96,8 @@
   .default-light .mtk9 { color: #267F99; }
   .default-light .mtk4 { color: #0000FF; }
   .default-light .mtk17 { color: #A31515; }
+  .default-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.05));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.2));
+  }
 </style>

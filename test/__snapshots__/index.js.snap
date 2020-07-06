@@ -14122,6 +14122,1864 @@ function SomeComponent(props) { // L29
 }
 `;
 
+exports[`GraphQL resolvers luminance-detection 1`] = `
+Object {
+  "data": Object {
+    "markdownRemark": Object {
+      "grvscCodeBlocks": Array [
+        Object {
+          "codeClassName": "grvsc-code",
+          "defaultTheme": Object {
+            "conditions": Array [
+              Object {
+                "condition": "default",
+                "value": null,
+              },
+            ],
+            "identifier": "Default Dark+",
+          },
+          "html": "<pre class=\\"grvsc-container grvsc-has-line-highlighting default-dark\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk10\\">module</span><span class=\\"mtk1\\">.</span><span class=\\"mtk10\\">exports</span><span class=\\"mtk1\\"> = {</span></span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk11\\">theme</span><span class=\\"mtk12\\">:</span><span class=\\"mtk1\\"> ({ </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\"> }) </span><span class=\\"mtk4\\">=&gt;</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\">.</span><span class=\\"mtk12\\">light</span><span class=\\"mtk1\\"> ? </span><span class=\\"mtk8\\">&#39;Default Light+&#39;</span><span class=\\"mtk1\\"> : </span><span class=\\"mtk8\\">&#39;Default Dark+&#39;</span><span class=\\"mtk1\\"> </span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">};</span></span></span></code></pre>",
+          "index": 0,
+          "language": "js",
+          "meta": Object {},
+          "preClassName": "grvsc-container grvsc-has-line-highlighting default-dark",
+          "text": "module.exports = {
+  theme: ({ parsedOptions }) => parsedOptions.light ? 'Default Light+' : 'Default Dark+' // highlight-line
+};",
+          "tokenizedLines": Array [
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk10\\">module</span><span class=\\"mtk1\\">.</span><span class=\\"mtk10\\">exports</span><span class=\\"mtk1\\"> = {</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "module.exports = {",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk10",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk10",
+                    "color": "#4EC9B0",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 6,
+                  "html": "<span class=\\"mtk10\\">module</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "support.type.object.module.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "module",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 7,
+                  "html": "<span class=\\"mtk1\\">.</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "punctuation.accessor.js",
+                  ],
+                  "startIndex": 6,
+                  "text": ".",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk10",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk10",
+                    "color": "#4EC9B0",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 14,
+                  "html": "<span class=\\"mtk10\\">exports</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "support.type.object.module.js",
+                  ],
+                  "startIndex": 7,
+                  "text": "exports",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 15,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                  ],
+                  "startIndex": 14,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 16,
+                  "html": "<span class=\\"mtk1\\">=</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "keyword.operator.assignment.js",
+                  ],
+                  "startIndex": 15,
+                  "text": "=",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 17,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                  ],
+                  "startIndex": 16,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 18,
+                  "html": "<span class=\\"mtk1\\">{</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "punctuation.definition.block.js",
+                  ],
+                  "startIndex": 17,
+                  "text": "{",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {
+                "class": "grvsc-line-highlighted",
+              },
+              "className": "grvsc-line grvsc-line-highlighted",
+              "data": Object {
+                "isHighlighted": true,
+              },
+              "diff": null,
+              "html": "<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk11\\">theme</span><span class=\\"mtk12\\">:</span><span class=\\"mtk1\\"> ({ </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\"> }) </span><span class=\\"mtk4\\">=&gt;</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\">.</span><span class=\\"mtk12\\">light</span><span class=\\"mtk1\\"> ? </span><span class=\\"mtk8\\">&#39;Default Light+&#39;</span><span class=\\"mtk1\\"> : </span><span class=\\"mtk8\\">&#39;Default Dark+&#39;</span><span class=\\"mtk1\\"> </span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "  theme: ({ parsedOptions }) => parsedOptions.light ? 'Default Light+' : 'Default Dark+' ",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk1\\">  </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "  ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk11",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk11",
+                    "color": "#DCDCAA",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 7,
+                  "html": "<span class=\\"mtk11\\">theme</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.object-literal.key.js",
+                    "entity.name.function.js",
+                  ],
+                  "startIndex": 2,
+                  "text": "theme",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#9CDCFE",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 8,
+                  "html": "<span class=\\"mtk12\\">:</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.object-literal.key.js",
+                    "punctuation.separator.key-value.js",
+                  ],
+                  "startIndex": 7,
+                  "text": ":",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 9,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 8,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 10,
+                  "html": "<span class=\\"mtk1\\">(</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "punctuation.definition.parameters.begin.js",
+                  ],
+                  "startIndex": 9,
+                  "text": "(",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 11,
+                  "html": "<span class=\\"mtk1\\">{</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "punctuation.definition.binding-pattern.object.js",
+                  ],
+                  "startIndex": 10,
+                  "text": "{",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 12,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                  ],
+                  "startIndex": 11,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#9CDCFE",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 25,
+                  "html": "<span class=\\"mtk12\\">parsedOptions</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "variable.parameter.js",
+                  ],
+                  "startIndex": 12,
+                  "text": "parsedOptions",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 26,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                  ],
+                  "startIndex": 25,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 27,
+                  "html": "<span class=\\"mtk1\\">}</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "punctuation.definition.binding-pattern.object.js",
+                  ],
+                  "startIndex": 26,
+                  "text": "}",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 28,
+                  "html": "<span class=\\"mtk1\\">)</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "punctuation.definition.parameters.end.js",
+                  ],
+                  "startIndex": 27,
+                  "text": ")",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 29,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 28,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk4",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk4",
+                    "color": "#569CD6",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 31,
+                  "html": "<span class=\\"mtk4\\">=&gt;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "storage.type.function.arrow.js",
+                  ],
+                  "startIndex": 29,
+                  "text": "=>",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 32,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 31,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#9CDCFE",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 45,
+                  "html": "<span class=\\"mtk12\\">parsedOptions</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "variable.other.object.js",
+                  ],
+                  "startIndex": 32,
+                  "text": "parsedOptions",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 46,
+                  "html": "<span class=\\"mtk1\\">.</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "punctuation.accessor.js",
+                  ],
+                  "startIndex": 45,
+                  "text": ".",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#9CDCFE",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 51,
+                  "html": "<span class=\\"mtk12\\">light</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "variable.other.property.js",
+                  ],
+                  "startIndex": 46,
+                  "text": "light",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 52,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 51,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 53,
+                  "html": "<span class=\\"mtk1\\">?</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "keyword.operator.ternary.js",
+                  ],
+                  "startIndex": 52,
+                  "text": "?",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 54,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 53,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 55,
+                  "html": "<span class=\\"mtk8\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.begin.js",
+                  ],
+                  "startIndex": 54,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 69,
+                  "html": "<span class=\\"mtk8\\">Default Light+</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                  ],
+                  "startIndex": 55,
+                  "text": "Default Light+",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 70,
+                  "html": "<span class=\\"mtk8\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.end.js",
+                  ],
+                  "startIndex": 69,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 71,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 70,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 72,
+                  "html": "<span class=\\"mtk1\\">:</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "keyword.operator.ternary.js",
+                  ],
+                  "startIndex": 71,
+                  "text": ":",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 73,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 72,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 74,
+                  "html": "<span class=\\"mtk8\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.begin.js",
+                  ],
+                  "startIndex": 73,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 87,
+                  "html": "<span class=\\"mtk8\\">Default Dark+</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                  ],
+                  "startIndex": 74,
+                  "text": "Default Dark+",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk8",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk8",
+                    "color": "#CE9178",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 88,
+                  "html": "<span class=\\"mtk8\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.end.js",
+                  ],
+                  "startIndex": 87,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 90,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 88,
+                  "text": " ",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">};</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "};",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 1,
+                  "html": "<span class=\\"mtk1\\">}</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "punctuation.definition.block.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "}",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk1\\">;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "punctuation.terminator.statement.js",
+                  ],
+                  "startIndex": 1,
+                  "text": ";",
+                },
+              ],
+            },
+          ],
+        },
+        Object {
+          "codeClassName": "grvsc-code",
+          "defaultTheme": Object {
+            "conditions": Array [
+              Object {
+                "condition": "default",
+                "value": null,
+              },
+            ],
+            "identifier": "Default Light+",
+          },
+          "html": "<pre class=\\"grvsc-container grvsc-has-line-highlighting default-light\\" data-language=\\"js\\" data-index=\\"1\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk9\\">module</span><span class=\\"mtk1\\">.</span><span class=\\"mtk9\\">exports</span><span class=\\"mtk1\\"> = {</span></span></span>
+<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk10\\">theme</span><span class=\\"mtk12\\">:</span><span class=\\"mtk1\\"> ({ </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\"> }) </span><span class=\\"mtk4\\">=&gt;</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\">.</span><span class=\\"mtk12\\">light</span><span class=\\"mtk1\\"> ? </span><span class=\\"mtk17\\">&#39;Default Light+&#39;</span><span class=\\"mtk1\\"> : </span><span class=\\"mtk17\\">&#39;Default Dark+&#39;</span><span class=\\"mtk1\\"> </span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">};</span></span></span></code></pre>",
+          "index": 1,
+          "language": "js",
+          "meta": Object {
+            "light": true,
+          },
+          "preClassName": "grvsc-container grvsc-has-line-highlighting default-light",
+          "text": "module.exports = {
+  theme: ({ parsedOptions }) => parsedOptions.light ? 'Default Light+' : 'Default Dark+' // highlight-line
+};",
+          "tokenizedLines": Array [
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk9\\">module</span><span class=\\"mtk1\\">.</span><span class=\\"mtk9\\">exports</span><span class=\\"mtk1\\"> = {</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "module.exports = {",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk9",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk9",
+                    "color": "#267F99",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 6,
+                  "html": "<span class=\\"mtk9\\">module</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "support.type.object.module.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "module",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 7,
+                  "html": "<span class=\\"mtk1\\">.</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "punctuation.accessor.js",
+                  ],
+                  "startIndex": 6,
+                  "text": ".",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk9",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk9",
+                    "color": "#267F99",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 14,
+                  "html": "<span class=\\"mtk9\\">exports</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "support.type.object.module.js",
+                  ],
+                  "startIndex": 7,
+                  "text": "exports",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 15,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                  ],
+                  "startIndex": 14,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 16,
+                  "html": "<span class=\\"mtk1\\">=</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "keyword.operator.assignment.js",
+                  ],
+                  "startIndex": 15,
+                  "text": "=",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 17,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                  ],
+                  "startIndex": 16,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 18,
+                  "html": "<span class=\\"mtk1\\">{</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "punctuation.definition.block.js",
+                  ],
+                  "startIndex": 17,
+                  "text": "{",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {
+                "class": "grvsc-line-highlighted",
+              },
+              "className": "grvsc-line grvsc-line-highlighted",
+              "data": Object {
+                "isHighlighted": true,
+              },
+              "diff": null,
+              "html": "<span class=\\"grvsc-line grvsc-line-highlighted\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk10\\">theme</span><span class=\\"mtk12\\">:</span><span class=\\"mtk1\\"> ({ </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\"> }) </span><span class=\\"mtk4\\">=&gt;</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">parsedOptions</span><span class=\\"mtk1\\">.</span><span class=\\"mtk12\\">light</span><span class=\\"mtk1\\"> ? </span><span class=\\"mtk17\\">&#39;Default Light+&#39;</span><span class=\\"mtk1\\"> : </span><span class=\\"mtk17\\">&#39;Default Dark+&#39;</span><span class=\\"mtk1\\"> </span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "  theme: ({ parsedOptions }) => parsedOptions.light ? 'Default Light+' : 'Default Dark+' ",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk1\\">  </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "  ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk10",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk10",
+                    "color": "#795E26",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 7,
+                  "html": "<span class=\\"mtk10\\">theme</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.object-literal.key.js",
+                    "entity.name.function.js",
+                  ],
+                  "startIndex": 2,
+                  "text": "theme",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#001080",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 8,
+                  "html": "<span class=\\"mtk12\\">:</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.object-literal.key.js",
+                    "punctuation.separator.key-value.js",
+                  ],
+                  "startIndex": 7,
+                  "text": ":",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 9,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 8,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 10,
+                  "html": "<span class=\\"mtk1\\">(</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "punctuation.definition.parameters.begin.js",
+                  ],
+                  "startIndex": 9,
+                  "text": "(",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 11,
+                  "html": "<span class=\\"mtk1\\">{</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "punctuation.definition.binding-pattern.object.js",
+                  ],
+                  "startIndex": 10,
+                  "text": "{",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 12,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                  ],
+                  "startIndex": 11,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#001080",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 25,
+                  "html": "<span class=\\"mtk12\\">parsedOptions</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "variable.parameter.js",
+                  ],
+                  "startIndex": 12,
+                  "text": "parsedOptions",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 26,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                  ],
+                  "startIndex": 25,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 27,
+                  "html": "<span class=\\"mtk1\\">}</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "meta.parameter.object-binding-pattern.js",
+                    "punctuation.definition.binding-pattern.object.js",
+                  ],
+                  "startIndex": 26,
+                  "text": "}",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 28,
+                  "html": "<span class=\\"mtk1\\">)</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "meta.parameters.js",
+                    "punctuation.definition.parameters.end.js",
+                  ],
+                  "startIndex": 27,
+                  "text": ")",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 29,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 28,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk4",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk4",
+                    "color": "#0000FF",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 31,
+                  "html": "<span class=\\"mtk4\\">=&gt;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                    "storage.type.function.arrow.js",
+                  ],
+                  "startIndex": 29,
+                  "text": "=>",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 32,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "meta.arrow.js",
+                  ],
+                  "startIndex": 31,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#001080",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 45,
+                  "html": "<span class=\\"mtk12\\">parsedOptions</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "variable.other.object.js",
+                  ],
+                  "startIndex": 32,
+                  "text": "parsedOptions",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 46,
+                  "html": "<span class=\\"mtk1\\">.</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "punctuation.accessor.js",
+                  ],
+                  "startIndex": 45,
+                  "text": ".",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk12",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk12",
+                    "color": "#001080",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 51,
+                  "html": "<span class=\\"mtk12\\">light</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "variable.other.property.js",
+                  ],
+                  "startIndex": 46,
+                  "text": "light",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 52,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 51,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 53,
+                  "html": "<span class=\\"mtk1\\">?</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "keyword.operator.ternary.js",
+                  ],
+                  "startIndex": 52,
+                  "text": "?",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 54,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 53,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 55,
+                  "html": "<span class=\\"mtk17\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.begin.js",
+                  ],
+                  "startIndex": 54,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 69,
+                  "html": "<span class=\\"mtk17\\">Default Light+</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                  ],
+                  "startIndex": 55,
+                  "text": "Default Light+",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 70,
+                  "html": "<span class=\\"mtk17\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.end.js",
+                  ],
+                  "startIndex": 69,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 71,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 70,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 72,
+                  "html": "<span class=\\"mtk1\\">:</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "keyword.operator.ternary.js",
+                  ],
+                  "startIndex": 71,
+                  "text": ":",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 73,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 72,
+                  "text": " ",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 74,
+                  "html": "<span class=\\"mtk17\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.begin.js",
+                  ],
+                  "startIndex": 73,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 87,
+                  "html": "<span class=\\"mtk17\\">Default Dark+</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                  ],
+                  "startIndex": 74,
+                  "text": "Default Dark+",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk17",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk17",
+                    "color": "#A31515",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 88,
+                  "html": "<span class=\\"mtk17\\">&#39;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                    "string.quoted.single.js",
+                    "punctuation.definition.string.end.js",
+                  ],
+                  "startIndex": 87,
+                  "text": "'",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 90,
+                  "html": "<span class=\\"mtk1\\"> </span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "meta.object.member.js",
+                  ],
+                  "startIndex": 88,
+                  "text": " ",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">};</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "};",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 1,
+                  "html": "<span class=\\"mtk1\\">}</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "meta.objectliteral.js",
+                    "punctuation.definition.block.js",
+                  ],
+                  "startIndex": 0,
+                  "text": "}",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#000000",
+                    "italic": false,
+                    "themeIdentifier": "Default Light+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk1\\">;</span>",
+                  "scopes": Array [
+                    "source.js",
+                    "punctuation.terminator.statement.js",
+                  ],
+                  "startIndex": 1,
+                  "text": ";",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      "grvscCodeSpans": Array [],
+    },
+  },
+}
+`;
+
 exports[`GraphQL resolvers npm-extension 1`] = `
 Object {
   "data": Object {
@@ -18280,6 +20138,10 @@ Object {
   .default-dark .mtk12 { color: var(--color-9CDCFE); }
   .default-dark .mtk7 { color: var(--color-B5CEA8); }
   .default-dark .mtk3 { color: var(--color-6A9955); }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18317,6 +20179,10 @@ Object {
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18354,6 +20220,10 @@ Object {
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18390,6 +20260,10 @@ Object {
   .default-dark .mtk1 { color: #D4D4D4; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18421,6 +20295,10 @@ Object {
   .default-dark {
     background-color: #1E1E1E;
     color: #D4D4D4;
+  }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
   }
 </style>",
     },
@@ -18459,6 +20337,10 @@ Object {
   .default-dark .mtk12 { color: #9CDCFE; }
   .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18491,6 +20373,10 @@ Object {
     background-color: #1E1E1E;
     color: #D4D4D4;
   }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],
@@ -18522,6 +20408,10 @@ Object {
   .default-dark {
     background-color: #1E1E1E;
     color: #D4D4D4;
+  }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
   }
 </style>",
     },
@@ -18560,6 +20450,10 @@ Object {
   .solarized-light .grvsc-tiaGIi-8 { color: #859900; }
   .solarized-light .grvsc-tiaGIi-6 { color: #D33682; }
   .solarized-light .grvsc-tiaGIi-3 { color: #93A1A1; }
+  .solarized-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.05));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.2));
+  }
   
   /* Monokai Dimmed */
   @media (prefers-color-scheme: dark) {
@@ -18572,6 +20466,10 @@ Object {
     .grvsc-mm-tuw09S .grvsc-tuw09S-3 { color: #6089B4; }
     .grvsc-mm-tuw09S .grvsc-tuw09S-15 { color: #676867; }
     .grvsc-mm-tuw09S .grvsc-tuw09S-4 { color: #9A9B99; }
+    .grvsc-mm-tuw09S .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+    }
   }
   
   /* Quiet Light */
@@ -18583,6 +20481,10 @@ Object {
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-6 { color: #777777; }
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-5 { color: #9C5D27; }
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-3 { color: #AAAAAA; }
+    .grvsc-mm-tZ0ymb .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.05));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.2));
+    }
   }
 </style>",
     },
@@ -18635,6 +20537,10 @@ Object {
   .solarized-light .grvsc-tiaGIi-8 { color: #859900; }
   .solarized-light .grvsc-tiaGIi-6 { color: #D33682; }
   .solarized-light .grvsc-tiaGIi-3 { color: #93A1A1; }
+  .solarized-light .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.05));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.2));
+  }
   
   /* Dark+ (default dark) */
   @media (prefers-color-scheme: dark) {
@@ -18647,6 +20553,10 @@ Object {
     .grvsc-mm-tlfloc .grvsc-tlfloc-12 { color: #9CDCFE; }
     .grvsc-mm-tlfloc .grvsc-tlfloc-7 { color: #B5CEA8; }
     .grvsc-mm-tlfloc .grvsc-tlfloc-3 { color: #6A9955; }
+    .grvsc-mm-tlfloc .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+    }
   }
   
   /* Quiet Light */
@@ -18658,6 +20568,10 @@ Object {
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-6 { color: #777777; }
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-5 { color: #9C5D27; }
     .grvsc-mm-tZ0ymb .grvsc-tZ0ymb-3 { color: #AAAAAA; }
+    .grvsc-mm-tZ0ymb .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(0, 0, 0, 0.05));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(0, 0, 0, 0.2));
+    }
   }
   
   /* Monokai */
@@ -18672,6 +20586,10 @@ Object {
     .grvsc-mm-tsSx3w .grvsc-tsSx3w-7 { color: #F92672; }
     .grvsc-mm-tsSx3w .grvsc-tsSx3w-4 { color: #AE81FF; }
     .grvsc-mm-tsSx3w .grvsc-tsSx3w-3 { color: #75715E; }
+    .grvsc-mm-tsSx3w .grvsc-line-highlighted::before {
+      background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+      box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+    }
   }
 </style>",
     },
@@ -18709,6 +20627,10 @@ Object {
     color: #D4D4D4;
   }
   .default-dark .mtk3 { color: #6A9955; }
+  .default-dark .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>",
     },
   ],

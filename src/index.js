@@ -108,7 +108,8 @@ function createPlugin() {
       const nodeData = /** @type {CodeBlockData | CodeSpanData} */ ({
         node,
         markdownNode,
-        language: languageName
+        language: languageName,
+        parsedOptions: meta
       });
 
       const possibleThemes = await getPossibleThemes(

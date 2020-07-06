@@ -1,5 +1,13 @@
 # Migration Guide
 
+## v2 → v3
+
+### Line highlighting is visible without custom CSS.
+
+Previously, the default line highlight background color was `transparent`, which meant a color had to be set with a CSS variable by the user. The reason for this limitation was that there is no sensible default that works for both light themes and dark themes, as a light highlight would be invisible on white, and a dark highlight would be invisible on black. As of v3, the plugin the luminance of each theme’s background color and selects a translucent white or translucent black highlight color as a default.
+
+This is unlikely to break existing sites, as the CSS variables continue to work as a customization. However, as part of upgrading to v3, you may be able to remove the variables you set if you’re happy with the new defaults. If, for some reason, you were relying on the old behavior of an invisible default, sorry, don’t do that 🤷🏻‍♂️
+
 ## v1 → v2
 
 ### Extensions are no longer downloaded automatically.

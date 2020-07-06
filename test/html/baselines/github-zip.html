@@ -73,11 +73,6 @@
     width: 100%;
   }
   
-  .grvsc-line-highlighted::before {
-    background-color: var(--grvsc-line-highlighted-background-color, transparent);
-    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, transparent);
-  }
-  
   .grvsc-line-diff-add::before {
     background-color: var(--grvsc-line-diff-add-background-color, rgba(0, 255, 60, 0.4));
   }
@@ -104,4 +99,8 @@
   .oceanic-plus .mtk1 { color: #CDD3DEFF; }
   .oceanic-plus .mtk9 { color: #6699CC; }
   .oceanic-plus .mtk4 { color: #F99157; }
+  .oceanic-plus .grvsc-line-highlighted::before {
+    background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
+    box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
+  }
 </style>

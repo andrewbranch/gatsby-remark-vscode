@@ -253,6 +253,97 @@ function loadTheme(themePath) {
   return { settings: [defaultTokenColors, ...tokenColors], resultColors: settings };
 }
 
+/**
+ * @param {Record<string, string>} settings
+ * https://codepen.io/atcb/pen/NWGQzXW?editors=0010
+ */
+function isDarkTheme(settings) {
+  const background = settings['editor.background'] || settings.background;
+  if (!background) return false;
+  const color = parseColor(background);
+  const lightness = perceivedLightness(color);
+  return lightness < 50;
+}
+
+/** @param {string} colorString */
+function parseColor(colorString) {
+  if (colorString[0] === '#') {
+    return parseHexColor(colorString);
+  }
+  if (colorString.startsWith('rgb')) {
+    return parseRGBOrRGBAColor(colorString);
+  }
+}
+
+/** @param {string} colorString */
+function parseHexColor(colorString) {
+  if (colorString.length === 4) {
+    const r = parseHexColorComponent(colorString[1]);
+    const g = parseHexColorComponent(colorString[2]);
+    const b = parseHexColorComponent(colorString[3]);
+    if (r !== false && g !== false && b !== false) {
+      return { r, g, b, a: 1 };
+    }
+  }
+  if (colorString.length === 7 || colorString.length === 9) {
+    const r = parseHexColorComponent(colorString.substr(1, 2));
+    const g = parseHexColorComponent(colorString.substr(3, 2));
+    const b = parseHexColorComponent(colorString.substr(5, 2));
+    const a = colorString.length === 9 ? parseHexColorComponent(colorString.substr(7, 2)) : 1;
+    if (r !== false && g !== false && b !== false && a !== false) {
+      return { r, g, b, a };
+    }
+  }
+}
+
+/** @param {string} component */
+function parseHexColorComponent(component) {
+  const val = +`0x${component.repeat(3 - component.length)}`;
+  return isNaN(val) ? false : val / 255;
+}
+
+const rgbRegExp = /^rgb\( *([^,\)]+), *([^,\)]+), *([^,\)]+) *\)/;
+const rgbaRegExp = /^rgba\( *([^,\)]+), *([^,\)]+), *([^,\)]+), *([^,\)]+) *\)/;
+
+/** @param {string} colorString */
+function parseRGBOrRGBAColor(colorString) {
+  const hasAlpha = colorString.startsWith('rgba');
+  const match = (hasAlpha ? rgbaRegExp : rgbRegExp).exec(colorString);
+  if (!match) return undefined;
+  const [r, g, b, a = 1] = match.slice(1).map(parseRGBAColorComponent);
+  if (r !== false && g !== false && b !== false && a !== false) {
+    return { r, g, b, a };
+  }
+}
+
+/** @param {string} component */
+function parseRGBAColorComponent(component) {
+  const val = +component;
+  return isNaN(val) ? false : val;
+}
+
+/** @param {{ r: number, g: number, b: number }} color */
+function luminance(color) {
+  return 0.2126 * sRGBtoLin(color.r) + 0.7152 * sRGBtoLin(color.g) + 0.0722 * sRGBtoLin(color.b);
+}
+
+/** @param {{ r: number, g: number, b: number }} color */
+function perceivedLightness(color) {
+  const y = luminance(color);
+  if (y <= 216 / 24389) {
+    return (y * 24389) / 27;
+  }
+  return Math.pow(y, 1 / 3) * 116 - 16;
+}
+
+/** @param {number} colorChannel between 0 and 1 */
+function sRGBtoLin(colorChannel) {
+  if (colorChannel <= 0.04045) {
+    return colorChannel / 12.92;
+  }
+  return Math.pow((colorChannel + 0.055) / 1.055, 2.4);
+}
+
 module.exports = {
   getThemePrefixedTokenClassName,
   getThemeClassName,
@@ -264,5 +355,6 @@ module.exports = {
   createDefaultTheme,
   createMatchMediaTheme,
   createParentSelectorTheme,
-  loadTheme
+  loadTheme,
+  isDarkTheme
 };
