@@ -26,6 +26,7 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
 - [Extra stuff](#extra-stuff)
   - [Inline code highlighting](#inline-code-highlighting)
   - [Line highlighting](#line-highlighting)
+  - [Line numbers](#line-numbers)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
 - [Options reference](#options-reference)
@@ -429,6 +430,64 @@ You can customize the default background color and left border width and color f
 }
 ```
 
+### Line numbers
+
+With code fence info:
+
+````md
+```js {numberLines}
+import * as React from 'react';
+
+React.createElement('span', {});
+```
+````
+
+![Rendered result of the example code above][line-numbering-with-code-fence-info]
+
+With code fence info specifying a starting line:
+
+````md
+```js {numberLines: 21}
+  return 'blah';
+```
+````
+
+![Rendered result of the example code above][line-numbering-starting-line]
+
+With a comment:
+
+````md
+```ts
+function getDefaultLineTransformers(pluginOptions, cache) {
+  return [
+    one, // L4
+    two,
+    three
+  ];
+}
+```
+````
+
+![Rendered result of the example code above][line-numbering-with-a-comment]
+
+With both:
+
+````md
+```ts {numberLines}
+import * as React from 'react';
+
+// ...
+
+function SomeComponent(props) { // L29
+  return <div />;
+}
+```
+````
+
+![Rendered result of the example code above][line-numbering-with-both]
+
+The line number cell’s styling can be overridden on the `.grvsc-line-number` class.
+
 ### Using different themes for different code fences
 
 The `theme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
@@ -575,3 +634,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 [solidity-own]: https://user-images.githubusercontent.com/3277153/56853800-5e847e00-68c8-11e9-9c83-5e76146d5e46.png
 [line-highlighting-meta]: https://user-images.githubusercontent.com/3277153/86545712-6fc21500-bee5-11ea-8a83-71d04f595ef4.png
 [line-highlighting-comment]: https://user-images.githubusercontent.com/3277153/86545710-6e90e800-bee5-11ea-9f4d-33278d9312d7.png
+[line-numbering-with-a-comment]: https://user-images.githubusercontent.com/3277153/87123264-3ff37400-c23b-11ea-8ae6-80cbfcf6b6a0.png
+[line-numbering-with-code-fence-info]: https://user-images.githubusercontent.com/3277153/87122757-5ea53b00-c23a-11ea-8fbc-c85917433345.png
+[line-numbering-with-both]: https://user-images.githubusercontent.com/3277153/87122755-5ea53b00-c23a-11ea-8fe8-144aea7aa952.png
+[line-numbering-starting-line]: https://user-images.githubusercontent.com/3277153/87122747-5c42e100-c23a-11ea-9a06-923c699c0a0b.png

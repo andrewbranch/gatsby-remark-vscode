@@ -101,3 +101,44 @@ const zero = [0, 1, 2, 3, 4, 5]
   .length;
 // highlight-end
 ```
+
+## Line numbering
+
+With code fence info:
+
+```js {numberLines}
+import * as React from 'react';
+
+React.createElement('span', {});
+```
+
+With code fence info specifying a starting line:
+
+```js {numberLines: 21}
+  return 'blah';
+```
+
+With a comment:
+
+```ts
+function getDefaultLineTransformers(pluginOptions, cache) {
+  return [
+    one, // L4
+    two,
+    three
+  ];
+}
+```
+
+With both:
+
+```ts {numberLines}
+import * as React from 'react';
+
+// ...
+
+function SomeComponent(props) { // L29
+  return <div />;
+}
+```
+
