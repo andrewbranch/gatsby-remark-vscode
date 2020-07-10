@@ -8,6 +8,10 @@ Previously, the default line highlight background color was `transparent`, which
 
 This is unlikely to break existing sites, as the CSS variables continue to work as a customization. However, as part of upgrading to v3, you may be able to remove the variables you set if you’re happy with the new defaults. If, for some reason, you were relying on the old behavior of an invisible default, sorry, don’t do that 🤷🏻‍♂️
 
+### The `codeFenceNode` property of option callback arguments is deprecated.
+
+The `theme` and `wrapperClassName` plugin options accept a callback function that receives an object with a `codeFenceNode` containing the original Remark MDAST node for the code block currently being highlighted. That property has been renamed `node`. I’m like a million percent sure nobody uses this, but if I don’t say it here, someone will complain when I remove it in 4.0.
+
 ## v1 → v2
 
 ### Extensions are no longer downloaded automatically.

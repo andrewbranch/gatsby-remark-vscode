@@ -447,10 +447,10 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 
 ```js
 {
-  theme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
+  theme: ({ parsedOptions, language, markdownNode, node }) => {
     // 'language' is 'jsx', in this case
     // 'markdownNode' is the gatsby-transformer-remark GraphQL node
-    // 'codeFenceNode' is the Markdown AST node of the current code fence
+    // 'node' is the Markdown AST node of the current code fence
     // 'parsedOptions' is your parsed object that looks like this:
     // {
     //   theme: 'Monokai',
@@ -459,7 +459,7 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     // }
     return parsedOptions.theme || 'Dark+ (default dark)';
   },
-  wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
+  wrapperClassName: ({ parsedOptions, language, markdownNode, node }) => '';
 }
 ```
 
