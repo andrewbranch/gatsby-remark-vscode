@@ -84,10 +84,13 @@ it('can replace a color value', async () => {
 describe('prefers-color-scheme', () => {
   it('supports prefers-color-scheme via an object for `colorTheme`', async () => {
     return testSnapshot({
-      colorTheme: {
-        defaultTheme: 'Solarized Light',
-        prefersDarkTheme: 'Monokai Dimmed',
-        prefersLightTheme: 'Quiet Light',
+      theme: {
+        default: 'Solarized Light',
+        dark: 'Monokai Dimmed',
+        media: [{
+          match: '(prefers-color-scheme: light)',
+          theme: 'Quiet Light',
+        }]
       },
     });
   });
@@ -97,10 +100,13 @@ describe('prefers-color-scheme', () => {
     let i = 0;
     const darkThemes = ['Dark+ (default dark)', 'Monokai'];
     return testSnapshot({
-      colorTheme: () => ({
-        defaultTheme: 'Solarized Light',
-        prefersDarkTheme: darkThemes[i++],
-        prefersLightTheme: 'Quiet Light',
+      theme: () => ({
+        default: 'Solarized Light',
+        dark: darkThemes[i++],
+        media: [{
+          match: '(prefers-color-scheme: light)',
+          theme: 'Quiet Light',
+        }]
       }),
     }, markdownAST);
   });
