@@ -57,12 +57,10 @@ interface Host {
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeBlockData) => string | LegacyThemeSettings);
 type ThemeOption<T extends CodeBlockData | CodeSpanData> = string | ThemeSettings | ((data: T) => string | ThemeSettings);
 
 interface PluginOptions {
   theme?: ThemeOption<CodeBlockData>;
-  colorTheme?: LegacyThemeOption;
   wrapperClassName?: string | ((data: CodeBlockData) => string);
   languageAliases?: Record<string, string>;
   extensions?: string[];
@@ -152,6 +150,7 @@ interface RegisteredCodeNodeData {
   possibleThemes: ConditionalTheme[];
   isTokenized: boolean;
   tokenizationResults: TokenizeWithThemeResult[];
+  className?: string;
 }
 
 interface RegisteredToken {
@@ -180,9 +179,11 @@ interface MarkdownNode extends grvsc.gql.Node {
 }
 
 type Line = {
+  gutterCells: (GutterCell | undefined)[];
   text: string;
   attrs: object;
   data: object;
+  setContainerClassName?: string;
 };
 
 interface CodeNodeRegistry<TKey extends Keyable> {
@@ -213,17 +214,24 @@ interface LineTransformerInfo<T> {
   state: T | undefined;
 }
 
+interface GutterCell {
+  className?: string;
+  text?: string;
+}
+
 interface LineTransformerResult<T> extends LineTransformerInfo<T> {
   data?: object;
+  gutterCells?: (GutterCell | undefined)[];
+  setContainerClassName?: string;
 }
 
 interface LineTransformerArgs<T> extends LineTransformerInfo<T> {
   language: string;
-  meta: object;
+  meta: any;
 }
 
-interface LineTransformer<T = any> {
-  (args: LineTransformerArgs<T>): LineTransformerResult<T> | Promise<LineTransformerResult<T>>;
+interface LineTransformer<TState = any> {
+  (args: LineTransformerArgs<TState>): LineTransformerResult<TState> | Promise<LineTransformerResult<TState>>;
   displayName: string;
   schemaExtension?: string;
 }

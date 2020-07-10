@@ -1,5 +1,5 @@
 const logger = require('loglevel');
-const { getChildNodes } = require('./src/cacheUtils');
+const { getChildBlockNodes, getChildSpanNodes } = require('./src/cacheUtils');
 const highlight = require('./src/graphql/highlight');
 const stylesheet = require('./src/graphql/stylesheet');
 
@@ -62,7 +62,8 @@ exports.createResolvers = ({
  * @param {boolean=} stop
  */
 async function getFromCache(type, cache, source, context, stop) {
-  const childNodes = await getChildNodes(cache, source.id, source.internal.contentDigest);
+  const get = type === 'GRVSCCodeBlock' ? getChildBlockNodes : getChildSpanNodes;
+  const childNodes = await get(cache, source.id, source.internal.contentDigest);
   // Hack alert: ensure plugin has been run by querying htmlAst,
   // which is set via `setFieldsOnGraphQLNodeType` by gatsby-transformer-remark,
   // therefore might not have been run before this resolver runs.

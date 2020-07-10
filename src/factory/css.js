@@ -1,4 +1,4 @@
-const { groupConditions, getStylesFromThemeSettings, getThemeClassName } = require('../themeUtils');
+const { groupConditions, getStylesFromThemeSettings, getThemeClassName, isDarkTheme } = require('../themeUtils');
 const { ruleset, declaration, media } = require('../renderers/css');
 
 const boldDeclarations = [declaration('font-weight', 'bold')];
@@ -16,6 +16,9 @@ const underlineDeclarations = [
  */
 function createThemeCSSRules(theme, settings, tokenClassNames, replaceColor) {
   const conditions = groupConditions(theme.conditions);
+  const isDark = isDarkTheme(settings);
+  const lineHighlightBackgroundDefault = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+  const lineHighlightBorderDefault = isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.2)';
   /** @type {grvsc.CSSElement[]} */
   const elements = [];
   const containerStyles = getStylesFromThemeSettings(settings);
@@ -55,6 +58,13 @@ function createThemeCSSRules(theme, settings, tokenClassNames, replaceColor) {
       );
       leadingComment = undefined;
     }
+
+    container.push(
+      ruleset(`${selector} .grvsc-line-highlighted::before`, {
+        'background-color': `var(--grvsc-line-highlighted-background-color, ${lineHighlightBackgroundDefault})`,
+        'box-shadow': `inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, ${lineHighlightBorderDefault})`
+      })
+    );
   }
 }
 

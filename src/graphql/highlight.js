@@ -17,14 +17,12 @@ const registryKey = { type: 'code' };
  * @returns {Promise<grvsc.gql.GRVSCCodeBlock>}
  */
 async function highlight(args, pluginOptions, { cache, createNodeId }) {
-  const {
-    theme,
-    languageAliases,
-    getLineTransformers,
-    getLineClassName,
-    wrapperClassName,
-    ...rest
-  } = await plugin.once(() => setup(pluginOptions, cache));
+  const { theme, languageAliases, getLineTransformers, getLineClassName, wrapperClassName, ...rest } = await setup(
+    pluginOptions,
+    '',
+    cache,
+    plugin.once
+  );
 
   const lineTransformers = getLineTransformers(
     {

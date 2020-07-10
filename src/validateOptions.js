@@ -1,5 +1,5 @@
 const { EOL } = require('os');
-const { deprecationNotice, isRelativePath } = require('./utils');
+const { isRelativePath } = require('./utils');
 
 const validMarkerRegExp = /^[^\sa-zA-Z0-9.-_`\\<]+$/;
 
@@ -10,9 +10,9 @@ function validateOptions(options) {
   /** @type {string[]} */
   const errors = [];
 
-  if (options.colorTheme) {
-    deprecationNotice(
-      `The 'colorTheme' option has been replaced by 'theme' and will be removed in a future version. ` +
+  if (options['colorTheme']) {
+    throw new Error(
+      `The 'colorTheme' option, deprecated in v2.0.0, has been replaced by 'theme'. ` +
         `See https://github.com/andrewbranch/gatsby-remark-vscode/blob/master/MIGRATING.md for details.`
     );
   }

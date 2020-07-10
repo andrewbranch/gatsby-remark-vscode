@@ -26,6 +26,8 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
 - [Extra stuff](#extra-stuff)
   - [Inline code highlighting](#inline-code-highlighting)
   - [Line highlighting](#line-highlighting)
+  - [Line numbers](#line-numbers)
+  - [Diff highlighting](#diff-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
 - [Options reference](#options-reference)
@@ -199,7 +201,7 @@ The following languages and themes can be used without [installing third-party e
 
 </details>
 
-Language names are resolve case-insensitively by any aliases and file extensions listed in the grammar’s metadata. For example, a code fence with C++ code in it can use [any of these language codes](https://github.com/Microsoft/vscode/blob/da3c97f3668393ebfcb9f8208d7616018d6d1859/extensions/cpp/package.json#L20-L21). You could also check the [built-in grammar manifest](https://unpkg.com/gatsby-remark-vscode@1.0.3/lib/grammars/manifest.json) for an exact list of mappings.
+Language names are resolved case-insensitively by any aliases and file extensions listed in the grammar’s metadata. For example, a code fence with C++ code in it can use [any of these language codes](https://github.com/Microsoft/vscode/blob/da3c97f3668393ebfcb9f8208d7616018d6d1859/extensions/cpp/package.json#L20-L21). You could also check the [built-in grammar manifest](https://unpkg.com/gatsby-remark-vscode@1.0.3/lib/grammars/manifest.json) for an exact list of mappings.
 
 ### Themes
 
@@ -357,6 +359,12 @@ See [`inlineCode`](#inlinecode) in the options reference for more API details.
 
 `gatsby-remark-vscode` offers the same line-range-after-language-name strategy of highlighting or emphasizing lines as [gatsby-remark-prismjs](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-remark-prismjs):
 
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
+
 ````md
 ```js{1,3-5}
 this.isLine(1); // highlighted
@@ -367,7 +375,23 @@ this.isLine(5); // highlighted
 ```
 ````
 
+</td>
+<td>
+
+![][line-highlighting-meta]
+
+</td>
+</tr>
+</tbody>
+</table>
+
 Comment directives are also supported:
+
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
 
 ````md
 ```js
@@ -387,24 +411,114 @@ const zero = [0, 1, 2, 3, 4, 5]
 ```
 ````
 
-You need to pick your own background color, and optionally a left border width and color, for the highlighted lines. This can be done by setting CSS variables:
+</td>
+<td>
+
+![][line-highlighting-comment]
+
+</td>
+</tr>
+</tbody>
+</table>
+
+You can customize the default background color and left border width and color for the highlighted lines by setting CSS variables:
 
 ```css
 :root {
-  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2); /* default: transparent */
-  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
-  --grvsc-line-highlighted-border-width: 2px; /* default: 4px */
+  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.2);
+  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5);
+  --grvsc-line-highlighted-border-width: 2px;
 }
 ```
 
-or by setting custom styles on the lines:
+### Line numbers
 
-```css
-.grvsc-container .grvsc-line-highlighted {
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: inset 2px 0 0 0 rgba(255, 255, 255, 0.5);
+With code fence info:
+
+````md
+```js {numberLines}
+import * as React from 'react';
+
+React.createElement('span', {});
+```
+````
+
+![Rendered result of the example code above][line-numbering-with-code-fence-info]
+
+With code fence info specifying a starting line:
+
+````md
+```js {numberLines: 21}
+  return 'blah';
+```
+````
+
+![Rendered result of the example code above][line-numbering-starting-line]
+
+With a comment:
+
+````md
+```ts
+function getDefaultLineTransformers(pluginOptions, cache) {
+  return [
+    one, // L4
+    two,
+    three
+  ];
 }
 ```
+````
+
+![Rendered result of the example code above][line-numbering-with-a-comment]
+
+With both:
+
+````md
+```ts {numberLines}
+import * as React from 'react';
+
+// ...
+
+function SomeComponent(props) { // L29
+  return <div />;
+}
+```
+````
+
+![Rendered result of the example code above][line-numbering-with-both]
+
+The line number cell’s styling can be overridden on the `.grvsc-line-number` class.
+
+### Diff highlighting
+
+You can combine syntax highlighting with diff highlighting:
+
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
+
+````md
+```ts {diff}
+function add(x, y) {
+-  return x + x;
++  return x + y;
+}
+```
+````
+
+</td>
+<td>
+
+![][diff-highlighting]
+
+</td>
+</tr>
+</tbody>
+</table>
+
+The highlight color can be customized with the CSS variables `--grvsc-line-diff-add-background-color` and `--grvsc-line-diff-del-background-color`. The default color is static and might not be accessible with all syntax themes. Consider contrast ratios and choose appropriate colors when using this feature.
 
 ### Using different themes for different code fences
 
@@ -424,10 +538,10 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 
 ```js
 {
-  theme: ({ parsedOptions, language, markdownNode, codeFenceNode }) => {
+  theme: ({ parsedOptions, language, markdownNode, node }) => {
     // 'language' is 'jsx', in this case
     // 'markdownNode' is the gatsby-transformer-remark GraphQL node
-    // 'codeFenceNode' is the Markdown AST node of the current code fence
+    // 'node' is the Markdown AST node of the current code fence
     // 'parsedOptions' is your parsed object that looks like this:
     // {
     //   theme: 'Monokai',
@@ -436,7 +550,7 @@ Line numbers and ranges aren’t the only things you can pass as options on your
     // }
     return parsedOptions.theme || 'Dark+ (default dark)';
   },
-  wrapperClassName: ({ parsedOptions, language, markdownNode, codeFenceNode }) => '';
+  wrapperClassName: ({ parsedOptions, language, markdownNode, node }) => '';
 }
 ```
 
@@ -550,3 +664,10 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 [templates-own]: https://user-images.githubusercontent.com/3277153/56853802-5e847e00-68c8-11e9-8468-dedcd8bcab78.png
 [solidity-others]: https://user-images.githubusercontent.com/3277153/56853799-5e847e00-68c8-11e9-8895-535d9e0d555c.png
 [solidity-own]: https://user-images.githubusercontent.com/3277153/56853800-5e847e00-68c8-11e9-9c83-5e76146d5e46.png
+[line-highlighting-meta]: https://user-images.githubusercontent.com/3277153/86545712-6fc21500-bee5-11ea-8a83-71d04f595ef4.png
+[line-highlighting-comment]: https://user-images.githubusercontent.com/3277153/86545710-6e90e800-bee5-11ea-9f4d-33278d9312d7.png
+[line-numbering-with-a-comment]: https://user-images.githubusercontent.com/3277153/87123264-3ff37400-c23b-11ea-8ae6-80cbfcf6b6a0.png
+[line-numbering-with-code-fence-info]: https://user-images.githubusercontent.com/3277153/87122757-5ea53b00-c23a-11ea-8fbc-c85917433345.png
+[line-numbering-with-both]: https://user-images.githubusercontent.com/3277153/87122755-5ea53b00-c23a-11ea-8fe8-144aea7aa952.png
+[line-numbering-starting-line]: https://user-images.githubusercontent.com/3277153/87122747-5c42e100-c23a-11ea-9a06-923c699c0a0b.png
+[diff-highlighting]: https://user-images.githubusercontent.com/3277153/87123984-aa58e400-c23c-11ea-87b3-3f66afcd795d.png

@@ -52,7 +52,12 @@ function getCodeBlockDataFromRegistry(registry, key, codeBlock, getWrapperClassN
 
   const wrapperClassNameValue = getWrapperClassName();
   const themeClassNames = flatMap(possibleThemes, getThemeClassNames);
-  const preClassName = joinClassNames('grvsc-container', wrapperClassNameValue, ...themeClassNames);
+  const preClassName = joinClassNames(
+    'grvsc-container',
+    wrapperClassNameValue,
+    codeBlock.className,
+    ...themeClassNames
+  );
   const codeClassName = 'grvsc-code';
   const [defaultTheme, additionalThemes] = partitionOne(possibleThemes, t =>
     t.conditions.some(c => c.condition === 'default')

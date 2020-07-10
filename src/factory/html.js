@@ -30,7 +30,28 @@ function createLineElement(line, meta, index, language, getLineClassName, tokens
   const lineClassName = joinClassNames(getLineClassName(lineData), 'grvsc-line');
   const attrs = mergeAttributes({ class: lineClassName }, line.attrs);
   const children = typeof tokens === 'string' ? [tokens] : mergeSimilarTokens(tokens);
-  return span(attrs, children, { whitespace: TriviaRenderFlags.NoWhitespace });
+  const gutterCells = line.gutterCells.map(createGutterCellElement);
+  if (gutterCells.length) {
+    gutterCells.unshift(span({ class: 'grvsc-gutter-pad' }, undefined, { whitespace: TriviaRenderFlags.NoWhitespace }));
+  }
+  return span(
+    attrs,
+    [...gutterCells, span({ class: 'grvsc-source' }, children, { whitespace: TriviaRenderFlags.NoWhitespace })],
+    { whitespace: TriviaRenderFlags.NoWhitespace }
+  );
+}
+
+/** @param {GutterCell | undefined} cell */
+function createGutterCellElement(cell) {
+  return span(
+    {
+      class: joinClassNames('grvsc-gutter', cell && cell.className),
+      'aria-hidden': 'true',
+      'data-content': cell && cell.text
+    },
+    [],
+    { whitespace: TriviaRenderFlags.NoWhitespace }
+  );
 }
 
 /**

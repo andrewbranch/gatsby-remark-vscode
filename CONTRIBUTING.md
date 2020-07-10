@@ -10,20 +10,22 @@ PRs introducing new ideas are always welcome, but might be declined if opened wi
 
 ## Local development setup
 
-Prerequisites: development is supported on the current [Node LTS](https://nodejs.org/).
+Prerequisites: development is supported on the current [Node LTS](https://nodejs.org/). Yarn is probably required to run all tests correctly, because npm fails to deduplicate certain dependencies which causes issues for running the GraphQL tests.
 
 1. Fork and clone the repo.
-2. Run `npm install`
+2. Run `yarn`
 
-Running `npm install` should automatically initialize or update the [vscode](./vscode) submodule, generate `src/graphql/schema.d.ts`, and populate [`lib/grammars`](lib/grammars) and [`lib/themes`](lib/themes). If any of these things are missing, you’ll errors when you try to run things later. You can rerun these steps with `npm run build`.
+Running `yarn` should automatically initialize or update the [vscode](./vscode) submodule, generate `src/graphql/schema.d.ts`, and populate [`lib/grammars`](lib/grammars) and [`lib/themes`](lib/themes). If any of these things are missing, you’ll get errors when you try to run things later. You can rerun these steps with `yarn build`.
 
 ## Tests
 
-To run tests, run `npm test`. You can use Jest CLI options after a `--` separator. For example, to run just the test named “code-fence-meta”, use `npm test -- -t code-fence-meta`.
+To run tests, run `yarn test`. You can use any Jest CLI options. For example, to run just the test named “code-fence-meta”, use `yarn test -t code-fence-meta`.
 
-Most tests are either Jest snapshot tests or HTML baseline tests against a known-good source ([`test/integration/cases/baselines`](test/integration/cases/baselines)). To update the snapshots and baselines, run `npm test -- -u`.
+Most tests are either Jest snapshot tests or HTML baseline tests against a known-good source ([`test/html/cases/baselines`](test/html/baselines)). To update the snapshots and baselines, run `yarn test -u`.
 
-Most new tests can be integration tests. To write one, create a new folder in `test/integration/cases`, then put a Markdown file named `test.md` inside. If you want to run the plugin with custom options, place an `options.js` file whose `module.exports` is the options object to be passed to the plugin. Then, when you next run `npm test`, the baseline will be created and opened in a browser so you can view the resulting HTML. If it looks right, commit it and you’re done. If it looks wrong, you can overwrite the bad baseline by running `npm test -- -u -t name-of-test` after you’ve made changes to fix your code.
+Most new tests can be baseline tests. To write one, create a new folder in `test/cases`, then put a Markdown file named `test.md` inside. If you want to run the plugin with custom options, place an `options.js` file whose `module.exports` is the options object to be passed to the plugin. Then, when you next run `yarn test`, the baseline will be created and opened in a browser so you can view the resulting HTML. If it looks right, commit it and you’re done. If it looks wrong, you can overwrite the bad baseline by running `yarn test -u -t name-of-test` after you’ve made changes to fix your code.
+
+Tests inside `test/cases` also generate a snapshot of a GraphQL query for the structured syntax highlighting data the plugin generates. The snapshot has a lot of data, so if you’re adding a new test case, don’t worry about manually inspecting every line of the added snapshot. They exist mostly to detect regressions, so if the snapshot looks plausibly correct, go ahead and commit it.
 
 ## Debugging
 
@@ -34,7 +36,7 @@ VS Code launch scripts have been provided, so you can debug the tests or the [ex
 When you’ve made changes you’re happy with, ensure that you have
 
 - Added a test if appropriate,
-- Formatted your changes through Prettier with `npm run format`,
+- Formatted your changes through Prettier with `yarn format`,
 - Maintained good JSDoc type annotations to the best of your ability.
 
-This project is written in plain JavaScript, but uses TypeScript to type-check via JSDoc annotations. After tests, type checking runs (and can be run alone with `npm run check`). If types are new to you, or you have trouble getting type checking to pass, that’s ok! I’ll help you in your PR if necessary. Type checking is a great way to catch errors early, but I don’t want it to be an impediment for anyone’s contribution.
+This project is written in plain JavaScript, but uses TypeScript to type-check via JSDoc annotations. After tests, type checking runs (and can be run alone with `yarn check`). If types are new to you, or you have trouble getting type checking to pass, that’s ok! I’ll help you in your PR if necessary. Type checking is a great way to catch errors early, but I don’t want it to be an impediment for anyone’s contribution.
