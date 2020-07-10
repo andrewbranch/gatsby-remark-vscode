@@ -6,9 +6,9 @@ A syntax highlighting plugin for [Gatsby](https://www.gatsbyjs.org/) that uses V
 
 Includes OS dark mode support 🌙
 
-## Migrating to v2
+## v3 is out now! 🎉
 
-If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
+If you’re updating from v2.x.x (or v1), see [MIGRATING.md](./MIGRATING.md). New features are [line numbers](#line-numbers) and [diff highlighting](#diff-highlighting) (thanks [@janosh](https://github.com/janosh) for the latter!).
 
 ## Table of contents
 
