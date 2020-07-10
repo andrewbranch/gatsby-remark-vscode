@@ -27,6 +27,7 @@ If you’re updating from v1.x.x to v2.x.x, see [MIGRATING.md](./MIGRATING.md).
   - [Inline code highlighting](#inline-code-highlighting)
   - [Line highlighting](#line-highlighting)
   - [Line numbers](#line-numbers)
+  - [Diff highlighting](#diff-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
 - [Options reference](#options-reference)
@@ -488,6 +489,37 @@ function SomeComponent(props) { // L29
 
 The line number cell’s styling can be overridden on the `.grvsc-line-number` class.
 
+### Diff highlighting
+
+You can combine syntax highlighting with diff highlighting:
+
+<table>
+<thead><tr><th>Markdown</th><th>Rendered result</th></thead>
+<tbody>
+<tr>
+<td>
+
+````md
+```ts {diff}
+function add(x, y) {
+-  return x + x;
++  return x + y;
+}
+```
+````
+
+</td>
+<td>
+
+![][diff-highlighting]
+
+</td>
+</tr>
+</tbody>
+</table>
+
+The highlight color can be customized with the CSS variables `--grvsc-line-diff-add-background-color` and `--grvsc-line-diff-del-background-color`. The default color is static and might not be accessible with all syntax themes. Consider contrast ratios and choose appropriate colors when using this feature.
+
 ### Using different themes for different code fences
 
 The `theme` option can take a function instead of a constant value. The function is called once per code fence with information about that code fence, and should return either a string or [an object](#dark-mode-support-via-prefers-color-scheme). See the [following section](#arbitrary-code-fence-options) for an example.
@@ -638,3 +670,4 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
 [line-numbering-with-code-fence-info]: https://user-images.githubusercontent.com/3277153/87122757-5ea53b00-c23a-11ea-8fbc-c85917433345.png
 [line-numbering-with-both]: https://user-images.githubusercontent.com/3277153/87122755-5ea53b00-c23a-11ea-8fe8-144aea7aa952.png
 [line-numbering-starting-line]: https://user-images.githubusercontent.com/3277153/87122747-5c42e100-c23a-11ea-9a06-923c699c0a0b.png
+[diff-highlighting]: https://user-images.githubusercontent.com/3277153/87123984-aa58e400-c23c-11ea-87b3-3f66afcd795d.png

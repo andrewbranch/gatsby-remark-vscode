@@ -142,3 +142,11 @@ function SomeComponent(props) { // L29
 }
 ```
 
+## Diff highlighting
+
+```ts {diff}
+function add(x, y) {
+-  return x + x;
++  return x + y;
+}
+```
