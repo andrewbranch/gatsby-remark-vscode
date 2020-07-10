@@ -204,41 +204,6 @@ function getStylesFromThemeSettings(settings) {
 }
 
 /**
- * @param {LegacyThemeOption} themeOption
- * @returns {ThemeOption<CodeBlockData>}
- */
-function convertLegacyThemeOption(themeOption) {
-  if (typeof themeOption === 'function') {
-    return data => convertLegacyThemeSettings(themeOption(data));
-  }
-  return convertLegacyThemeSettings(themeOption);
-}
-
-/**
- * @param {LegacyThemeSettings | string} themeSettings
- * @returns {ThemeSettings | string}
- */
-function convertLegacyThemeSettings(themeSettings) {
-  if (typeof themeSettings === 'string') {
-    return themeSettings;
-  }
-
-  /** @type {MediaQuerySetting[]} */
-  const media = [];
-  if (themeSettings.prefersDarkTheme) {
-    media.push({ match: '(prefers-color-scheme: dark)', theme: themeSettings.prefersDarkTheme });
-  }
-  if (themeSettings.prefersLightTheme) {
-    media.push({ match: '(prefers-color-scheme: light)', theme: themeSettings.prefersLightTheme });
-  }
-
-  return {
-    default: themeSettings.defaultTheme,
-    media
-  };
-}
-
-/**
  * @param {string} themePath
  * @returns {RawTheme}
  */
@@ -351,7 +316,6 @@ module.exports = {
   concatConditionalThemes,
   groupConditions,
   getStylesFromThemeSettings,
-  convertLegacyThemeOption,
   createDefaultTheme,
   createMatchMediaTheme,
   createParentSelectorTheme,

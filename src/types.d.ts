@@ -57,12 +57,10 @@ interface Host {
   decompress: (input: string | Buffer, output: string) => Promise<unknown>;
 }
 
-type LegacyThemeOption = string | LegacyThemeSettings | ((data: CodeBlockData) => string | LegacyThemeSettings);
 type ThemeOption<T extends CodeBlockData | CodeSpanData> = string | ThemeSettings | ((data: T) => string | ThemeSettings);
 
 interface PluginOptions {
   theme?: ThemeOption<CodeBlockData>;
-  colorTheme?: LegacyThemeOption;
   wrapperClassName?: string | ((data: CodeBlockData) => string);
   languageAliases?: Record<string, string>;
   extensions?: string[];

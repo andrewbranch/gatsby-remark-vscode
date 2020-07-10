@@ -2,7 +2,6 @@ const logger = require('loglevel');
 const defaultHost = require('./host');
 const validateOptions = require('./validateOptions');
 const { getDefaultLineTransformers } = require('./transformers');
-const { convertLegacyThemeOption } = require('./themeUtils');
 const { processExtensions } = require('./processExtension');
 
 /**
@@ -28,7 +27,6 @@ async function setup(options, markdownAbsolutePath, cache, once) {
 async function setupOptions(
   {
     theme = 'Default Dark+',
-    colorTheme: legacyTheme,
     wrapperClassName = '',
     languageAliases = {},
     extensions = [],
@@ -43,13 +41,9 @@ async function setupOptions(
   cache
 ) {
   logger.setLevel(logLevel);
-  if (legacyTheme) {
-    theme = convertLegacyThemeOption(legacyTheme);
-  }
 
   validateOptions({
     theme,
-    colorTheme: legacyTheme,
     wrapperClassName,
     languageAliases,
     extensions,
@@ -64,7 +58,6 @@ async function setupOptions(
   await processExtensions(extensions, host, cache);
   return {
     theme,
-    colorTheme: legacyTheme,
     wrapperClassName,
     languageAliases,
     extensions,
