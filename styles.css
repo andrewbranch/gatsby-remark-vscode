@@ -52,6 +52,13 @@
   padding-right: var(--grvsc-padding-right, var(--grvsc-padding-h, 1.5rem));
 }
 
+.grvsc-source:empty::after {
+  content: ' ';
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
 .grvsc-gutter + .grvsc-source {
   padding-left: 0.75rem;
   padding-left: calc(var(--grvsc-padding-left, var(--grvsc-padding-h, 1.5rem)) / 2);
