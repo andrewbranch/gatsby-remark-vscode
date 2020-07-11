@@ -1,5 +1,226 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`GraphQL resolvers blank-lines 1`] = `
+Object {
+  "data": Object {
+    "markdownRemark": Object {
+      "grvscCodeBlocks": Array [
+        Object {
+          "codeClassName": "grvsc-code",
+          "defaultTheme": Object {
+            "conditions": Array [
+              Object {
+                "condition": "default",
+                "value": null,
+              },
+            ],
+            "identifier": "Default Dark+",
+          },
+          "html": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"ts\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// You have to make sure</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// blank lines</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// don’t disappear</span></span></span></code></pre>",
+          "index": 0,
+          "language": "ts",
+          "meta": Object {},
+          "preClassName": "grvsc-container default-dark",
+          "text": "// You have to make sure
+
+// blank lines
+
+// don’t disappear",
+          "tokenizedLines": Array [
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// You have to make sure</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "// You have to make sure",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk3\\">//</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                    "punctuation.definition.comment.ts",
+                  ],
+                  "startIndex": 0,
+                  "text": "//",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 24,
+                  "html": "<span class=\\"mtk3\\"> You have to make sure</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                  ],
+                  "startIndex": 2,
+                  "text": " You have to make sure",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "",
+              "tokens": Array [],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// blank lines</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "// blank lines",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk3\\">//</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                    "punctuation.definition.comment.ts",
+                  ],
+                  "startIndex": 0,
+                  "text": "//",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 14,
+                  "html": "<span class=\\"mtk3\\"> blank lines</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                  ],
+                  "startIndex": 2,
+                  "text": " blank lines",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "",
+              "tokens": Array [],
+            },
+            Object {
+              "attrs": Object {},
+              "className": "grvsc-line",
+              "data": Object {},
+              "diff": null,
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk3\\">// don’t disappear</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "// don’t disappear",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 2,
+                  "html": "<span class=\\"mtk3\\">//</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                    "punctuation.definition.comment.ts",
+                  ],
+                  "startIndex": 0,
+                  "text": "//",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk3",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk3",
+                    "color": "#6A9955",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 18,
+                  "html": "<span class=\\"mtk3\\"> don’t disappear</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "comment.line.double-slash.ts",
+                  ],
+                  "startIndex": 2,
+                  "text": " don’t disappear",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      "grvscCodeSpans": Array [],
+    },
+  },
+}
+`;
+
 exports[`GraphQL resolvers bug-37 1`] = `
 Object {
   "data": Object {
