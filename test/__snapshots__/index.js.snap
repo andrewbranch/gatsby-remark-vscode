@@ -20502,8 +20502,8 @@ Object {
     Object {
       "lang": "embedded",
       "type": "html",
-      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"embedded\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">const x = 3;</span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\">// Comment</span></span></code></pre>",
+      "value": "<pre class=\\"grvsc-container default-dark\\" data-language=\\"embedded\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">3</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">//</span><span class=\\"mtk12\\"> Comment</span></span></span></code></pre>",
     },
     Object {
       "children": Array [],
@@ -20517,6 +20517,10 @@ Object {
     background-color: #1E1E1E;
     color: #D4D4D4;
   }
+  .default-dark .mtk4 { color: #569CD6; }
+  .default-dark .mtk12 { color: #9CDCFE; }
+  .default-dark .mtk1 { color: #D4D4D4; }
+  .default-dark .mtk7 { color: #B5CEA8; }
   .default-dark .grvsc-line-highlighted::before {
     background-color: var(--grvsc-line-highlighted-background-color, rgba(255, 255, 255, 0.1));
     box-shadow: inset var(--grvsc-line-highlighted-border-width, 4px) 0 0 0 var(--grvsc-line-highlighted-border-color, rgba(255, 255, 255, 0.5));
