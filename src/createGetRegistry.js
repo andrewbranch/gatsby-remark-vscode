@@ -1,8 +1,19 @@
 // @ts-check
+const fs = require('fs');
+const path = require('path');
 const logger = require('loglevel');
+const oniguruma = require('vscode-oniguruma');
 const { getGrammarLocation, getGrammar, getAllGrammars } = require('./storeUtils');
 const { readFile } = require('./utils');
 const { Registry, parseRawGrammar } = require('vscode-textmate');
+
+const wasmBin = fs.readFileSync(path.join(require.resolve('vscode-oniguruma'), '../../release/onig.wasm')).buffer;
+const onigLib = oniguruma.loadWASM(wasmBin).then(() => {
+    return {
+        createOnigScanner(patterns) { return new oniguruma.OnigScanner(patterns); },
+        createOnigString(s) { return new oniguruma.OnigString(s); }
+    };
+});
 
 function createEmitter() {
   /** @type {() => void} */
@@ -75,7 +86,8 @@ function createGetRegistry() {
             }
             return acc;
           }, []);
-        }
+        },
+        onigLib
       });
     }
     const unlock = await getLock();
