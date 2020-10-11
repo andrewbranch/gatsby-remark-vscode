@@ -19,8 +19,13 @@ declare namespace grvsc {
             defaultThemeTokenData: GRVSCThemeTokenData;
             additionalThemeTokenData: GRVSCThemeTokenData[];
         }
+        interface GRVSCGutterCell {
+            className?: string;
+            text?: string;
+        }
         interface GRVSCTokenizedLine {
             tokens: GRVSCToken[];
+            gutterCells?: GRVSCGutterCell[];
             text: string;
             html: string;
             attrs: any;

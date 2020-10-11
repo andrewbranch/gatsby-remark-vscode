@@ -18,8 +18,8 @@ type GRVSCToken {
   additionalThemeTokenData: [GRVSCThemeTokenData!]!
 }
 type GRVSCGutterCell {
-  className: String!
-  text: String!
+  className: String
+  text: String
 }
 type GRVSCTokenizedLine {
   tokens: [GRVSCToken!]!
