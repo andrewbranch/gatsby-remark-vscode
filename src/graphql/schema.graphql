@@ -17,8 +17,13 @@ type GRVSCToken {
   defaultThemeTokenData: GRVSCThemeTokenData!
   additionalThemeTokenData: [GRVSCThemeTokenData!]!
 }
+type GRVSCGutterCell {
+  className: String!
+  text: String!
+}
 type GRVSCTokenizedLine {
   tokens: [GRVSCToken!]!
+  gutterCells: [GRVSCGutterCell]
   text: String!
   html: String!
   attrs: JSON!
