@@ -63,7 +63,6 @@
     "decompress": "^4.2.0",
     "json5": "^2.1.1",
     "loglevel": "^1.6.4",
-    "oniguruma": "^7.2.0",
     "plist": "^3.0.1",
     "unist-util-visit": "^1.4.1",
     "vscode-oniguruma": "^1.4.0",
