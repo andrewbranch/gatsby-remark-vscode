@@ -9,10 +9,14 @@ const { Registry, parseRawGrammar } = require('vscode-textmate');
 
 const wasmBin = fs.readFileSync(path.join(require.resolve('vscode-oniguruma'), '../../release/onig.wasm')).buffer;
 const onigLib = oniguruma.loadWASM(wasmBin).then(() => {
-    return {
-        createOnigScanner(patterns) { return new oniguruma.OnigScanner(patterns); },
-        createOnigString(s) { return new oniguruma.OnigString(s); }
-    };
+  return {
+    createOnigScanner(patterns) {
+      return new oniguruma.OnigScanner(patterns);
+    },
+    createOnigString(s) {
+      return new oniguruma.OnigString(s);
+    }
+  };
 });
 
 function createEmitter() {
