@@ -21,7 +21,7 @@ function parseCodeFenceInfo(lang, metaString) {
   let pos = 0;
   let meta = {};
   let languageName = '';
-  const input = lang + (metaString || '');
+  const input = [lang, metaString].filter(Boolean).join(' ');
   skipTrivia();
   if (!isEnd() && current() !== '{') {
     languageName = parseIdentifier();
@@ -32,11 +32,8 @@ function parseCodeFenceInfo(lang, metaString) {
     meta = parseObject();
   }
 
-  if (!isEnd()) {
-    if (languageNameEnd === pos) {
-      return fail(`Invalid character in language name: '${current()}'`);
-    }
-    return fail(`Unrecognized input: '${current()}'`);
+  if (!isEnd() && languageNameEnd === pos) {
+    return fail(`Invalid character in language name: '${current()}'`);
   }
 
   return { languageName, meta };
