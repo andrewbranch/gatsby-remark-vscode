@@ -54,6 +54,10 @@ describe('parseCodeFenceInfo', () => {
     expect(() => parse('jsx{ : }')).toThrowError(/expected identifier/i);
     expect(() => parse('jsx{ a: "')).toThrowError(/unexpected end of input/i);
     expect(() => parse('c%')).toThrowError(/invalid character in language name.+?%/i);
-    expect(() => parse('c %')).toThrowError(/unrecognized input.+?%/i);
+  });
+
+  it('ignores additional meta', () => {
+    expect(parse('jsx codesandbox=react')).toEqual({ languageName: 'jsx', meta: {} });
+    expect(parse('js file=some/dir/file.js')).toEqual({ languageName: 'js', meta: {} });
   });
 });
