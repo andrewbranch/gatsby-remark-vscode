@@ -68,6 +68,9 @@
     "vscode-oniguruma": "^1.4.0",
     "vscode-textmate": "^5.2.0"
   },
+  "peerDependencies": {
+    "gatsby": "^2.12.1"
+  },
   "jest": {
     "testMatch": [
       "<rootDir>/test/index.js"
