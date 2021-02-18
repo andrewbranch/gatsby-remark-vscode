@@ -3,4 +3,5 @@
 - const y = 2;
 +const a = 'a';
 -const b = 'b';
++ veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode();
 ```

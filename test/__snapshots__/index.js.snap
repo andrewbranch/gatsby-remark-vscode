@@ -3390,7 +3390,8 @@ Object {
           "html": "<pre class=\\"grvsc-container grvsc-has-line-highlighting default-dark\\" data-language=\\"ts\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-add\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-add\\" aria-hidden=\\"true\\" data-content=\\"+\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">x</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">1</span><span class=\\"mtk1\\">;</span></span></span>
 <span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-del\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-del\\" aria-hidden=\\"true\\" data-content=\\"-\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">y</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk7\\">2</span><span class=\\"mtk1\\">;</span></span></span>
 <span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-add\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-add\\" aria-hidden=\\"true\\" data-content=\\"+\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">a</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk8\\">&#39;a&#39;</span><span class=\\"mtk1\\">;</span></span></span>
-<span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-del\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-del\\" aria-hidden=\\"true\\" data-content=\\"-\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">b</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk8\\">&#39;b&#39;</span><span class=\\"mtk1\\">;</span></span></span></code></pre>",
+<span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-del\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-del\\" aria-hidden=\\"true\\" data-content=\\"-\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk4\\">const</span><span class=\\"mtk1\\"> </span><span class=\\"mtk12\\">b</span><span class=\\"mtk1\\"> = </span><span class=\\"mtk8\\">&#39;b&#39;</span><span class=\\"mtk1\\">;</span></span></span>
+<span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-add\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-add\\" aria-hidden=\\"true\\" data-content=\\"+\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk11\\">veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode</span><span class=\\"mtk1\\">();</span></span></span></code></pre>",
           "index": 0,
           "language": "ts",
           "meta": Object {
@@ -3400,7 +3401,8 @@ Object {
           "text": "+ const x = 1;
 - const y = 2;
 +const a = 'a';
--const b = 'b';",
+-const b = 'b';
++ veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode();",
           "tokenizedLines": Array [
             Object {
               "attrs": Object {
@@ -4218,6 +4220,103 @@ Object {
                     "punctuation.terminator.statement.ts",
                   ],
                   "startIndex": 13,
+                  "text": ";",
+                },
+              ],
+            },
+            Object {
+              "attrs": Object {
+                "class": "grvsc-line-diff grvsc-line-diff-add",
+              },
+              "className": "grvsc-line grvsc-line-diff grvsc-line-diff-add",
+              "data": Object {
+                "diff": "ADD",
+              },
+              "diff": null,
+              "html": "<span class=\\"grvsc-line grvsc-line-diff grvsc-line-diff-add\\"><span class=\\"grvsc-gutter-pad\\"></span><span class=\\"grvsc-gutter grvsc-diff-add\\" aria-hidden=\\"true\\" data-content=\\"+\\"></span><span class=\\"grvsc-source\\"><span class=\\"mtk11\\">veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode</span><span class=\\"mtk1\\">();</span></span></span>",
+              "isHighlighted": null,
+              "lineNumber": null,
+              "text": "veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode();",
+              "tokens": Array [
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk11",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk11",
+                    "color": "#DCDCAA",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 92,
+                  "html": "<span class=\\"mtk11\\">veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "meta.function-call.ts",
+                    "entity.name.function.ts",
+                  ],
+                  "startIndex": 0,
+                  "text": "veryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCodeVeryLongLineOfAddedCode",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 93,
+                  "html": "<span class=\\"mtk1\\">(</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "meta.brace.round.ts",
+                  ],
+                  "startIndex": 92,
+                  "text": "(",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 94,
+                  "html": "<span class=\\"mtk1\\">)</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "meta.brace.round.ts",
+                  ],
+                  "startIndex": 93,
+                  "text": ")",
+                },
+                Object {
+                  "additionalThemeTokenData": Array [],
+                  "className": "mtk1",
+                  "defaultThemeTokenData": Object {
+                    "bold": false,
+                    "className": "mtk1",
+                    "color": "#D4D4D4",
+                    "italic": false,
+                    "themeIdentifier": "Default Dark+",
+                    "underline": false,
+                  },
+                  "endIndex": 95,
+                  "html": "<span class=\\"mtk1\\">;</span>",
+                  "scopes": Array [
+                    "source.ts",
+                    "punctuation.terminator.statement.ts",
+                  ],
+                  "startIndex": 94,
                   "text": ";",
                 },
               ],
