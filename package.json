@@ -62,7 +62,6 @@
   },
   "dependencies": {
     "decompress": "^4.2.0",
-    "global": "^4.4.0",
     "json5": "^2.1.1",
     "loglevel": "^1.6.4",
     "plist": "^3.0.1",
