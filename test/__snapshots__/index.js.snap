@@ -218,6 +218,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -2274,6 +2275,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -3202,6 +3204,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -3368,6 +3371,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -4228,6 +4232,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -6137,6 +6142,7 @@ async function mergeCache(cache, key, value) {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -7955,6 +7961,7 @@ somethingSuperInteresting();",
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -8852,6 +8859,7 @@ Object {
       ],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -9749,6 +9757,7 @@ Object {
       ],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -10709,6 +10718,7 @@ Object {
       ],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -14340,6 +14350,7 @@ function SomeComponent(props) { // L29
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -16198,6 +16209,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -16218,12 +16230,12 @@ Object {
             "identifier": "synthwave-vscode",
           },
           "html": "<pre class=\\"grvsc-container synthwave-vscode\\" data-language=\\"js\\" data-index=\\"0\\"><code class=\\"grvsc-code\\"><span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\">/**</span></span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{*}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">cache</span></span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{string}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">key</span></span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{object}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">value</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{*}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">cache</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{string}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">key</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{object}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">value</span></span></span>
 <span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> */</span></span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk9\\">async</span><span class=\\"mtk1\\"> </span><span class=\\"mtk9\\">function</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">mergeCache</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3 mtki\\">cache</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">key</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">value</span><span class=\\"mtk1\\">) {</span></span></span>
-<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk9\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">set</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">, { </span><span class=\\"mtk9\\">...</span><span class=\\"mtk1\\">(</span><span class=\\"mtk9\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">get</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">)), </span><span class=\\"mtk9\\">...</span><span class=\\"mtk3\\">value</span><span class=\\"mtk1\\"> });</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk10\\">async</span><span class=\\"mtk1\\"> </span><span class=\\"mtk10\\">function</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">mergeCache</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3 mtki\\">cache</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">key</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">value</span><span class=\\"mtk1\\">) {</span></span></span>
+<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk10\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">set</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">, { </span><span class=\\"mtk10\\">...</span><span class=\\"mtk1\\">(</span><span class=\\"mtk10\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">get</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">)), </span><span class=\\"mtk10\\">...</span><span class=\\"mtk3\\">value</span><span class=\\"mtk1\\"> });</span></span></span>
 <span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">}</span></span></span></code></pre>",
           "index": 0,
           "language": "js",
@@ -16254,7 +16266,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16276,7 +16288,7 @@ async function mergeCache(cache, key, value) {
               "className": "grvsc-line",
               "data": Object {},
               "diff": null,
-              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{*}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">cache</span></span></span>",
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{*}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">cache</span></span></span>",
               "isHighlighted": null,
               "lineNumber": null,
               "text": " * @param {*} cache",
@@ -16287,7 +16299,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16307,7 +16319,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16323,17 +16335,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 4,
-                  "html": "<span class=\\"mtk9 mtki\\">@</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">@</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16345,17 +16357,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 9,
-                  "html": "<span class=\\"mtk9 mtki\\">param</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">param</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16370,7 +16382,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16386,17 +16398,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 11,
-                  "html": "<span class=\\"mtk8 mtki\\">{</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">{</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16408,17 +16420,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 12,
-                  "html": "<span class=\\"mtk8 mtki\\">*</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">*</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16429,17 +16441,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 13,
-                  "html": "<span class=\\"mtk8 mtki\\">}</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">}</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16455,7 +16467,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16497,7 +16509,7 @@ async function mergeCache(cache, key, value) {
               "className": "grvsc-line",
               "data": Object {},
               "diff": null,
-              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{string}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">key</span></span></span>",
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{string}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">key</span></span></span>",
               "isHighlighted": null,
               "lineNumber": null,
               "text": " * @param {string} key",
@@ -16508,7 +16520,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16528,7 +16540,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16544,17 +16556,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 4,
-                  "html": "<span class=\\"mtk9 mtki\\">@</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">@</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16566,17 +16578,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 9,
-                  "html": "<span class=\\"mtk9 mtki\\">param</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">param</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16591,7 +16603,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16607,17 +16619,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 11,
-                  "html": "<span class=\\"mtk8 mtki\\">{</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">{</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16629,17 +16641,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 17,
-                  "html": "<span class=\\"mtk8 mtki\\">string</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">string</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16650,17 +16662,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 18,
-                  "html": "<span class=\\"mtk8 mtki\\">}</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">}</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16676,7 +16688,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16718,7 +16730,7 @@ async function mergeCache(cache, key, value) {
               "className": "grvsc-line",
               "data": Object {},
               "diff": null,
-              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk9 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk8 mtki\\">{object}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">value</span></span></span>",
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk4 mtki\\"> * </span><span class=\\"mtk10 mtki\\">@param</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk9 mtki\\">{object}</span><span class=\\"mtk4 mtki\\"> </span><span class=\\"mtk3 mtki\\">value</span></span></span>",
               "isHighlighted": null,
               "lineNumber": null,
               "text": " * @param {object} value",
@@ -16729,7 +16741,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16749,7 +16761,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16765,17 +16777,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 4,
-                  "html": "<span class=\\"mtk9 mtki\\">@</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">@</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16787,17 +16799,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9 mtki",
+                  "className": "mtk10 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9 mtki",
+                    "className": "mtk10 mtki",
                     "color": "#FEDE5D",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 9,
-                  "html": "<span class=\\"mtk9 mtki\\">param</span>",
+                  "html": "<span class=\\"mtk10 mtki\\">param</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16812,7 +16824,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16828,17 +16840,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 11,
-                  "html": "<span class=\\"mtk8 mtki\\">{</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">{</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16850,17 +16862,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 17,
-                  "html": "<span class=\\"mtk8 mtki\\">object</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">object</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16871,17 +16883,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk8 mtki",
+                  "className": "mtk9 mtki",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk8 mtki",
+                    "className": "mtk9 mtki",
                     "color": "#FE4450",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 18,
-                  "html": "<span class=\\"mtk8 mtki\\">}</span>",
+                  "html": "<span class=\\"mtk9 mtki\\">}</span>",
                   "scopes": Array [
                     "source.js",
                     "comment.block.documentation.js",
@@ -16897,7 +16909,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16950,7 +16962,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16970,7 +16982,7 @@ async function mergeCache(cache, key, value) {
                   "defaultThemeTokenData": Object {
                     "bold": false,
                     "className": "mtk4 mtki",
-                    "color": "#495495",
+                    "color": "#848BBD",
                     "italic": true,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
@@ -16992,24 +17004,24 @@ async function mergeCache(cache, key, value) {
               "className": "grvsc-line",
               "data": Object {},
               "diff": null,
-              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk9\\">async</span><span class=\\"mtk1\\"> </span><span class=\\"mtk9\\">function</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">mergeCache</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3 mtki\\">cache</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">key</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">value</span><span class=\\"mtk1\\">) {</span></span></span>",
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk10\\">async</span><span class=\\"mtk1\\"> </span><span class=\\"mtk10\\">function</span><span class=\\"mtk1\\"> </span><span class=\\"mtk6\\">mergeCache</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3 mtki\\">cache</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">key</span><span class=\\"mtk1\\">, </span><span class=\\"mtk3 mtki\\">value</span><span class=\\"mtk1\\">) {</span></span></span>",
               "isHighlighted": null,
               "lineNumber": null,
               "text": "async function mergeCache(cache, key, value) {",
               "tokens": Array [
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 5,
-                  "html": "<span class=\\"mtk9\\">async</span>",
+                  "html": "<span class=\\"mtk10\\">async</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -17040,17 +17052,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 14,
-                  "html": "<span class=\\"mtk9\\">function</span>",
+                  "html": "<span class=\\"mtk10\\">function</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -17346,7 +17358,7 @@ async function mergeCache(cache, key, value) {
               "className": "grvsc-line",
               "data": Object {},
               "diff": null,
-              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk9\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">set</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">, { </span><span class=\\"mtk9\\">...</span><span class=\\"mtk1\\">(</span><span class=\\"mtk9\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">get</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">)), </span><span class=\\"mtk9\\">...</span><span class=\\"mtk3\\">value</span><span class=\\"mtk1\\"> });</span></span></span>",
+              "html": "<span class=\\"grvsc-line\\"><span class=\\"grvsc-source\\"><span class=\\"mtk1\\">  </span><span class=\\"mtk10\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">set</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">, { </span><span class=\\"mtk10\\">...</span><span class=\\"mtk1\\">(</span><span class=\\"mtk10\\">await</span><span class=\\"mtk1\\"> </span><span class=\\"mtk3\\">cache</span><span class=\\"mtk1\\">.</span><span class=\\"mtk6\\">get</span><span class=\\"mtk1\\">(</span><span class=\\"mtk3\\">key</span><span class=\\"mtk1\\">)), </span><span class=\\"mtk10\\">...</span><span class=\\"mtk3\\">value</span><span class=\\"mtk1\\"> });</span></span></span>",
               "isHighlighted": null,
               "lineNumber": null,
               "text": "  await cache.set(key, { ...(await cache.get(key)), ...value });",
@@ -17374,17 +17386,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 7,
-                  "html": "<span class=\\"mtk9\\">await</span>",
+                  "html": "<span class=\\"mtk10\\">await</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -17618,17 +17630,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 28,
-                  "html": "<span class=\\"mtk9\\">...</span>",
+                  "html": "<span class=\\"mtk10\\">...</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -17666,17 +17678,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 34,
-                  "html": "<span class=\\"mtk9\\">await</span>",
+                  "html": "<span class=\\"mtk10\\">await</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -17929,17 +17941,17 @@ async function mergeCache(cache, key, value) {
                 },
                 Object {
                   "additionalThemeTokenData": Array [],
-                  "className": "mtk9",
+                  "className": "mtk10",
                   "defaultThemeTokenData": Object {
                     "bold": false,
-                    "className": "mtk9",
+                    "className": "mtk10",
                     "color": "#FEDE5D",
                     "italic": false,
                     "themeIdentifier": "synthwave-vscode",
                     "underline": false,
                   },
                   "endIndex": 55,
-                  "html": "<span class=\\"mtk9\\">...</span>",
+                  "html": "<span class=\\"mtk10\\">...</span>",
                   "scopes": Array [
                     "source.js",
                     "meta.function.js",
@@ -18107,6 +18119,7 @@ async function mergeCache(cache, key, value) {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -18417,6 +18430,7 @@ Object {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 
@@ -20326,6 +20340,7 @@ async function mergeCache(cache, key, value) {
       "grvscCodeSpans": Array [],
     },
   },
+  "extensions": Object {},
 }
 `;
 

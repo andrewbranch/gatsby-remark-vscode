@@ -14,5 +14,8 @@
     "test",
     "lib/vscode",
     "scripts"
+  ],
+  "exclude": [
+    "test/graphql/site"
   ]
 }
