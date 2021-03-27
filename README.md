@@ -63,7 +63,9 @@ Add to your `gatsby-config.js`:
       plugins: [{
         resolve: `gatsby-remark-vscode`,
         options: {
-          theme: 'Abyss' // Or install your favorite theme from GitHub
+          theme: {
+            default: 'Abyss' // Or install your favorite theme from GitHub
+          },
         }
       }]
     }
