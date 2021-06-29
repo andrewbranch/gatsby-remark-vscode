@@ -11,7 +11,7 @@ interface RemarkPluginArguments {
 
 interface CodeBlockData {
   language?: string;
-  markdownNode: MarkdownNode;
+  markdownNode?: MarkdownNode;
   /** @deprecated Use `node` instead. */
   codeFenceNode: MDASTNode<'code'>;
   node: MDASTNode<'code'>;
@@ -20,7 +20,7 @@ interface CodeBlockData {
 
 interface CodeSpanData {
   language?: string;
-  markdownNode: MarkdownNode;
+  markdownNode?: MarkdownNode;
   node: MDASTNode<'inlineCode'>;
 }
 
