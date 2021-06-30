@@ -14,9 +14,7 @@ const {
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
 /** @type NodeRequire */
-const requireMain = require.main
-  ? createRequire(require.main.filename)
-  : undefined
+const requireMain = require.main ? createRequire(require.main.filename) : undefined;
 const requireCwd = createRequire(path.join(process.cwd(), 'index.js'));
 
 /**

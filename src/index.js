@@ -19,7 +19,7 @@ const { getScope } = require('./storeUtils');
 const { createStyleElement } = require('./factory/html');
 const { renderHTML } = require('./renderers/html');
 const { createOnce } = require('./utils');
-const remarkPlugin = require('./remarkPlugin')
+const remarkPlugin = require('./remarkPlugin');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
 function createPlugin() {
