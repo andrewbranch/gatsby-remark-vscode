@@ -13,7 +13,8 @@ const {
 } = require('./utils');
 const { getHighestBuiltinLanguageId } = require('./storeUtils');
 const unzipDir = path.resolve(__dirname, '../lib/extensions');
-const requireMain = createRequire(require.main.filename);
+/** @type NodeRequire */
+const requireMain = require.main ? createRequire(require.main.filename) : undefined;
 const requireCwd = createRequire(path.join(process.cwd(), 'index.js'));
 
 /**
@@ -151,7 +152,7 @@ async function getExtensionPackageJsonPath(specifier, host) {
 function requireResolveExtension(specifier) {
   return (
     tryResolve(require) ||
-    tryResolve(requireMain) ||
+    (requireMain && tryResolve(requireMain)) ||
     tryResolve(requireCwd) ||
     require.resolve(path.join(specifier, 'package.json'))
   ); // If none work, throw the best error stack

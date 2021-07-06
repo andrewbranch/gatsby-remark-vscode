@@ -4,33 +4,41 @@ const path = require('path');
 const logger = require('loglevel');
 const visit = require('unist-util-visit');
 const setup = require('./setup');
-const createGetRegistry = require('./createGetRegistry');
 const getPossibleThemes = require('./getPossibleThemes');
 const createCodeNodeRegistry = require('./createCodeNodeRegistry');
 const parseCodeFenceInfo = require('./parseCodeFenceInfo');
 const parseCodeSpanInfo = require('./parseCodeSpanInfo');
-const createSchemaCustomization = require('./graphql/createSchemaCustomization');
 const getCodeBlockGraphQLDataFromRegistry = require('./graphql/getCodeBlockDataFromRegistry');
 const getCodeSpanGraphQLDataFromRegistry = require('./graphql/getCodeSpanDataFromRegistry');
 const { registerCodeBlock, registerCodeSpan } = require('./registerCodeNode');
-const { createHash } = require('crypto');
-const { setChildBlockNodes, setChildSpanNodes } = require('./cacheUtils');
 const { getScope } = require('./storeUtils');
 const { createStyleElement } = require('./factory/html');
 const { renderHTML } = require('./renderers/html');
 const { createOnce } = require('./utils');
-const remarkPlugin = require('./remarkPlugin');
+const createGetRegistry = require('./createGetRegistry');
 const styles = fs.readFileSync(path.resolve(__dirname, '../styles.css'), 'utf8');
 
-function createPlugin() {
-  const getRegistry = createGetRegistry();
-  const once = createOnce();
+class Cache {
+  constructor() {
+    this.cache = new Map();
+  }
+  async set(key, value) {
+    this.cache.set(key, value);
+  }
+  async get(key) {
+    return this.cache.get(key);
+  }
+}
 
-  /**
-   * @param {RemarkPluginArguments} _
-   * @param {PluginOptions=} options
-   */
-  async function textmateHighlight({ markdownAST, markdownNode, cache, actions, createNodeId }, options = {}) {
+const once = createOnce();
+const cache = new Cache();
+const getRegistry = createGetRegistry();
+
+/**
+ * @param {PluginOptions=} options
+ */
+function remarkPlugin(options = {}) {
+  return async function(tree) {
     const {
       theme,
       wrapperClassName,
@@ -43,7 +51,7 @@ function createPlugin() {
       getLineTransformers,
       inlineCode,
       ...rest
-    } = await setup(options, markdownNode.fileAbsolutePath, cache, once);
+    } = await setup(options, undefined, cache, once);
 
     const lineTransformers = getLineTransformers(
       {
@@ -66,7 +74,7 @@ function createPlugin() {
     /** @type {(MDASTNode<'code'> | MDASTNode<'inlineCode'>)[]} */
     const nodes = [];
     visit(
-      markdownAST,
+      tree,
       ({ type }) => type === 'code' || (inlineCode && type === 'inlineCode'),
       node => {
         nodes.push(node);
@@ -77,10 +85,6 @@ function createPlugin() {
     //    and register its contents with a central code block registry, performing tokenization
     //    along the way.
 
-    /** @type {grvsc.gql.GRVSCCodeBlock[]} */
-    const graphQLBlockNodes = [];
-    /** @type {grvsc.gql.GRVSCCodeSpan[]} */
-    const graphQLSpanNodes = [];
     /** @type {CodeNodeRegistry<MDASTNode<'code' | 'inlineCode'>>} */
     const codeNodeRegistry = createCodeNodeRegistry();
     for (const node of nodes) {
@@ -108,7 +112,6 @@ function createPlugin() {
 
       const nodeData = /** @type {CodeBlockData | CodeSpanData} */ ({
         node,
-        markdownNode,
         language: languageName,
         parsedOptions: meta
       });
@@ -116,8 +119,7 @@ function createPlugin() {
       const possibleThemes = await getPossibleThemes(
         node.type === 'inlineCode' ? inlineCode.theme || theme : theme,
         await cache.get('themes'),
-        // Node could be sourced from something other than a File node
-        markdownNode.fileAbsolutePath ? path.dirname(markdownNode.fileAbsolutePath) : undefined,
+        undefined,
         nodeData
       );
 
@@ -167,24 +169,10 @@ function createPlugin() {
       (node).type = 'html';
       node.value = graphQLNode.html;
 
-      // Push GraphQL node
-      graphQLBlockNodes.push({
-        ...graphQLNode,
-        id: createNodeId(`GRVSCCodeBlock-${markdownNode.id}-${codeBlock.index}`),
-        parent: markdownNode.id,
-        internal: {
-          type: 'GRVSCCodeBlock',
-          contentDigest: createHash('md5')
-            .update(JSON.stringify(graphQLNode))
-            .digest('hex')
-        }
-      });
-
       function getWrapperClassName() {
         return typeof wrapperClassName === 'function'
           ? wrapperClassName({
               language: codeBlock.languageName,
-              markdownNode,
               node,
               codeFenceNode: node,
               parsedOptions: codeBlock.meta
@@ -201,24 +189,10 @@ function createPlugin() {
       (node).type = 'html';
       node.value = graphQLNode.html;
 
-      // Push GraphQL node
-      graphQLSpanNodes.push({
-        ...graphQLNode,
-        id: createNodeId(`GRVSCCodeSpan-${markdownNode.id}-${codeSpan.index}`),
-        parent: markdownNode.id,
-        internal: {
-          type: 'GRVSCCodeSpan',
-          contentDigest: createHash('md5')
-            .update(JSON.stringify(graphQLNode))
-            .digest('hex')
-        }
-      });
-
       function getClassName() {
         return typeof inlineCode.className === 'function'
           ? inlineCode.className({
               language: codeSpan.languageName,
-              markdownNode,
               node
             })
           : inlineCode.className;
@@ -236,31 +210,9 @@ function createPlugin() {
     );
 
     if (styleElement) {
-      markdownAST.children.push({
-        type: 'html',
-        value: renderHTML(styleElement)
-      });
+      tree.children.unshift({ type: 'html', value: renderHTML(styleElement) });
     }
-
-    // 5. Create all GraphQL nodes with Gatsby so code blocks can be queried.
-
-    for (const childNode of [...graphQLBlockNodes, ...graphQLSpanNodes]) {
-      await actions.createNode(childNode);
-      await actions.createParentChildLink({
-        parent: markdownNode,
-        child: childNode
-      });
-    }
-
-    await setChildBlockNodes(cache, markdownNode.id, markdownNode.internal.contentDigest, graphQLBlockNodes);
-    await setChildSpanNodes(cache, markdownNode.id, markdownNode.internal.contentDigest, graphQLSpanNodes);
-  }
-
-  textmateHighlight.getRegistry = getRegistry;
-  textmateHighlight.once = once;
-  textmateHighlight.createSchemaCustomization = createSchemaCustomization;
-  textmateHighlight.remarkPlugin = remarkPlugin;
-  return textmateHighlight;
+  };
 }
 
-module.exports = createPlugin;
+module.exports = remarkPlugin;

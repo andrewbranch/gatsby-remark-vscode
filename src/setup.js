@@ -12,7 +12,7 @@ const { processExtensions } = require('./processExtension');
  * @returns {Promise<PluginOptions>}
  */
 async function setup(options, markdownAbsolutePath, cache, once) {
-  if (options['__getOptions__']) {
+  if (markdownAbsolutePath && options['__getOptions__']) {
     return setupOptions(options['__getOptions__'](markdownAbsolutePath), cache);
   } else {
     return once(() => setupOptions(options, cache), 'setup');

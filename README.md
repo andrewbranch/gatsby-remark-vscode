@@ -30,6 +30,7 @@ If you’re updating from v2.x.x (or v1), see [MIGRATING.md](./MIGRATING.md). Ne
   - [Diff highlighting](#diff-highlighting)
   - [Using different themes for different code fences](#using-different-themes-for-different-code-fences)
   - [Arbitrary code fence options](#arbitrary-code-fence-options)
+  - [Usage as a remark plugin without Gatsby](#usage-as-a-remark-plugin-without-gatsby)
 - [Options reference](#options-reference)
 - [Contributing](#contributing)
 
@@ -554,6 +555,51 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 }
 ```
 
+### Usage as a remark plugin without Gatsby
+
+This package exports a `remarkPlugin` property that accepts the same [options](#options-reference) as the main Gatsby plugin and is usable as a [remark](https://github.com/remarkjs/remark) plugin in any [unifiedjs](https://github.com/unifiedjs/unified) processing pipeline:
+
+````js
+const unified = require('unified');
+const remarkParse = require('remarkParse');
+const remarkVscode = require('gatsby-remark-vscode');
+const remarkToRehype = require('remark-rehype');
+const rehypeRaw = require('rehype-raw');
+const rehypeStringify = require('rehype-stringify');
+
+const markdownSource = `
+# Code example with awesome syntax highlighting
+
+```ts {numberLines}
+export function sum(a: number, b: number): number {
+  return a + b;
+}
+```
+
+This is a paragraph after the code example.
+`
+
+const processor = unified()
+  // parse markdown to remark AST
+  .use(remarkParse)
+  // apply syntax highlighting using `remarkPlugin`
+  // with your preferred options
+  .use(remarkVscode.remarkPlugin, {
+    theme: 'Default Light+',
+  })
+  // convert remark AST to rehype AST
+  .use(remarkToRehype, { allowDangerousHtml: true })
+  .use(rehypeRaw)
+  // stringify
+  .use(rehypeStringify, {
+    allowDangerousHtml: true,
+    closeSelfClosing: true,
+  });
+
+const vfile = await processor.process(markdownSource);
+console.log(vfile.contents); // logs resulting HTML
+````
+
 ## Options reference
 
 ### `theme`
@@ -567,7 +613,7 @@ The syntax theme used for code blocks.
   - **`ThemeSettings`:** An object that selects different themes to use in different contexts. (See [Multi-theme support](#multi-theme-support).)
   - **`(data: CodeBlockData) => string | ThemeSettings`:** A function returning the theme selection for a given code block. `CodeBlockData` is an object with properties:
     - **`language`:** The language of the code block, if one was specified.
-    - **`markdownNode`:** The MarkdownRemark GraphQL node.
+    - **`markdownNode`:** The MarkdownRemark GraphQL node (*not available if used as `remarkPlugin`*)
     - **`node`:** The Remark AST node of the code block.
     - **`parsedOptions`:** The object form of of any code fence info supplied. (See [Arbitrary code fence options](#arbitrary-code-fence-options).)
 
@@ -625,7 +671,7 @@ Enables syntax highlighting for inline code spans. (See [Inline code highlightin
   - **`marker`:** A string used as a separator between the language name and the content of a code span. For example, with a `marker` of value `'•'`, you can highlight a code span as JavaScript by writing the Markdown code span as `` `js•Code.to.highlight("inline")` ``.
   - **`className`:** A string, or function returning a string for a given code span, that sets a custom class name on the wrapper `code` HTML tag. If the function form is used, it is passed an object parameter describing the code span with properties:
     - **`language`:** The language of the code span (the bit before the `marker` character).
-    - **`markdownNode`:** The MarkdownRemark GraphQL node.
+    - **`markdownNode`:** The MarkdownRemark GraphQL node. (*not available if used as `remarkPlugin`*)
     - **`node`:** The Remark AST node of the code span.
 
 ### `injectStyles`
