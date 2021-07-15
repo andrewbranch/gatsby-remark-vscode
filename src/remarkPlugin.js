@@ -155,7 +155,11 @@ function remarkPlugin(options = {}) {
     //    time, change the original code fence Markdown node to an HTML node and set
     //    its value to the HTML rendering contained in the GraphQL node.
 
+    let numCodeOccurrences = 0;
+    
     codeNodeRegistry.forEachCodeBlock((codeBlock, node) => {
+      numCodeOccurrences++;
+
       const graphQLNode = getCodeBlockGraphQLDataFromRegistry(
         codeNodeRegistry,
         node,
@@ -182,6 +186,8 @@ function remarkPlugin(options = {}) {
     });
 
     codeNodeRegistry.forEachCodeSpan((codeSpan, node) => {
+      numCodeOccurrences++;
+
       const graphQLNode = getCodeSpanGraphQLDataFromRegistry(codeNodeRegistry, node, codeSpan, getClassName);
 
       // Update Markdown node
@@ -202,15 +208,17 @@ function remarkPlugin(options = {}) {
     // 4. Generate CSS rules for each theme used by one or more code blocks in the registry,
     //    then append that CSS to the Markdown AST in an HTML node.
 
-    const styleElement = createStyleElement(
-      codeNodeRegistry.getAllPossibleThemes(),
-      codeNodeRegistry.getTokenStylesForTheme,
-      replaceColor,
-      injectStyles ? styles : undefined
-    );
+    if (numCodeOccurrences > 0) {
+      const styleElement = createStyleElement(
+        codeNodeRegistry.getAllPossibleThemes(),
+        codeNodeRegistry.getTokenStylesForTheme,
+        replaceColor,
+        injectStyles ? styles : undefined
+      );
 
-    if (styleElement) {
-      tree.children.unshift({ type: 'html', value: renderHTML(styleElement) });
+      if (styleElement) {
+        tree.children.unshift({ type: 'html', value: renderHTML(styleElement) });
+      }
     }
   };
 }
