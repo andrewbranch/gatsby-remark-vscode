@@ -156,7 +156,7 @@ function remarkPlugin(options = {}) {
     //    its value to the HTML rendering contained in the GraphQL node.
 
     let numCodeOccurrences = 0;
-    
+
     codeNodeRegistry.forEachCodeBlock((codeBlock, node) => {
       numCodeOccurrences++;
 
