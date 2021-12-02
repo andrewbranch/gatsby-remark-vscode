@@ -559,22 +559,22 @@ Line numbers and ranges aren’t the only things you can pass as options on your
 
 This package exports a `remarkPlugin` property that accepts the same [options](#options-reference) as the main Gatsby plugin and is usable as a [remark](https://github.com/remarkjs/remark) plugin in any [unifiedjs](https://github.com/unifiedjs/unified) processing pipeline:
 
-````js
-const unified = require('unified');
-const remarkParse = require('remarkParse');
-const remarkVscode = require('gatsby-remark-vscode');
-const remarkToRehype = require('remark-rehype');
-const rehypeRaw = require('rehype-raw');
-const rehypeStringify = require('rehype-stringify');
+```
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkVscode from 'gatsby-remark-vscode';
+import remarkToRehype from 'remark-rehype';
+import rehypeRaw from 'rehype-raw';
+import rehypeStringify from 'rehype-stringify';
 
 const markdownSource = `
 # Code example with awesome syntax highlighting
 
-```ts {numberLines}
+\`\`\`ts { numberLines }
 export function sum(a: number, b: number): number {
   return a + b;
 }
-```
+\`\`\`
 
 This is a paragraph after the code example.
 `
@@ -596,9 +596,15 @@ const processor = unified()
     closeSelfClosing: true,
   });
 
-const vfile = await processor.process(markdownSource);
-console.log(vfile.contents); // logs resulting HTML
-````
+
+async function go() {
+  const vfile = await processor.process(markdownSource);
+  console.log(vfile);
+  console.log(vfile.value); // logs resulting HTML
+}
+
+go();
+```
 
 ## Options reference
 
