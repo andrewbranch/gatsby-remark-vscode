@@ -561,7 +561,7 @@ This package exports a `remarkPlugin` property that accepts the same [options](#
 
 ````js
 const unified = require('unified');
-const remarkParse = require('remarkParse');
+const remarkParse = require('remark-parse');
 const remarkVscode = require('gatsby-remark-vscode');
 const remarkToRehype = require('remark-rehype');
 const rehypeRaw = require('rehype-raw');
