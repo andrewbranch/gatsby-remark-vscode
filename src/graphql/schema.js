@@ -1,3 +1,4 @@
+const schema = `
 type GRVSCThemeTokenData {
   themeIdentifier: String!
   className: String!
@@ -75,3 +76,6 @@ input GRVSCThemeArgument {
   identifier: String!
   conditions: [String!]!
 }
+`;
+
+module.exports = { schema };

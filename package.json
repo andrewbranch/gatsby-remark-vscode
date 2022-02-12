@@ -41,10 +41,10 @@
     "@types/plist": "^3.0.2",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.22.0",
-    "gatsby": "^3.1.1",
-    "gatsby-cli": "^3.1.0",
-    "gatsby-source-filesystem": "^3.1.0",
-    "gatsby-transformer-remark": "^3.1.0",
+    "gatsby": "^4.0.0",
+    "gatsby-cli": "^4.0.0",
+    "gatsby-source-filesystem": "^4.0.0",
+    "gatsby-transformer-remark": "^5.0.0",
     "glob": "^7.1.5",
     "hast-util-raw": "^5.0.1",
     "jest": "^26.6.3",
@@ -69,6 +69,9 @@
     "unist-util-visit": "^1.4.1",
     "vscode-oniguruma": "^1.4.0",
     "vscode-textmate": "^5.2.0"
+  },
+  "peerDependencies": {
+    "gatsby": "^4.0.0"
   },
   "jest": {
     "testMatch": [

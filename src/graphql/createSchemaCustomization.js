@@ -1,9 +1,7 @@
 // @ts-check
-const fs = require('fs');
-const path = require('path');
 const logger = require('loglevel');
 const { getDefaultLineTransformers } = require('../transformers');
-const rootSchema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'), 'utf8');
+const { schema } = require('./schema');
 
 /**
  * @param {*} nodeApiOptions
@@ -12,7 +10,7 @@ const rootSchema = fs.readFileSync(path.resolve(__dirname, 'schema.graphql'), 'u
 function createSchemaCustomization({ actions, cache }, options) {
   const { createTypes } = actions;
   logger.setLevel(options.logLevel || 'error');
-  createTypes(rootSchema);
+  createTypes(schema);
   const lineTransformers = options.getLineTransformers
     ? options.getLineTransformers(options, cache)
     : getDefaultLineTransformers(options, cache);

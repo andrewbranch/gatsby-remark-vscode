@@ -3,8 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
 const { visit, parse } = require('graphql');
+const { schema: rawSchema } = require('../src/graphql/schema');
 
-const schema = parse(fs.readFileSync(path.resolve(__dirname, '../src/graphql/schema.graphql'), 'utf8'));
+const schema = parse(rawSchema);
 const declarations = createNamespaceDeclaration(gatherTypeDeclarations(gatherEnums()));
 
 const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
@@ -16,7 +17,7 @@ const out = printer.printNode(
 
 // Validate generated code
 const { diagnostics } = ts.transpileModule(out, { reportDiagnostics: true });
-fs.writeFileSync(path.resolve(__dirname, '../src/graphql/schema.d.ts'), out);
+fs.writeFileSync(path.resolve(__dirname, '../src/schema.d.ts'), out);
 if (diagnostics.length) {
   console.error('schema.d.ts was generated with errors');
   process.exit(1);
@@ -46,7 +47,10 @@ function gatherEnums() {
   const enums = new Map();
   visit(schema, {
     EnumTypeDefinition: node => {
-      enums.set(node.name.value, node.values.map(v => v.name.value));
+      enums.set(
+        node.name.value,
+        node.values.map(v => v.name.value)
+      );
     }
   });
   return enums;
@@ -63,28 +67,32 @@ function gatherTypeDeclarations(enums) {
     EnumTypeDefinition: stop,
     ObjectTypeDefinition: {
       enter: node => {
-        types.push(ts.createInterfaceDeclaration(
-          undefined,
-          undefined,
-          node.name.value,
-          undefined,
-          node.interfaces.length ? [transformImplementsToExtends(node.interfaces)] : undefined,
-          node.fields.map(transformFieldDefinitionNode)
-        ));
+        types.push(
+          ts.createInterfaceDeclaration(
+            undefined,
+            undefined,
+            node.name.value,
+            undefined,
+            node.interfaces.length ? [transformImplementsToExtends(node.interfaces)] : undefined,
+            node.fields.map(transformFieldDefinitionNode)
+          )
+        );
 
         return false;
       }
     },
     InputObjectTypeDefinition: {
       enter: node => {
-        types.push(ts.createInterfaceDeclaration(
-          undefined,
-          undefined,
-          node.name.value,
-          undefined,
-          undefined,
-          node.fields.map(transformFieldDefinitionNode)
-        ));
+        types.push(
+          ts.createInterfaceDeclaration(
+            undefined,
+            undefined,
+            node.name.value,
+            undefined,
+            undefined,
+            node.fields.map(transformFieldDefinitionNode)
+          )
+        );
 
         return false;
       }
@@ -100,7 +108,7 @@ function gatherTypeDeclarations(enums) {
     return ts.createHeritageClause(
       ts.SyntaxKind.ExtendsKeyword,
       interfaces.map(({ name }) => ts.createExpressionWithTypeArguments(undefined, ts.createIdentifier(name.value)))
-    );      
+    );
   }
 
   /** @param {import('graphql').FieldDefinitionNode | import('graphql').InputValueDefinitionNode} field */
@@ -132,12 +140,18 @@ function gatherTypeDeclarations(enums) {
   /** @param {string} name */
   function mapTypeName(name) {
     switch (name) {
-      case 'String': return 'string';
-      case 'Int': return 'number';
-      case 'Boolean': return 'boolean';
-      case 'DateTime': return 'Date';
-      case 'JSON': return 'any';
-      default: return name;
+      case 'String':
+        return 'string';
+      case 'Int':
+        return 'number';
+      case 'Boolean':
+        return 'boolean';
+      case 'DateTime':
+        return 'Date';
+      case 'JSON':
+        return 'any';
+      default:
+        return name;
     }
   }
 }
