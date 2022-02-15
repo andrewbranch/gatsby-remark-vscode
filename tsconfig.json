@@ -7,7 +7,6 @@
     "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "skipLibCheck": true
   },
   "include": [
     "gatsby-node.js",
@@ -18,5 +17,6 @@
   ],
   "exclude": [
     "test/graphql/site"
-  ]
+  ],
+  "types": ["node", "jest"]
 }
