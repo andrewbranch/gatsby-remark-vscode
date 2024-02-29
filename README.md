@@ -587,8 +587,6 @@ export function sum(a: number, b: number): number {
 This is a paragraph after the code example.
 `
 
-console.log(markdownSource)
-
 const processor = unified()
   // parse markdown to remark AST
   .use(remarkParse)
